@@ -9,6 +9,7 @@ import type { UnitBlueprint } from './unit-blueprint';
 import { Interceptable } from '../utils/interceptable';
 import { ActionPointComponent } from './action-point.component';
 import { TypedEventEmitter } from '../utils/typed-emitter';
+import { HealthComponent } from './health.component';
 
 export type SerializedUnit = {
   id: string;
@@ -51,10 +52,14 @@ export class Unit extends Entity implements Serializable<SerializedUnit> {
 
   readonly ap: ActionPointComponent;
 
+  readonly hp: HealthComponent;
+
   private interceptors = {
     canMove: new Interceptable<boolean, Unit>(),
 
-    speed: new Interceptable<number, Entity>()
+    attack: new Interceptable<number, Unit>(),
+    defense: new Interceptable<number, Unit>(),
+    speed: new Interceptable<number, Unit>()
   };
 
   constructor(game: Game, options: UnitOptions) {
@@ -71,6 +76,7 @@ export class Unit extends Entity implements Serializable<SerializedUnit> {
       new SolidPathfindingStrategy(this.game)
     );
     this.ap = new ActionPointComponent({ maxAp: this.blueprint.maxAp });
+    this.hp = new HealthComponent({ maxHp: this.blueprint.maxHp });
   }
 
   get x() {
