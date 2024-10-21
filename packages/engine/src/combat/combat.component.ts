@@ -68,8 +68,10 @@ export class CombatComponent {
     this.aoeShape = options.aoeShape;
   }
 
-  get canAttackAt() {
-    return this.targeting.canAttackAt;
+  canAttackAt(point: Point3D) {
+    if (!this.game.unitSystem.getUnitAt(point)) return;
+
+    return this.targeting.canAttackAt(point);
   }
 
   get pAtk(): number {
