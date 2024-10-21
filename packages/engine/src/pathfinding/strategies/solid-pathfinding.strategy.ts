@@ -92,7 +92,7 @@ export class SolidBodyPathfindingStrategy implements PathfindingStrategy {
   isEdgeValid(cell: Cell) {
     if (this.origin.equals(cell)) return false;
 
-    const entityAtPoint = this.game.unitSystem.getEntityAt(cell);
+    const entityAtPoint = this.game.unitSystem.getUnitAt(cell);
     return !!entityAtPoint;
   }
 

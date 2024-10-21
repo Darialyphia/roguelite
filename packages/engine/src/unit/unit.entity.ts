@@ -9,9 +9,12 @@ import { ActionPointComponent } from './action-point.component';
 import { TypedEventEmitter } from '../utils/typed-emitter';
 import { HealthComponent } from './health.component';
 import { CardManagerComponent } from '../card/card-manager.component';
-import { CombatComponent, type Damage } from './combat.component';
+import { CombatComponent, type Damage } from '../combat/combat.component';
 import { MOVE_EVENTS, MovementComponent } from './movement.component';
 import { DECK_EVENTS } from '../card/deck.entity';
+import type { Player } from '../player/player.entity';
+import { MeleeTargetingPatternStrategy } from '../targeting/melee-targeting.straegy';
+import { PointAOEShape } from '../targeting/aoe-shapes';
 
 export type SerializedUnit = {
   id: string;
@@ -26,6 +29,7 @@ export type UnitOptions = {
   position: Point3D;
   deck: CardOptions[];
   blueprint: UnitBlueprint;
+  player: Player;
 };
 
 export const UNIT_EVENTS = {
@@ -48,16 +52,18 @@ export type UnitEventMap = {
   [UNIT_EVENTS.AFTER_MOVE]: [{ position: Vec3; previousPosition: Vec3 }];
   [UNIT_EVENTS.BEFORE_DRAW]: [];
   [UNIT_EVENTS.AFTER_DRAW]: [{ cards: Card[] }];
-  [UNIT_EVENTS.BEFORE_ATTACK]: [{ target: Unit }];
-  [UNIT_EVENTS.AFTER_ATTACK]: [{ target: Unit }];
-  [UNIT_EVENTS.BEFORE_DEAL_DAMAGE]: [{ target: Unit; damage: Damage; amount: number }];
-  [UNIT_EVENTS.AFTER_DEAL_DAMAGE]: [{ target: Unit; damage: Damage; amount: number }];
+  [UNIT_EVENTS.BEFORE_ATTACK]: [{ target: Point3D }];
+  [UNIT_EVENTS.AFTER_ATTACK]: [{ target: Point3D }];
+  [UNIT_EVENTS.BEFORE_DEAL_DAMAGE]: [{ targets: Unit[]; damage: Damage }];
+  [UNIT_EVENTS.AFTER_DEAL_DAMAGE]: [{ targets: Unit[]; damage: Damage }];
   [UNIT_EVENTS.BEFORE_RECEIVE_DAMAGE]: [{ from: Unit; damage: Damage; amount: number }];
   [UNIT_EVENTS.AFTER_RECEIVE_DAMAGE]: [{ from: Unit; damage: Damage; amount: number }];
 };
 
 export class Unit extends Entity implements Serializable<SerializedUnit> {
   private game: Game;
+
+  readonly player: Player;
 
   private emitter = new TypedEventEmitter<UnitEventMap>();
 
@@ -74,17 +80,25 @@ export class Unit extends Entity implements Serializable<SerializedUnit> {
   readonly combat: CombatComponent;
 
   private interceptors = {
-    speed: new Interceptable<number, Unit>()
+    canMove: new Interceptable<boolean>(),
+    canAttack: new Interceptable<boolean>(),
+    speed: new Interceptable<number>()
   };
 
   constructor(game: Game, options: UnitOptions) {
     super(createEntityId(options.id));
     this.game = game;
+    this.player = options.player;
     this.blueprint = options.blueprint;
     this.cardManager = new CardManagerComponent(this.game, { deck: options.deck });
     this.ap = new ActionPointComponent({ maxAp: this.blueprint.maxAp });
     this.hp = new HealthComponent({ maxHp: this.blueprint.maxHp });
-    this.combat = new CombatComponent(this.game, { baseStats: this.blueprint });
+    this.combat = new CombatComponent(this.game, {
+      baseStats: this.blueprint,
+      unit: this,
+      attackPattern: new MeleeTargetingPatternStrategy(this.game, this),
+      aoeShape: new PointAOEShape(this.game)
+    });
     this.movement = new MovementComponent(this.game, {
       position: options.position,
       pathfindingStrategy: new SolidBodyPathfindingStrategy(this.game)
@@ -122,7 +136,7 @@ export class Unit extends Entity implements Serializable<SerializedUnit> {
   }
 
   get speed(): number {
-    return this.interceptors.speed.getValue(this.blueprint.speed, this);
+    return this.interceptors.speed.getValue(this.blueprint.speed, {});
   }
 
   get pAtk() {
@@ -149,6 +163,18 @@ export class Unit extends Entity implements Serializable<SerializedUnit> {
     return this.combat.mDefPiercing;
   }
 
+  get canMove(): boolean {
+    return this.interceptors.canMove.getValue(true, {});
+  }
+
+  get canAttack(): boolean {
+    return this.interceptors.canAttack.getValue(true, {});
+  }
+
+  get isAt() {
+    return this.movement.isAt;
+  }
+
   private forwardEvents() {
     this.movement.on(MOVE_EVENTS.BEFORE_MOVE, e => {
       this.emitter.emit(UNIT_EVENTS.BEFORE_MOVE, e);
@@ -164,7 +190,17 @@ export class Unit extends Entity implements Serializable<SerializedUnit> {
     });
   }
 
+  isEnemy(unit: Unit) {
+    return unit.player.isEnemy(unit.player);
+  }
+
+  isAlly(unit: Unit) {
+    return !unit.player.isEnemy(unit.player);
+  }
+
   canMoveTo(point: Point3D) {
+    if (!this.canMove) return false;
+
     return this.movement.canMoveTo(point, this.ap.current);
   }
 
@@ -172,14 +208,16 @@ export class Unit extends Entity implements Serializable<SerializedUnit> {
     const path = this.movement.move(to);
     if (!path) return;
 
-    this.ap.remove(path.distance * this.game.config.AP_SPENT_PER_MOVEMENT);
+    this.ap.remove(path.distance * this.game.config.AP_COST_PER_MOVEMENT);
   }
 
-  dealDamage(target: Unit, damage: Damage) {
-    const amount = this.combat.getDamageDealt(damage, target);
-    this.emitter.emit(UNIT_EVENTS.BEFORE_DEAL_DAMAGE, { target, damage, amount });
-    target.receiveDamage(this, damage, amount);
-    this.emitter.emit(UNIT_EVENTS.AFTER_DEAL_DAMAGE, { target, damage, amount });
+  dealDamage(targets: Unit[], damage: Damage) {
+    this.emitter.emit(UNIT_EVENTS.BEFORE_DEAL_DAMAGE, { targets, damage });
+    targets.forEach(target => {
+      const amount = this.combat.getDamageDealt(damage, target);
+      target.receiveDamage(this, damage, amount);
+    });
+    this.emitter.emit(UNIT_EVENTS.AFTER_DEAL_DAMAGE, { targets, damage });
   }
 
   receiveDamage(from: Unit, damage: Damage, amount: number) {
@@ -188,16 +226,22 @@ export class Unit extends Entity implements Serializable<SerializedUnit> {
     this.emitter.emit(UNIT_EVENTS.AFTER_RECEIVE_DAMAGE, { from, damage, amount });
   }
 
-  attack(target: Unit) {
+  canAttackAt(point: Point3D) {
+    if (!this.canAttack) return;
+
+    return this.combat.canAttackAt(point);
+  }
+
+  attack(target: Point3D) {
     this.emitter.emit(UNIT_EVENTS.BEFORE_ATTACK, { target });
-
-    this.dealDamage(target, { type: 'physical', amount: 0, ratio: 1 });
-
+    this.combat.attackAt(target);
+    this.ap.remove(this.game.config.AP_COST_PER_ATTACK);
     this.emitter.emit(UNIT_EVENTS.AFTER_ATTACK, { target });
   }
 
   ready() {
     this.ap.refill();
+    this.cardManager.draw(this.game.config.CARDS_DRAWN_PER_TURN);
   }
 
   serialize(): SerializedUnit {

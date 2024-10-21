@@ -1,6 +1,5 @@
-import type { Serializable, Values } from '@game/shared';
+import type { Serializable } from '@game/shared';
 import { createEntityId, Entity } from '../entity';
-import { TypedEventEmitter } from '../utils/typed-emitter';
 
 export type SerializedCard = {
   id: string;

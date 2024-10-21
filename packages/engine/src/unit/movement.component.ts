@@ -4,6 +4,7 @@ import type { Game } from '../game';
 import { PathfinderComponent } from '../pathfinding/pathfinder.component';
 import { Interceptable } from '../utils/interceptable';
 import { TypedEventEmitter } from '../utils/typed-emitter';
+import { Position } from '../utils/position';
 
 export type MovementComponentOptions = {
   position: Point3D;
@@ -25,19 +26,15 @@ export type MoveEventMap = {
 export class MovementComponent {
   private game: Game;
 
-  private _position: Vec3;
+  private _position: Position;
 
   private pathfinding: PathfinderComponent;
-
-  private interceptors = {
-    canMove: new Interceptable<boolean>()
-  };
 
   private emitter = new TypedEventEmitter<MoveEventMap>();
 
   constructor(game: Game, options: MovementComponentOptions) {
     this.game = game;
-    this._position = Vec3.fromPoint3D(options.position);
+    this._position = Position.fromPoint3D(options.position);
     this.pathfinding = new PathfinderComponent(this.game, options.pathfindingStrategy);
   }
 
@@ -69,17 +66,11 @@ export class MovementComponent {
     return this._position.z;
   }
 
-  get canMove(): boolean {
-    return this.interceptors.canMove.getValue(true, {});
-  }
-
   isAt(point: Point3D) {
     return this._position.equals(point);
   }
 
   canMoveTo(point: Point3D, maxDistance: number) {
-    if (!this.canMove) return false;
-
     const path = this.pathfinding.getPathTo(this, point);
     if (!path) return false;
 
@@ -96,7 +87,7 @@ export class MovementComponent {
         position: this._position,
         destination: Vec3.fromPoint3D(point)
       });
-      this._position = Vec3.fromPoint3D(point);
+      this._position = Position.fromPoint3D(point);
       this.emitter.emit(MOVE_EVENTS.AFTER_MOVE, {
         position: this._position,
         previousPosition: currentPosition

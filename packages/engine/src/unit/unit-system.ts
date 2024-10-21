@@ -31,11 +31,11 @@ export class UnitSystem
     return [...this.unitMap.values()];
   }
 
-  getEntityById(id: EntityId) {
+  getUnitById(id: EntityId) {
     return this.unitMap.get(id) ?? null;
   }
 
-  getEntityAt(position: Point3D) {
+  getUnitAt(position: Point3D) {
     return (
       this.units.find(e => {
         return e.isAt(position);
@@ -43,40 +43,40 @@ export class UnitSystem
     );
   }
 
-  getNearbyEntities({ x, y, z }: Point3D) {
+  getNearbyUnits({ x, y, z }: Point3D) {
     // prettier-ignore
     return [
       // Same level
-      this.getEntityAt({ x: x - 1, y: y - 1, z }), // top left
-      this.getEntityAt({ x: x    , y: y - 1, z }), // top
-      this.getEntityAt({ x: x + 1, y: y - 1, z }), // top right
-      this.getEntityAt({ x: x - 1, y: y    , z}),  // left
-      this.getEntityAt({ x: x + 1, y: y    , z}),  // right
-      this.getEntityAt({ x: x - 1, y: y + 1, z }), // bottom left
-      this.getEntityAt({ x: x    , y: y + 1, z }), // bottom
-      this.getEntityAt({ x: x + 1, y: y + 1, z }), // bottom right,
+      this.getUnitAt({ x: x - 1, y: y - 1, z }), // top left
+      this.getUnitAt({ x: x    , y: y - 1, z }), // top
+      this.getUnitAt({ x: x + 1, y: y - 1, z }), // top right
+      this.getUnitAt({ x: x - 1, y: y    , z}),  // left
+      this.getUnitAt({ x: x + 1, y: y    , z}),  // right
+      this.getUnitAt({ x: x - 1, y: y + 1, z }), // bottom left
+      this.getUnitAt({ x: x    , y: y + 1, z }), // bottom
+      this.getUnitAt({ x: x + 1, y: y + 1, z }), // bottom right,
 
       // below
-      this.getEntityAt({ x: x - 1, y: y - 1, z: z - 1 }), // top left
-      this.getEntityAt({ x: x    , y: y - 1, z: z - 1 }), // top
-      this.getEntityAt({ x: x + 1, y: y - 1, z: z - 1 }), // top right
-      this.getEntityAt({ x: x - 1, y: y    , z: z - 1 }), // left
-      this.getEntityAt({ x: x    , y: y    , z: z - 1 }), // center
-      this.getEntityAt({ x: x + 1, y: y    , z: z - 1 }), // right
-      this.getEntityAt({ x: x - 1, y: y + 1, z: z - 1 }), // bottom left
-      this.getEntityAt({ x: x    , y: y + 1, z: z - 1 }), // bottom
-      this.getEntityAt({ x: x + 1, y: y + 1, z: z - 1 }), // bottom right,
+      this.getUnitAt({ x: x - 1, y: y - 1, z: z - 1 }), // top left
+      this.getUnitAt({ x: x    , y: y - 1, z: z - 1 }), // top
+      this.getUnitAt({ x: x + 1, y: y - 1, z: z - 1 }), // top right
+      this.getUnitAt({ x: x - 1, y: y    , z: z - 1 }), // left
+      this.getUnitAt({ x: x    , y: y    , z: z - 1 }), // center
+      this.getUnitAt({ x: x + 1, y: y    , z: z - 1 }), // right
+      this.getUnitAt({ x: x - 1, y: y + 1, z: z - 1 }), // bottom left
+      this.getUnitAt({ x: x    , y: y + 1, z: z - 1 }), // bottom
+      this.getUnitAt({ x: x + 1, y: y + 1, z: z - 1 }), // bottom right,
 
       // Above
-      this.getEntityAt({ x: x - 1, y: y - 1, z: z + 1 }), // top left
-      this.getEntityAt({ x: x    , y: y - 1, z: z + 1 }), // top
-      this.getEntityAt({ x: x + 1, y: y - 1, z: z + 1 }), // top right
-      this.getEntityAt({ x: x - 1, y: y    , z: z + 1 }), // left
-      this.getEntityAt({ x: x    , y: y    , z: z + 1 }), // center
-      this.getEntityAt({ x: x + 1, y: y    , z: z + 1 }), // right
-      this.getEntityAt({ x: x - 1, y: y + 1, z: z + 1 }), // bottom left
-      this.getEntityAt({ x: x    , y: y + 1, z: z + 1 }), // bottom
-      this.getEntityAt({ x: x + 1, y: y + 1, z: z + 1 }), // bottom right,
+      this.getUnitAt({ x: x - 1, y: y - 1, z: z + 1 }), // top left
+      this.getUnitAt({ x: x    , y: y - 1, z: z + 1 }), // top
+      this.getUnitAt({ x: x + 1, y: y - 1, z: z + 1 }), // top right
+      this.getUnitAt({ x: x - 1, y: y    , z: z + 1 }), // left
+      this.getUnitAt({ x: x    , y: y    , z: z + 1 }), // center
+      this.getUnitAt({ x: x + 1, y: y    , z: z + 1 }), // right
+      this.getUnitAt({ x: x - 1, y: y + 1, z: z + 1 }), // bottom left
+      this.getUnitAt({ x: x    , y: y + 1, z: z + 1 }), // bottom
+      this.getUnitAt({ x: x + 1, y: y + 1, z: z + 1 }), // bottom right,
     ].filter(isDefined)
   }
 

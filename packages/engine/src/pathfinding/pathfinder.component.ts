@@ -33,7 +33,7 @@ export class PathfinderComponent {
   }
 
   getPathTo(from: Point3D, to: Point3D) {
-    const entityAtPoint = this.game.unitSystem.getEntityAt(to);
+    const entityAtPoint = this.game.unitSystem.getUnitAt(to);
     if (entityAtPoint) return null;
 
     const path = findShortestPath<SerializedCoords>(

@@ -1,7 +1,7 @@
-import { Vec3, type Point3D, type Serializable } from '@game/shared';
-import { type Direction } from './board-utils';
+import { type Point3D, type Serializable } from '@game/shared';
 import { createEntityId, Entity } from '../entity';
 import type { Game } from '../game';
+import { Position } from '../utils/position';
 
 export type SerializedCoords = `${string}:${string}:${string}`;
 
@@ -16,14 +16,14 @@ export type CellOptions = {
 };
 
 export class Cell extends Entity implements Serializable {
-  public position: Vec3;
+  public position: Position;
 
   constructor(
     private game: Game,
     public options: CellOptions
   ) {
     super(createEntityId(options.id));
-    this.position = Vec3.fromPoint3D(options.position);
+    this.position = Position.fromPoint3D(options.position);
   }
 
   get cellAbove(): Cell | null {
@@ -66,9 +66,9 @@ export class Cell extends Entity implements Serializable {
     return true;
   }
 
-  // get entity() {
-  //   return this.game.entitySystem.getEntityAt(this);
-  // }
+  get unit() {
+    return this.game.unitSystem.getUnitAt(this);
+  }
 
   // get canSummonAt() {
   //   return !this.entity && this.isWalkable && this.terrain === TERRAINS.GROUND;

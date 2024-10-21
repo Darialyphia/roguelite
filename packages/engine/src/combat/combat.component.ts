@@ -1,7 +1,10 @@
 import { match } from 'ts-pattern';
 import type { Game } from '../game';
 import { Interceptable } from '../utils/interceptable';
-import type { Unit } from './unit.entity';
+import type { Unit } from '../unit/unit.entity';
+import type { TargetingStrategy } from '../targeting/targeting-strategy';
+import type { AOEShape } from '../targeting/aoe-shapes';
+import { isDefined, type Point3D } from '@game/shared';
 
 export type Damage = {
   type: 'physical' | 'magical';
@@ -25,13 +28,22 @@ export type CombatStats = {
 };
 
 export type CombatComponentOptions = {
+  unit: Unit;
   baseStats: CombatStats;
+  attackPattern: TargetingStrategy;
+  aoeShape: AOEShape;
 };
 
 export class CombatComponent {
   private game: Game;
 
+  private unit: Unit;
+
   private baseStats: CombatStats;
+
+  private targeting: TargetingStrategy;
+
+  private aoeShape: AOEShape;
 
   private interceptors = {
     pAtk: new Interceptable<number>(),
@@ -50,7 +62,14 @@ export class CombatComponent {
 
   constructor(game: Game, options: CombatComponentOptions) {
     this.game = game;
+    this.unit = options.unit;
     this.baseStats = options.baseStats;
+    this.targeting = options.attackPattern;
+    this.aoeShape = options.aoeShape;
+  }
+
+  get canAttackAt() {
+    return this.targeting.canAttackAt;
   }
 
   get pAtk(): number {
@@ -112,5 +131,15 @@ export class CombatComponent {
         return base * (100 / (100 + reduction));
       })
       .exhaustive();
+  }
+
+  attackAt(point: Point3D, allowFriendlyFire = false) {
+    const targets = this.aoeShape
+      .getCells(point)
+      .map(cell => cell.unit)
+      .filter(isDefined)
+      .filter(unit => (allowFriendlyFire ? true : unit.isEnemy(this.unit)));
+
+    this.unit.dealDamage(targets, { type: 'physical', amount: 0, ratio: 1 });
   }
 }
