@@ -10,7 +10,7 @@ export type inferInterceptor<T> =
 
 export class Interceptable<
   TValue extends string | number | boolean,
-  TContext extends AnyObject
+  TContext extends AnyObject = Record<string, never>
 > {
   listeners: { interceptor: Interceptor<TValue, TContext>; priority: number }[] = [];
 

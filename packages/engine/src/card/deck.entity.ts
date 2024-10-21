@@ -12,16 +12,14 @@ export type SerializedDeck = {
 
 export const DECK_EVENTS = {
   BEFORE_DRAW: 'before_draw',
-  AFTER_DRAW: 'after_draw',
-  BEFORE_REPLACE: 'before_replace',
-  AFTER_REPLACE: 'after_replace'
+  AFTER_DRAW: 'after_draw'
 } as const;
 
 export type DeckEvent = Values<typeof DECK_EVENTS>;
 
 export type DeckEventMap = {
-  [DECK_EVENTS.BEFORE_DRAW]: [Deck];
-  [DECK_EVENTS.AFTER_DRAW]: [{ deck: Deck; cards: Card[] }];
+  [DECK_EVENTS.BEFORE_DRAW]: [];
+  [DECK_EVENTS.AFTER_DRAW]: [{ cards: Card[] }];
 };
 
 export class Deck extends Entity implements Serializable<SerializedDeck> {
@@ -55,12 +53,11 @@ export class Deck extends Entity implements Serializable<SerializedDeck> {
   }
 
   draw(amount: number) {
-    this.emitter.emit(DECK_EVENTS.BEFORE_DRAW, this);
+    this.emitter.emit(DECK_EVENTS.BEFORE_DRAW);
 
     const cards = this.cards.splice(0, amount);
-    cards.forEach(card => card.draw());
 
-    this.emitter.emit(DECK_EVENTS.AFTER_DRAW, { deck: this, cards: cards });
+    this.emitter.emit(DECK_EVENTS.AFTER_DRAW, { cards: cards });
 
     return cards;
   }

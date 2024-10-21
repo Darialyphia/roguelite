@@ -19,7 +19,7 @@ export type SolidPathfindingStrategyOptions = {
 /**
  * A pathfinding strategy for solid bodies that cannot pass through other bodies
  */
-export class SolidPathfindingStrategy implements PathfindingStrategy {
+export class SolidBodyPathfindingStrategy implements PathfindingStrategy {
   private cache = new Map<SerializedCoords, Edge<SerializedCoords>[]>();
 
   private origin!: Vec3;

@@ -1,21 +1,24 @@
 import { Vec3, type Point3D, type Serializable, type Values } from '@game/shared';
 import { createEntityId, Entity } from '../entity';
-import { Card, type CardOptions } from '../card/card.entity';
-import { Deck } from '../card/deck.entity';
+import { Card, type CardOptions, type SerializedCard } from '../card/card.entity';
 import type { Game } from '../game';
-import { PathfinderComponent } from '../pathfinding/pathfinder.component';
-import { SolidPathfindingStrategy } from '../pathfinding/strategies/solid-pathfinding.strategy';
+import { SolidBodyPathfindingStrategy } from '../pathfinding/strategies/solid-pathfinding.strategy';
 import type { UnitBlueprint } from './unit-blueprint';
 import { Interceptable } from '../utils/interceptable';
 import { ActionPointComponent } from './action-point.component';
 import { TypedEventEmitter } from '../utils/typed-emitter';
 import { HealthComponent } from './health.component';
+import { CardManagerComponent } from '../card/card-manager.component';
+import { CombatComponent, type Damage } from './combat.component';
+import { MOVE_EVENTS, MovementComponent } from './movement.component';
+import { DECK_EVENTS } from '../card/deck.entity';
 
 export type SerializedUnit = {
   id: string;
   position: Point3D;
   blueprint: UnitBlueprint;
   deckSize: number;
+  hand: SerializedCard[];
 };
 
 export type UnitOptions = {
@@ -27,14 +30,30 @@ export type UnitOptions = {
 
 export const UNIT_EVENTS = {
   BEFORE_MOVE: 'before_move',
-  AFTER_MOVE: 'after_move'
+  AFTER_MOVE: 'after_move',
+  BEFORE_DRAW: 'before_draw',
+  AFTER_DRAW: 'after_draw',
+  BEFORE_ATTACK: 'before_attack',
+  AFTER_ATTACK: 'after_attack',
+  BEFORE_DEAL_DAMAGE: 'before_deal_damage',
+  AFTER_DEAL_DAMAGE: 'after_deal_damage',
+  BEFORE_RECEIVE_DAMAGE: 'before_receive_damage',
+  AFTER_RECEIVE_DAMAGE: 'after_receive_damage'
 } as const;
 
 export type UnitEvent = Values<typeof UNIT_EVENTS>;
 
 export type UnitEventMap = {
-  [UNIT_EVENTS.BEFORE_MOVE]: [{ entity: Entity; destination: Vec3 }];
-  [UNIT_EVENTS.AFTER_MOVE]: [{ entity: Entity; previousPosition: Vec3 }];
+  [UNIT_EVENTS.BEFORE_MOVE]: [{ position: Vec3; destination: Vec3 }];
+  [UNIT_EVENTS.AFTER_MOVE]: [{ position: Vec3; previousPosition: Vec3 }];
+  [UNIT_EVENTS.BEFORE_DRAW]: [];
+  [UNIT_EVENTS.AFTER_DRAW]: [{ cards: Card[] }];
+  [UNIT_EVENTS.BEFORE_ATTACK]: [{ target: Unit }];
+  [UNIT_EVENTS.AFTER_ATTACK]: [{ target: Unit }];
+  [UNIT_EVENTS.BEFORE_DEAL_DAMAGE]: [{ target: Unit; damage: Damage; amount: number }];
+  [UNIT_EVENTS.AFTER_DEAL_DAMAGE]: [{ target: Unit; damage: Damage; amount: number }];
+  [UNIT_EVENTS.BEFORE_RECEIVE_DAMAGE]: [{ from: Unit; damage: Damage; amount: number }];
+  [UNIT_EVENTS.AFTER_RECEIVE_DAMAGE]: [{ from: Unit; damage: Damage; amount: number }];
 };
 
 export class Unit extends Entity implements Serializable<SerializedUnit> {
@@ -42,23 +61,19 @@ export class Unit extends Entity implements Serializable<SerializedUnit> {
 
   private emitter = new TypedEventEmitter<UnitEventMap>();
 
-  private position: Vec3;
-
-  private deck: Deck;
+  private cardManager: CardManagerComponent;
 
   private blueprint: UnitBlueprint;
-
-  private pathfinding: PathfinderComponent;
 
   readonly ap: ActionPointComponent;
 
   readonly hp: HealthComponent;
 
-  private interceptors = {
-    canMove: new Interceptable<boolean, Unit>(),
+  readonly movement: MovementComponent;
 
-    attack: new Interceptable<number, Unit>(),
-    defense: new Interceptable<number, Unit>(),
+  readonly combat: CombatComponent;
+
+  private interceptors = {
     speed: new Interceptable<number, Unit>()
   };
 
@@ -66,29 +81,32 @@ export class Unit extends Entity implements Serializable<SerializedUnit> {
     super(createEntityId(options.id));
     this.game = game;
     this.blueprint = options.blueprint;
-    this.position = Vec3.fromPoint3D(options.position);
-    this.deck = new Deck(
-      this.game,
-      options.deck.map(card => new Card(card))
-    );
-    this.pathfinding = new PathfinderComponent(
-      this.game,
-      new SolidPathfindingStrategy(this.game)
-    );
+    this.cardManager = new CardManagerComponent(this.game, { deck: options.deck });
     this.ap = new ActionPointComponent({ maxAp: this.blueprint.maxAp });
     this.hp = new HealthComponent({ maxHp: this.blueprint.maxHp });
+    this.combat = new CombatComponent(this.game, { baseStats: this.blueprint });
+    this.movement = new MovementComponent(this.game, {
+      position: options.position,
+      pathfindingStrategy: new SolidBodyPathfindingStrategy(this.game)
+    });
+
+    this.forwardEvents();
+  }
+
+  get position() {
+    return this.movement.position;
   }
 
   get x() {
-    return this.position.x;
+    return this.movement.x;
   }
 
   get y() {
-    return this.position.y;
+    return this.movement.y;
   }
 
   get z() {
-    return this.position.z;
+    return this.movement.z;
   }
 
   get on() {
@@ -103,44 +121,79 @@ export class Unit extends Entity implements Serializable<SerializedUnit> {
     return this.emitter.off;
   }
 
-  isAt(point: Point3D) {
-    return this.position.equals(point);
-  }
-
-  get speed() {
+  get speed(): number {
     return this.interceptors.speed.getValue(this.blueprint.speed, this);
   }
 
-  get canMove(): boolean {
-    return this.interceptors.canMove.getValue(true, this);
+  get pAtk() {
+    return this.combat.pAtk;
+  }
+
+  get mAtk() {
+    return this.combat.mAtk;
+  }
+
+  get pDef() {
+    return this.combat.pDef;
+  }
+
+  get mDef() {
+    return this.combat.mDef;
+  }
+
+  get pDefPiercing() {
+    return this.combat.pDefPiercing;
+  }
+
+  get mDefPiercing() {
+    return this.combat.mDefPiercing;
+  }
+
+  private forwardEvents() {
+    this.movement.on(MOVE_EVENTS.BEFORE_MOVE, e => {
+      this.emitter.emit(UNIT_EVENTS.BEFORE_MOVE, e);
+    });
+    this.movement.on(MOVE_EVENTS.AFTER_MOVE, e => {
+      this.emitter.emit(UNIT_EVENTS.AFTER_MOVE, e);
+    });
+    this.cardManager.deck.on(DECK_EVENTS.BEFORE_DRAW, () => {
+      this.emitter.emit(DECK_EVENTS.BEFORE_DRAW);
+    });
+    this.cardManager.deck.on(DECK_EVENTS.AFTER_DRAW, e => {
+      this.emitter.emit(DECK_EVENTS.AFTER_DRAW, e);
+    });
   }
 
   canMoveTo(point: Point3D) {
-    if (!this.canMove) return false;
-
-    const path = this.pathfinding.getPathTo(this, point);
-    if (!path) return false;
-
-    return path.distance <= this.ap.current;
+    return this.movement.canMoveTo(point, this.ap.current);
   }
 
   move(to: Point3D) {
-    const path = this.pathfinding.getPathTo(this, to);
+    const path = this.movement.move(to);
     if (!path) return;
 
-    for (const point of path.path) {
-      const currentPosition = this.position;
-      this.emitter.emit(UNIT_EVENTS.BEFORE_MOVE, {
-        entity: this,
-        destination: Vec3.fromPoint3D(point)
-      });
-      this.position = Vec3.fromPoint3D(point);
-      this.emitter.emit(UNIT_EVENTS.AFTER_MOVE, {
-        entity: this,
-        previousPosition: currentPosition
-      });
-    }
     this.ap.remove(path.distance * this.game.config.AP_SPENT_PER_MOVEMENT);
+  }
+
+  dealDamage(target: Unit, damage: Damage) {
+    const amount = this.combat.getDamageDealt(damage, target);
+    this.emitter.emit(UNIT_EVENTS.BEFORE_DEAL_DAMAGE, { target, damage, amount });
+    target.receiveDamage(this, damage, amount);
+    this.emitter.emit(UNIT_EVENTS.AFTER_DEAL_DAMAGE, { target, damage, amount });
+  }
+
+  receiveDamage(from: Unit, damage: Damage, amount: number) {
+    this.emitter.emit(UNIT_EVENTS.BEFORE_RECEIVE_DAMAGE, { from, damage, amount });
+    this.hp.remove(amount);
+    this.emitter.emit(UNIT_EVENTS.AFTER_RECEIVE_DAMAGE, { from, damage, amount });
+  }
+
+  attack(target: Unit) {
+    this.emitter.emit(UNIT_EVENTS.BEFORE_ATTACK, { target });
+
+    this.dealDamage(target, { type: 'physical', amount: 0, ratio: 1 });
+
+    this.emitter.emit(UNIT_EVENTS.AFTER_ATTACK, { target });
   }
 
   ready() {
@@ -152,7 +205,8 @@ export class Unit extends Entity implements Serializable<SerializedUnit> {
       id: this.id,
       position: this.position.serialize(),
       blueprint: this.blueprint,
-      deckSize: this.deck.size
+      deckSize: this.cardManager.remainingCardsInDeck,
+      hand: [...this.cardManager.hand.values()].map(card => card.serialize())
     };
   }
 }

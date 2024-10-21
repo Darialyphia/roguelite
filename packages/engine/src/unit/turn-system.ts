@@ -18,7 +18,7 @@ export type TurnEventMap = {
 export class TurnSystem {
   private _turnCount = 1;
 
-  private queue = new Set<Unit>();
+  private queue: Unit[] = [];
 
   private game: Game;
 
@@ -50,10 +50,10 @@ export class TurnSystem {
 
   startGameTurn() {
     this._turnCount++;
-    this.queue.clear();
+    this.queue = [];
     this.game.unitSystem.units
       .sort((a, b) => b.speed - a.speed)
-      .forEach(unit => this.queue.add(unit));
+      .forEach(unit => this.queue.push(unit));
     this.emitter.emit(TURN_EVENTS.TURN_START, { turnCount: this.turnCount });
   }
 
@@ -62,7 +62,7 @@ export class TurnSystem {
   }
 
   onUnitTurnEnd() {
-    this.queue.delete(this.activeUnit);
+    this.queue.splice(this.queue.indexOf(this.activeUnit), 1);
 
     if (!this.activeUnit) {
       this.endGameTurn();

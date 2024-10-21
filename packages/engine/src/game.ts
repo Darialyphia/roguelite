@@ -12,11 +12,11 @@ export type SerializedGameState = {
 };
 
 type GlobalUnitEvents = {
-  [Event in UnitEvent as `entity:${Event}`]: UnitEventMap[Event];
+  [Event in UnitEvent as `entity.${Event}`]: UnitEventMap[Event];
 };
 
 type GlobalTurnEvents = {
-  [Event in TurnEvent as `turn:${Event}`]: TurnEventMap[Event];
+  [Event in TurnEvent as `turn.${Event}`]: TurnEventMap[Event];
 };
 
 type GameEventsBase = {
