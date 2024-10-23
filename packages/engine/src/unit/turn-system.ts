@@ -2,6 +2,7 @@ import type { Values } from '@game/shared';
 import type { Game } from '../game';
 import type { Unit } from './unit.entity';
 import { TypedEventEmitter } from '../utils/typed-emitter';
+import { System } from '../system';
 
 export const TURN_EVENTS = {
   TURN_START: 'turn_start',
@@ -15,17 +16,15 @@ export type TurnEventMap = {
   [TURN_EVENTS.TURN_END]: [{ turnCount: number }];
 };
 
-export class TurnSystem {
+export class TurnSystem extends System<never> {
   private _turnCount = 1;
 
   private queue: Unit[] = [];
 
-  private game: Game;
-
   private emitter = new TypedEventEmitter<TurnEventMap>();
 
-  constructor(game: Game) {
-    this.game = game;
+  initialize() {
+    this.game.on('turn.turn_end', this.onUnitTurnEnd.bind(this));
   }
 
   get turnCount() {
@@ -69,6 +68,6 @@ export class TurnSystem {
       return;
     }
 
-    this.activeUnit.ready();
+    this.activeUnit.startTurn();
   }
 }

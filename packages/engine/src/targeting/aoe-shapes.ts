@@ -1,4 +1,3 @@
-import type { Position } from '../utils/position';
 import type { Game } from '../game';
 import { isDefined, type Point3D } from '@game/shared';
 import type { Cell } from '../board/cell';

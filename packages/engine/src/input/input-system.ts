@@ -1,7 +1,9 @@
 import type { AnyFunction, Constructor, Nullable, Values } from '@game/shared';
 import type { Game } from '../game';
-import { TestInput } from './inputs/test.input';
 import type { DefaultSchema, Input, SerializedInput } from './input';
+import { MoveInput } from './inputs/move.input';
+import { AttackInput } from './inputs/attack.input';
+import { PlayCardInput } from './inputs/play-card.input';
 
 type GenericInputMap = Record<string, Constructor<Input<DefaultSchema>>>;
 
@@ -16,7 +18,9 @@ type ValidatedInputMap<T extends GenericInputMap> = {
 const validateinputMap = <T extends GenericInputMap>(data: ValidatedInputMap<T>) => data;
 
 const inputMap = validateinputMap({
-  test: TestInput
+  move: MoveInput,
+  attack: AttackInput,
+  playCard: PlayCardInput
 });
 
 export type InputSystemOptions = { game: Game };
@@ -79,9 +83,9 @@ export class InputSystem {
     if (!this.isActionType(type)) return;
     // this.session.logger(`%c[ACTION:${type}]`, 'color: blue', payload);
     const ctor = inputMap[type];
-    const action = new ctor(payload);
+    const action = new ctor(this.game, payload);
     this._currentAction = action;
-    action.execute(this.game);
+    action.execute();
     this.history.push(action);
     this._currentAction = null;
   }

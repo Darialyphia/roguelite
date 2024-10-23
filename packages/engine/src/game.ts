@@ -6,13 +6,14 @@ import { RngSystem } from './rng/rng-system';
 import { TurnSystem, type TurnEvent, type TurnEventMap } from './unit/turn-system';
 import type { UnitEvent, UnitEventMap } from './unit/unit.entity';
 import { config } from './config';
+import { PlayerSystem } from './player/player-system';
 
 export type SerializedGameState = {
   foo: boolean;
 };
 
 type GlobalUnitEvents = {
-  [Event in UnitEvent as `entity.${Event}`]: UnitEventMap[Event];
+  [Event in UnitEvent as `unit.${Event}`]: UnitEventMap[Event];
 };
 
 type GlobalTurnEvents = {
@@ -36,6 +37,8 @@ export class Game implements Serializable<SerializedGameState> {
 
   readonly unitSystem = new UnitSystem(this);
 
+  readonly playerSystem = new PlayerSystem(this);
+
   readonly rngSystem = new RngSystem(this);
 
   readonly turnSystem = new TurnSystem(this);
@@ -49,8 +52,11 @@ export class Game implements Serializable<SerializedGameState> {
       height: 10,
       cells: []
     });
-
+    this.playerSystem.initialize({
+      teams: []
+    });
     this.unitSystem.initialize({ units: [] });
+    this.turnSystem.initialize();
   }
 
   get on() {

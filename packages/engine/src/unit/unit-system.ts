@@ -1,6 +1,6 @@
 import { isDefined, type Point3D, type Serializable } from '@game/shared';
 import type { Entity, EntityId } from '../entity';
-import { Unit, type SerializedUnit, type UnitOptions } from './unit.entity';
+import { Unit, UNIT_EVENTS, type SerializedUnit, type UnitOptions } from './unit.entity';
 import { System } from '../system';
 
 export type SerializedUnitSystem = {
@@ -23,7 +23,7 @@ export class UnitSystem
     options.units.forEach(rawEntity => {
       const entity = new Unit(this.game, rawEntity);
       this.unitMap.set(entity.id, entity);
-      this.setupListeners(entity);
+      this.forwardListeners(entity);
     });
   }
 
@@ -80,19 +80,21 @@ export class UnitSystem
     ].filter(isDefined)
   }
 
-  setupListeners(entity: Entity) {
-    // Object.values(ENTITY_EVENTS).forEach(eventName => {
-    //   entity.on(eventName, event => {
-    //     await this.game.emit(`entity.${eventName}`, event as any);
-    //   });
-    // });
+  forwardListeners(unit: Unit) {
+    Object.values(UNIT_EVENTS).forEach(eventName => {
+      //@ts-expect-error
+      unit.on(eventName, event => {
+        //@ts-expect-error
+        this.game.emit(`unit.${eventName}`, { ...event, unit } as any);
+      });
+    });
   }
 
   addUnit(unitOptions: Omit<UnitOptions, 'id'>) {
     const id = `unit_${this.nextUnitId}`;
     const entity = new Unit(this.game, { ...unitOptions, id });
     this.unitMap.set(entity.id, entity);
-    this.setupListeners(entity);
+    this.forwardListeners(entity);
 
     return entity;
   }

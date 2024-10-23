@@ -1,6 +1,7 @@
 import { z } from 'zod';
 import type { JSONValue, Serializable } from '@game/shared';
 import type { Game } from '../game';
+import { createEntityId } from '../entity';
 
 export const defaultInputSchema = z.object({
   playerId: z.string()
@@ -23,9 +24,12 @@ export abstract class Input<TSchema extends DefaultSchema>
 
   protected payload!: z.infer<TSchema>;
 
-  constructor(protected rawPayload: JSONValue) {}
+  constructor(
+    protected game: Game,
+    protected rawPayload: JSONValue
+  ) {}
 
-  protected abstract impl(game: Game): void;
+  protected abstract impl(): void;
 
   private parsePayload() {
     const parsed = this.payloadSchema.safeParse(this.rawPayload);
@@ -36,11 +40,19 @@ export abstract class Input<TSchema extends DefaultSchema>
     this.payload = parsed.data;
   }
 
-  async execute(game: Game) {
+  get player() {
+    return this.game.playerSystem.getPlayerById(createEntityId(this.payload.playerId))!;
+  }
+
+  async execute() {
     this.parsePayload();
     if (!this.payload) return;
 
-    this.impl(game);
+    if (!this.player) {
+      throw new Error(`Unknown player id: ${this.payload.playerId}`);
+    }
+
+    this.impl();
   }
 
   serialize() {

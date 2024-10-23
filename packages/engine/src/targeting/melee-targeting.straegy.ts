@@ -1,22 +1,30 @@
-import { isDefined, type Point3D } from '@game/shared';
-import type { TargetingStrategy } from './targeting-strategy';
+import { type Point3D } from '@game/shared';
+import type { TargetingStrategy, TargetingType } from './targeting-strategy';
 import type { Unit } from '../unit/unit.entity';
 import type { Game } from '../game';
+import { Position } from '../utils/position';
+import { match } from 'ts-pattern';
 
 export class MeleeTargetingPatternStrategy implements TargetingStrategy {
   constructor(
     private game: Game,
-    private unit: Unit
+    private unit: Unit,
+    private type: TargetingType
   ) {}
 
-  canAttackAt(point: Point3D) {
+  canTargetAt(point: Point3D) {
+    const position = Position.fromPoint3D(point);
+    if (!position.isAxisAligned(point)) return false;
+    if (!position.isNearby(point)) return false;
+
     const unit = this.game.unitSystem.getUnitAt(point);
-    if (!unit) return false;
 
-    return this.unit.position.isAxisAligned(point) && this.unit.position.isNearby(point);
-  }
-
-  getAOE(target: Point3D) {
-    return [this.game.boardSystem.getCellAt(target)].filter(isDefined);
+    return match(this.type)
+      .with('any', () => true)
+      .with('empty', () => !unit)
+      .with('ally', () => !!unit?.isAlly(this.unit))
+      .with('enemy', () => !!unit?.isEnemy(this.unit))
+      .with('both', () => !!unit)
+      .exhaustive();
   }
 }

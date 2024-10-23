@@ -71,7 +71,7 @@ export class CombatComponent {
   canAttackAt(point: Point3D) {
     if (!this.game.unitSystem.getUnitAt(point)) return;
 
-    return this.targeting.canAttackAt(point);
+    return this.targeting.canTargetAt(point);
   }
 
   get pAtk(): number {
@@ -116,21 +116,30 @@ export class CombatComponent {
     };
   }
 
-  getDamageDealt(damage: Damage, opponent: Unit) {
+  getDamageDealt(damage: Damage) {
     return match(damage.type)
       .with('physical', () => {
-        const base = damage.amount + this.pAtk * damage.ratio;
+        return damage.amount + this.pAtk * damage.ratio;
+      })
+      .with('magical', () => {
+        return damage.amount + this.mAtk * damage.ratio;
+      })
+      .exhaustive();
+  }
+
+  getDamageTaken(damage: Damage, amount: number, opponent: CombatStats) {
+    return match(damage.type)
+      .with('physical', () => {
         const reduction =
           opponent.pDef * (this.pDefPiercing.percentage / 100) - this.pDefPiercing.flat;
 
-        return base * (100 / (100 + reduction));
+        return amount * (100 / (100 + reduction));
       })
       .with('magical', () => {
-        const base = damage.amount + this.mAtk * damage.ratio;
         const reduction =
           opponent.mDef * (this.mDefPiercing.percentage / 100) - this.mDefPiercing.flat;
 
-        return base * (100 / (100 + reduction));
+        return amount * (100 / (100 + reduction));
       })
       .exhaustive();
   }

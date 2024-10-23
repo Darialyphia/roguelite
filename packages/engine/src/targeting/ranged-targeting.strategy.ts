@@ -1,27 +1,31 @@
-import { isDefined, type Point3D } from '@game/shared';
+import { type Point3D } from '@game/shared';
 import type { Game } from '../game';
 import type { Unit } from '../unit/unit.entity';
-import type { TargetingStrategy } from './targeting-strategy';
+import type { TargetingStrategy, TargetingType } from './targeting-strategy';
+import { Position } from '../utils/position';
+import { match } from 'ts-pattern';
 
 export class RangedTargetingStrategy implements TargetingStrategy {
   constructor(
     private game: Game,
     private unit: Unit,
+    private type: TargetingType,
     public readonly range: number
   ) {}
 
-  canAttackAt(point: Point3D) {
+  canTargetAt(point: Point3D) {
+    const position = Position.fromPoint3D(point);
+    if (position.isNearby(point)) return false;
+    if (!position.isWithinCells(point, this.range)) return false;
+
     const unit = this.game.unitSystem.getUnitAt(point);
-    if (!unit) return false;
 
-    return (
-      this.unit.position.isAxisAligned(point) &&
-      !this.unit.position.isNearby(point) &&
-      this.unit.position.isWithinCells(point, this.range)
-    );
-  }
-
-  getAOE(target: Point3D) {
-    return [this.game.boardSystem.getCellAt(target)].filter(isDefined);
+    return match(this.type)
+      .with('any', () => true)
+      .with('empty', () => !unit)
+      .with('ally', () => !!unit?.isAlly(this.unit))
+      .with('enemy', () => !!unit?.isEnemy(this.unit))
+      .with('both', () => !!unit)
+      .exhaustive();
   }
 }

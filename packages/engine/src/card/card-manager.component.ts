@@ -1,3 +1,4 @@
+import type { Point3D } from '@game/shared';
 import type { Game } from '../game';
 import { Card, type CardOptions } from './card.entity';
 import { Deck } from './deck.entity';
@@ -19,7 +20,7 @@ export class CardManagerComponent {
     this.game = game;
     this.deck = new Deck(
       this.game,
-      options.deck.map(c => new Card(c))
+      options.deck.map(card => new Card(this.game, card))
     );
 
     this.draw(this.game.config.INITIAL_HAND_SIZE);
@@ -31,6 +32,10 @@ export class CardManagerComponent {
 
   get remainingCardsInDeck() {
     return this.deck.size;
+  }
+
+  getCardAt(index: number) {
+    return [...this.hand][index];
   }
 
   draw(amount: number) {
@@ -50,9 +55,9 @@ export class CardManagerComponent {
     this.discardPile.add(card);
   }
 
-  play(card: Card) {
+  play(card: Card, targets: Point3D[]) {
     if (!this.hand.has(card)) return;
-    card.play();
+    card.play(targets);
     this.discard(card);
   }
 }
