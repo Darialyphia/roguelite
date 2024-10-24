@@ -1,1 +1,1 @@
-export const foo = true;
+export { Game } from './game';

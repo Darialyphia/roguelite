@@ -1,15 +1,16 @@
 import type { Prettify, Serializable } from '@game/shared';
 import { TypedEventEmitter } from './utils/typed-emitter';
-import { BoardSystem } from './board/board-system';
+import { BoardSystem, type SerializedBoard } from './board/board-system';
 import { UnitSystem } from './unit/unit-system';
 import { RngSystem } from './rng/rng-system';
 import { TurnSystem, type TurnEvent, type TurnEventMap } from './unit/turn-system';
-import type { UnitEvent, UnitEventMap } from './unit/unit.entity';
+import type { SerializedUnit, UnitEvent, UnitEventMap } from './unit/unit.entity';
 import { config } from './config';
 import { PlayerSystem } from './player/player-system';
 
 export type SerializedGameState = {
-  foo: boolean;
+  units: SerializedUnit[];
+  board: SerializedBoard;
 };
 
 type GlobalUnitEvents = {
@@ -72,6 +73,9 @@ export class Game implements Serializable<SerializedGameState> {
   }
 
   serialize() {
-    return { foo: true };
+    return {
+      units: this.unitSystem.units.map(u => u.serialize()),
+      board: this.boardSystem.serialize()
+    };
   }
 }
