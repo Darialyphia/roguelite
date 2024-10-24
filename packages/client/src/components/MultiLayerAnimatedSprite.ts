@@ -1,12 +1,19 @@
 import type { ParsedAsepriteSheet } from '@/utils/aseprite-parser';
-import { isString } from '@game/shared';
-import { AnimatedSprite, Container, ObservablePoint, Point } from 'pixi.js';
+import { isDefined, isString } from '@game/shared';
+import {
+  AnimatedSprite,
+  Container,
+  ObservablePoint,
+  Point,
+  Texture
+} from 'pixi.js';
+import { ref, watchEffect, type Ref } from 'vue';
 
 export type Parts = {
-  armor: string;
-  helm: string;
-  weapon: string;
-  vfx: string;
+  armor: string | null;
+  helm: string | null;
+  weapon: string | null;
+  vfx: string | null;
 };
 
 export class MultiLayerAnimatedSprite extends Container {
@@ -34,37 +41,53 @@ export class MultiLayerAnimatedSprite extends Container {
     0
   );
 
-  private parts: Parts;
+  private sheets: ParsedAsepriteSheet['sheets'];
+
+  private _parts: Ref<Parts>;
+
+  private _animation: Ref<string>;
 
   constructor(
-    private sheets: ParsedAsepriteSheet['sheets'],
-    private _animation: string,
-    parts: string | Parts
+    sheets: ParsedAsepriteSheet['sheets'],
+    animation: string,
+    parts: null | string | Parts
   ) {
     super();
-    this.parts = isString(parts)
-      ? { armor: parts, helm: parts, weapon: parts, vfx: parts }
-      : {
-          armor: parts.armor,
-          helm: parts.helm,
-          weapon: parts.weapon,
-          vfx: parts.vfx
-        };
+    this.sheets = sheets;
+    this._animation = ref(animation);
+    this._parts = ref(
+      isString(parts) || !isDefined(parts)
+        ? { armor: parts, helm: parts, weapon: parts, vfx: parts }
+        : {
+            armor: parts.armor,
+            helm: parts.helm,
+            weapon: parts.weapon,
+            vfx: parts.vfx
+          }
+    );
     this.body = new AnimatedSprite(this.getBodyFrames());
     this.armor = new AnimatedSprite(this.getFrames('armor'));
     this.helm = new AnimatedSprite(this.getFrames('helm'));
     this.weapon = new AnimatedSprite(this.getFrames('weapon'));
     this.vfx = new AnimatedSprite(this.getFrames('vfx'));
     this.addChild(this.body, this.armor, this.helm, this.weapon, this.vfx);
+
+    const unsub = watchEffect(() => {
+      this.updateParts();
+    });
+    this.on('destroyed', unsub);
+  }
+
+  get parts() {
+    return this._parts.value;
   }
 
   get animation() {
-    return this._animation;
+    return this._animation.value;
   }
 
   set animation(val) {
-    this._animation = val;
-    this.updateParts();
+    this._animation.value = val;
   }
 
   private updateParts() {
@@ -75,17 +98,16 @@ export class MultiLayerAnimatedSprite extends Container {
   }
 
   private getBodyFrames() {
-    return this.sheets.base.body.animations[this._animation];
+    return this.sheets.base.body.animations[this._animation.value];
   }
 
   private getFrames(
     part: Exclude<keyof ParsedAsepriteSheet['sheets'][string], 'body'>
   ) {
-    return this.sheets[this.parts[part]][part].animations[this._animation];
-  }
+    if (!this._parts.value[part]) return [Texture.EMPTY];
 
-  setPart(part: keyof Parts, value: string) {
-    this.parts[part] = value;
-    this.updateParts();
+    return this.sheets[this._parts.value[part]][part].animations[
+      this._animation.value
+    ];
   }
 }
