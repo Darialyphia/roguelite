@@ -116,16 +116,19 @@ type LoadedAsepriteSheet = {
   groups: Record<string, LayerGroup>;
 };
 
-export type ParsedAsepriteSheet = Record<
-  string,
-  {
-    body: Spritesheet;
-    weapon: Spritesheet;
-    armor: Spritesheet;
-    helm: Spritesheet;
-    vfx: Spritesheet;
-  }
->;
+export type ParsedAsepriteSheet = {
+  groups: string[];
+  sheets: Record<
+    string,
+    {
+      body: Spritesheet;
+      weapon: Spritesheet;
+      armor: Spritesheet;
+      helm: Spritesheet;
+      vfx: Spritesheet;
+    }
+  >;
+};
 
 const initSpritesheetData = (meta: AsepriteMeta) => ({
   frames: {},
@@ -161,7 +164,10 @@ const parseAsepriteSheet = async (
   src: string,
   loader: Loader
 ): Promise<ParsedAsepriteSheet> => {
-  const result: ParsedAsepriteSheet = {};
+  const result: ParsedAsepriteSheet = {
+    groups: [],
+    sheets: {}
+  };
 
   let basePath = path.dirname(src);
 
@@ -182,7 +188,10 @@ const parseAsepriteSheet = async (
   };
 
   for (const [groupName, group] of Object.entries(asset.groups)) {
-    result[groupName] = {
+    if (groupName !== 'base') {
+      result.groups.unshift(groupName);
+    }
+    result.sheets[groupName] = {
       body: await loadAndParse(group.body),
       weapon: await loadAndParse(group.weapon),
       armor: await loadAndParse(group.armor),
