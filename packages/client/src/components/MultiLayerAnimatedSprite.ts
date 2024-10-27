@@ -1,12 +1,6 @@
 import type { ParsedAsepriteSheet } from '@/utils/aseprite-parser';
 import { isDefined, isString } from '@game/shared';
-import {
-  AnimatedSprite,
-  Container,
-  ObservablePoint,
-  Point,
-  Texture
-} from 'pixi.js';
+import { AnimatedSprite, Container, ObservablePoint, Texture } from 'pixi.js';
 import { ref, watchEffect, type Ref } from 'vue';
 
 export type Parts = {
@@ -41,7 +35,7 @@ export class MultiLayerAnimatedSprite extends Container {
     0
   );
 
-  private sheets: ParsedAsepriteSheet['sheets'];
+  private _sheets: ParsedAsepriteSheet['sheets'];
 
   private _parts: Ref<Parts>;
 
@@ -53,7 +47,7 @@ export class MultiLayerAnimatedSprite extends Container {
     parts: null | string | Parts
   ) {
     super();
-    this.sheets = sheets;
+    this._sheets = sheets;
     this._animation = ref(animation);
     this._parts = ref(
       isString(parts) || !isDefined(parts)
@@ -90,7 +84,17 @@ export class MultiLayerAnimatedSprite extends Container {
     this._animation.value = val;
   }
 
+  get sheets() {
+    return this._sheets;
+  }
+
+  set sheets(val) {
+    this._sheets = val;
+    this.updateParts();
+  }
+
   private updateParts() {
+    this.body.textures = this.getBodyFrames();
     this.armor.textures = this.getFrames('armor');
     this.helm.textures = this.getFrames('helm');
     this.weapon.textures = this.getFrames('weapon');
@@ -98,7 +102,7 @@ export class MultiLayerAnimatedSprite extends Container {
   }
 
   private getBodyFrames() {
-    return this.sheets.base.body.animations[this._animation.value];
+    return this._sheets.base.body.animations[this._animation.value];
   }
 
   private getFrames(
@@ -106,7 +110,7 @@ export class MultiLayerAnimatedSprite extends Container {
   ) {
     if (!this._parts.value[part]) return [Texture.EMPTY];
 
-    return this.sheets[this._parts.value[part]][part].animations[
+    return this._sheets[this._parts.value[part]][part].animations[
       this._animation.value
     ];
   }
