@@ -31,7 +31,6 @@ export type CombatComponentOptions = {
   unit: Unit;
   baseStats: CombatStats;
   attackPattern: TargetingStrategy;
-  aoeShape: AOEShape;
 };
 
 export class CombatComponent {
@@ -42,8 +41,6 @@ export class CombatComponent {
   private baseStats: CombatStats;
 
   private targeting: TargetingStrategy;
-
-  private aoeShape: AOEShape;
 
   private interceptors = {
     pAtk: new Interceptable<number>(),
@@ -65,7 +62,6 @@ export class CombatComponent {
     this.unit = options.unit;
     this.baseStats = options.baseStats;
     this.targeting = options.attackPattern;
-    this.aoeShape = options.aoeShape;
   }
 
   canAttackAt(point: Point3D) {
@@ -144,12 +140,12 @@ export class CombatComponent {
       .exhaustive();
   }
 
-  attackAt(point: Point3D, allowFriendlyFire = false) {
-    const targets = this.aoeShape
+  attackAt(point: Point3D, options: { aoeShape: AOEShape; allowFriendlyFire: boolean }) {
+    const targets = options.aoeShape
       .getCells(point)
       .map(cell => cell.unit)
       .filter(isDefined)
-      .filter(unit => (allowFriendlyFire ? true : unit.isEnemy(this.unit)));
+      .filter(unit => (options.allowFriendlyFire ? true : unit.isEnemy(this.unit)));
 
     this.unit.dealDamage(targets, { type: 'physical', amount: 0, ratio: 1 });
   }

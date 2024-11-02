@@ -110,8 +110,7 @@ export class Unit extends Entity implements Serializable<SerializedUnit> {
         this.game,
         this,
         TARGETING_TYPE.BOTH
-      ),
-      aoeShape: new PointAOEShape(this.game)
+      )
     });
     this.movement = new MovementComponent(this.game, {
       position: options.position,
@@ -266,7 +265,10 @@ export class Unit extends Entity implements Serializable<SerializedUnit> {
   attack(target: Point3D) {
     this.emitter.emit(UNIT_EVENTS.BEFORE_ATTACK, { target });
     this.ap.remove(this.game.config.AP_COST_PER_ATTACK);
-    this.combat.attackAt(target);
+    this.combat.attackAt(target, {
+      aoeShape: new PointAOEShape(this.game),
+      allowFriendlyFire: false
+    });
     this.emitter.emit(UNIT_EVENTS.AFTER_ATTACK, { target });
   }
 

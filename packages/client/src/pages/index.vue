@@ -6,14 +6,6 @@ import {
   type ParsedAsepriteSheet
 } from '@/utils/aseprite-parser';
 import { Application, Assets, extensions } from 'pixi.js';
-import {
-  computed,
-  onMounted,
-  ref,
-  shallowRef,
-  useTemplateRef,
-  watch
-} from 'vue';
 
 const canvas = useTemplateRef('pixiRoot');
 
