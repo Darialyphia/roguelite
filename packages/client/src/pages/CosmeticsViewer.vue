@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { MultiLayerAnimatedSprite } from '@/components/MultiLayerAnimatedSprite';
+import { MultiLayerAnimatedSprite } from '@/pages/MultiLayerAnimatedSprite';
 import {
   ASEPRITE_SPRITESHEET_PARSER,
   asepriteSpriteSheetParser,

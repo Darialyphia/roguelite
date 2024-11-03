@@ -30,6 +30,13 @@ export default [
   },
 
   ...pluginVue.configs['flat/essential'],
+  {
+    name: 'app/rules-overrides',
+    rules: {
+      'vue/multi-word-component-names': 'off'
+    }
+  },
+
   ...vueTsEslintConfig(),
   skipFormatting
 ];

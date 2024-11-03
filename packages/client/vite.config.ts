@@ -7,11 +7,12 @@ import vueDevTools from 'vite-plugin-vue-devtools';
 import autoImport from 'unplugin-auto-import/vite';
 import vueRouter from 'unplugin-vue-router/vite';
 import { VueRouterAutoImports } from 'unplugin-vue-router';
+import UnoCSS from 'unocss/vite';
 
 export default defineConfig({
   plugins: [
     vueRouter({
-      /* options */
+      extensions: ['.page.vue']
     }),
     vue(),
     vueDevTools(),
@@ -21,7 +22,8 @@ export default defineConfig({
       eslintrc: {
         enabled: true
       }
-    })
+    }),
+    UnoCSS()
   ],
   resolve: {
     alias: {
