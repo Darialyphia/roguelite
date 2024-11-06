@@ -1,12 +1,7 @@
 <script setup lang="ts">
-import { HomeScene } from './home.scene';
-
 definePage({
   name: 'Home',
-  path: '/',
-  meta: {
-    scene: HomeScene
-  }
+  path: '/'
 });
 </script>
 

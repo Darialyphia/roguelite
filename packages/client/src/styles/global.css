@@ -9,6 +9,8 @@
 
   body {
     color: var(--text-1);
+    height: 100dvh;
+    overflow: hidden;
   }
 }
 

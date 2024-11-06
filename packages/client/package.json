@@ -14,11 +14,14 @@
   },
   "dependencies": {
     "@game/shared": "^1.0.0",
+    "@pixi/layers": "^2.1.0",
     "@vueuse/core": "^11.2.0",
     "open-props": "^1.7.7",
-    "pixi.js": "^8.5.2",
+    "pixi-viewport": "^5.0.2",
+    "pixi.js": "^7.4.2",
     "vue": "^3.5.12",
     "vue-router": "^4.4.5",
+    "vue3-pixi": "^0.9.4",
     "zod": "^3.23.8"
   },
   "devDependencies": {

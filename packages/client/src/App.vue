@@ -1,26 +1,20 @@
 <script setup lang="ts">
-import { providePixiApp } from './shared/composables/usePixiApp';
-
-const canvas = useTemplateRef('canvas');
-
-const { isReady } = providePixiApp(canvas);
+import { Application, External } from 'vue3-pixi';
+const viewport = window;
 </script>
 
 <template>
-  <main class="app">
-    <canvas ref="canvas" />
-    <div class="ui" v-if="isReady">
-      <RouterView />
-    </div>
-  </main>
+  <Application :resize-to="viewport">
+    <RouterView name="scene" />
+    <External>
+      <div class="ui">
+        <RouterView name="ui" />
+      </div>
+    </External>
+  </Application>
 </template>
 
 <style scoped>
-.app {
-  height: 100dhv;
-  overflow: hidden;
-}
-
 .ui {
   position: absolute;
   inset: 0;
