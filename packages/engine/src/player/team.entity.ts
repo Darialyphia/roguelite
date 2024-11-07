@@ -1,18 +1,14 @@
-import { Player, type SerializedPlayer, type PlayerOptions } from './player.entity';
-import { type Serializable } from '@game/shared';
+import { Player, type PlayerOptions } from './player.entity';
 import { createEntityId, Entity, type EntityId } from '../entity';
+import type { Point3D } from '@game/shared';
 
 export type TeamOptions = {
   id: string;
   players: PlayerOptions[];
+  deployZone: Point3D[];
 };
 
-export type SerializedTeam = {
-  id: string;
-  players: SerializedPlayer[];
-};
-
-export class Team extends Entity implements Serializable<SerializedTeam> {
+export class Team extends Entity {
   private playerMap = new Map<EntityId, Player>();
 
   constructor(options: TeamOptions) {
@@ -29,12 +25,5 @@ export class Team extends Entity implements Serializable<SerializedTeam> {
 
   getPlayerById(id: EntityId) {
     return this.playerMap.get(id);
-  }
-
-  serialize() {
-    return {
-      id: this.id,
-      players: this.players.map(player => player.serialize())
-    };
   }
 }

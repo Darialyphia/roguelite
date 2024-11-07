@@ -1,6 +1,6 @@
 import type { Nullable } from '@game/shared';
-import { Game } from './game';
-import { ClientRngSystem, ServerRngSystem } from './rng/rng-system';
+import { Game, type StarEvent } from './game';
+import { ClientRngSystem } from './rng/rng-system';
 import type { Input, SerializedInput } from './input/input';
 
 export type ClientSessionOptions = {
@@ -9,6 +9,7 @@ export type ClientSessionOptions = {
 
 export class ClientSession {
   readonly game: Game;
+  private eventsSinceLastInput: StarEvent[] = [];
 
   constructor(options: ClientSessionOptions) {
     this.game = new Game({
@@ -16,6 +17,9 @@ export class ClientSession {
       rngCtor: ClientRngSystem
     });
     this.game.rngSystem.values = options.rngValues;
+    this.game.on('*', evt => {
+      this.eventsSinceLastInput.push(evt);
+    });
     this.game.initialize();
   }
 
@@ -26,9 +30,23 @@ export class ClientSession {
     try {
       this.game.rngSystem.values.push(...meta.rngValues);
 
-      return this.game.dispatch(input);
+      this.game.dispatch(input);
+      this.eventsSinceLastInput = [];
     } catch (err) {
       console.error(err);
     }
+  }
+
+  subscribe(cb: (input: SerializedInput, events: StarEvent[]) => void) {
+    let latestInput: Nullable<Input<any>> = null;
+
+    this.game.on('game.input-queue-flushed', () => {
+      const lastInput = this.game.inputSystem.getHistory().at(-1)!;
+      // update for  this input has already been pushed
+      if (latestInput === lastInput) return;
+
+      cb(lastInput.serialize(), this.eventsSinceLastInput);
+      latestInput = lastInput;
+    });
   }
 }

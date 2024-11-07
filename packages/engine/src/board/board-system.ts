@@ -1,5 +1,5 @@
-import { isDefined, isString, type Point3D, type Serializable } from '@game/shared';
-import { Cell, type CellOptions, type SerializedCell } from './cell';
+import { isDefined, isString, type Point3D } from '@game/shared';
+import { Cell, type CellOptions } from './cell';
 import { createEntityId, type EntityId } from '../entity';
 import { pointToCellId } from './board-utils';
 import { System } from '../system';
@@ -10,16 +10,7 @@ export type BoardSystemOptions = {
   width: number;
 };
 
-export type SerializedBoard = {
-  width: number;
-  height: number;
-  cells: SerializedCell[];
-};
-
-export class BoardSystem
-  extends System<BoardSystemOptions>
-  implements Serializable<SerializedBoard>
-{
+export class BoardSystem extends System<BoardSystemOptions> {
   height!: number;
 
   width!: number;
@@ -38,14 +29,6 @@ export class BoardSystem
 
   get cells() {
     return [...this.cellsMap.values()];
-  }
-
-  serialize(): BoardSystemOptions {
-    return {
-      width: this.width,
-      height: this.height,
-      cells: this.cells.map(cell => cell.serialize())
-    };
   }
 
   getCellAt(posOrKey: EntityId | Point3D) {

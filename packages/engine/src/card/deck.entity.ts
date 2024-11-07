@@ -1,14 +1,10 @@
-import { type Serializable, type Values } from '@game/shared';
+import { type Values } from '@game/shared';
 import { TypedEventEmitter } from '../utils/typed-emitter';
 import { shuffleArray } from '@game/shared';
 import type { Game } from '../game';
-import type { Card, SerializedCard } from './card.entity';
+import type { Card } from './card.entity';
 import { nanoid } from 'nanoid';
 import { createEntityId, Entity } from '../entity';
-
-export type SerializedDeck = {
-  cards: SerializedCard[];
-};
 
 export const DECK_EVENTS = {
   BEFORE_DRAW: 'before_draw',
@@ -22,7 +18,7 @@ export type DeckEventMap = {
   [DECK_EVENTS.AFTER_DRAW]: [{ cards: Card[] }];
 };
 
-export class Deck extends Entity implements Serializable<SerializedDeck> {
+export class Deck extends Entity {
   private emitter = new TypedEventEmitter<DeckEventMap>();
 
   constructor(
@@ -77,11 +73,5 @@ export class Deck extends Entity implements Serializable<SerializedDeck> {
   pluck(card: Card) {
     this.cards = this.cards.filter(c => c !== card);
     return card;
-  }
-
-  serialize(): SerializedDeck {
-    return {
-      cards: this.cards.map(card => card.serialize())
-    };
   }
 }

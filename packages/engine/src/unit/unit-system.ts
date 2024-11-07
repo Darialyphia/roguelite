@@ -1,4 +1,4 @@
-import { isDefined, type Point3D, type Serializable } from '@game/shared';
+import { isDefined, type Point3D } from '@game/shared';
 import type { Entity, EntityId } from '../entity';
 import { Unit, UNIT_EVENTS, type SerializedUnit, type UnitOptions } from './unit.entity';
 import { System } from '../system';
@@ -11,10 +11,7 @@ export type UnitSystemOptions = {
   units: UnitOptions[];
 };
 
-export class UnitSystem
-  extends System<UnitSystemOptions>
-  implements Serializable<SerializedUnitSystem>
-{
+export class UnitSystem extends System<UnitSystemOptions> {
   private unitMap = new Map<EntityId, Unit>();
 
   private nextUnitId = 0;
@@ -84,7 +81,6 @@ export class UnitSystem
     Object.values(UNIT_EVENTS).forEach(eventName => {
       //@ts-expect-error
       unit.on(eventName, event => {
-        //@ts-expect-error
         this.game.emit(`unit.${eventName}`, { ...event, unit } as any);
       });
     });
@@ -101,11 +97,5 @@ export class UnitSystem
 
   removeEntity(entity: Entity) {
     this.unitMap.delete(entity.id);
-  }
-
-  serialize() {
-    return {
-      units: this.units.map(e => e.serialize())
-    };
   }
 }

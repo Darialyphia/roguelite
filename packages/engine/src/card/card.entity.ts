@@ -1,12 +1,8 @@
-import type { Point3D, Serializable } from '@game/shared';
+import type { Point3D } from '@game/shared';
 import { createEntityId, Entity } from '../entity';
 import type { CardBlueprint } from './card-blueprint';
 import type { Unit } from '../unit/unit.entity';
 import type { Game } from '../game';
-
-export type SerializedCard = {
-  id: string;
-};
 
 export type CardOptions = {
   id: string;
@@ -14,7 +10,7 @@ export type CardOptions = {
   blueprint: CardBlueprint;
 };
 
-export class Card extends Entity implements Serializable<SerializedCard> {
+export class Card extends Entity {
   private game: Game;
 
   private blueprint: CardBlueprint;
@@ -30,10 +26,6 @@ export class Card extends Entity implements Serializable<SerializedCard> {
 
   get cost() {
     return this.blueprint.cost;
-  }
-
-  serialize(): SerializedCard {
-    return { id: this.id };
   }
 
   play(targets: Point3D[]) {

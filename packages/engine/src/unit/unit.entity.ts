@@ -1,4 +1,4 @@
-import { Vec3, type Point3D, type Serializable, type Values } from '@game/shared';
+import { Vec3, type Point3D, type Values } from '@game/shared';
 import { createEntityId, Entity } from '../entity';
 import { Card, type CardOptions, type SerializedCard } from '../card/card.entity';
 import type { Game } from '../game';
@@ -69,7 +69,7 @@ export type UnitEventMap = {
   [UNIT_EVENTS.AFTER_PLAY_CARD]: [{ card: Card }];
 };
 
-export class Unit extends Entity implements Serializable<SerializedUnit> {
+export class Unit extends Entity {
   private game: Game;
 
   readonly player: Player;
@@ -295,15 +295,5 @@ export class Unit extends Entity implements Serializable<SerializedUnit> {
 
   endTurn() {
     this.emitter.emit(UNIT_EVENTS.END_TURN);
-  }
-
-  serialize(): SerializedUnit {
-    return {
-      id: this.id,
-      position: this.position.serialize(),
-      blueprint: this.blueprint,
-      deckSize: this.cardManager.remainingCardsInDeck,
-      hand: [...this.cardManager.hand.values()].map(card => card.serialize())
-    };
   }
 }

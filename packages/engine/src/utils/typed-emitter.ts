@@ -7,9 +7,7 @@ type PrefixedEvents<T extends string, TEventMap extends Record<string, any>, TCt
 };
 
 export class TypedEventEmitter<TEvents extends Record<string, any>> {
-  private emitter = new EventEmitter2({
-    wildcard: true
-  });
+  private emitter = new EventEmitter2();
 
   constructor() {
     this.emitter.setMaxListeners(99999);

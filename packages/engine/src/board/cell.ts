@@ -1,21 +1,16 @@
-import { type Point3D, type Serializable } from '@game/shared';
+import { type Point3D } from '@game/shared';
 import { createEntityId, Entity } from '../entity';
 import type { Game } from '../game';
 import { Position } from '../utils/position';
 
 export type SerializedCoords = `${string}:${string}:${string}`;
 
-export type SerializedCell = {
-  id: string;
-  position: Point3D;
-};
-
 export type CellOptions = {
   id: string;
   position: Point3D;
 };
 
-export class Cell extends Entity implements Serializable {
+export class Cell extends Entity {
   public position: Position;
 
   constructor(
@@ -68,13 +63,5 @@ export class Cell extends Entity implements Serializable {
 
   get unit() {
     return this.game.unitSystem.getUnitAt(this);
-  }
-
-  // get canSummonAt() {
-  //   return !this.entity && this.isWalkable && this.terrain === TERRAINS.GROUND;
-  // }
-
-  serialize(): SerializedCell {
-    return { id: this.id, position: this.position.serialize() };
   }
 }

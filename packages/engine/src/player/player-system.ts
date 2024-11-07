@@ -4,6 +4,7 @@ import type { Player } from './player.entity';
 import { Team, type TeamOptions } from './team.entity';
 
 export type PlayerSystemOptions = { teams: TeamOptions[] };
+
 export class PlayerSystem extends System<PlayerSystemOptions> {
   private teamMap = new Map<EntityId, Team>();
 

@@ -15,6 +15,7 @@
     "nanoid": "^5.0.6",
     "seedrandom": "^3.0.5",
     "ts-pattern": "^5.0.8",
+    "typescript-fsm": "^1.4.5",
     "zod": "^3.21.4"
   },
   "scripts": {
