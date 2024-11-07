@@ -1,12 +1,14 @@
-import type { Prettify, Serializable } from '@game/shared';
+import type { Constructor, Prettify, Serializable } from '@game/shared';
 import { TypedEventEmitter } from './utils/typed-emitter';
 import { BoardSystem, type SerializedBoard } from './board/board-system';
 import { UnitSystem } from './unit/unit-system';
-import { RngSystem } from './rng/rng-system';
 import { TurnSystem, type TurnEvent, type TurnEventMap } from './unit/turn-system';
 import type { SerializedUnit, UnitEvent, UnitEventMap } from './unit/unit.entity';
 import { config } from './config';
 import { PlayerSystem } from './player/player-system';
+import { InputSystem } from './input/input-system';
+import type { RngSystem } from './rng/rng-system';
+import type { SerializedInput } from './input/input';
 
 export type SerializedGameState = {
   units: SerializedUnit[];
@@ -22,13 +24,15 @@ type GlobalTurnEvents = {
 };
 
 type GameEventsBase = {
-  'game:error': [Error];
+  'game.input-queue-flushed': [];
+  'game.error': [{ error: Error }];
 };
 
 export type GameEventMap = Prettify<GameEventsBase & GlobalUnitEvents & GlobalTurnEvents>;
 
 export type GameOptions = {
   rngSeed: string;
+  rngCtor: Constructor<RngSystem>;
 };
 
 export class Game implements Serializable<SerializedGameState> {
@@ -40,14 +44,20 @@ export class Game implements Serializable<SerializedGameState> {
 
   readonly playerSystem = new PlayerSystem(this);
 
-  readonly rngSystem = new RngSystem(this);
+  readonly rngSystem: RngSystem;
 
   readonly turnSystem = new TurnSystem(this);
 
+  readonly inputSystem = new InputSystem(this);
+
   readonly config = config;
 
-  constructor(options: GameOptions) {
-    this.rngSystem.initialize({ seed: options.rngSeed });
+  constructor(private options: GameOptions) {
+    this.rngSystem = new options.rngCtor(this);
+  }
+
+  initialize() {
+    this.rngSystem.initialize({ seed: this.options.rngSeed });
     this.boardSystem.initialize({
       width: 10,
       height: 10,
@@ -58,6 +68,7 @@ export class Game implements Serializable<SerializedGameState> {
     });
     this.unitSystem.initialize({ units: [] });
     this.turnSystem.initialize();
+    this.inputSystem.initialize([]);
   }
 
   get on() {
@@ -69,7 +80,11 @@ export class Game implements Serializable<SerializedGameState> {
   }
 
   get emit() {
-    return this.emitter.on;
+    return this.emitter.emit;
+  }
+
+  dispatch(input: SerializedInput) {
+    return this.inputSystem.dispatch(input);
   }
 
   serialize() {

@@ -4,6 +4,7 @@ import type { DefaultSchema, Input, SerializedInput } from './input';
 import { MoveInput } from './inputs/move.input';
 import { AttackInput } from './inputs/attack.input';
 import { PlayCardInput } from './inputs/play-card.input';
+import { System } from '../system';
 
 type GenericInputMap = Record<string, Constructor<Input<DefaultSchema>>>;
 
@@ -24,24 +25,26 @@ const inputMap = validateinputMap({
 });
 
 export type InputSystemOptions = { game: Game };
-export class InputSystem {
+export class InputSystem extends System<SerializedInput[]> {
   private history: Input<any>[] = [];
 
   private isRunning = false;
 
-  private scheduledInputs: AnyFunction[] = [];
+  private queue: AnyFunction[] = [];
 
   private _currentAction?: Nullable<InstanceType<Values<typeof inputMap>>> = null;
 
-  constructor(private game: Game) {}
+  constructor(game: Game) {
+    super(game);
+  }
 
   get currentAction() {
     return this._currentAction;
   }
 
-  setup(rawHistory: SerializedInput[]) {
+  initialize(rawHistory: SerializedInput[]) {
     for (const action of rawHistory) {
-      this.schedule(() => this.handleAction(action));
+      this.schedule(() => this.handleInput(action));
     }
   }
 
@@ -50,7 +53,7 @@ export class InputSystem {
   }
 
   schedule(fn: AnyFunction) {
-    this.scheduledInputs.push(fn);
+    this.queue.push(fn);
     if (!this.isRunning) {
       this.flushSchedule();
     }
@@ -63,23 +66,24 @@ export class InputSystem {
     }
     this.isRunning = true;
     try {
-      while (this.scheduledInputs.length) {
-        const fn = this.scheduledInputs.shift();
+      while (this.queue.length) {
+        const fn = this.queue.shift();
         fn!();
       }
       this.isRunning = false;
+      this.game.emit('game.input-queue-flushed');
     } catch (err) {
       console.error(err);
-      // this.game.emit('game:error', err as Error);
+      this.game.emit('game.error', { error: err as Error });
     }
   }
 
   dispatch({ type, payload }: SerializedInput) {
     if (!this.isActionType(type)) return;
-    return this.schedule(() => this.handleAction({ type, payload }));
+    return this.schedule(() => this.handleInput({ type, payload }));
   }
 
-  handleAction({ type, payload }: SerializedInput) {
+  handleInput({ type, payload }: SerializedInput) {
     if (!this.isActionType(type)) return;
     // this.session.logger(`%c[ACTION:${type}]`, 'color: blue', payload);
     const ctor = inputMap[type];
