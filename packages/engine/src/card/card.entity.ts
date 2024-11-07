@@ -1,4 +1,4 @@
-import type { Point3D } from '@game/shared';
+import { assert, type Point3D } from '@game/shared';
 import { createEntityId, Entity } from '../entity';
 import type { CardBlueprint } from './card-blueprint';
 import type { Unit } from '../unit/unit.entity';
@@ -6,7 +6,6 @@ import type { Game } from '../game';
 
 export type CardOptions = {
   id: string;
-  unit: Unit;
   blueprint: CardBlueprint;
 };
 
@@ -17,10 +16,10 @@ export class Card extends Entity {
 
   readonly unit: Unit;
 
-  constructor(game: Game, options: CardOptions) {
+  constructor(game: Game, unit: Unit, options: CardOptions) {
     super(createEntityId(options.id));
     this.game = game;
-    this.unit = options.unit;
+    this.unit = unit;
     this.blueprint = options.blueprint;
   }
 
@@ -33,12 +32,14 @@ export class Card extends Entity {
   }
 
   canPlayAt(targets: Point3D[]) {
-    if (targets.length > this.blueprint.targets.length) {
-      throw new Error('Cannot play card: too many targets.');
-    }
-    if (targets.length < this.blueprint.minTargets) {
-      throw new Error('Cannot play card: not enough targets.');
-    }
+    assert(
+      targets.length <= this.blueprint.targets.length,
+      'Cannot play card: too many targets.'
+    );
+    assert(
+      targets.length >= this.blueprint.minTargets,
+      'Cannot play card: not enough targets.'
+    );
 
     return targets.every((target, index) => {
       const targeting = this.blueprint.targets[index].getTargeting(this.game, this);

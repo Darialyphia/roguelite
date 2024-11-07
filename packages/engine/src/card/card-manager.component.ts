@@ -2,6 +2,7 @@ import type { Point3D } from '@game/shared';
 import type { Game } from '../game';
 import { Card, type CardOptions } from './card.entity';
 import { Deck } from './deck.entity';
+import type { Unit } from '../unit/unit.entity';
 
 export type CardManagerComponentOptions = {
   deck: CardOptions[];
@@ -16,11 +17,11 @@ export class CardManagerComponent {
 
   readonly discardPile = new Set<Card>();
 
-  constructor(game: Game, options: CardManagerComponentOptions) {
+  constructor(game: Game, unit: Unit, options: CardManagerComponentOptions) {
     this.game = game;
     this.deck = new Deck(
       this.game,
-      options.deck.map(card => new Card(this.game, card))
+      options.deck.map(card => new Card(this.game, unit, card))
     );
 
     this.draw(this.game.config.INITIAL_HAND_SIZE);

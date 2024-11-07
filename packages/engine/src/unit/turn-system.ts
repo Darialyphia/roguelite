@@ -17,7 +17,7 @@ export type TurnEventMap = {
 };
 
 export class TurnSystem extends System<never> {
-  private _turnCount = 1;
+  private _turnCount = 0;
 
   private queue: Unit[] = [];
 

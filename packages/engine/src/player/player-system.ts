@@ -12,7 +12,7 @@ export class PlayerSystem extends System<PlayerSystemOptions> {
 
   initialize(options: PlayerSystemOptions): void {
     options.teams.forEach(t => {
-      const team = new Team(t);
+      const team = new Team(this.game, t);
       this.teamMap.set(team.id, team);
       team.players.forEach(player => {
         this.playerMap.set(player.id, player);

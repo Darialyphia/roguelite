@@ -5,6 +5,7 @@ import { MoveInput } from './inputs/move.input';
 import { AttackInput } from './inputs/attack.input';
 import { PlayCardInput } from './inputs/play-card.input';
 import { System } from '../system';
+import { DeployInput } from './inputs/deploy.input';
 
 type GenericInputMap = Record<string, Constructor<Input<DefaultSchema>>>;
 
@@ -21,7 +22,8 @@ const validateinputMap = <T extends GenericInputMap>(data: ValidatedInputMap<T>)
 const inputMap = validateinputMap({
   move: MoveInput,
   attack: AttackInput,
-  playCard: PlayCardInput
+  playCard: PlayCardInput,
+  deploy: DeployInput
 });
 
 export type InputSystemOptions = { game: Game };

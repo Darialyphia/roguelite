@@ -1,11 +1,7 @@
 import { isDefined, type Point3D } from '@game/shared';
 import type { Entity, EntityId } from '../entity';
-import { Unit, UNIT_EVENTS, type SerializedUnit, type UnitOptions } from './unit.entity';
+import { Unit, UNIT_EVENTS, type UnitOptions } from './unit.entity';
 import { System } from '../system';
-
-export type SerializedUnitSystem = {
-  units: SerializedUnit[];
-};
 
 export type UnitSystemOptions = {
   units: UnitOptions[];

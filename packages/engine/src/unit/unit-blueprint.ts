@@ -1,4 +1,5 @@
 export type UnitBlueprint = {
+  id: string;
   maxAp: number;
   speed: number;
   maxHp: number;

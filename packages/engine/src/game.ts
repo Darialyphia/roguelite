@@ -16,6 +16,7 @@ import type { RngSystem } from './rng/rng-system';
 import type { SerializedInput } from './input/input';
 import { mapValues } from 'lodash-es';
 import { StateMachine, t } from 'typescript-fsm';
+import { GamePhaseSystem } from './game-phase.system';
 
 type GlobalUnitEvents = {
   [Event in UnitEvent as `unit.${Event}`]: UnitEventMap[Event];
@@ -44,7 +45,7 @@ export type StarEvent<
   event: GameEventMap[T];
 };
 
-const GAME_EVENTS = {
+export const GAME_EVENTS = {
   ...mapValues(UNIT_EVENTS, evt => `unit.${evt}` as `unit.${typeof evt}`),
   ...mapValues(TURN_EVENTS, evt => `turn.${evt}` as `turn.${typeof evt}`),
   ERROR: 'game.error',
@@ -58,21 +59,10 @@ export type GameOptions = {
   rngCtor: Constructor<RngSystem>;
 };
 
-export const GAME_PHASES = {
-  DEPLOYMENT: 'deployment',
-  BATTLE: 'battle',
-  END: 'end'
-} as const;
-export type GamePhase = Values<typeof GAME_PHASES>;
-
-export const GAME_PHASE_EVENTS = {
-  START_BATTLE: 'start_battle',
-  END_BATTLE: 'end_battle'
-} as const;
-export type GamePhaseEvent = Values<typeof GAME_PHASE_EVENTS>;
-
 export class Game {
   private readonly emitter = new TypedEventEmitter<GameEventMap>();
+
+  readonly gamePhaseSystem = new GamePhaseSystem(this);
 
   readonly boardSystem = new BoardSystem(this);
 
@@ -88,39 +78,9 @@ export class Game {
 
   readonly config = config;
 
-  private stateMachine = new StateMachine<GamePhase, GamePhaseEvent>(
-    GAME_PHASES.DEPLOYMENT,
-    [
-      t(GAME_PHASES.DEPLOYMENT, GAME_PHASE_EVENTS.START_BATTLE, GAME_PHASES.BATTLE),
-      t(GAME_PHASES.BATTLE, GAME_PHASE_EVENTS.END_BATTLE, GAME_PHASES.END)
-    ]
-  );
-
   constructor(private options: GameOptions) {
     this.rngSystem = new options.rngCtor(this);
     this.setupStarEvents();
-  }
-
-  get phase() {
-    return this.stateMachine.getState();
-  }
-
-  startBattle() {
-    if (!this.stateMachine.can(GAME_PHASE_EVENTS.START_BATTLE)) {
-      throw new Error(
-        `Cannot enter phase ${GAME_PHASES.BATTLE} from phase ${this.phase}`
-      );
-    }
-
-    this.stateMachine.dispatch(GAME_PHASE_EVENTS.START_BATTLE);
-  }
-
-  endBattle() {
-    if (!this.stateMachine.can(GAME_PHASE_EVENTS.END_BATTLE)) {
-      throw new Error(`Cannot enter phase ${GAME_PHASES.END} from phase ${this.phase}`);
-    }
-
-    this.stateMachine.dispatch(GAME_PHASE_EVENTS.END_BATTLE);
   }
 
   // the event emitter doesnt provide the event name if you enable wildcards, so let's implement it ourselves
@@ -136,6 +96,7 @@ export class Game {
 
   initialize() {
     this.rngSystem.initialize({ seed: this.options.rngSeed });
+    this.gamePhaseSystem.initialize();
     this.boardSystem.initialize({
       width: 10,
       height: 10,
@@ -154,11 +115,15 @@ export class Game {
   }
 
   get once() {
-    return this.emitter.on;
+    return this.emitter.once;
   }
 
   get emit() {
     return this.emitter.emit;
+  }
+
+  get phase() {
+    return this.gamePhaseSystem.phase;
   }
 
   dispatch(input: SerializedInput) {

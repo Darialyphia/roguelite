@@ -1,5 +1,6 @@
 import { z } from 'zod';
 import { defaultInputSchema, Input } from '../input';
+import { GAME_PHASES } from '../../game-phase.system';
 
 const schema = defaultInputSchema.extend({
   index: z.number(),
@@ -14,6 +15,8 @@ const schema = defaultInputSchema.extend({
 
 export class PlayCardInput extends Input<typeof schema> {
   readonly name = 'playCard';
+
+  readonly allowedPhases = [GAME_PHASES.BATTLE];
 
   protected payloadSchema = schema;
 

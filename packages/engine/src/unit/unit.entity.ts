@@ -1,6 +1,6 @@
 import { Vec3, type Point3D, type Values } from '@game/shared';
 import { createEntityId, Entity } from '../entity';
-import { Card, type CardOptions, type SerializedCard } from '../card/card.entity';
+import { Card, type CardOptions } from '../card/card.entity';
 import type { Game } from '../game';
 import { SolidBodyPathfindingStrategy } from '../pathfinding/strategies/solid-pathfinding.strategy';
 import type { UnitBlueprint } from './unit-blueprint';
@@ -16,14 +16,6 @@ import type { Player } from '../player/player.entity';
 import { MeleeTargetingPatternStrategy } from '../targeting/melee-targeting.straegy';
 import { PointAOEShape } from '../targeting/aoe-shapes';
 import { TARGETING_TYPE } from '../targeting/targeting-strategy';
-
-export type SerializedUnit = {
-  id: string;
-  position: Point3D;
-  blueprint: UnitBlueprint;
-  deckSize: number;
-  hand: SerializedCard[];
-};
 
 export type UnitOptions = {
   id: string;
@@ -100,7 +92,7 @@ export class Unit extends Entity {
     this.game = game;
     this.player = options.player;
     this.blueprint = options.blueprint;
-    this.cardManager = new CardManagerComponent(this.game, { deck: options.deck });
+    this.cardManager = new CardManagerComponent(this.game, this, { deck: options.deck });
     this.ap = new ActionPointComponent({ maxAp: this.blueprint.maxAp });
     this.hp = new HealthComponent({ maxHp: this.blueprint.maxHp });
     this.combat = new CombatComponent(this.game, {

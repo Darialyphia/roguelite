@@ -12,7 +12,7 @@
     "@game/shared": "*",
     "eventemitter2": "^6.4.9",
     "lodash-es": "^4.17.21",
-    "nanoid": "^5.0.6",
+    "nanoid": "^5.0.8",
     "seedrandom": "^3.0.5",
     "ts-pattern": "^5.0.8",
     "typescript-fsm": "^1.4.5",
