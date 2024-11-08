@@ -1,4 +1,4 @@
-import type { Nullable, Point3D } from '@game/shared';
+import { assert, Vec3, type Nullable, type Point3D } from '@game/shared';
 import type { Player } from './player.entity';
 import type { Game } from '../game';
 import { UNITS_DICTIONARY } from '../unit/units/_index';
@@ -10,6 +10,7 @@ export type RosterUnit = { blueprintId: string; deck: Array<{ blueprintId: strin
 export type PlayerRosterComponentOptions = {
   player: Player;
   units: RosterUnit[];
+  deployZone: Point3D[];
 };
 
 export class PlayerRosterComponent {
@@ -20,17 +21,27 @@ export class PlayerRosterComponent {
 
   private deployment: Nullable<Point3D[]> = null;
 
+  readonly deployZone: Vec3[];
+
   constructor(game: Game, options: PlayerRosterComponentOptions) {
     this.game = game;
     this.units = options.units;
     this.player = options.player;
+    this.deployZone = options.deployZone.map(point => Vec3.fromPoint3D(point));
   }
 
   get isReady() {
     return !!this.deployment;
   }
 
+  canDeployAt(point: Point3D) {
+    return this.deployZone.some(vec => vec.equals(point));
+  }
+
   commitDeployment(deployment: Point3D[]) {
+    deployment.forEach(point => {
+      assert(this.canDeployAt(point), 'Invalid deploy position');
+    });
     this.deployment = deployment;
   }
 

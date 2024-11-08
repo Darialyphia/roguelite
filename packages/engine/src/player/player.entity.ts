@@ -16,18 +16,17 @@ export class Player extends Entity {
 
   private team: Team;
 
-  readonly deployZone: Vec3[];
-
   readonly roster: PlayerRosterComponent;
 
   constructor(game: Game, options: PlayerOptions) {
     super(createEntityId(options.id));
     this.game = game;
     this.team = options.team;
-    this.deployZone = options.deployZone.map(point => Vec3.fromPoint3D(point));
+
     this.roster = new PlayerRosterComponent(this.game, {
       player: this,
-      units: options.roster
+      units: options.roster,
+      deployZone: options.deployZone
     });
   }
 
