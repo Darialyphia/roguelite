@@ -1,7 +1,7 @@
 import { type Values } from '@game/shared';
 import { TypedEventEmitter } from '../utils/typed-emitter';
 import { shuffleArray } from '@game/shared';
-import type { Game } from '../game';
+import type { Game } from '../game/game';
 import type { Card } from './card.entity';
 import { nanoid } from 'nanoid';
 import { createEntityId, Entity } from '../entity';

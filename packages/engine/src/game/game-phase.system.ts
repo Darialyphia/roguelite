@@ -1,6 +1,6 @@
 import { assert, type Values } from '@game/shared';
 import { StateMachine, t } from 'typescript-fsm';
-import { System } from './system';
+import { System } from '../system';
 import { GAME_EVENTS } from './game';
 
 export const GAME_PHASES = {

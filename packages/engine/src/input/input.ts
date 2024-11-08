@@ -1,8 +1,8 @@
 import { z } from 'zod';
 import { assert, type JSONValue, type Serializable } from '@game/shared';
-import type { Game } from '../game';
+import type { Game } from '../game/game';
 import { createEntityId } from '../entity';
-import type { GamePhase } from '../game-phase.system';
+import type { GamePhase } from '../game/game-phase.system';
 
 export const defaultInputSchema = z.object({
   playerId: z.string()

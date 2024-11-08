@@ -1,7 +1,7 @@
 import { Player, type PlayerOptions } from './player.entity';
 import { createEntityId, Entity, type EntityId } from '../entity';
 import type { Point3D } from '@game/shared';
-import type { Game } from '../game';
+import type { Game } from '../game/game';
 
 export type TeamOptions = {
   id: string;

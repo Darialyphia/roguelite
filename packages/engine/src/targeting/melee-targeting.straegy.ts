@@ -1,7 +1,7 @@
 import { type Point3D } from '@game/shared';
 import type { TargetingStrategy, TargetingType } from './targeting-strategy';
 import type { Unit } from '../unit/unit.entity';
-import type { Game } from '../game';
+import type { Game } from '../game/game';
 import { Position } from '../utils/position';
 import { match } from 'ts-pattern';
 

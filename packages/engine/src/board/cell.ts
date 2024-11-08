@@ -1,6 +1,6 @@
 import { type Point3D } from '@game/shared';
 import { createEntityId, Entity } from '../entity';
-import type { Game } from '../game';
+import type { Game } from '../game/game';
 import { Position } from '../utils/position';
 
 export type SerializedCoords = `${string}:${string}:${string}`;

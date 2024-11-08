@@ -1,8 +1,7 @@
 import type { Values } from '@game/shared';
-import type { Game } from '../game';
-import type { Unit } from './unit.entity';
 import { TypedEventEmitter } from '../utils/typed-emitter';
 import { System } from '../system';
+import type { Unit } from '../unit/unit.entity';
 
 export const TURN_EVENTS = {
   TURN_START: 'turn_start',

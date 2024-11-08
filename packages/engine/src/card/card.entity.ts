@@ -2,7 +2,7 @@ import { assert, type Point3D } from '@game/shared';
 import { createEntityId, Entity } from '../entity';
 import type { CardBlueprint } from './card-blueprint';
 import type { Unit } from '../unit/unit.entity';
-import type { Game } from '../game';
+import type { Game } from '../game/game';
 
 export type CardOptions = {
   id: string;

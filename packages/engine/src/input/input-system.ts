@@ -1,5 +1,5 @@
 import type { AnyFunction, Constructor, Nullable, Values } from '@game/shared';
-import type { Game } from '../game';
+import type { Game } from '../game/game';
 import type { DefaultSchema, Input, SerializedInput } from './input';
 import { MoveInput } from './inputs/move.input';
 import { AttackInput } from './inputs/attack.input';

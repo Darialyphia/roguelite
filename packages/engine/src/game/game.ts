@@ -1,21 +1,20 @@
 import type { Constructor, Prettify, Values } from '@game/shared';
-import { TypedEventEmitter } from './utils/typed-emitter';
-import { BoardSystem } from './board/board-system';
-import { UnitSystem } from './unit/unit-system';
+import { TypedEventEmitter } from '../utils/typed-emitter';
+import { BoardSystem } from '../board/board-system';
+import { UnitSystem } from '../unit/unit-system';
 import {
   TURN_EVENTS,
   TurnSystem,
   type TurnEvent,
   type TurnEventMap
-} from './unit/turn-system';
-import { UNIT_EVENTS, type UnitEvent, type UnitEventMap } from './unit/unit.entity';
-import { config } from './config';
-import { PlayerSystem } from './player/player-system';
-import { InputSystem } from './input/input-system';
-import type { RngSystem } from './rng/rng-system';
-import type { SerializedInput } from './input/input';
+} from './turn-system';
+import { UNIT_EVENTS, type UnitEvent, type UnitEventMap } from '../unit/unit.entity';
+import { config } from '../config';
+import { PlayerSystem } from '../player/player-system';
+import { InputSystem } from '../input/input-system';
+import type { RngSystem } from '../rng/rng-system';
+import type { SerializedInput } from '../input/input';
 import { mapValues } from 'lodash-es';
-import { StateMachine, t } from 'typescript-fsm';
 import { GamePhaseSystem } from './game-phase.system';
 
 type GlobalUnitEvents = {

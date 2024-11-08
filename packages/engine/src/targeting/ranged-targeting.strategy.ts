@@ -1,5 +1,5 @@
 import { type Point3D } from '@game/shared';
-import type { Game } from '../game';
+import type { Game } from '../game/game';
 import type { Unit } from '../unit/unit.entity';
 import type { TargetingStrategy, TargetingType } from './targeting-strategy';
 import { Position } from '../utils/position';

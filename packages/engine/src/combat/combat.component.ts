@@ -1,4 +1,4 @@
-import type { Game } from '../game';
+import type { Game } from '../game/game';
 import { Interceptable } from '../utils/interceptable';
 import type { Unit } from '../unit/unit.entity';
 import type { TargetingStrategy } from '../targeting/targeting-strategy';
@@ -7,6 +7,7 @@ import { isDefined, type Point3D } from '@game/shared';
 import { Damage } from './damage/damage';
 import { PhyicalScalingStrategy } from './damage/scaling/physical-scaling.strategy';
 import { PhysicalMitigationStrategy } from './damage/mitigation/physical-mitigation.strategy';
+import { config } from '../config';
 
 export type CombatStats = {
   pAtk: number;
@@ -112,11 +113,14 @@ export class CombatComponent {
     const targets = options.aoeShape
       .getCells(point)
       .map(cell => cell.unit)
-      .filter(isDefined)
-      .filter(unit => (options.allowFriendlyFire ? true : unit.isEnemy(this.unit)));
+      .filter((target): target is Unit => {
+        if (!isDefined(target)) return false;
+        if (!options.allowFriendlyFire) return target.isEnemy(this.unit);
+        return true;
+      });
 
     const damage = new Damage({
-      baseAmount: 1,
+      baseAmount: config.BASE_ATTACK_DAAMGE,
       source: this.unit,
       scalings: [new PhyicalScalingStrategy(1)],
       mitigation: new PhysicalMitigationStrategy()

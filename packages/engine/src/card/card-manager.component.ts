@@ -1,5 +1,5 @@
 import type { Point3D } from '@game/shared';
-import type { Game } from '../game';
+import type { Game } from '../game/game';
 import { Card, type CardOptions } from './card.entity';
 import { Deck } from './deck.entity';
 import type { Unit } from '../unit/unit.entity';

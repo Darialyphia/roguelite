@@ -1,7 +1,6 @@
 import { Vec3, type Point3D } from '@game/shared';
 import { dijkstra, findShortestPath } from './dijkstra';
-import type { Game } from '../game';
-import type { Unit } from '../unit/unit.entity';
+import type { Game } from '../game/game';
 import type { SerializedCoords } from '../board/cell';
 import { cellIdToPoint, pointToCellId } from '../board/board-utils';
 import type { PathfindingStrategy } from './strategies/pathinding-strategy';
@@ -22,6 +21,7 @@ export class PathfinderComponent {
   }
 
   getDistanceMap(from: Point3D): DistanceMap {
+    this.strategy.setOrigin(from);
     const map = dijkstra(this.strategy, pointToCellId(from));
 
     return {
@@ -35,6 +35,8 @@ export class PathfinderComponent {
   getPathTo(from: Point3D, to: Point3D) {
     const entityAtPoint = this.game.unitSystem.getUnitAt(to);
     if (entityAtPoint) return null;
+
+    this.strategy.setOrigin(from);
 
     const path = findShortestPath<SerializedCoords>(
       this.strategy,

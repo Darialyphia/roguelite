@@ -1,6 +1,6 @@
 import { Vec3, type Point3D, type Values } from '@game/shared';
 import type { PathfindingStrategy } from '../pathfinding/strategies/pathinding-strategy';
-import type { Game } from '../game';
+import type { Game } from '../game/game';
 import { PathfinderComponent } from '../pathfinding/pathfinder.component';
 import { Interceptable } from '../utils/interceptable';
 import { TypedEventEmitter } from '../utils/typed-emitter';

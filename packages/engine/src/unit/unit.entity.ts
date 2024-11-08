@@ -1,7 +1,7 @@
 import { Vec3, type Point3D, type Values } from '@game/shared';
 import { createEntityId, Entity } from '../entity';
 import { Card, type CardOptions } from '../card/card.entity';
-import type { Game } from '../game';
+import type { Game } from '../game/game';
 import { SolidBodyPathfindingStrategy } from '../pathfinding/strategies/solid-pathfinding.strategy';
 import type { UnitBlueprint } from './unit-blueprint';
 import { Interceptable } from '../utils/interceptable';
@@ -56,8 +56,8 @@ export type UnitEventMap = {
   [UNIT_EVENTS.AFTER_ATTACK]: [{ target: Point3D }];
   [UNIT_EVENTS.BEFORE_DEAL_DAMAGE]: [{ targets: Unit[]; damage: Damage }];
   [UNIT_EVENTS.AFTER_DEAL_DAMAGE]: [{ targets: Unit[]; damage: Damage }];
-  [UNIT_EVENTS.BEFORE_RECEIVE_DAMAGE]: [{ from: Unit; damage: Damage; amount: number }];
-  [UNIT_EVENTS.AFTER_RECEIVE_DAMAGE]: [{ from: Unit; damage: Damage; amount: number }];
+  [UNIT_EVENTS.BEFORE_RECEIVE_DAMAGE]: [{ from: Unit; damage: Damage }];
+  [UNIT_EVENTS.AFTER_RECEIVE_DAMAGE]: [{ from: Unit; damage: Damage }];
   [UNIT_EVENTS.BEFORE_PLAY_CARD]: [{ card: Card }];
   [UNIT_EVENTS.AFTER_PLAY_CARD]: [{ card: Card }];
 };
@@ -234,17 +234,14 @@ export class Unit extends Entity {
   }
 
   takeDamage(from: Unit, damage: Damage) {
-    const mitigatedAmount = damage.getMitigatedAmount(this);
     this.emitter.emit(UNIT_EVENTS.BEFORE_RECEIVE_DAMAGE, {
       from,
-      damage,
-      amount: mitigatedAmount
+      damage
     });
-    this.hp.remove(mitigatedAmount);
+    this.hp.remove(damage.getMitigatedAmount(this));
     this.emitter.emit(UNIT_EVENTS.AFTER_RECEIVE_DAMAGE, {
       from,
-      damage,
-      amount: mitigatedAmount
+      damage
     });
   }
 

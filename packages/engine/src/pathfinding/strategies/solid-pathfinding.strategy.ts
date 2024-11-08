@@ -8,7 +8,7 @@ import {
   pointToCellId
 } from '../../board/board-utils';
 import type { Cell, SerializedCoords } from '../../board/cell';
-import type { Game } from '../../game';
+import type { Game } from '../../game/game';
 import type { Edge } from '../dijkstra';
 import type { PathfindingStrategy } from './pathinding-strategy';
 
@@ -33,6 +33,7 @@ export class SolidBodyPathfindingStrategy implements PathfindingStrategy {
   setOrigin(origin: Point3D) {
     this.origin = Vec3.fromPoint3D(origin);
   }
+
   getEdge(posOrKey: Point3D | string, direction: Direction): Cell | null {
     let from: Point3D;
     if (isString(posOrKey)) {

@@ -1,7 +1,7 @@
 import type { Nullable } from '@game/shared';
-import { Game, type StarEvent } from './game';
-import { ClientRngSystem } from './rng/rng-system';
+import { Game, type StarEvent } from './game/game';
 import type { Input, SerializedInput } from './input/input';
+import { ClientRngSystem } from './rng/client-rng.system';
 
 export type ClientSessionOptions = {
   rngValues: number[];

@@ -1,6 +1,6 @@
 import { assert, Vec3, type Nullable, type Point3D } from '@game/shared';
 import type { Player } from './player.entity';
-import type { Game } from '../game';
+import type { Game } from '../game/game';
 import { UNITS_DICTIONARY } from '../unit/units/_index';
 import { CARDS_DICTIONARY } from '../card/cards/_index';
 import { nanoid } from 'nanoid';

@@ -1,4 +1,4 @@
-import type { Game } from './game';
+import type { Game } from './game/game';
 
 export abstract class System<T> {
   constructor(protected game: Game) {}

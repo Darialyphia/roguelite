@@ -1,5 +1,5 @@
 import type { Point3D } from '@game/shared';
-import type { Game } from '../game';
+import type { Game } from '../game/game';
 import type { Card } from './card.entity';
 import type { TargetingStrategy } from '../targeting/targeting-strategy';
 import type { AOEShape } from '../targeting/aoe-shapes';

@@ -1,6 +1,6 @@
 import type { Nullable } from '@game/shared';
-import { Game } from './game';
-import { ServerRngSystem } from './rng/rng-system';
+import { Game } from './game/game';
+import { ServerRngSystem } from './rng/server-rng.system';
 import type { Input, SerializedInput } from './input/input';
 
 export type ServerSessionOptions = {

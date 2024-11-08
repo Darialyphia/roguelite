@@ -1,7 +1,7 @@
 import { z } from 'zod';
 import { defaultInputSchema, Input } from '../input';
-import { GAME_PHASES } from '../../game-phase.system';
 import { assert } from '@game/shared';
+import { GAME_PHASES } from '../../game/game-phase.system';
 
 const schema = defaultInputSchema.extend({
   x: z.number(),
