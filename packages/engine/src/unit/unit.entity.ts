@@ -9,13 +9,14 @@ import { ActionPointComponent } from './action-point.component';
 import { TypedEventEmitter } from '../utils/typed-emitter';
 import { HealthComponent } from './health.component';
 import { CardManagerComponent } from '../card/card-manager.component';
-import { CombatComponent, type Damage } from '../combat/combat.component';
+import { CombatComponent } from '../combat/combat.component';
 import { MOVE_EVENTS, MovementComponent } from './movement.component';
 import { DECK_EVENTS } from '../card/deck.entity';
 import type { Player } from '../player/player.entity';
 import { MeleeTargetingPatternStrategy } from '../targeting/melee-targeting.straegy';
 import { PointAOEShape } from '../targeting/aoe-shapes';
 import { TARGETING_TYPE } from '../targeting/targeting-strategy';
+import type { Damage } from '../combat/damage/damage';
 
 export type UnitOptions = {
   id: string;
@@ -227,20 +228,19 @@ export class Unit extends Entity {
   dealDamage(targets: Unit[], damage: Damage) {
     this.emitter.emit(UNIT_EVENTS.BEFORE_DEAL_DAMAGE, { targets, damage });
     targets.forEach(target => {
-      const amount = this.combat.getDamageDealt(damage);
-      target.takeDamage(this, damage, amount);
+      target.takeDamage(this, damage);
     });
     this.emitter.emit(UNIT_EVENTS.AFTER_DEAL_DAMAGE, { targets, damage });
   }
 
-  takeDamage(from: Unit, damage: Damage, amount: number) {
-    const mitigatedAmount = this.combat.getDamageTaken(damage, amount, from);
+  takeDamage(from: Unit, damage: Damage) {
+    const mitigatedAmount = damage.getMitigatedAmount(this);
     this.emitter.emit(UNIT_EVENTS.BEFORE_RECEIVE_DAMAGE, {
       from,
       damage,
       amount: mitigatedAmount
     });
-    this.hp.remove(amount);
+    this.hp.remove(mitigatedAmount);
     this.emitter.emit(UNIT_EVENTS.AFTER_RECEIVE_DAMAGE, {
       from,
       damage,

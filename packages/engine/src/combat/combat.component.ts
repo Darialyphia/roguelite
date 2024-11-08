@@ -1,16 +1,12 @@
-import { match } from 'ts-pattern';
 import type { Game } from '../game';
 import { Interceptable } from '../utils/interceptable';
 import type { Unit } from '../unit/unit.entity';
 import type { TargetingStrategy } from '../targeting/targeting-strategy';
 import type { AOEShape } from '../targeting/aoe-shapes';
 import { isDefined, type Point3D } from '@game/shared';
-
-export type Damage = {
-  type: 'physical' | 'magical';
-  amount: number;
-  ratio: number;
-};
+import { Damage } from './damage/damage';
+import { PhyicalScalingStrategy } from './damage/scaling/physical-scaling.strategy';
+import { PhysicalMitigationStrategy } from './damage/mitigation/physical-mitigation.strategy';
 
 export type CombatStats = {
   pAtk: number;
@@ -112,34 +108,6 @@ export class CombatComponent {
     };
   }
 
-  getDamageDealt(damage: Damage) {
-    return match(damage.type)
-      .with('physical', () => {
-        return damage.amount + this.pAtk * damage.ratio;
-      })
-      .with('magical', () => {
-        return damage.amount + this.mAtk * damage.ratio;
-      })
-      .exhaustive();
-  }
-
-  getDamageTaken(damage: Damage, amount: number, opponent: CombatStats) {
-    return match(damage.type)
-      .with('physical', () => {
-        const reduction =
-          opponent.pDef * (this.pDefPiercing.percentage / 100) - this.pDefPiercing.flat;
-
-        return amount * (100 / (100 + reduction));
-      })
-      .with('magical', () => {
-        const reduction =
-          opponent.mDef * (this.mDefPiercing.percentage / 100) - this.mDefPiercing.flat;
-
-        return amount * (100 / (100 + reduction));
-      })
-      .exhaustive();
-  }
-
   attackAt(point: Point3D, options: { aoeShape: AOEShape; allowFriendlyFire: boolean }) {
     const targets = options.aoeShape
       .getCells(point)
@@ -147,6 +115,13 @@ export class CombatComponent {
       .filter(isDefined)
       .filter(unit => (options.allowFriendlyFire ? true : unit.isEnemy(this.unit)));
 
-    this.unit.dealDamage(targets, { type: 'physical', amount: 0, ratio: 1 });
+    const damage = new Damage({
+      baseAmount: 1,
+      source: this.unit,
+      scalings: [new PhyicalScalingStrategy(1)],
+      mitigation: new PhysicalMitigationStrategy()
+    });
+
+    this.unit.dealDamage(targets, damage);
   }
 }
