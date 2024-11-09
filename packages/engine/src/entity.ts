@@ -1,7 +1,7 @@
-import { createStringBrand, type Branded } from '@game/shared';
+import { type Branded } from '@game/shared';
 
 export type EntityId = Branded<string, 'EntityId'>;
-export const [createEntityId, isEntityId] = createStringBrand('EntityId' as const);
+export const createEntityId = (str: string) => str as EntityId;
 
 export abstract class Entity {
   readonly id: EntityId;

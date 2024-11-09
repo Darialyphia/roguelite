@@ -1,8 +1,10 @@
-import { Interceptable } from '../utils/interceptable';
+import { Interceptable, type inferInterceptor } from '../utils/interceptable';
 
 export type HealthComponentOptions = {
   maxHp: number;
 };
+
+type HealthInterceptor = HealthComponent['interceptors'];
 
 export class HealthComponent {
   private baseMaxHp: number;
@@ -36,5 +38,24 @@ export class HealthComponent {
 
   remove(amount: number) {
     this._current = Math.max(this._current - amount, 0);
+  }
+
+  addInterceptor<T extends keyof HealthInterceptor>(
+    key: T,
+    interceptor: inferInterceptor<HealthInterceptor[T]>,
+    priority?: number
+  ) {
+    this.interceptors[key].add(interceptor, priority);
+    this._current = Math.min(this._current, this.max);
+
+    return () => this.removeInterceptor(key, interceptor);
+  }
+
+  removeInterceptor<T extends keyof HealthInterceptor>(
+    key: T,
+    interceptor: inferInterceptor<HealthInterceptor[T]>
+  ) {
+    this.interceptors[key].remove(interceptor);
+    this._current = Math.min(this._current, this.max);
   }
 }

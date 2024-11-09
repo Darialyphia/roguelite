@@ -13,6 +13,7 @@
     "format": "prettier --write src/"
   },
   "dependencies": {
+    "@game/engine": "^1.0.0",
     "@game/shared": "^1.0.0",
     "@pixi/layers": "^2.1.0",
     "@vueuse/core": "^11.2.0",
@@ -26,6 +27,7 @@
     "zod": "^3.23.8"
   },
   "devDependencies": {
+    "@assetpack/core": "^0.8.0",
     "@tsconfig/node20": "^20.1.4",
     "@types/fs-extra": "^11.0.4",
     "@types/node": "^20.16.11",

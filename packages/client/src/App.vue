@@ -18,5 +18,6 @@ const viewport = window;
 .ui {
   position: absolute;
   inset: 0;
+  pointer-events: none;
 }
 </style>

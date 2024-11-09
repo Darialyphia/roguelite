@@ -1,5 +1,5 @@
 import { isDefined, isFunction } from '@game/shared';
-import { PriorityQueue } from './priority-queue';
+import { PriorityQueue } from '../utils/priority-queue';
 
 export type NodeKey = string | number;
 

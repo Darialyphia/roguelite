@@ -1,11 +1,9 @@
-import type { Nullable } from '@game/shared';
-import { Game } from './game/game';
+import type { BetterOmit, Nullable } from '@game/shared';
+import { Game, type GameOptions } from './game/game';
 import { ServerRngSystem } from './rng/server-rng.system';
 import type { Input, SerializedInput } from './input/input';
 
-export type ServerSessionOptions = {
-  rngSeed: string;
-};
+export type ServerSessionOptions = BetterOmit<GameOptions, 'rngCtor'>;
 
 export class ServerSession {
   readonly game: Game;
@@ -13,7 +11,9 @@ export class ServerSession {
   constructor(options: ServerSessionOptions) {
     this.game = new Game({
       rngSeed: options.rngSeed,
-      rngCtor: ServerRngSystem
+      rngCtor: ServerRngSystem,
+      mapId: options.mapId,
+      teams: options.teams
     });
     this.game.initialize();
   }

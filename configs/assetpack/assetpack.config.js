@@ -6,7 +6,7 @@ import { mipmap } from "@assetpack/plugin-mipmap";
 
 import { path, SavableAssetCache } from "@assetpack/core";
 
-const SPRITESHEET_PARSER = "Aseprite_spritesheet_Parser";
+const SPRITESHEET_PARSER = "aseprite_loader";
 const TILESET_PARSER = "Aseprite_tileset_Parser";
 
 const loadParserByAssetType = {
@@ -39,7 +39,7 @@ const prefixByAssetType = {
   pedestals: "",
   hitboxes: "hitbox-",
   emotes: "",
-  portraits: "portraits-"
+  portraits: "portraits-",
 };
 
 function manifestEntryParser(tree, processor) {
@@ -52,7 +52,7 @@ function manifestEntryParser(tree, processor) {
 
     const assetName = name.split("/").at(-1);
     const prefix = prefixByAssetType[assetType];
-    const stripExtension = name.endsWith(".json") ||assetType === 'icons';
+    const stripExtension = name.endsWith(".json") || assetType === "icons";
     const needsCustomParser = name.endsWith(".json");
 
     const res = {
@@ -81,7 +81,7 @@ export default function (entry, output) {
     cache: false,
     plugins: {
       audio: audio({
-        inputs: [".mp3",  ".wav"],
+        inputs: [".mp3", ".wav"],
         outputs: [
           {
             formats: [".mp3"],

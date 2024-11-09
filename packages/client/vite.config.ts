@@ -1,6 +1,6 @@
 import { fileURLToPath, URL } from 'node:url';
 
-import { defineConfig } from 'vite';
+import { defineConfig, Plugin, ResolvedConfig } from 'vite';
 import vue from '@vitejs/plugin-vue';
 
 import vueDevTools from 'vite-plugin-vue-devtools';
@@ -9,9 +9,42 @@ import vueRouter from 'unplugin-vue-router/vite';
 import { VueRouterAutoImports } from 'unplugin-vue-router';
 import UnoCSS from 'unocss/vite';
 import { isCustomElement, transformAssetUrls } from 'vue3-pixi/compiler';
+//@ts-expect-error no types for this package
+import assetpackConfig from '@game/assetpack';
 
 const customElements = ['viewport', 'layer'];
 const prefix = 'pixi-';
+
+import { AssetPack } from '@assetpack/core';
+
+function assetpackPlugin(): Plugin {
+  const apConfig = assetpackConfig('./src/assets/', './src/public/assets');
+
+  let mode: ResolvedConfig['command'];
+  let ap: AssetPack | undefined;
+
+  return {
+    name: 'vite-plugin-assetpack',
+    configResolved(resolvedConfig) {
+      mode = resolvedConfig.command;
+    },
+    buildStart: async () => {
+      if (mode === 'serve') {
+        if (ap) return;
+        ap = new AssetPack(apConfig);
+        void ap.watch();
+      } else {
+        await new AssetPack(apConfig).run();
+      }
+    },
+    buildEnd: async () => {
+      if (ap) {
+        await ap.stop();
+        ap = undefined;
+      }
+    }
+  };
+}
 
 export default defineConfig({
   plugins: [
@@ -52,7 +85,8 @@ export default defineConfig({
         enabled: true
       }
     }),
-    UnoCSS()
+    UnoCSS(),
+    assetpackPlugin()
   ],
   resolve: {
     alias: {

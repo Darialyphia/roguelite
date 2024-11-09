@@ -1,0 +1,76 @@
+{
+  "bundles": [
+    {
+      "name": "default",
+      "assets": [
+        {
+          "alias": [
+            "undefinedlogo.svg"
+          ],
+          "src": [
+            "/assets/logo.svg"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "tiles",
+      "assets": [
+        {
+          "alias": [
+            "grass"
+          ],
+          "src": [
+            "/assets/tiles/grass.json"
+          ],
+          "loadParser": "Aseprite_spritesheet_Parser",
+          "data": {
+            "tags": {
+              "m": true
+            }
+          }
+        },
+        {
+          "alias": [
+            "grass.png"
+          ],
+          "src": [
+            "/assets/tiles/grass.png"
+          ],
+          "data": {
+            "tags": {
+              "m": true
+            }
+          }
+        },
+        {
+          "alias": [
+            "water"
+          ],
+          "src": [
+            "/assets/tiles/water.json"
+          ],
+          "loadParser": "Aseprite_spritesheet_Parser",
+          "data": {
+            "tags": {
+              "m": true
+            }
+          }
+        },
+        {
+          "alias": [
+            "water.png"
+          ],
+          "src": [
+            "/assets/tiles/water.png"
+          ],
+          "data": {
+            "tags": {
+              "m": true
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -1,5 +1,5 @@
 {
   "extends": "@game/tsconfig/base.json",
-  "include": ["src/**/*.ts", "tsup.config.ts"],
+  "include": ["src/**/*.ts", "tsup.config.ts", "../client/src/utils/pixi-elements.ts"],
   "exclude": [".git", "node_modules"]
 }

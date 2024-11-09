@@ -38,5 +38,11 @@ export default [
   },
 
   ...vueTsEslintConfig(),
-  skipFormatting
+  skipFormatting,
+
+  {
+    rules: {
+      '@typescript-eslint/no-explicit-any': 'off'
+    }
+  }
 ];

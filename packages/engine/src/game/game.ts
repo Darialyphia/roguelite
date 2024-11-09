@@ -16,6 +16,8 @@ import type { RngSystem } from '../rng/rng-system';
 import type { SerializedInput } from '../input/input';
 import { mapValues } from 'lodash-es';
 import { GamePhaseSystem } from './game-phase.system';
+import type { PlayerOptions } from '../player/player.entity';
+import { MAPS_DICTIONARY } from '../board/maps/_index';
 
 type GlobalUnitEvents = {
   [Event in UnitEvent as `unit.${Event}`]: UnitEventMap[Event];
@@ -56,6 +58,8 @@ export const GAME_EVENTS = {
 export type GameOptions = {
   rngSeed: string;
   rngCtor: Constructor<RngSystem>;
+  mapId: string;
+  teams: Pick<PlayerOptions, 'id' | 'roster' | 'units'>[][];
 };
 
 export class Game {
@@ -96,13 +100,16 @@ export class Game {
   initialize() {
     this.rngSystem.initialize({ seed: this.options.rngSeed });
     this.gamePhaseSystem.initialize();
-    this.boardSystem.initialize({
-      width: 10,
-      height: 10,
-      cells: []
-    });
+    const map = MAPS_DICTIONARY[this.options.mapId];
+    this.boardSystem.initialize({ map });
     this.playerSystem.initialize({
-      teams: []
+      teams: this.options.teams.map((team, teamIndex) => ({
+        id: `team.${teamIndex}`,
+        players: team.map((player, playerIndex) => ({
+          ...player,
+          deployZone: map.deployZones[teamIndex][playerIndex]
+        }))
+      }))
     });
     this.unitSystem.initialize({ units: [] });
     this.turnSystem.initialize();

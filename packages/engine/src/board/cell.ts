@@ -2,22 +2,27 @@ import { type Point3D } from '@game/shared';
 import { createEntityId, Entity } from '../entity';
 import type { Game } from '../game/game';
 import { Position } from '../utils/position';
+import type { Terrain } from './board-utils';
 
 export type SerializedCoords = `${string}:${string}:${string}`;
 
 export type CellOptions = {
   id: string;
   position: Point3D;
+  terrain: Terrain;
 };
 
 export class Cell extends Entity {
-  public position: Position;
+  readonly position: Position;
+
+  readonly terrain: Terrain;
 
   constructor(
     private game: Game,
     public options: CellOptions
   ) {
     super(createEntityId(options.id));
+    this.terrain = options.terrain;
     this.position = Position.fromPoint3D(options.position);
   }
 

@@ -2,15 +2,15 @@ import { Vec3, type Point3D } from '@game/shared';
 import { createEntityId, Entity } from '../entity';
 import type { Team } from './team.entity';
 import type { Game } from '../game/game';
-import { PlayerRosterComponent } from './player-roster.component';
+import { PlayerRosterComponent, type RosterUnit } from './player-roster.component';
 import { UNITS_DICTIONARY } from '../unit/units/_index';
 import { CARDS_DICTIONARY } from '../card/cards/_index';
 import { nanoid } from 'nanoid';
 
 export type PlayerOptions = {
   id: string;
-  team: Team;
-  roster: Array<{ blueprintId: string; deck: Array<{ blueprintId: string }> }>;
+
+  roster: RosterUnit[];
   deployZone: Point3D[];
   units: Array<{
     blueprintId: string;
@@ -26,10 +26,10 @@ export class Player extends Entity {
 
   readonly roster: PlayerRosterComponent;
 
-  constructor(game: Game, options: PlayerOptions) {
+  constructor(game: Game, team: Team, options: PlayerOptions) {
     super(createEntityId(options.id));
     this.game = game;
-    this.team = options.team;
+    this.team = team;
 
     this.roster = new PlayerRosterComponent(this.game, {
       player: this,

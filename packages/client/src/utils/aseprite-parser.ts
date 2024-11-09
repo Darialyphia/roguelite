@@ -1,13 +1,12 @@
 import { isDefined } from '@game/shared';
 import {
   ExtensionType,
-  Loader,
+  type Loader,
   LoaderParserPriority,
-  path,
   Spritesheet,
   Texture,
-  type LoaderParserAdvanced,
-  type SpritesheetData
+  // type LoaderParserAdvanced,
+  type ISpritesheetData
 } from 'pixi.js';
 import { z } from 'zod';
 
@@ -105,11 +104,11 @@ const parseFrameKey = (key: FrameKey) => {
 };
 
 type LayerGroup = {
-  body: SpritesheetData;
-  weapon: SpritesheetData;
-  armor: SpritesheetData;
-  helm: SpritesheetData;
-  vfx: SpritesheetData;
+  body: ISpritesheetData;
+  weapon: ISpritesheetData;
+  armor: ISpritesheetData;
+  helm: ISpritesheetData;
+  vfx: ISpritesheetData;
 };
 type LoadedAsepriteSheet = {
   imagePath: string;
@@ -169,19 +168,19 @@ const parseAsepriteSheet = async (
     sheets: {}
   };
 
-  let basePath = path.dirname(src);
+  const basePath = '';
 
-  if (basePath && basePath.lastIndexOf('/') !== basePath.length - 1) {
-    basePath += '/';
-  }
+  // if (basePath && basePath.lastIndexOf('/') !== basePath.length - 1) {
+  //   basePath += '/';
+  // }
   const imagePath = basePath + asset.imagePath;
 
   const assets = await loader.load<Texture>([imagePath]);
 
   const texture = assets[imagePath];
-  texture.source.scaleMode = 'nearest';
+  // texture.source.scaleMode = 'nearest';
 
-  const loadAndParse = async (data: SpritesheetData) => {
+  const loadAndParse = async (data: ISpritesheetData) => {
     const sheet = new Spritesheet(texture, data);
     await sheet.parse();
     return sheet;
@@ -218,20 +217,17 @@ const parseAsepriteSheet = async (
 //   meta,
 // });
 
-export const ASEPRITE_SPRITESHEET_PARSER = 'Aseprite_loader';
+export const ASEPRITE_SPRITESHEET_LOADER = 'aseprite_loader';
 // export const ASEPRITE_TILESET_PARSER = "Aseprite_tileset_Parser";
 
-export const asepriteSpriteSheetParser: LoaderParserAdvanced<
-  LoadedAsepriteSheet,
-  ParsedAsepriteSheet
-> = {
+export const asepriteSpriteSheetParser = {
   extension: {
-    name: ASEPRITE_SPRITESHEET_PARSER,
+    name: ASEPRITE_SPRITESHEET_LOADER,
     priority: LoaderParserPriority.High,
     type: ExtensionType.LoadParser
   },
 
-  name: ASEPRITE_SPRITESHEET_PARSER,
+  name: ASEPRITE_SPRITESHEET_LOADER,
 
   async load(url: string) {
     const response = await fetch(url);
@@ -241,13 +237,13 @@ export const asepriteSpriteSheetParser: LoaderParserAdvanced<
     return loadAsepritesheet(parsed);
   },
 
-  testParse(asset, resolvedAsset) {
+  testParse(asset: any, resolvedAsset: any) {
     return Promise.resolve(
-      resolvedAsset?.loadParser === ASEPRITE_SPRITESHEET_PARSER
+      resolvedAsset?.loadParser === ASEPRITE_SPRITESHEET_LOADER
     );
   },
 
-  async parse(asset, resolvedAsset, loader) {
+  async parse(asset: any, resolvedAsset: any, loader: any) {
     return parseAsepriteSheet(asset, resolvedAsset!.src!, loader!);
   }
 };

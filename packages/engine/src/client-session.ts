@@ -1,11 +1,13 @@
-import type { Nullable } from '@game/shared';
-import { Game, type StarEvent } from './game/game';
+import type { BetterOmit, Nullable } from '@game/shared';
+import { Game, type GameOptions, type StarEvent } from './game/game';
 import type { Input, SerializedInput } from './input/input';
 import { ClientRngSystem } from './rng/client-rng.system';
 
-export type ClientSessionOptions = {
+export type ClientSessionOptions = BetterOmit<GameOptions, 'rngCtor' | 'rngSeed'> & {
   rngValues: number[];
 };
+
+export type ClientDispatchMeta = { rngValues: number[] };
 
 export class ClientSession {
   readonly game: Game;
@@ -14,7 +16,9 @@ export class ClientSession {
   constructor(options: ClientSessionOptions) {
     this.game = new Game({
       rngSeed: '',
-      rngCtor: ClientRngSystem
+      rngCtor: ClientRngSystem,
+      mapId: options.mapId,
+      teams: options.teams
     });
     this.game.rngSystem.values = options.rngValues;
     this.game.on('*', evt => {
@@ -23,10 +27,7 @@ export class ClientSession {
     this.game.initialize();
   }
 
-  async dispatch(
-    input: SerializedInput,
-    meta: { rngValues: number[] } = { rngValues: [] }
-  ) {
+  async dispatch(input: SerializedInput, meta: ClientDispatchMeta) {
     try {
       this.game.rngSystem.values.push(...meta.rngValues);
 

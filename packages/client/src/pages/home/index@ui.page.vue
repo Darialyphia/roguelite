@@ -7,7 +7,16 @@ definePage({
 
 <template>
   <h1>Home Page</h1>
-  <RouterLink :to="{ name: 'Settings' }">Settings</RouterLink>
+  <nav class="pointer-events-auto">
+    <ul class="flex gap-4">
+      <li>
+        <RouterLink :to="{ name: 'Settings' }">Settings</RouterLink>
+      </li>
+      <li>
+        <RouterLink :to="{ name: 'Battle' }">Test Battle</RouterLink>
+      </li>
+    </ul>
+  </nav>
 </template>
 
 <style scoped lang="postcss"></style>

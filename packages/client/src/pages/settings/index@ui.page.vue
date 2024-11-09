@@ -6,7 +6,9 @@ definePage({
 
 <template>
   <h1>Settings page</h1>
-  <RouterLink :to="{ name: 'Home' }">Back to Home</RouterLink>
+  <RouterLink :to="{ name: 'Home' }" class="pointer-events-auto">
+    Back to Home
+  </RouterLink>
 </template>
 
 <style scoped lang="postcss"></style>

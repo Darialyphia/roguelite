@@ -5,7 +5,7 @@ definePage({
   name: 'Home',
   path: '/'
 });
-const size = ref(100);
+const size = ref(0);
 const screen = useScreen();
 
 let count = 0;
