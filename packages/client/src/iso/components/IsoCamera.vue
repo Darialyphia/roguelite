@@ -40,7 +40,7 @@ until(camera.viewport)
         direction: 'all'
       })
       .clampZoom({ minScale: 1, maxScale: 3 })
-      .setZoom(1, false)
+      .setZoom(2, false)
       .mouseEdges({
         distance: 10,
         speed: 15,
@@ -95,21 +95,7 @@ const containerOffset = computed(() => {
     :disable-on-context-menu="true"
     :sortable-children="true"
   >
-    <graphics
-      @render="
-        g => {
-          g.clear();
-          g.beginFill('blue');
-          g.drawRect(0, 0, worldSize.width, worldSize.height);
-          g.endFill();
-        }
-      "
-    />
-    <container
-      :sortable-children="true"
-      v-bind="containerOffset"
-      @click="camera.rotateCW()"
-    >
+    <container :sortable-children="true" v-bind="containerOffset">
       <slot />
     </container>
   </viewport>

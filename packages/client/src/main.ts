@@ -10,6 +10,14 @@ import { createRouter, createWebHistory } from 'vue-router';
 import { createPinia } from 'pinia';
 import App from './App.vue';
 import { useAssetsProvider } from './shared/composables/useAssets';
+import { PixiPlugin } from 'gsap/PixiPlugin';
+import gsap from 'gsap';
+import * as PIXI from 'pixi.js';
+
+// @ts-expect-error enables pixi devtools
+window.PIXI = PIXI;
+gsap.install(window);
+gsap.registerPlugin(PixiPlugin);
 
 const app = createApp(App);
 

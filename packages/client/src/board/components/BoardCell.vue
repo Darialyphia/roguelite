@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import IsoPoint from '@/iso/components/IsoPoint.vue';
+import AnimatedIsoPoint from '@/iso/components/AnimatedIsoPoint.vue';
 import type { CellViewModel } from '@/pages/battle/battle.store';
 import { useAssets } from '@/shared/composables/useAssets';
 import type { ParsedAsepriteSheet } from '@/utils/aseprite-parser';
@@ -16,13 +16,13 @@ assets.loadSpritesheet<'', 'tile'>('grass').then(result => {
 </script>
 
 <template>
-  <IsoPoint :position="cell">
+  <AnimatedIsoPoint :position="cell">
     <AnimatedSprite
       v-if="sheet"
       :textures="sheet.sheets.base.tile.animations[0]"
       :pivot="[0, config.TILE_SIZE.z]"
     />
-  </IsoPoint>
+  </AnimatedIsoPoint>
 </template>
 
 <style scoped lang="postcss"></style>
