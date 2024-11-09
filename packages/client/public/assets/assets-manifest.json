@@ -23,7 +23,7 @@
           "src": [
             "/assets/tiles/grass.json"
           ],
-          "loadParser": "Aseprite_spritesheet_Parser",
+          "loadParser": "aseprite_loader",
           "data": {
             "tags": {
               "m": true
@@ -50,7 +50,7 @@
           "src": [
             "/assets/tiles/water.json"
           ],
-          "loadParser": "Aseprite_spritesheet_Parser",
+          "loadParser": "aseprite_loader",
           "data": {
             "tags": {
               "m": true

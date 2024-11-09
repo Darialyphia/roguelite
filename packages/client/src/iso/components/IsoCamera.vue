@@ -5,6 +5,7 @@ import { Container } from 'pixi.js';
 import { until, useEventListener } from '@vueuse/core';
 import { useIsoCamera } from '../composables/useIsoCamera';
 import { config } from '@/utils/config';
+import { match } from 'ts-pattern';
 
 const { width, height } = defineProps<{
   width: number;
@@ -13,15 +14,9 @@ const { width, height } = defineProps<{
 const app = useApplication();
 
 const camera = useIsoCamera();
-
-const WORLD_PADDING = {
-  x: 0,
-  y: 0
-};
-
 const worldSize = computed(() => ({
-  width: WORLD_PADDING.x + ((width + height) / 2) * config.TILE_SIZE.x,
-  height: WORLD_PADDING.y + ((width + height) / 2) * config.TILE_SIZE.y
+  width: ((width + height) / 2) * config.TILE_SIZE.x,
+  height: ((width + height) / 2) * config.TILE_SIZE.y + config.TILE_SIZE.z
 }));
 
 watchEffect(() => {
@@ -29,7 +24,6 @@ watchEffect(() => {
     x: worldSize.value.width / 2,
     y: worldSize.value.height / 2
   };
-  console.log(worldSize.value);
 });
 
 until(camera.viewport)
@@ -46,7 +40,7 @@ until(camera.viewport)
         direction: 'all'
       })
       .clampZoom({ minScale: 1, maxScale: 3 })
-      .setZoom(2, false)
+      .setZoom(1, false)
       .mouseEdges({
         distance: 10,
         speed: 15,
@@ -55,10 +49,32 @@ until(camera.viewport)
       .pinch({ noDrag: true })
       .moveCenter(worldSize.value.width / 2, worldSize.value.height / 2);
   });
+
 useEventListener('resize', () => {
   setTimeout(() => {
     camera.viewport.value?.resize(window.innerWidth, window.innerHeight);
-  }, 100);
+  }, 50);
+});
+
+const containerOffset = computed(() => {
+  return match(camera.angle.value)
+    .with(0, () => ({
+      x: (height / 2) * config.TILE_SIZE.x,
+      y: 0
+    }))
+    .with(90, () => ({
+      x: (height / 2) * config.TILE_SIZE.x,
+      y: 0
+    }))
+    .with(180, () => ({
+      x: (height / 2) * config.TILE_SIZE.x,
+      y: 0
+    }))
+    .with(270, () => ({
+      x: (height / 2) * config.TILE_SIZE.x,
+      y: 0
+    }))
+    .exhaustive();
 });
 </script>
 
@@ -79,17 +95,21 @@ useEventListener('resize', () => {
     :disable-on-context-menu="true"
     :sortable-children="true"
   >
-    <container :sortable-children="true">
-      <graphics
-        @render="
-          g => {
-            g.clear();
-            g.beginFill('blue');
-            g.drawRect(0, 0, worldSize.width, worldSize.height);
-            g.endFill();
-          }
-        "
-      />
+    <graphics
+      @render="
+        g => {
+          g.clear();
+          g.beginFill('blue');
+          g.drawRect(0, 0, worldSize.width, worldSize.height);
+          g.endFill();
+        }
+      "
+    />
+    <container
+      :sortable-children="true"
+      v-bind="containerOffset"
+      @click="camera.rotateCW()"
+    >
       <slot />
     </container>
   </viewport>

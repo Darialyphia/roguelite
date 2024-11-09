@@ -3,6 +3,7 @@ import {
   type AssetsManifest,
   Spritesheet,
   Texture,
+  type UnresolvedAsset,
   extensions
 } from 'pixi.js';
 import type { App, InjectionKey, Ref } from 'vue';
@@ -23,7 +24,13 @@ export type AssetsContext = {
   manifest: Readonly<Nullable<AssetsManifest>>;
   loaded: Ref<boolean>;
   fullyLoaded: Ref<boolean>;
-  loadSpritesheet(key: string): Promise<ParsedAsepriteSheet>;
+  loadSpritesheet<
+    TGroups extends string = string,
+    TBaseLayers extends string = string,
+    TGroupLayers extends string = string
+  >(
+    key: string
+  ): Promise<ParsedAsepriteSheet<TGroups, TBaseLayers, TGroupLayers>>;
   // unloadSpritesheet(key: string): Promise<void>;
   // loadTexture(key: string): Promise<Texture>;
   // loadNormalSpritesheet(
@@ -40,21 +47,21 @@ export const ASSETS_INJECTION_KEY = Symbol(
   'assets'
 ) as InjectionKey<AssetsContext>;
 
-// const splitBundle = (manifest: AssetsManifest, name: string) => {
-//   const bundle = manifest.bundles.find(b => b.name === name)!;
-//   manifest.bundles.splice(manifest.bundles.indexOf(bundle), 1);
+const splitBundle = (manifest: AssetsManifest, name: string) => {
+  const bundle = manifest.bundles.find(b => b.name === name)!;
+  manifest.bundles.splice(manifest.bundles.indexOf(bundle), 1);
 
-//   const bundleIds: string[] = [];
-//   (bundle.assets as UnresolvedAsset[]).forEach(asset => {
-//     const newBundle = {
-//       name: asset.alias?.[0] ?? '',
-//       assets: [asset]
-//     };
-//     manifest.bundles.push(newBundle);
-//     bundleIds.push(newBundle.name);
-//   });
-//   return bundleIds;
-// };
+  const bundleIds: string[] = [];
+  (bundle.assets as UnresolvedAsset[]).forEach(asset => {
+    const newBundle = {
+      name: asset.alias?.[0] ?? '',
+      assets: [asset]
+    };
+    manifest.bundles.push(newBundle);
+    bundleIds.push(newBundle.name);
+  });
+  return bundleIds;
+};
 
 // const getNormalAssetData = (
 //   asset: ISpritesheetData,
@@ -87,9 +94,9 @@ export const useAssetsProvider = (app: App) => {
     extensions.add(asepriteSpriteSheetParser);
     Assets.cache.reset();
     manifest = await (await fetch('/assets/assets-manifest.json')).json();
-
     // createNormalSheetsBundle(manifest, 'units');
     // transform the manifest to add separate bundles for units and icons, as loading everything at once is way too expensive
+    splitBundle(manifest, 'tiles');
     // splitBundle(manifest, 'units');
     // splitBundle(manifest, 'icons');
     // splitBundle(manifest, 'normals');
@@ -98,20 +105,21 @@ export const useAssetsProvider = (app: App) => {
     Assets.init({ manifest });
   };
 
-  const loadNonCriticalResources = async () => {
-    await Promise.all(
-      ['tiles' /*'obstacles', 'tilesets', 'hitboxes', 'modifiers'*/].map(
-        bundle => {
-          return new Promise(resolve => {
-            window.requestIdleCallback(() => {
-              Assets.loadBundle(bundle).then(resolve);
-            });
-          });
-        }
-      )
-    );
-    fullyLoaded.value = true;
-  };
+  // const loadNonCriticalResources = async () => {
+  //   await Promise.all(
+  //     ['tiles' /*'obstacles', 'tilesets', 'hitboxes', 'modifiers'*/].map(
+  //       bundle => {
+  //         return new Promise(resolve => {
+  //           window.requestIdleCallback(() => {
+  //             console.log('preload', bundle);
+  //             Assets.loadBundle(bundle).then(resolve);
+  //           });
+  //         });
+  //       }
+  //     )
+  //   );
+  //   fullyLoaded.value = true;
+  // };
 
   const load = async () => {
     if (loaded.value) return;
@@ -119,7 +127,7 @@ export const useAssetsProvider = (app: App) => {
     // await Promise.all(['ui', 'pedestals'].map(id => Assets.loadBundle(id)));
     loaded.value = true;
 
-    loadNonCriticalResources();
+    // loadNonCriticalResources();
   };
 
   const bundlesPromises = new Map<string, Promise<any>>();
@@ -131,12 +139,19 @@ export const useAssetsProvider = (app: App) => {
     loaded,
     fullyLoaded,
     load,
-    async loadSpritesheet(key: string) {
+    async loadSpritesheet<
+      TGroups extends string = string,
+      TBaseLayers extends string = string,
+      TGroupLayers extends string = string
+    >(key: string) {
       if (!bundlesPromises.has(key)) {
+        console.log('load', key);
         bundlesPromises.set(key, Assets.loadBundle(key));
       }
       await bundlesPromises.get(key);
-      return Assets.get<ParsedAsepriteSheet>(key);
+      return Assets.get<
+        ParsedAsepriteSheet<TGroups, TBaseLayers, TGroupLayers>
+      >(key);
     }
 
     // async loadSpritesheet(key) {

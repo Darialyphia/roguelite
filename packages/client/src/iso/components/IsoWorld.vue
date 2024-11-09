@@ -3,10 +3,11 @@ import { toRefs } from 'vue';
 import { useIsoCameraProvider } from '../composables/useIsoCamera';
 import { useIsoWorldProvider } from '../composables/useIsoWorld';
 import type { Angle } from '../composables/useIso';
-import type { Point, Point3D } from '@game/shared';
+import type { Point3D } from '@game/shared';
 
 const props = defineProps<{
-  rotationCenter?: Point;
+  width: number;
+  height: number;
   angle?: Angle;
   tileSize?: Point3D;
 }>();

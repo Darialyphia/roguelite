@@ -1,10 +1,13 @@
 <script setup lang="ts">
 import { Application, External } from 'vue3-pixi';
+import { useAssets } from './shared/composables/useAssets';
 const viewport = window;
+const { loaded } = useAssets();
 </script>
 
 <template>
-  <Application :resize-to="viewport">
+  <div v-if="!loaded">Loading...</div>
+  <Application :resize-to="viewport" v-else>
     <RouterView name="scene" />
     <External>
       <div class="ui">

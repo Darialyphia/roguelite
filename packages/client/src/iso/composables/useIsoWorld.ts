@@ -1,12 +1,13 @@
-import type { Nullable, Point, Point3D } from '@game/shared';
-import type { ComputedRef, MaybeRefOrGetter } from 'vue';
+import type { Nullable, Point3D } from '@game/shared';
+import type { Ref, ComputedRef, MaybeRefOrGetter } from 'vue';
 import type { Angle } from './useIso';
 import { useSafeInject } from '@/shared/composables/useSafeInject';
 
 export type IsoWorldContext = {
-  rotationCenter: ComputedRef<Point>;
-  angle: ComputedRef<Angle>;
+  angle: Ref<Angle>;
   scale: ComputedRef<Point3D>;
+  width: ComputedRef<number>;
+  height: ComputedRef<number>;
 };
 
 export const ISO_GRID_INJECTION_KEY = Symbol(
@@ -14,16 +15,17 @@ export const ISO_GRID_INJECTION_KEY = Symbol(
 ) as InjectionKey<IsoWorldContext>;
 
 export type UseIsoWorldProviderOptions = {
-  rotationCenter: MaybeRefOrGetter<Nullable<Point>>;
   angle: MaybeRefOrGetter<Nullable<Angle>>;
   tileSize: MaybeRefOrGetter<Nullable<Point3D>>;
+  width: MaybeRefOrGetter<number>;
+  height: MaybeRefOrGetter<number>;
 };
 export const useIsoWorldProvider = (options: UseIsoWorldProviderOptions) => {
+  const angle = ref(toValue(options.angle) ?? 0);
   const ctx: IsoWorldContext = {
-    rotationCenter: computed(
-      () => toValue(options.rotationCenter) ?? { x: 0, y: 0 }
-    ),
-    angle: computed(() => toValue(options.angle) ?? 0),
+    angle,
+    width: computed(() => toValue(options.width)),
+    height: computed(() => toValue(options.height)),
     scale: computed(() => toValue(options.tileSize) ?? { x: 1, y: 1, z: 1 })
   };
 

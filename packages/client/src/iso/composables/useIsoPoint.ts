@@ -14,7 +14,7 @@ export const useIsoPoint = ({ position, zIndexOffset }: UseIsoTileOptions) => {
   const isoPosition = useIso(
     computed(() => toValue(position)),
     computed(() => ({
-      rotationCenter: grid.rotationCenter.value,
+      dimensions: { width: grid.width.value, height: grid.height.value },
       angle: grid.angle.value,
       scale: grid.scale.value
     }))

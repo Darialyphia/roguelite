@@ -24,7 +24,8 @@ app.use(router);
 app.use(pinia);
 app.use({
   install(app) {
-    useAssetsProvider(app);
+    const assets = useAssetsProvider(app);
+    assets.load();
   }
 });
 app.mount('#app');

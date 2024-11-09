@@ -18,7 +18,7 @@ const prefix = 'pixi-';
 import { AssetPack } from '@assetpack/core';
 
 function assetpackPlugin(): Plugin {
-  const apConfig = assetpackConfig('./src/assets/', './src/public/assets');
+  const apConfig = assetpackConfig('./src/assets/', './public/assets/');
 
   let mode: ResolvedConfig['command'];
   let ap: AssetPack | undefined;

@@ -50,7 +50,14 @@ export const asepriteJsonMetaSchema = z.object({
         .array()
     })
     .array()
-    .optional()
+    .optional(),
+  layers: z
+    .object({
+      name: z.string(),
+      opacity: z.number(),
+      blendMode: z.string()
+    })
+    .array()
 });
 export type AsepriteMeta = z.infer<typeof asepriteJsonMetaSchema>;
 
@@ -103,30 +110,23 @@ const parseFrameKey = (key: FrameKey) => {
   } as ParsedFramedKey;
 };
 
-type LayerGroup = {
-  body: ISpritesheetData;
-  weapon: ISpritesheetData;
-  armor: ISpritesheetData;
-  helm: ISpritesheetData;
-  vfx: ISpritesheetData;
-};
+type LayerGroup = Record<string, ISpritesheetData>;
 type LoadedAsepriteSheet = {
   imagePath: string;
   groups: Record<string, LayerGroup>;
 };
 
-export type ParsedAsepriteSheet = {
-  groups: string[];
-  sheets: Record<
-    string,
-    {
-      body: Spritesheet;
-      weapon: Spritesheet;
-      armor: Spritesheet;
-      helm: Spritesheet;
-      vfx: Spritesheet;
-    }
-  >;
+export type ParsedAsepriteSheet<
+  TGroups extends string = string,
+  TBaseLayers extends string = string,
+  TGroupLayers extends string = string
+> = {
+  groups: TGroups[];
+  sheets: {
+    [key in TGroups | 'base']: key extends 'base'
+      ? Record<TBaseLayers, Spritesheet>
+      : Record<TGroupLayers, Spritesheet>;
+  };
 };
 
 const initSpritesheetData = (meta: AsepriteMeta) => ({
@@ -143,13 +143,11 @@ const loadAsepritesheet = ({ frames, meta }: AsepriteJson) => {
   Object.entries(frames).forEach(([frameName, frame]) => {
     assertFrameKey(frameName);
     const { tag, index, layer, group } = parseFrameKey(frameName as FrameKey);
-    groups[group] ??= {
-      body: initSpritesheetData(meta),
-      armor: initSpritesheetData(meta),
-      helm: initSpritesheetData(meta),
-      weapon: initSpritesheetData(meta),
-      vfx: initSpritesheetData(meta)
-    };
+    groups[group] ??= Object.fromEntries(
+      meta.layers
+        .map(l => l.name)
+        .map(name => [name, initSpritesheetData(meta)])
+    );
     groups[group][layer].animations![tag] ??= [];
     groups[group][layer].animations![tag][index] = frameName;
     groups[group][layer].frames[frameName] = frame;
@@ -168,12 +166,8 @@ const parseAsepriteSheet = async (
     sheets: {}
   };
 
-  const basePath = '';
-
-  // if (basePath && basePath.lastIndexOf('/') !== basePath.length - 1) {
-  //   basePath += '/';
-  // }
-  const imagePath = basePath + asset.imagePath;
+  const basePath = src.split('/').slice(0, -1).join('/');
+  const imagePath = `${basePath}/${asset.imagePath}`;
 
   const assets = await loader.load<Texture>([imagePath]);
 
@@ -185,20 +179,17 @@ const parseAsepriteSheet = async (
     await sheet.parse();
     return sheet;
   };
-
   for (const [groupName, group] of Object.entries(asset.groups)) {
     if (groupName !== 'base') {
       result.groups.unshift(groupName);
     }
-    result.sheets[groupName] = {
-      body: await loadAndParse(group.body),
-      weapon: await loadAndParse(group.weapon),
-      armor: await loadAndParse(group.armor),
-      helm: await loadAndParse(group.helm),
-      vfx: await loadAndParse(group.vfx)
-    };
+    const resources = await Promise.all(
+      Object.keys(group).map(
+        async k => [k, await loadAndParse(group[k])] as const
+      )
+    );
+    result.sheets[groupName] = Object.fromEntries(resources);
   }
-
   return result;
 };
 
@@ -244,7 +235,17 @@ export const asepriteSpriteSheetParser = {
   },
 
   async parse(asset: any, resolvedAsset: any, loader: any) {
-    return parseAsepriteSheet(asset, resolvedAsset!.src!, loader!);
+    try {
+      const result = await parseAsepriteSheet(
+        asset,
+        resolvedAsset!.src!,
+        loader!
+      );
+      return result;
+    } catch (e) {
+      console.log('PARSE ERROR', e);
+      throw e;
+    }
   }
 };
 

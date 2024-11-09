@@ -21,6 +21,7 @@
     "pinia": "^2.2.6",
     "pixi-viewport": "^5.0.2",
     "pixi.js": "^7.4.2",
+    "ts-pattern": "^5.5.0",
     "vue": "^3.5.12",
     "vue-router": "^4.4.5",
     "vue3-pixi": "^0.9.4",

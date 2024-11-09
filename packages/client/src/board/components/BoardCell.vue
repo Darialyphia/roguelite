@@ -2,26 +2,25 @@
 import IsoPoint from '@/iso/components/IsoPoint.vue';
 import type { CellViewModel } from '@/pages/battle/battle.store';
 import { useAssets } from '@/shared/composables/useAssets';
+import type { ParsedAsepriteSheet } from '@/utils/aseprite-parser';
+import { config } from '@/utils/config';
+
 const { cell } = defineProps<{ cell: CellViewModel }>();
 
 const assets = useAssets();
 
-assets.loadSpritesheet('grass').then(sheet => {
-  console.log(sheet);
+const sheet = shallowRef<ParsedAsepriteSheet<'', 'tile'>>();
+assets.loadSpritesheet<'', 'tile'>('grass').then(result => {
+  sheet.value = result;
 });
 </script>
 
 <template>
   <IsoPoint :position="cell">
-    <graphics
-      @render="
-        g => {
-          g.clear();
-          g.beginFill('red');
-          g.drawCircle(0, 0, 32);
-          g.endFill();
-        }
-      "
+    <AnimatedSprite
+      v-if="sheet"
+      :textures="sheet.sheets.base.tile.animations[0]"
+      :pivot="[0, config.TILE_SIZE.z]"
     />
   </IsoPoint>
 </template>
