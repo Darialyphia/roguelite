@@ -1,7 +1,7 @@
 import type { CardBlueprint } from '../card-blueprint';
 
 export const testCard: CardBlueprint = {
-  id: 'test',
+  id: 'test-card',
   name: 'Test card',
   cost: 1,
   description: 'This is a test card',

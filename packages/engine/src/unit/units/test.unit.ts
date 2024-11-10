@@ -1,7 +1,8 @@
 import type { UnitBlueprint } from '../unit-blueprint';
 
 export const testUnit: UnitBlueprint = {
-  id: 'test',
+  id: 'test-unit',
+  spriteId: 'wizard',
   speed: 6,
   pAtk: 10,
   pDef: 5,

@@ -23,6 +23,7 @@ export type UnitOptions = {
   position: Point3D;
   deck: CardOptions[];
   blueprint: UnitBlueprint;
+  cosmetics: Record<string, string | null>;
   player: Player;
 };
 
@@ -81,6 +82,8 @@ export class Unit extends Entity {
 
   readonly combat: CombatComponent;
 
+  readonly cosmetics: Record<string, string | null>;
+
   private interceptors = {
     canMove: new Interceptable<boolean>(),
     canAttack: new Interceptable<boolean>(),
@@ -93,6 +96,7 @@ export class Unit extends Entity {
     this.game = game;
     this.player = options.player;
     this.blueprint = options.blueprint;
+    this.cosmetics = options.cosmetics;
     this.cardManager = new CardManagerComponent(this.game, this, { deck: options.deck });
     this.ap = new ActionPointComponent({ maxAp: this.blueprint.maxAp });
     this.hp = new HealthComponent({ maxHp: this.blueprint.maxHp });
@@ -111,6 +115,10 @@ export class Unit extends Entity {
     });
 
     this.forwardEvents();
+  }
+
+  get spriteId() {
+    return this.blueprint.spriteId;
   }
 
   get position() {

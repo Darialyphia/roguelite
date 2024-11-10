@@ -1,4 +1,4 @@
-import { Vec3, type Point3D } from '@game/shared';
+import { type Point3D } from '@game/shared';
 import { createEntityId, Entity } from '../entity';
 import type { Team } from './team.entity';
 import type { Game } from '../game/game';
@@ -9,14 +9,9 @@ import { nanoid } from 'nanoid';
 
 export type PlayerOptions = {
   id: string;
-
   roster: RosterUnit[];
   deployZone: Point3D[];
-  units: Array<{
-    blueprintId: string;
-    position: Point3D;
-    deck: Array<{ blueprintId: string }>;
-  }>;
+  units: Array<RosterUnit & { position: Point3D }>;
 };
 
 export class Player extends Entity {
@@ -42,6 +37,7 @@ export class Player extends Entity {
         blueprint: UNITS_DICTIONARY[unit.blueprintId],
         player: this,
         position: unit.position,
+        cosmetics: unit.spriteParts,
         deck: unit.deck.map(card => {
           return {
             blueprint: CARDS_DICTIONARY[card.blueprintId],

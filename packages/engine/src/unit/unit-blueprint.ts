@@ -1,5 +1,6 @@
 export type UnitBlueprint = {
   id: string;
+  spriteId: string;
   maxAp: number;
   speed: number;
   maxHp: number;

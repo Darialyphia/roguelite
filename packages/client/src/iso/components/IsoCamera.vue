@@ -62,7 +62,7 @@ useEventListener('resize', () => {
 
 const containerOffset = computed(() => {
   return {
-    x: (height / 2) * config.TILE_SIZE.x + WORLD_PADDING.x / 2,
+    x: (height / 2) * config.TILE_SIZE.x,
     y: WORLD_PADDING.y
   };
 });

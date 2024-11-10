@@ -10,16 +10,25 @@
 import type { ParsedAsepriteSheet } from '@/utils/aseprite-parser';
 import { createSpritesheetFrameObject } from '@/utils/sprite';
 import { objectEntries } from '@game/shared';
+import type { AnimatedSprite, IPointData } from 'pixi.js';
+import type { ContainerProps } from 'vue3-pixi';
 
-const { sheet, tag, parts } = defineProps<{
-  sheet: ParsedAsepriteSheet<TGroups, TBaseLayers, TGroupLayers>;
-  tag: string;
-  parts: Record<TGroupLayers, TGroups | null>;
-}>();
-
-watchEffect(() => {
-  console.log(parts);
-});
+const {
+  sheet,
+  tag,
+  parts,
+  anchor,
+  tint = 'white',
+  ...props
+} = defineProps<
+  ContainerProps & {
+    sheet: ParsedAsepriteSheet<TGroups, TBaseLayers, TGroupLayers>;
+    tag: string;
+    parts: Record<TGroupLayers, TGroups | null>;
+    anchor?: number | IPointData;
+    tint?: AnimatedSprite['tint'];
+  }
+>();
 
 const sheets = computed(() => {
   const result = objectEntries(sheet.sheets.base).map(([, sheet]) => ({
@@ -46,13 +55,14 @@ const texturesGroups = computed(() => {
 </script>
 
 <template>
-  <container>
+  <container v-bind="props">
     <animated-sprite
       v-for="(textures, index) in texturesGroups"
       :key="index"
       :textures="textures"
-      :anchor="0.5"
+      :anchor="anchor"
       event-mode="none"
+      :tint="tint"
     />
   </container>
 </template>

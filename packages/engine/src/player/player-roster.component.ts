@@ -5,7 +5,11 @@ import { UNITS_DICTIONARY } from '../unit/units/_index';
 import { CARDS_DICTIONARY } from '../card/cards/_index';
 import { nanoid } from 'nanoid';
 
-export type RosterUnit = { blueprintId: string; deck: Array<{ blueprintId: string }> };
+export type RosterUnit = {
+  blueprintId: string;
+  deck: Array<{ blueprintId: string }>;
+  spriteParts: Record<string, string>;
+};
 
 export type PlayerRosterComponentOptions = {
   player: Player;
@@ -28,6 +32,9 @@ export class PlayerRosterComponent {
     this.units = options.units;
     this.player = options.player;
     this.deployZone = options.deployZone.map(point => Vec3.fromPoint3D(point));
+    if (!this.units.length) {
+      this.deployment = [];
+    }
   }
 
   get isReady() {
@@ -54,6 +61,7 @@ export class PlayerRosterComponent {
       this.game.unitSystem.addUnit({
         blueprint: UNITS_DICTIONARY[unit.blueprintId],
         player: this.player,
+        cosmetics: unit?.spriteParts,
         position: this.deployment![index],
         deck: unit.deck.map(card => {
           return {

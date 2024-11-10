@@ -114,6 +114,10 @@ export class Game {
     this.unitSystem.initialize({ units: [] });
     this.turnSystem.initialize();
     this.inputSystem.initialize([]);
+
+    if (this.playerSystem.players.every(p => p.isReady)) {
+      this.gamePhaseSystem.startBattle();
+    }
   }
 
   get on() {
