@@ -22,7 +22,6 @@ watchEffect(() => {
 });
 
 const sheets = computed(() => {
-  console.log('compute sheets');
   const result = objectEntries(sheet.sheets.base).map(([, sheet]) => ({
     sheet
   }));
