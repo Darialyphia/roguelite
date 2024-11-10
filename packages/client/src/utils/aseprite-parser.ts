@@ -78,8 +78,8 @@ type AsepriteJson = z.infer<typeof asepriteJsonSchema>;
 
 type Name = string;
 type Group = string;
-type Layer = 'helm' | 'weapon' | 'armor' | 'vfx' | 'body';
-type Tag = 'idle';
+type Layer = string;
+type Tag = string;
 type FrameIndex = string;
 
 type FrameKey = `${Name}_${Group}_${Layer}_${Tag}_${FrameIndex}`;
