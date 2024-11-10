@@ -83,7 +83,7 @@ export class UnitSystem extends System<UnitSystemOptions> {
   }
 
   addUnit(unitOptions: Omit<UnitOptions, 'id'>) {
-    const id = `unit_${this.nextUnitId}`;
+    const id = `unit_${++this.nextUnitId}`;
     const entity = new Unit(this.game, { ...unitOptions, id });
     this.unitMap.set(entity.id, entity);
     this.forwardListeners(entity);
