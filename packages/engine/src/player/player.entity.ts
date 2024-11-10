@@ -17,7 +17,7 @@ export type PlayerOptions = {
 export class Player extends Entity {
   private game: Game;
 
-  private team: Team;
+  readonly team: Team;
 
   readonly roster: PlayerRosterComponent;
 
@@ -48,8 +48,12 @@ export class Player extends Entity {
     });
   }
 
-  isEnemy(player: Player) {
+  isAlly(player: Player) {
     return player.team.equals(this.team);
+  }
+
+  isEnemy(player: Player) {
+    return !player.team.equals(this.team);
   }
 
   get commitDeployment() {

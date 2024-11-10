@@ -137,6 +137,35 @@
               "m": true
             }
           }
+        },
+        {
+          "alias": [
+            "unit-stat-bars"
+          ],
+          "src": [
+            "/assets/ui/unit-stat-bars.json"
+          ],
+          "loadParser": "aseprite_loader",
+          "foo": "bar",
+          "data": {
+            "tags": {
+              "m": true
+            }
+          }
+        },
+        {
+          "alias": [
+            "unit-stat-bars.png"
+          ],
+          "src": [
+            "/assets/ui/unit-stat-bars.png"
+          ],
+          "foo": "bar",
+          "data": {
+            "tags": {
+              "m": true
+            }
+          }
         }
       ]
     },

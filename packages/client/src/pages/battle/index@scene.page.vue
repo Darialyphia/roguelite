@@ -20,7 +20,30 @@ const options: Pick<GameOptions, 'mapId' | 'teams'> = {
     [
       {
         id: 'player',
-        units: [],
+        units: [
+          {
+            blueprintId: 'test-unit',
+            deck: [
+              { blueprintId: 'test-card' },
+              { blueprintId: 'test-card' },
+              { blueprintId: 'test-card' },
+              { blueprintId: 'test-card' },
+              { blueprintId: 'test-card' },
+              { blueprintId: 'test-card' },
+              { blueprintId: 'test-card' },
+              { blueprintId: 'test-card' },
+              { blueprintId: 'test-card' },
+              { blueprintId: 'test-card' }
+            ],
+            spriteParts: {
+              armor: 'tier3',
+              helm: 'tier3',
+              weapon: 'tier3',
+              vfx: 'tier3'
+            },
+            position: { x: 0, y: 0, z: 0 }
+          }
+        ],
         roster: [
           {
             blueprintId: 'test-unit',
@@ -51,28 +74,6 @@ const options: Pick<GameOptions, 'mapId' | 'teams'> = {
         id: 'ai',
         roster: [],
         units: [
-          {
-            blueprintId: 'test-unit',
-            deck: [
-              { blueprintId: 'test-card' },
-              { blueprintId: 'test-card' },
-              { blueprintId: 'test-card' },
-              { blueprintId: 'test-card' },
-              { blueprintId: 'test-card' },
-              { blueprintId: 'test-card' },
-              { blueprintId: 'test-card' },
-              { blueprintId: 'test-card' },
-              { blueprintId: 'test-card' },
-              { blueprintId: 'test-card' }
-            ],
-            spriteParts: {
-              armor: 'tier3',
-              helm: 'tier3',
-              weapon: 'tier3',
-              vfx: 'tier3'
-            },
-            position: { x: 7, y: 0, z: 0 }
-          },
           {
             blueprintId: 'test-unit',
             deck: [
