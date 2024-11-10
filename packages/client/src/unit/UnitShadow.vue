@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import type { UnitViewModel } from '@/pages/battle/battle.store';
 import { useSpritesheet } from '@/shared/composables/useSpritesheet';
-import MultiLayerAnimatedSprite from '@/shared/components/MultiLayerAnimatedSprite.vue';
 import type { Filter } from 'pixi.js';
 import { config } from '@/utils/config';
+import { useMultiLayerTexture } from '@/shared/composables/useMultiLayerTexture';
 
 const { unit } = defineProps<{ unit: UnitViewModel }>();
 
@@ -14,21 +14,27 @@ const filters = computed(() => {
 
   return result;
 });
+
+const textures = useMultiLayerTexture({
+  sheet: spritesheet,
+  parts: () => unit.cosmetics,
+  tag: 'idle',
+  dimensions: config.UNIT_SPRITE_SIZE
+});
 </script>
 
 <template>
-  <MultiLayerAnimatedSprite
-    v-if="spritesheet"
+  <animated-sprite
+    v-if="textures.length"
+    :textures="textures"
+    event-mode="none"
     :filters="filters"
-    :sheet="spritesheet"
-    tag="idle"
-    :parts="unit.cosmetics"
     :anchor="{ x: 0, y: 1 }"
     :y="config.UNIT_SPRITE_SIZE.height - config.TILE_SIZE.z"
-    :scale-y="0.6"
+    :scale-y="0.5"
     :skew-x="0.5"
     :tint="0"
-    :alpha="0.3"
+    :alpha="0.5"
   />
 </template>
 

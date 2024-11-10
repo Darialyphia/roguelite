@@ -31,7 +31,7 @@ watch(
 </script>
 
 <template>
-  <container ref="containerRef" :pivot="{ x: scale.x / 2 }">
+  <container ref="containerRef" :pivot="{ x: 0, y: scale.z }">
     <slot :isoPosition="isoPosition" :z-index="zIndex" />
   </container>
 </template>

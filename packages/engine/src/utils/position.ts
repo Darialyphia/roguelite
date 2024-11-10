@@ -6,7 +6,7 @@ export class Position extends Vec3 {
   }
 
   clone() {
-    return new Position(this.x, this.y, this.y);
+    return new Position(this.x, this.y, this.z);
   }
 
   isWithinCells(point: Point3D, range: number | Point3D) {

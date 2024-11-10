@@ -8,25 +8,15 @@
   "
 >
 import type { ParsedAsepriteSheet } from '@/utils/aseprite-parser';
-import { createSpritesheetFrameObject } from '@/utils/sprite';
 import { objectEntries } from '@game/shared';
-import type { AnimatedSprite, IPointData } from 'pixi.js';
-import type { ContainerProps } from 'vue3-pixi';
+import { Graphics, RenderTexture, type AnimatedSprite } from 'pixi.js';
+import { useApplication, type AnimatedSpriteProps } from 'vue3-pixi';
 
-const {
-  sheet,
-  tag,
-  parts,
-  anchor,
-  tint = 'white',
-  ...props
-} = defineProps<
-  ContainerProps & {
+const { sheet, tag, parts, ...props } = defineProps<
+  Omit<AnimatedSpriteProps, 'textures' | 'eventMode'> & {
     sheet: ParsedAsepriteSheet<TGroups, TBaseLayers, TGroupLayers>;
     tag: string;
     parts: Record<TGroupLayers, TGroups | null>;
-    anchor?: number | IPointData;
-    tint?: AnimatedSprite['tint'];
   }
 >();
 
@@ -49,22 +39,45 @@ const sheets = computed(() => {
 
 const texturesGroups = computed(() => {
   return sheets.value.map(({ sheet }) => {
-    return createSpritesheetFrameObject(tag, sheet);
+    return sheet.animations[tag];
+    // return createSpritesheetFrameObject(tag, sheet);
   });
+});
+
+const app = useApplication();
+
+const textures = shallowRef<RenderTexture[]>([]);
+watchEffect(() => {
+  textures.value = [];
+  const graphics: Graphics[] = [];
+  texturesGroups.value.forEach(groupTextures => {
+    groupTextures.forEach((texture, index) => {
+      if (!graphics[index]) {
+        graphics[index] = new Graphics();
+      }
+      const g = graphics[index];
+      g.beginTextureFill({ texture });
+      g.drawRect(0, 0, sheet.meta.size.w, sheet.meta.size.h);
+    });
+  });
+
+  graphics.forEach(g => {
+    textures.value.push(app.value.renderer.generateTexture(g));
+  });
+  console.log(textures.value);
+});
+watchEffect(() => {
+  console.log(props);
 });
 </script>
 
 <template>
-  <container v-bind="props">
-    <animated-sprite
-      v-for="(textures, index) in texturesGroups"
-      :key="index"
-      :textures="textures"
-      :anchor="anchor"
-      event-mode="none"
-      :tint="tint"
-    />
-  </container>
+  <animated-sprite
+    :textures="textures"
+    event-mode="none"
+    v-bind="props"
+    :tint="props.tint ?? 'white'"
+  />
 </template>
 
 <style scoped lang="postcss"></style>

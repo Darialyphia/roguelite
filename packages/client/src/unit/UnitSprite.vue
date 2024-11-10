@@ -1,10 +1,11 @@
 <script setup lang="ts">
 import type { UnitViewModel } from '@/pages/battle/battle.store';
 import { useSpritesheet } from '@/shared/composables/useSpritesheet';
-import MultiLayerAnimatedSprite from '@/shared/components/MultiLayerAnimatedSprite.vue';
 import { useBattleUiStore } from '@/pages/battle/battle-ui.store';
 import { OutlineFilter } from '@pixi/filter-outline';
 import type { Filter } from 'pixi.js';
+import { useMultiLayerTexture } from '@/shared/composables/useMultiLayerTexture';
+import { config } from '@/utils/config';
 
 const { unit } = defineProps<{ unit: UnitViewModel }>();
 
@@ -26,16 +27,21 @@ const filters = computed(() => {
   }
   return result;
 });
+
+const textures = useMultiLayerTexture({
+  sheet: spritesheet,
+  parts: () => unit.cosmetics,
+  tag: 'idle',
+  dimensions: config.UNIT_SPRITE_SIZE
+});
 </script>
 
 <template>
-  <MultiLayerAnimatedSprite
-    v-if="spritesheet"
+  <animated-sprite
+    v-if="textures.length"
+    :textures="textures"
     event-mode="none"
     :filters="filters"
-    :sheet="spritesheet"
-    tag="idle"
-    :parts="unit.cosmetics"
   />
 </template>
 

@@ -1,1 +1,256 @@
-{"frames":{"wizard__body_idle_0":{"frame":{"x":0,"y":0,"w":128,"h":128},"rotated":false,"trimmed":false,"spriteSourceSize":{"x":0,"y":0,"w":128,"h":128},"sourceSize":{"w":128,"h":128},"duration":100},"wizard_tier4_armor_idle_0":{"frame":{"x":0,"y":128,"w":128,"h":128},"rotated":false,"trimmed":false,"spriteSourceSize":{"x":0,"y":0,"w":128,"h":128},"sourceSize":{"w":128,"h":128},"duration":100},"wizard_tier4_helm_idle_0":{"frame":{"x":0,"y":256,"w":128,"h":128},"rotated":false,"trimmed":false,"spriteSourceSize":{"x":0,"y":0,"w":128,"h":128},"sourceSize":{"w":128,"h":128},"duration":100},"wizard_tier4_weapon_idle_0":{"frame":{"x":0,"y":384,"w":128,"h":128},"rotated":false,"trimmed":false,"spriteSourceSize":{"x":0,"y":0,"w":128,"h":128},"sourceSize":{"w":128,"h":128},"duration":100},"wizard_tier4_vfx_idle_0":{"frame":{"x":0,"y":512,"w":128,"h":128},"rotated":false,"trimmed":false,"spriteSourceSize":{"x":0,"y":0,"w":128,"h":128},"sourceSize":{"w":128,"h":128},"duration":100},"wizard_tier3_armor_idle_0":{"frame":{"x":0,"y":640,"w":128,"h":128},"rotated":false,"trimmed":false,"spriteSourceSize":{"x":0,"y":0,"w":128,"h":128},"sourceSize":{"w":128,"h":128},"duration":100},"wizard_tier3_helm_idle_0":{"frame":{"x":0,"y":768,"w":128,"h":128},"rotated":false,"trimmed":false,"spriteSourceSize":{"x":0,"y":0,"w":128,"h":128},"sourceSize":{"w":128,"h":128},"duration":100},"wizard_tier3_weapon_idle_0":{"frame":{"x":0,"y":896,"w":128,"h":128},"rotated":false,"trimmed":false,"spriteSourceSize":{"x":0,"y":0,"w":128,"h":128},"sourceSize":{"w":128,"h":128},"duration":100},"wizard_tier3_vfx_idle_0":{"frame":{"x":0,"y":1024,"w":128,"h":128},"rotated":false,"trimmed":false,"spriteSourceSize":{"x":0,"y":0,"w":128,"h":128},"sourceSize":{"w":128,"h":128},"duration":100},"wizard_tier2_armor_idle_0":{"frame":{"x":0,"y":1152,"w":128,"h":128},"rotated":false,"trimmed":false,"spriteSourceSize":{"x":0,"y":0,"w":128,"h":128},"sourceSize":{"w":128,"h":128},"duration":100},"wizard_tier2_helm_idle_0":{"frame":{"x":0,"y":1280,"w":128,"h":128},"rotated":false,"trimmed":false,"spriteSourceSize":{"x":0,"y":0,"w":128,"h":128},"sourceSize":{"w":128,"h":128},"duration":100},"wizard_tier2_weapon_idle_0":{"frame":{"x":0,"y":1408,"w":128,"h":128},"rotated":false,"trimmed":false,"spriteSourceSize":{"x":0,"y":0,"w":128,"h":128},"sourceSize":{"w":128,"h":128},"duration":100},"wizard_tier2_vfx_idle_0":{"frame":{"x":0,"y":1536,"w":128,"h":128},"rotated":false,"trimmed":false,"spriteSourceSize":{"x":0,"y":0,"w":128,"h":128},"sourceSize":{"w":128,"h":128},"duration":100},"wizard_tier1_armor_idle_0":{"frame":{"x":0,"y":1664,"w":128,"h":128},"rotated":false,"trimmed":false,"spriteSourceSize":{"x":0,"y":0,"w":128,"h":128},"sourceSize":{"w":128,"h":128},"duration":100},"wizard_tier1_helm_idle_0":{"frame":{"x":0,"y":1792,"w":128,"h":128},"rotated":false,"trimmed":false,"spriteSourceSize":{"x":0,"y":0,"w":128,"h":128},"sourceSize":{"w":128,"h":128},"duration":100},"wizard_tier1_weapon_idle_0":{"frame":{"x":0,"y":1920,"w":128,"h":128},"rotated":false,"trimmed":false,"spriteSourceSize":{"x":0,"y":0,"w":128,"h":128},"sourceSize":{"w":128,"h":128},"duration":100},"wizard_tier1_vfx_idle_0":{"frame":{"x":0,"y":2048,"w":128,"h":128},"rotated":false,"trimmed":false,"spriteSourceSize":{"x":0,"y":0,"w":128,"h":128},"sourceSize":{"w":128,"h":128},"duration":100}},"meta":{"app":"https://www.aseprite.org/","version":"1.3.9.2-x64","image":"wizard.png","format":"RGBA8888","size":{"w":128,"h":2176},"scale":"1","frameTags":[{"name":"idle","from":0,"to":0,"direction":"forward","color":"#000000ff"}],"layers":[{"name":"body","opacity":255,"blendMode":"normal"},{"name":"tier4"},{"name":"armor","group":"tier4","opacity":255,"blendMode":"normal"},{"name":"helm","group":"tier4","opacity":255,"blendMode":"normal"},{"name":"weapon","group":"tier4","opacity":255,"blendMode":"normal"},{"name":"vfx","group":"tier4","opacity":255,"blendMode":"normal"},{"name":"tier3"},{"name":"armor","group":"tier3","opacity":255,"blendMode":"normal"},{"name":"helm","group":"tier3","opacity":255,"blendMode":"normal"},{"name":"weapon","group":"tier3","opacity":255,"blendMode":"normal"},{"name":"vfx","group":"tier3","opacity":255,"blendMode":"normal"},{"name":"tier2"},{"name":"armor","group":"tier2","opacity":255,"blendMode":"normal"},{"name":"helm","group":"tier2","opacity":255,"blendMode":"normal"},{"name":"weapon","group":"tier2","opacity":255,"blendMode":"normal"},{"name":"vfx","group":"tier2","opacity":255,"blendMode":"normal"},{"name":"tier1"},{"name":"armor","group":"tier1","opacity":255,"blendMode":"normal"},{"name":"helm","group":"tier1","opacity":255,"blendMode":"normal"},{"name":"weapon","group":"tier1","opacity":255,"blendMode":"normal"},{"name":"vfx","group":"tier1","opacity":255,"blendMode":"normal"}],"slices":[]}}
+{
+  "frames": {
+    "wizard__body_idle_0": {
+      "frame": { "x": 0, "y": 0, "w": 128, "h": 128 },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": { "x": 0, "y": 0, "w": 128, "h": 128 },
+      "sourceSize": { "w": 128, "h": 128 },
+      "duration": 100
+    },
+    "wizard_tier4_armor_idle_0": {
+      "frame": { "x": 0, "y": 128, "w": 128, "h": 128 },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": { "x": 0, "y": 0, "w": 128, "h": 128 },
+      "sourceSize": { "w": 128, "h": 128 },
+      "duration": 100
+    },
+    "wizard_tier4_helm_idle_0": {
+      "frame": { "x": 0, "y": 256, "w": 128, "h": 128 },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": { "x": 0, "y": 0, "w": 128, "h": 128 },
+      "sourceSize": { "w": 128, "h": 128 },
+      "duration": 100
+    },
+    "wizard_tier4_weapon_idle_0": {
+      "frame": { "x": 0, "y": 384, "w": 128, "h": 128 },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": { "x": 0, "y": 0, "w": 128, "h": 128 },
+      "sourceSize": { "w": 128, "h": 128 },
+      "duration": 100
+    },
+    "wizard_tier4_vfx_idle_0": {
+      "frame": { "x": 0, "y": 512, "w": 128, "h": 128 },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": { "x": 0, "y": 0, "w": 128, "h": 128 },
+      "sourceSize": { "w": 128, "h": 128 },
+      "duration": 100
+    },
+    "wizard_tier3_armor_idle_0": {
+      "frame": { "x": 0, "y": 640, "w": 128, "h": 128 },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": { "x": 0, "y": 0, "w": 128, "h": 128 },
+      "sourceSize": { "w": 128, "h": 128 },
+      "duration": 100
+    },
+    "wizard_tier3_helm_idle_0": {
+      "frame": { "x": 0, "y": 768, "w": 128, "h": 128 },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": { "x": 0, "y": 0, "w": 128, "h": 128 },
+      "sourceSize": { "w": 128, "h": 128 },
+      "duration": 100
+    },
+    "wizard_tier3_weapon_idle_0": {
+      "frame": { "x": 0, "y": 896, "w": 128, "h": 128 },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": { "x": 0, "y": 0, "w": 128, "h": 128 },
+      "sourceSize": { "w": 128, "h": 128 },
+      "duration": 100
+    },
+    "wizard_tier3_vfx_idle_0": {
+      "frame": { "x": 0, "y": 1024, "w": 128, "h": 128 },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": { "x": 0, "y": 0, "w": 128, "h": 128 },
+      "sourceSize": { "w": 128, "h": 128 },
+      "duration": 100
+    },
+    "wizard_tier2_armor_idle_0": {
+      "frame": { "x": 0, "y": 1152, "w": 128, "h": 128 },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": { "x": 0, "y": 0, "w": 128, "h": 128 },
+      "sourceSize": { "w": 128, "h": 128 },
+      "duration": 100
+    },
+    "wizard_tier2_helm_idle_0": {
+      "frame": { "x": 0, "y": 1280, "w": 128, "h": 128 },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": { "x": 0, "y": 0, "w": 128, "h": 128 },
+      "sourceSize": { "w": 128, "h": 128 },
+      "duration": 100
+    },
+    "wizard_tier2_weapon_idle_0": {
+      "frame": { "x": 0, "y": 1408, "w": 128, "h": 128 },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": { "x": 0, "y": 0, "w": 128, "h": 128 },
+      "sourceSize": { "w": 128, "h": 128 },
+      "duration": 100
+    },
+    "wizard_tier2_vfx_idle_0": {
+      "frame": { "x": 0, "y": 1536, "w": 128, "h": 128 },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": { "x": 0, "y": 0, "w": 128, "h": 128 },
+      "sourceSize": { "w": 128, "h": 128 },
+      "duration": 100
+    },
+    "wizard_tier1_armor_idle_0": {
+      "frame": { "x": 0, "y": 1664, "w": 128, "h": 128 },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": { "x": 0, "y": 0, "w": 128, "h": 128 },
+      "sourceSize": { "w": 128, "h": 128 },
+      "duration": 100
+    },
+    "wizard_tier1_helm_idle_0": {
+      "frame": { "x": 0, "y": 1792, "w": 128, "h": 128 },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": { "x": 0, "y": 0, "w": 128, "h": 128 },
+      "sourceSize": { "w": 128, "h": 128 },
+      "duration": 100
+    },
+    "wizard_tier1_weapon_idle_0": {
+      "frame": { "x": 0, "y": 1920, "w": 128, "h": 128 },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": { "x": 0, "y": 0, "w": 128, "h": 128 },
+      "sourceSize": { "w": 128, "h": 128 },
+      "duration": 100
+    },
+    "wizard_tier1_vfx_idle_0": {
+      "frame": { "x": 0, "y": 2048, "w": 128, "h": 128 },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": { "x": 0, "y": 0, "w": 128, "h": 128 },
+      "sourceSize": { "w": 128, "h": 128 },
+      "duration": 100
+    }
+  },
+  "meta": {
+    "app": "https://www.aseprite.org/",
+    "version": "1.3.9.2-x64",
+    "image": "wizard.png",
+    "format": "RGBA8888",
+    "size": { "w": 128, "h": 2176 },
+    "scale": "1",
+    "frameTags": [
+      {
+        "name": "idle",
+        "from": 0,
+        "to": 0,
+        "direction": "forward",
+        "color": "#000000ff"
+      }
+    ],
+    "layers": [
+      { "name": "body", "opacity": 255, "blendMode": "normal" },
+      { "name": "tier4" },
+      {
+        "name": "armor",
+        "group": "tier4",
+        "opacity": 255,
+        "blendMode": "normal"
+      },
+      {
+        "name": "helm",
+        "group": "tier4",
+        "opacity": 255,
+        "blendMode": "normal"
+      },
+      {
+        "name": "weapon",
+        "group": "tier4",
+        "opacity": 255,
+        "blendMode": "normal"
+      },
+      {
+        "name": "vfx",
+        "group": "tier4",
+        "opacity": 255,
+        "blendMode": "normal"
+      },
+      { "name": "tier3" },
+      {
+        "name": "armor",
+        "group": "tier3",
+        "opacity": 255,
+        "blendMode": "normal"
+      },
+      {
+        "name": "helm",
+        "group": "tier3",
+        "opacity": 255,
+        "blendMode": "normal"
+      },
+      {
+        "name": "weapon",
+        "group": "tier3",
+        "opacity": 255,
+        "blendMode": "normal"
+      },
+      {
+        "name": "vfx",
+        "group": "tier3",
+        "opacity": 255,
+        "blendMode": "normal"
+      },
+      { "name": "tier2" },
+      {
+        "name": "armor",
+        "group": "tier2",
+        "opacity": 255,
+        "blendMode": "normal"
+      },
+      {
+        "name": "helm",
+        "group": "tier2",
+        "opacity": 255,
+        "blendMode": "normal"
+      },
+      {
+        "name": "weapon",
+        "group": "tier2",
+        "opacity": 255,
+        "blendMode": "normal"
+      },
+      {
+        "name": "vfx",
+        "group": "tier2",
+        "opacity": 255,
+        "blendMode": "normal"
+      },
+      { "name": "tier1" },
+      {
+        "name": "armor",
+        "group": "tier1",
+        "opacity": 255,
+        "blendMode": "normal"
+      },
+      {
+        "name": "helm",
+        "group": "tier1",
+        "opacity": 255,
+        "blendMode": "normal"
+      },
+      {
+        "name": "weapon",
+        "group": "tier1",
+        "opacity": 255,
+        "blendMode": "normal"
+      },
+      { "name": "vfx", "group": "tier1", "opacity": 255, "blendMode": "normal" }
+    ],
+    "slices": []
+  }
+}

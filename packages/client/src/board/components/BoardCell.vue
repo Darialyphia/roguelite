@@ -4,7 +4,6 @@ import type { CellViewModel } from '@/pages/battle/battle.store';
 import { useBattleUiStore } from '@/pages/battle/battle-ui.store';
 import BoardCellSprite from './BoardCellSprite.vue';
 import UiAnimatedSprite from '@/ui/components/UiAnimatedSprite.vue';
-import { config } from '@/utils/config';
 
 const { cell } = defineProps<{ cell: CellViewModel }>();
 
@@ -15,7 +14,6 @@ const isHovered = computed(() => ui.hoveredCell?.equals(cell.getCell()));
 
 <template>
   <AnimatedIsoPoint
-    :pivot="[0, config.TILE_SIZE.z]"
     :position="cell"
     @pointerenter="
       () => {
