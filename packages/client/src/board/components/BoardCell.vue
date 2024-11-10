@@ -1,28 +1,30 @@
 <script setup lang="ts">
 import AnimatedIsoPoint from '@/iso/components/AnimatedIsoPoint.vue';
 import type { CellViewModel } from '@/pages/battle/battle.store';
-import { useAssets } from '@/shared/composables/useAssets';
-import type { ParsedAsepriteSheet } from '@/utils/aseprite-parser';
+import { useBattleUiStore } from '@/pages/battle/battle-ui.store';
+import BoardCellSprite from './BoardCellSprite.vue';
+import UiAnimatedSprite from '@/ui/components/UiAnimatedSprite.vue';
 import { config } from '@/utils/config';
 
 const { cell } = defineProps<{ cell: CellViewModel }>();
 
-const assets = useAssets();
+const ui = useBattleUiStore();
 
-const sheet = shallowRef<ParsedAsepriteSheet<'', 'tile'>>();
-assets.loadSpritesheet<'', 'tile'>('grass').then(result => {
-  sheet.value = result;
-});
+const isHovered = computed(() => ui.hoveredCell?.equals(cell.getCell()));
 </script>
 
 <template>
-  <AnimatedIsoPoint :position="cell">
-    <AnimatedSprite
-      v-if="sheet"
-      :textures="sheet.sheets.base.tile.animations[0]"
-      :pivot="[0, config.TILE_SIZE.z]"
-    />
+  <AnimatedIsoPoint
+    :pivot="[0, config.TILE_SIZE.z]"
+    :position="cell"
+    @pointerenter="
+      () => {
+        ui.hoverAt(cell);
+      }
+    "
+    @pointerleave="ui.unHover()"
+  >
+    <BoardCellSprite :cell="cell" />
+    <UiAnimatedSprite assetId="hovered-cell" v-if="isHovered" />
   </AnimatedIsoPoint>
 </template>
-
-<style scoped lang="postcss"></style>

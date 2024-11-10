@@ -21,6 +21,7 @@ const isMatch = <TControl extends Control>(
   e: KeyboardEvent,
   control: TControl
 ): e is ValiatedKeyboardEvent<TControl> => {
+  if (e.repeat) return false;
   if (e.code !== control.key) return false;
   const match =
     (control.modifier === null && !e.shiftKey && !e.ctrlKey && !e.altKey) ||
@@ -38,14 +39,9 @@ export const useKeyboardControl = <TControl extends Control>(
   control: MaybeRefOrGetter<TControl>,
   cb: (e: ValiatedKeyboardEvent<TControl>) => void
 ) => {
-  watchEffect(onCleanup => {
+  return useEventListener('keydown', e => {
     const _control = toValue(control);
-
-    const cleanup = useEventListener('keydown', e => {
-      if (!isMatch(e, _control)) return;
-      cb(e);
-    });
-
-    onCleanup(cleanup);
+    if (!isMatch(e, _control)) return;
+    cb(e);
   });
 };

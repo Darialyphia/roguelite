@@ -20,7 +20,7 @@ export class BoardSystem extends System<BoardSystemOptions> {
       plane.forEach((row, y) => {
         row.forEach((cell, x) => {
           const instance = new Cell(this.game, {
-            id: `${x}.${y}.${z}`,
+            id: pointToCellId({ x, y, z }),
             position: { x, y, z },
             terrain: cell.terrain
           });
@@ -46,7 +46,6 @@ export class BoardSystem extends System<BoardSystemOptions> {
     if (isString(posOrKey)) {
       return this.cellsMap.get(posOrKey) ?? null;
     }
-
     return this.cellsMap.get(createEntityId(pointToCellId(posOrKey))) ?? null;
   }
 

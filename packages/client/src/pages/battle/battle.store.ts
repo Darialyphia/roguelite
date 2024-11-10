@@ -3,6 +3,7 @@ import type { Terrain } from '@game/engine/src/board/board-utils';
 import type { Cell } from '@game/engine/src/board/cell';
 import type { ClientDispatchMeta } from '@game/engine/src/client-session';
 import type { GameEventMap } from '@game/engine/src/game/game';
+import type { GamePhase } from '@game/engine/src/game/game-phase.system';
 import type { SerializedInput } from '@game/engine/src/input/input';
 import { assert, isDefined, type Point3D } from '@game/shared';
 import { defineStore } from 'pinia';
@@ -24,9 +25,11 @@ export const useBattleStore = defineStore('battle', () => {
   const internal = useInternalBattleStore();
 
   const cells = ref<CellViewModel[]>([]);
+  const phase = ref<GamePhase>('deployment');
 
-  const syncVmodel = () => {
+  const syncState = () => {
     assert(isDefined(internal.session));
+    phase.value = internal.session.game.phase;
     cells.value = internal.session.game.boardSystem.cells.map(cell => ({
       id: cell.id,
       x: cell.x,
@@ -48,7 +51,7 @@ export const useBattleStore = defineStore('battle', () => {
   return {
     init(session: ClientSession) {
       internal.session = session;
-      syncVmodel();
+      syncState();
       internal.session.subscribe(async (input, events) => {
         for (const event of events) {
           const listeners = asyncListeners[event.eventName];
@@ -59,7 +62,7 @@ export const useBattleStore = defineStore('battle', () => {
             )
           );
         }
-        syncVmodel();
+        syncState();
       });
     },
 

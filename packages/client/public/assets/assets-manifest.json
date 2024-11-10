@@ -9,7 +9,8 @@
           ],
           "src": [
             "/assets/logo.svg"
-          ]
+          ],
+          "foo": "bar"
         }
       ]
     },
@@ -24,6 +25,7 @@
             "/assets/tiles/grass.json"
           ],
           "loadParser": "aseprite_loader",
+          "foo": "bar",
           "data": {
             "tags": {
               "m": true
@@ -37,6 +39,7 @@
           "src": [
             "/assets/tiles/grass.png"
           ],
+          "foo": "bar",
           "data": {
             "tags": {
               "m": true
@@ -51,6 +54,7 @@
             "/assets/tiles/water.json"
           ],
           "loadParser": "aseprite_loader",
+          "foo": "bar",
           "data": {
             "tags": {
               "m": true
@@ -64,6 +68,104 @@
           "src": [
             "/assets/tiles/water.png"
           ],
+          "foo": "bar",
+          "data": {
+            "tags": {
+              "m": true
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "ui",
+      "assets": [
+        {
+          "alias": [
+            "hovered-cell"
+          ],
+          "src": [
+            "/assets/ui/hovered-cell.json"
+          ],
+          "loadParser": "aseprite_loader",
+          "foo": "bar",
+          "data": {
+            "tags": {
+              "m": true
+            }
+          }
+        },
+        {
+          "alias": [
+            "hovered-cell.png"
+          ],
+          "src": [
+            "/assets/ui/hovered-cell.png"
+          ],
+          "foo": "bar",
+          "data": {
+            "tags": {
+              "m": true
+            }
+          }
+        },
+        {
+          "alias": [
+            "tile-highlights"
+          ],
+          "src": [
+            "/assets/ui/tile-highlights.json"
+          ],
+          "loadParser": "aseprite_loader",
+          "foo": "bar",
+          "data": {
+            "tags": {
+              "m": true
+            }
+          }
+        },
+        {
+          "alias": [
+            "tile-highlights.png"
+          ],
+          "src": [
+            "/assets/ui/tile-highlights.png"
+          ],
+          "foo": "bar",
+          "data": {
+            "tags": {
+              "m": true
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "units",
+      "assets": [
+        {
+          "alias": [
+            "wizard"
+          ],
+          "src": [
+            "/assets/units/wizard.json"
+          ],
+          "loadParser": "aseprite_loader",
+          "foo": "bar",
+          "data": {
+            "tags": {
+              "m": true
+            }
+          }
+        },
+        {
+          "alias": [
+            "wizard.png"
+          ],
+          "src": [
+            "/assets/units/wizard.png"
+          ],
+          "foo": "bar",
           "data": {
             "tags": {
               "m": true

@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { Application, External } from 'vue3-pixi';
 import { useAssets } from './shared/composables/useAssets';
+
 const viewport = window;
 const { loaded } = useAssets();
 </script>

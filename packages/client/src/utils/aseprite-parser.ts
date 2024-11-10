@@ -1,4 +1,4 @@
-import { isDefined } from '@game/shared';
+import { isDefined, isEmptyObject, type Override } from '@game/shared';
 import {
   ExtensionType,
   type Loader,
@@ -54,8 +54,9 @@ export const asepriteJsonMetaSchema = z.object({
   layers: z
     .object({
       name: z.string(),
-      opacity: z.number(),
-      blendMode: z.string()
+      opacity: z.number().optional(),
+      blendMode: z.string().optional(),
+      group: z.string().optional()
     })
     .array()
 });
@@ -98,22 +99,40 @@ function assertFrameKey(key: string): asserts key is FrameKey {
   }
 }
 
+const BASE_LAYER_GROUP = 'base';
 const parseFrameKey = (key: FrameKey) => {
   const [name, group, layer, tag, index] = key.split('_');
 
   return {
     name,
-    group: group || 'base',
+    group: group || BASE_LAYER_GROUP,
     layer,
     tag,
     index: parseInt(index)
   } as ParsedFramedKey;
 };
 
-type LayerGroup = Record<string, ISpritesheetData>;
+type LayerData = Override<
+  ISpritesheetData,
+  {
+    meta: Override<
+      ISpritesheetData['meta'],
+      {
+        layers: Array<{
+          name: string;
+          group?: string;
+          opacity?: number;
+          blendMode?: string;
+        }>;
+      }
+    >;
+  }
+>;
+type LayerGroup = Record<string, LayerData>;
 type LoadedAsepriteSheet = {
   imagePath: string;
   groups: Record<string, LayerGroup>;
+  meta: AsepriteMeta;
 };
 
 export type ParsedAsepriteSheet<
@@ -123,10 +142,13 @@ export type ParsedAsepriteSheet<
 > = {
   groups: TGroups[];
   sheets: {
-    [key in TGroups | 'base']: key extends 'base'
+    [key in
+      | TGroups
+      | typeof BASE_LAYER_GROUP]: key extends typeof BASE_LAYER_GROUP
       ? Record<TBaseLayers, Spritesheet>
       : Record<TGroupLayers, Spritesheet>;
   };
+  meta: AsepriteMeta;
 };
 
 const initSpritesheetData = (meta: AsepriteMeta) => ({
@@ -143,17 +165,22 @@ const loadAsepritesheet = ({ frames, meta }: AsepriteJson) => {
   Object.entries(frames).forEach(([frameName, frame]) => {
     assertFrameKey(frameName);
     const { tag, index, layer, group } = parseFrameKey(frameName as FrameKey);
+
     groups[group] ??= Object.fromEntries(
       meta.layers
+        .filter(l =>
+          group === BASE_LAYER_GROUP ? !l.group : l.group === group
+        )
         .map(l => l.name)
         .map(name => [name, initSpritesheetData(meta)])
     );
+
     groups[group][layer].animations![tag] ??= [];
     groups[group][layer].animations![tag][index] = frameName;
     groups[group][layer].frames[frameName] = frame;
   });
 
-  return { groups, imagePath: meta.image };
+  return { groups, imagePath: meta.image, meta };
 };
 
 const parseAsepriteSheet = async (
@@ -163,7 +190,8 @@ const parseAsepriteSheet = async (
 ): Promise<ParsedAsepriteSheet> => {
   const result: ParsedAsepriteSheet = {
     groups: [],
-    sheets: {}
+    sheets: {},
+    meta: asset.meta
   };
 
   const basePath = src.split('/').slice(0, -1).join('/');
@@ -174,8 +202,8 @@ const parseAsepriteSheet = async (
   const texture = assets[imagePath];
   // texture.source.scaleMode = 'nearest';
 
-  const loadAndParse = async (data: ISpritesheetData) => {
-    const sheet = new Spritesheet(texture, data);
+  const loadAndParse = async (data: LayerData) => {
+    const sheet = new Spritesheet(texture, data as ISpritesheetData);
     await sheet.parse();
     return sheet;
   };
@@ -184,29 +212,14 @@ const parseAsepriteSheet = async (
       result.groups.unshift(groupName);
     }
     const resources = await Promise.all(
-      Object.keys(group).map(
-        async k => [k, await loadAndParse(group[k])] as const
-      )
+      Object.entries(group)
+        .filter(([, v]) => !isEmptyObject(v.frames))
+        .map(async ([k, v]) => [k, await loadAndParse(v)] as const)
     );
     result.sheets[groupName] = Object.fromEntries(resources);
   }
   return result;
 };
-
-// const parseTileset = ({ frames, meta }: AsepriteJson) => ({
-//   frames: Object.fromEntries(
-//     frames.map((frame, index) => {
-//       const frameName = `${trimExtension(meta.image)}-${index}`;
-//       // avoids console warnings with HMR
-//       if (import.meta.env.DEV) {
-//         Texture.removeFromCache(frameName);
-//       }
-
-//       return [frameName, frame];
-//     }),
-//   ),
-//   meta,
-// });
 
 export const ASEPRITE_SPRITESHEET_LOADER = 'aseprite_loader';
 // export const ASEPRITE_TILESET_PARSER = "Aseprite_tileset_Parser";
@@ -221,11 +234,15 @@ export const asepriteSpriteSheetParser = {
   name: ASEPRITE_SPRITESHEET_LOADER,
 
   async load(url: string) {
-    const response = await fetch(url);
-    const json = await response.json();
+    try {
+      const response = await fetch(url);
+      const json = await response.json();
 
-    const parsed = asepriteJsonSchema.parse(json);
-    return loadAsepritesheet(parsed);
+      const parsed = asepriteJsonSchema.parse(json);
+      return loadAsepritesheet(parsed);
+    } catch (err) {
+      console.error('Error loading aseprite sheet', err);
+    }
   },
 
   testParse(asset: any, resolvedAsset: any) {

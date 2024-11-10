@@ -4,26 +4,25 @@ import type { GameMap } from '../map';
 
 export const testMap1v1: GameMap = {
   id: 'testMap1v1',
-  width: 9,
-  height: 5,
+  width: 14,
+  height: 14,
   //prettier-ignore
   cells: [
     [
-      [
-        { terrain: TERRAINS.GROUND }, { terrain: TERRAINS.GROUND }, { terrain: TERRAINS.GROUND }, { terrain: TERRAINS.GROUND }, { terrain: TERRAINS.GROUND }, { terrain: TERRAINS.GROUND }, { terrain: TERRAINS.GROUND }, { terrain: TERRAINS.GROUND },  { terrain: TERRAINS.GROUND },
-      ],
-      [
-        { terrain: TERRAINS.GROUND }, { terrain: TERRAINS.GROUND }, { terrain: TERRAINS.GROUND }, { terrain: TERRAINS.GROUND }, { terrain: TERRAINS.GROUND }, { terrain: TERRAINS.GROUND }, { terrain: TERRAINS.GROUND }, { terrain: TERRAINS.GROUND },  { terrain: TERRAINS.GROUND },
-      ],
-      [
-        { terrain: TERRAINS.GROUND }, { terrain: TERRAINS.GROUND }, { terrain: TERRAINS.GROUND }, { terrain: TERRAINS.GROUND }, { terrain: TERRAINS.GROUND }, { terrain: TERRAINS.GROUND }, { terrain: TERRAINS.GROUND }, { terrain: TERRAINS.GROUND },  { terrain: TERRAINS.GROUND },
-      ],
-      [
-        { terrain: TERRAINS.GROUND }, { terrain: TERRAINS.GROUND }, { terrain: TERRAINS.GROUND }, { terrain: TERRAINS.GROUND }, { terrain: TERRAINS.GROUND }, { terrain: TERRAINS.GROUND }, { terrain: TERRAINS.GROUND }, { terrain: TERRAINS.GROUND },  { terrain: TERRAINS.GROUND },
-      ],
-      [
-        { terrain: TERRAINS.GROUND }, { terrain: TERRAINS.GROUND }, { terrain: TERRAINS.GROUND }, { terrain: TERRAINS.GROUND }, { terrain: TERRAINS.GROUND }, { terrain: TERRAINS.GROUND }, { terrain: TERRAINS.GROUND }, { terrain: TERRAINS.GROUND },  { terrain: TERRAINS.GROUND },
-      ],
+      [{ terrain: TERRAINS.GROUND }, { terrain: TERRAINS.GROUND }, { terrain: TERRAINS.GROUND }, { terrain: TERRAINS.GROUND }, { terrain: TERRAINS.GROUND }, { terrain: TERRAINS.GROUND }, { terrain: TERRAINS.GROUND }, { terrain: TERRAINS.GROUND },  { terrain: TERRAINS.GROUND }, { terrain: TERRAINS.GROUND }, { terrain: TERRAINS.GROUND }, { terrain: TERRAINS.GROUND }, { terrain: TERRAINS.GROUND }, { terrain: TERRAINS.GROUND }],
+      [{ terrain: TERRAINS.GROUND }, { terrain: TERRAINS.GROUND }, { terrain: TERRAINS.GROUND }, { terrain: TERRAINS.GROUND }, { terrain: TERRAINS.GROUND }, { terrain: TERRAINS.GROUND }, { terrain: TERRAINS.GROUND }, { terrain: TERRAINS.GROUND },  { terrain: TERRAINS.GROUND }, { terrain: TERRAINS.GROUND }, { terrain: TERRAINS.GROUND }, { terrain: TERRAINS.GROUND }, { terrain: TERRAINS.GROUND }, { terrain: TERRAINS.GROUND }],
+      [{ terrain: TERRAINS.GROUND }, { terrain: TERRAINS.GROUND }, { terrain: TERRAINS.GROUND }, { terrain: TERRAINS.GROUND }, { terrain: TERRAINS.GROUND }, { terrain: TERRAINS.GROUND }, { terrain: TERRAINS.GROUND }, { terrain: TERRAINS.GROUND },  { terrain: TERRAINS.GROUND }, { terrain: TERRAINS.GROUND }, { terrain: TERRAINS.GROUND }, { terrain: TERRAINS.GROUND }, { terrain: TERRAINS.GROUND }, { terrain: TERRAINS.GROUND }],
+      [{ terrain: TERRAINS.GROUND }, { terrain: TERRAINS.GROUND }, { terrain: TERRAINS.GROUND }, { terrain: TERRAINS.GROUND }, { terrain: TERRAINS.GROUND }, { terrain: TERRAINS.GROUND }, { terrain: TERRAINS.GROUND }, { terrain: TERRAINS.GROUND },  { terrain: TERRAINS.GROUND }, { terrain: TERRAINS.GROUND }, { terrain: TERRAINS.GROUND }, { terrain: TERRAINS.GROUND }, { terrain: TERRAINS.GROUND }, { terrain: TERRAINS.GROUND }],
+      [{ terrain: TERRAINS.GROUND }, { terrain: TERRAINS.GROUND }, { terrain: TERRAINS.GROUND }, { terrain: TERRAINS.GROUND }, { terrain: TERRAINS.GROUND }, { terrain: TERRAINS.GROUND }, { terrain: TERRAINS.GROUND }, { terrain: TERRAINS.GROUND },  { terrain: TERRAINS.GROUND }, { terrain: TERRAINS.GROUND }, { terrain: TERRAINS.GROUND }, { terrain: TERRAINS.GROUND }, { terrain: TERRAINS.GROUND }, { terrain: TERRAINS.GROUND }],
+      [{ terrain: TERRAINS.GROUND }, { terrain: TERRAINS.GROUND }, { terrain: TERRAINS.GROUND }, { terrain: TERRAINS.GROUND }, { terrain: TERRAINS.GROUND }, { terrain: TERRAINS.GROUND }, { terrain: TERRAINS.GROUND }, { terrain: TERRAINS.GROUND },  { terrain: TERRAINS.GROUND }, { terrain: TERRAINS.GROUND }, { terrain: TERRAINS.GROUND }, { terrain: TERRAINS.GROUND }, { terrain: TERRAINS.GROUND }, { terrain: TERRAINS.GROUND }],
+      [{ terrain: TERRAINS.GROUND }, { terrain: TERRAINS.GROUND }, { terrain: TERRAINS.GROUND }, { terrain: TERRAINS.GROUND }, { terrain: TERRAINS.GROUND }, { terrain: TERRAINS.GROUND }, { terrain: TERRAINS.GROUND }, { terrain: TERRAINS.GROUND },  { terrain: TERRAINS.GROUND }, { terrain: TERRAINS.GROUND }, { terrain: TERRAINS.GROUND }, { terrain: TERRAINS.GROUND }, { terrain: TERRAINS.GROUND }, { terrain: TERRAINS.GROUND }],
+      [{ terrain: TERRAINS.GROUND }, { terrain: TERRAINS.GROUND }, { terrain: TERRAINS.GROUND }, { terrain: TERRAINS.GROUND }, { terrain: TERRAINS.GROUND }, { terrain: TERRAINS.GROUND }, { terrain: TERRAINS.GROUND }, { terrain: TERRAINS.GROUND },  { terrain: TERRAINS.GROUND }, { terrain: TERRAINS.GROUND }, { terrain: TERRAINS.GROUND }, { terrain: TERRAINS.GROUND }, { terrain: TERRAINS.GROUND }, { terrain: TERRAINS.GROUND }],
+      [{ terrain: TERRAINS.GROUND }, { terrain: TERRAINS.GROUND }, { terrain: TERRAINS.GROUND }, { terrain: TERRAINS.GROUND }, { terrain: TERRAINS.GROUND }, { terrain: TERRAINS.GROUND }, { terrain: TERRAINS.GROUND }, { terrain: TERRAINS.GROUND },  { terrain: TERRAINS.GROUND }, { terrain: TERRAINS.GROUND }, { terrain: TERRAINS.GROUND }, { terrain: TERRAINS.GROUND }, { terrain: TERRAINS.GROUND }, { terrain: TERRAINS.GROUND }],
+      [{ terrain: TERRAINS.GROUND }, { terrain: TERRAINS.GROUND }, { terrain: TERRAINS.GROUND }, { terrain: TERRAINS.GROUND }, { terrain: TERRAINS.GROUND }, { terrain: TERRAINS.GROUND }, { terrain: TERRAINS.GROUND }, { terrain: TERRAINS.GROUND },  { terrain: TERRAINS.GROUND }, { terrain: TERRAINS.GROUND }, { terrain: TERRAINS.GROUND }, { terrain: TERRAINS.GROUND }, { terrain: TERRAINS.GROUND }, { terrain: TERRAINS.GROUND }],
+      [{ terrain: TERRAINS.GROUND }, { terrain: TERRAINS.GROUND }, { terrain: TERRAINS.GROUND }, { terrain: TERRAINS.GROUND }, { terrain: TERRAINS.GROUND }, { terrain: TERRAINS.GROUND }, { terrain: TERRAINS.GROUND }, { terrain: TERRAINS.GROUND },  { terrain: TERRAINS.GROUND }, { terrain: TERRAINS.GROUND }, { terrain: TERRAINS.GROUND }, { terrain: TERRAINS.GROUND }, { terrain: TERRAINS.GROUND }, { terrain: TERRAINS.GROUND }],
+      [{ terrain: TERRAINS.GROUND }, { terrain: TERRAINS.GROUND }, { terrain: TERRAINS.GROUND }, { terrain: TERRAINS.GROUND }, { terrain: TERRAINS.GROUND }, { terrain: TERRAINS.GROUND }, { terrain: TERRAINS.GROUND }, { terrain: TERRAINS.GROUND },  { terrain: TERRAINS.GROUND }, { terrain: TERRAINS.GROUND }, { terrain: TERRAINS.GROUND }, { terrain: TERRAINS.GROUND }, { terrain: TERRAINS.GROUND }, { terrain: TERRAINS.GROUND }],
+      [{ terrain: TERRAINS.GROUND }, { terrain: TERRAINS.GROUND }, { terrain: TERRAINS.GROUND }, { terrain: TERRAINS.GROUND }, { terrain: TERRAINS.GROUND }, { terrain: TERRAINS.GROUND }, { terrain: TERRAINS.GROUND }, { terrain: TERRAINS.GROUND },  { terrain: TERRAINS.GROUND }, { terrain: TERRAINS.GROUND }, { terrain: TERRAINS.GROUND }, { terrain: TERRAINS.GROUND }, { terrain: TERRAINS.GROUND }, { terrain: TERRAINS.GROUND }],
+      [{ terrain: TERRAINS.GROUND }, { terrain: TERRAINS.GROUND }, { terrain: TERRAINS.GROUND }, { terrain: TERRAINS.GROUND }, { terrain: TERRAINS.GROUND }, { terrain: TERRAINS.GROUND }, { terrain: TERRAINS.GROUND }, { terrain: TERRAINS.GROUND },  { terrain: TERRAINS.GROUND }, { terrain: TERRAINS.GROUND }, { terrain: TERRAINS.GROUND }, { terrain: TERRAINS.GROUND }, { terrain: TERRAINS.GROUND }, { terrain: TERRAINS.GROUND }],
     ]
     
   ],

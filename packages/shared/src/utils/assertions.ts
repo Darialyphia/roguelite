@@ -3,6 +3,9 @@ import type { AnyFunction, Defined, Nullable } from '../types/utils';
 export const isObject = (x: unknown): x is object =>
   typeof x === 'object' && x !== null && !Array.isArray(x);
 
+export const isEmptyObject = (x: unknown) =>
+  isObject(x) && Object.keys(x).length === 0;
+
 export const isString = (x: unknown): x is string => typeof x === 'string';
 
 export const isNumber = (x: unknown): x is number => typeof x === 'number';

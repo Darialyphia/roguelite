@@ -5,7 +5,6 @@ import { Container } from 'pixi.js';
 import { until, useEventListener } from '@vueuse/core';
 import { useIsoCamera } from '../composables/useIsoCamera';
 import { config } from '@/utils/config';
-import { match } from 'ts-pattern';
 
 const { width, height } = defineProps<{
   width: number;
@@ -14,9 +13,14 @@ const { width, height } = defineProps<{
 const app = useApplication();
 
 const camera = useIsoCamera();
+const WORLD_PADDING = {
+  x: config.TILE_SIZE.x,
+  y: config.TILE_SIZE.y + config.TILE_SIZE.z
+};
 const worldSize = computed(() => ({
-  width: ((width + height) / 2) * config.TILE_SIZE.x,
-  height: ((width + height) / 2) * config.TILE_SIZE.y + config.TILE_SIZE.z
+  width: ((width + height) / 2) * config.TILE_SIZE.x + WORLD_PADDING.x,
+  // prettier-ignore
+  height: ((width + height) / 2) * config.TILE_SIZE.y + config.TILE_SIZE.z + WORLD_PADDING.y
 }));
 
 watchEffect(() => {
@@ -27,15 +31,15 @@ watchEffect(() => {
 });
 
 until(camera.viewport)
-  .not.toBe(undefined)
-  .then(() => {
-    camera.viewport.value
-      ?.drag({
+  .toBeTruthy()
+  .then(viewport => {
+    viewport
+      .drag({
         mouseButtons: 'left'
       })
       .pinch()
       .decelerate({ friction: 0.88 })
-      .wheel({ smooth: 20, percent: 0.05 })
+      .wheel({ smooth: 20, percent: 0.25 })
       .clamp({
         direction: 'all'
       })
@@ -57,24 +61,10 @@ useEventListener('resize', () => {
 });
 
 const containerOffset = computed(() => {
-  return match(camera.angle.value)
-    .with(0, () => ({
-      x: (height / 2) * config.TILE_SIZE.x,
-      y: 0
-    }))
-    .with(90, () => ({
-      x: (height / 2) * config.TILE_SIZE.x,
-      y: 0
-    }))
-    .with(180, () => ({
-      x: (height / 2) * config.TILE_SIZE.x,
-      y: 0
-    }))
-    .with(270, () => ({
-      x: (height / 2) * config.TILE_SIZE.x,
-      y: 0
-    }))
-    .exhaustive();
+  return {
+    x: (height / 2) * config.TILE_SIZE.x + WORLD_PADDING.x / 2,
+    y: WORLD_PADDING.y
+  };
 });
 </script>
 

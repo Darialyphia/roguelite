@@ -63,6 +63,7 @@ function manifestEntryParser(tree, processor) {
       loadParser: needsCustomParser
         ? loadParserByAssetType[assetType]
         : undefined,
+      foo: "bar",
     };
 
     file.data && (res.data = file.data);

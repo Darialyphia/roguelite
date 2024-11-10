@@ -7,7 +7,7 @@
     "sourceSize": { "w": 96, "h": 80 },
     "duration": 100
    },
-   "grass__tile_90_1": {
+   "grass__tile_90_0": {
     "frame": { "x": 96, "y": 0, "w": 96, "h": 80 },
     "rotated": false,
     "trimmed": false,
@@ -15,7 +15,7 @@
     "sourceSize": { "w": 96, "h": 80 },
     "duration": 100
    },
-   "grass__tile_180_2": {
+   "grass__tile_180_0": {
     "frame": { "x": 192, "y": 0, "w": 96, "h": 80 },
     "rotated": false,
     "trimmed": false,
@@ -23,7 +23,7 @@
     "sourceSize": { "w": 96, "h": 80 },
     "duration": 100
    },
-   "grass__tile_270_3": {
+   "grass__tile_270_0": {
     "frame": { "x": 288, "y": 0, "w": 96, "h": 80 },
     "rotated": false,
     "trimmed": false,

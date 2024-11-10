@@ -17,7 +17,7 @@ watch(
     if (!container) return;
 
     gsap.to(container, {
-      duration: prevContainer ? 0.7 : 0,
+      duration: prevContainer ? 0.5 : 0,
       pixi: {
         x: pos.x,
         y: pos.y,

@@ -63,26 +63,6 @@ const splitBundle = (manifest: AssetsManifest, name: string) => {
   return bundleIds;
 };
 
-// const getNormalAssetData = (
-//   asset: ISpritesheetData,
-//   imagePath: string
-// ): ISpritesheetData => {
-//   const animations = Object.fromEntries(
-//     Object.entries(asset.animations!).map(([key, frames]) => [
-//       key,
-//       frames.map(frame => `n_${frame}`)
-//     ])
-//   );
-//   const frames = Object.fromEntries(
-//     Object.entries(asset.frames).map(([key, frame]) => [`n_${key}`, frame])
-//   );
-//   return {
-//     animations,
-//     frames,
-//     meta: { ...asset.meta, image: imagePath }
-//   };
-// };
-
 export const useAssetsProvider = (app: App) => {
   let manifest: AssetsManifest;
   // means the essentials are loaded and the app is ready to run
@@ -97,7 +77,7 @@ export const useAssetsProvider = (app: App) => {
     // createNormalSheetsBundle(manifest, 'units');
     // transform the manifest to add separate bundles for units and icons, as loading everything at once is way too expensive
     splitBundle(manifest, 'tiles');
-    // splitBundle(manifest, 'units');
+    splitBundle(manifest, 'units');
     // splitBundle(manifest, 'icons');
     // splitBundle(manifest, 'normals');
     // splitBundle(manifest, 'fx');
@@ -124,7 +104,7 @@ export const useAssetsProvider = (app: App) => {
   const load = async () => {
     if (loaded.value) return;
     await init();
-    // await Promise.all(['ui', 'pedestals'].map(id => Assets.loadBundle(id)));
+    await Promise.all(['ui'].map(id => Assets.loadBundle(id)));
     loaded.value = true;
 
     // loadNonCriticalResources();
@@ -145,7 +125,6 @@ export const useAssetsProvider = (app: App) => {
       TGroupLayers extends string = string
     >(key: string) {
       if (!bundlesPromises.has(key)) {
-        console.log('load', key);
         bundlesPromises.set(key, Assets.loadBundle(key));
       }
       await bundlesPromises.get(key);

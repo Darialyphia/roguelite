@@ -7,6 +7,11 @@ import IsoWorld from '@/iso/components/IsoWorld.vue';
 import IsoCamera from '@/iso/components/IsoCamera.vue';
 import { useKeyboardControl } from '@/shared/composables/useKeyboardControl';
 import { useSettingsStore } from '@/shared/composables/useSettings';
+import { useSpritesheet } from '@/shared/composables/useSpritesheet';
+
+import AnimatedIsoPoint from '@/iso/components/AnimatedIsoPoint.vue';
+import MultiLayerAnimatedSprite from '@/shared/components/MultiLayerAnimatedSprite.vue';
+import { useBattleUiStore } from './battle-ui.store';
 
 definePage({
   name: 'Battle'
@@ -36,6 +41,14 @@ useKeyboardControl(
   () => settingsStore.settings.bindings.rotateCCW.control,
   () => isoWorld.value?.camera.rotateCCW()
 );
+
+const spritesheet = useSpritesheet<
+  'tier1' | 'tier2' | 'tier3' | 'tier4',
+  'body',
+  'armor' | 'helm' | 'weapon' | 'vfx'
+>('wizard');
+
+const ui = useBattleUiStore();
 </script>
 
 <template>
@@ -52,6 +65,15 @@ useKeyboardControl(
       :height="battleStore.session.game.boardSystem.height"
     >
       <BoardCell v-for="cell in battleStore.state.cells" :key="cell.id" :cell />
+
+      <AnimatedIsoPoint :position="{ x: 3, y: 2, z: 0 }" :z-index-offset="32">
+        <MultiLayerAnimatedSprite
+          v-if="spritesheet"
+          :sheet="spritesheet"
+          tag="idle"
+          :parts="ui.parts"
+        />
+      </AnimatedIsoPoint>
     </IsoCamera>
   </IsoWorld>
 </template>
