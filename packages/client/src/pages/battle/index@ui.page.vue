@@ -61,10 +61,10 @@ const options: Pick<GameOptions, 'mapId' | 'teams'> = {
               { blueprintId: 'test-card' }
             ],
             spriteParts: {
-              armor: 'tier3',
-              helm: 'tier3',
-              weapon: 'tier3',
-              vfx: 'tier3'
+              armor: 'tier4',
+              helm: null,
+              weapon: 'tier4',
+              vfx: 'tier4'
             },
             position: { x: 8, y: 0, z: 0 }
           }

@@ -8,7 +8,7 @@ import { nanoid } from 'nanoid';
 export type RosterUnit = {
   blueprintId: string;
   deck: Array<{ blueprintId: string }>;
-  spriteParts: Record<string, string>;
+  spriteParts: Record<string, string | null>;
 };
 
 export type PlayerRosterComponentOptions = {

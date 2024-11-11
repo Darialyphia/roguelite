@@ -3,6 +3,7 @@ import { config } from '@/utils/config';
 import AnimatedIsoPoint from '@/iso/components/AnimatedIsoPoint.vue';
 import type { UnitViewModel } from '../unit.model';
 import { useBattleEvent } from '@/pages/battle/battle.store';
+import { useIsoWorld } from '@/iso/composables/useIsoWorld';
 
 const { unit } = defineProps<{ unit: UnitViewModel }>();
 
@@ -15,10 +16,18 @@ useBattleEvent('unit.after_move', e => {
   return new Promise(resolve => {
     if (!e.unit.equals(unit.getUnit())) return resolve();
 
+    const start = e.previousPosition;
+
+    const end = e.position;
+
+    const midPoint = {
+      x: (start.x + end.x) / 2,
+      y: (start.y + end.y) / 2,
+      z: (start.z + end.z) / 2 + 1.5
+    };
+
     gsap.to(unit.position, {
-      x: e.position.x,
-      y: e.position.y,
-      z: e.position.z,
+      motionPath: [start, midPoint, end],
       duration: 0.4,
       ease: Power1.easeIn,
       onComplete: resolve
