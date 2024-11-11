@@ -1,4 +1,4 @@
-import type { Constructor, Prettify, Values } from '@game/shared';
+import type { AnyObject, Constructor, Prettify, Values } from '@game/shared';
 import { TypedEventEmitter } from '../utils/typed-emitter';
 import { BoardSystem } from '../board/board-system';
 import { UnitSystem } from '../unit/unit-system';
@@ -8,7 +8,12 @@ import {
   type TurnEvent,
   type TurnEventMap
 } from './turn-system';
-import { UNIT_EVENTS, type UnitEvent, type UnitEventMap } from '../unit/unit.entity';
+import {
+  Unit,
+  UNIT_EVENTS,
+  type UnitEvent,
+  type UnitEventMap
+} from '../unit/unit.entity';
 import { config } from '../config';
 import { PlayerSystem } from '../player/player-system';
 import { InputSystem, type SerializedInput } from '../input/input-system';
@@ -18,8 +23,17 @@ import { GamePhaseSystem } from './game-phase.system';
 import type { PlayerOptions } from '../player/player.entity';
 import { MAPS_DICTIONARY } from '../board/maps/_index';
 
+type EnrichEvent<TTuple extends [...any[]], TAdditional extends AnyObject> = {
+  [Index in keyof TTuple]: TTuple[Index] extends AnyObject
+    ? TTuple[Index] & TAdditional
+    : TTuple;
+} & { length: TTuple['length'] };
+
 type GlobalUnitEvents = {
-  [Event in UnitEvent as `unit.${Event}`]: UnitEventMap[Event];
+  [Event in UnitEvent as `unit.${Event}`]: EnrichEvent<
+    UnitEventMap[Event],
+    { unit: Unit }
+  >;
 };
 
 type GlobalTurnEvents = {

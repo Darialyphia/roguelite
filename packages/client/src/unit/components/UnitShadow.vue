@@ -5,7 +5,7 @@ import type { Filter } from 'pixi.js';
 import { config } from '@/utils/config';
 import { useMultiLayerTexture } from '@/shared/composables/useMultiLayerTexture';
 import { useIsoWorld } from '@/iso/composables/useIsoWorld';
-import type { UnitViewModel } from './unit.model';
+import type { UnitViewModel } from '../unit.model';
 
 const { unit } = defineProps<{ unit: UnitViewModel }>();
 

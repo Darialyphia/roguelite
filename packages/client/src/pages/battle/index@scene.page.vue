@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { useBattleStore } from './battle.store';
 import BoardCell from '@/board/components/BoardCell.vue';
-import Unit from '@/unit/Unit.vue';
+import Unit from '@/unit/components/Unit.vue';
 import { config } from '@/utils/config';
 import IsoWorld from '@/iso/components/IsoWorld.vue';
 import IsoCamera from '@/iso/components/IsoCamera.vue';

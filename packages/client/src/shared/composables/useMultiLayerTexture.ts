@@ -23,11 +23,9 @@ export const useMultiLayerTexture = <
   const sheets = computed(() => {
     const _sheet = toValue(sheet);
     if (!_sheet) return [];
-
     const result = objectEntries(_sheet.sheets.base).map(([, sheet]) => ({
       sheet
     }));
-
     Object.entries(toValue(parts)).forEach(([part, group]) => {
       if (!group) return;
       result.push({
