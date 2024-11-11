@@ -1,7 +1,52 @@
 import { Cell } from '@game/engine/src/board/cell';
 import { defineStore } from 'pinia';
 import { useBattleStore } from './battle.store';
-import { type Nullable, type Point3D } from '@game/shared';
+import { type Nullable, type Point3D, type Values } from '@game/shared';
+import { StateMachine, t } from 'typescript-fsm';
+import type { Game } from '@game/engine';
+import type { InputDispatcher } from '@game/engine/src/input/input-system';
+
+export const UI_MODES = {
+  BASIC: 'basic',
+  SELECT_CARD_TARGETS: 'select_card_targets'
+} as const;
+export type UiMode = Values<typeof UI_MODES>;
+
+export const UI_MODE_TRANSITIONS = {
+  SELECT_CARD: 'select_card',
+  UNSELECT_CARD: 'unselect_card'
+} as const;
+export type UiModeTransition = Values<typeof UI_MODE_TRANSITIONS>;
+
+export class UiModeManager {
+  private game: Game;
+  private dispatcher: InputDispatcher;
+
+  constructor(game: Game, dispatcher: InputDispatcher) {
+    this.game = game;
+    this.dispatcher = dispatcher;
+  }
+
+  private stateMachine = new StateMachine<UiMode, UiModeTransition>(
+    UI_MODES.BASIC,
+    [
+      t(
+        UI_MODES.BASIC,
+        UI_MODE_TRANSITIONS.SELECT_CARD,
+        UI_MODES.SELECT_CARD_TARGETS
+      ),
+      t(
+        UI_MODES.SELECT_CARD_TARGETS,
+        UI_MODE_TRANSITIONS.UNSELECT_CARD,
+        UI_MODES.BASIC
+      )
+    ]
+  );
+
+  get mode() {
+    return this.stateMachine.getState();
+  }
+}
 
 export const useInternalBattleUiStore = defineStore(
   'internal-battle-ui',

@@ -1,9 +1,10 @@
 <script setup lang="ts">
 import { useIsoCamera } from '@/iso/composables/useIsoCamera';
-import type { CellViewModel } from '@/pages/battle/battle.store';
 import { useSpritesheet } from '@/shared/composables/useSpritesheet';
 import { TERRAINS, type Terrain } from '@game/engine/src/board/board-utils';
 import { Hitbox } from '@/utils/hitbox';
+import type { CellViewModel } from '../models/cell.model';
+
 const { cell } = defineProps<{ cell: CellViewModel }>();
 
 const sheetsDict: Record<Terrain, string> = {

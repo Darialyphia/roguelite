@@ -1,16 +1,14 @@
+import { CellViewModel } from '@/board/models/cell.model';
+import { PlayerViewModel } from '@/player/player.model';
 import { UnitViewModel } from '@/unit/unit.model';
 import type { ClientSession } from '@game/engine';
-import type { Terrain } from '@game/engine/src/board/board-utils';
-import type { Cell } from '@game/engine/src/board/cell';
 import type { GameEventMap } from '@game/engine/src/game/game';
 import type { GamePhase } from '@game/engine/src/game/game-phase.system';
 import type {
   InputDispatcher,
   SerializedInput
 } from '@game/engine/src/input/input-system';
-import type { RosterUnit } from '@game/engine/src/player/player-roster.component';
-import type { Player } from '@game/engine/src/player/player.entity';
-import { assert, isDefined, type Point3D } from '@game/shared';
+import { assert, isDefined } from '@game/shared';
 import { defineStore } from 'pinia';
 
 const useInternalBattleStore = defineStore('battle-internal', () => {
@@ -20,20 +18,6 @@ const useInternalBattleStore = defineStore('battle-internal', () => {
     session
   };
 });
-// @TODO Make ViewModel class for Cell and Player
-export type CellViewModel = Readonly<
-  Point3D & {
-    id: string;
-    getCell(): Cell;
-    terrain: Terrain;
-  }
->;
-
-export type PlayerViewModel = Readonly<{
-  id: string;
-  getPlayer(): Player;
-  roster: RosterUnit[];
-}>;
 
 const PLAYER_ID = 'player';
 export const useBattleStore = defineStore('battle', () => {
@@ -48,27 +32,16 @@ export const useBattleStore = defineStore('battle', () => {
 
   const syncState = () => {
     assert(isDefined(internal.session));
+    console.log('sync state');
     const game = internal.session.game;
-    console.log('sync game state', game.phase);
 
     phase.value = game.phase;
-    cells.value = game.boardSystem.cells.map(cell => ({
-      id: cell.id,
-      x: cell.x,
-      y: cell.y,
-      z: cell.z,
-      terrain: cell.terrain,
-      getCell() {
-        return cell;
-      }
-    }));
-    players.value = game.playerSystem.players.map(player => ({
-      id: player.id,
-      roster: player.roster.units,
-      getPlayer() {
-        return player;
-      }
-    }));
+    cells.value = game.boardSystem.cells.map(
+      cell => new CellViewModel(game, cell)
+    );
+    players.value = game.playerSystem.players.map(
+      player => new PlayerViewModel(game, player)
+    );
     units.value = game.unitSystem.units.map(
       unit => new UnitViewModel(game, unit)
     );
@@ -86,13 +59,13 @@ export const useBattleStore = defineStore('battle', () => {
 
   let dispatch: InputDispatcher = () => {};
   return {
-    async init(session: ClientSession, dispatcher: InputDispatcher) {
+    init(session: ClientSession, dispatcher: InputDispatcher) {
       internal.session = session;
-      await internal.session.initialize();
       dispatch = dispatcher;
 
       syncState();
       internal.session.subscribe(async (input, events) => {
+        console.log(input, events);
         isPlayingFx.value = true;
         for (const event of events) {
           const listeners = fxListeners[event.eventName];

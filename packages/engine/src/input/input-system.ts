@@ -42,6 +42,10 @@ export type InputDispatcher = (input: SerializedInput) => void;
 export type InputSystemOptions = { game: Game };
 
 export class InputSystem extends System<SerializedInput[]> {
+  name = 'INPUT SYSTEM';
+
+  color = 'blue';
+
   private history: Input<any>[] = [];
 
   private isRunning = false;
@@ -101,7 +105,6 @@ export class InputSystem extends System<SerializedInput[]> {
 
   handleInput({ type, payload }: SerializedInput) {
     if (!this.isActionType(type)) return;
-    // this.session.logger(`%c[ACTION:${type}]`, 'color: blue', payload);
     const ctor = inputMap[type];
     const action = new ctor(this.game, payload);
     this._currentAction = action;

@@ -6,6 +6,10 @@ import { Team, type TeamOptions } from './team.entity';
 export type PlayerSystemOptions = { teams: TeamOptions[] };
 
 export class PlayerSystem extends System<PlayerSystemOptions> {
+  name = 'PLAYER SYSTEM';
+
+  color = 'orange';
+
   private teamMap = new Map<EntityId, Team>();
 
   private playerMap = new Map<EntityId, Player>();

@@ -12,7 +12,7 @@ export type DefaultSchema = typeof defaultInputSchema;
 export type AnyGameAction = Input<any>;
 
 export abstract class Input<TSchema extends DefaultSchema>
-  implements Serializable<z.infer<TSchema>>
+  implements Serializable<{ type: string; payload: z.infer<TSchema> }>
 {
   abstract readonly allowedPhases: GamePhase[];
 
@@ -43,6 +43,7 @@ export abstract class Input<TSchema extends DefaultSchema>
   get isValidPhase() {
     return this.allowedPhases.includes(this.game.phase);
   }
+
   async execute() {
     this.parsePayload();
 
@@ -53,10 +54,14 @@ export abstract class Input<TSchema extends DefaultSchema>
       `Cannot execute input ${this.name} during game phase ${this.game.phase}`
     );
 
+    this.game.log(this.name, this.payload);
     this.impl();
   }
 
   serialize() {
-    return this.payload;
+    return {
+      type: this.name,
+      payload: this.payload
+    };
   }
 }

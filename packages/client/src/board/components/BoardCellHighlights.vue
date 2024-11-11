@@ -1,10 +1,8 @@
 <script setup lang="ts">
-import {
-  useBattleStore,
-  type CellViewModel
-} from '@/pages/battle/battle.store';
+import { useBattleStore } from '@/pages/battle/battle.store';
 import UiAnimatedSprite from '@/ui/components/UiAnimatedSprite.vue';
 import { GAME_PHASES } from '@game/engine/src/game/game-phase.system';
+import type { CellViewModel } from '../models/cell.model';
 
 const { cell } = defineProps<{ cell: CellViewModel }>();
 
@@ -12,16 +10,9 @@ const battleStore = useBattleStore();
 
 const tag = computed(() => 'movement');
 
-const canMove = computed(
-  () => {
-    return battleStore.state.activeUnit?.getUnit().canMoveTo(cell);
-  },
-  {
-    onTrigger(event) {
-      console.log(event);
-    }
-  }
-);
+const canMove = computed(() => {
+  return battleStore.state.activeUnit?.getUnit().canMoveTo(cell);
+});
 // const canAttack = computed(() =>
 //   battleStore.state.activeUnit?.unit.canAttackAt(cell)
 // );

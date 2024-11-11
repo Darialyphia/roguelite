@@ -4,13 +4,14 @@ import { ServerRngSystem } from './rng/server-rng.system';
 import type { Input } from './input/input';
 import type { SerializedInput } from './input/input-system';
 
-export type ServerSessionOptions = BetterOmit<GameOptions, 'rngCtor'>;
+export type ServerSessionOptions = BetterOmit<GameOptions, 'rngCtor' | 'id'>;
 
 export class ServerSession {
   readonly game: Game;
 
   constructor(options: ServerSessionOptions) {
     this.game = new Game({
+      id: 'SERVER',
       rngSeed: options.rngSeed,
       rngCtor: ServerRngSystem,
       mapId: options.mapId,
@@ -31,7 +32,7 @@ export class ServerSession {
       // update for  this input has already been pushed
       if (latestInput === lastInput) return;
 
-      cb(lastInput.serialize(), {
+      cb(lastInput.serialize() as SerializedInput, {
         rngValues: this.game.rngSystem.values.slice(lastRngValueIndexSent)
       });
       lastRngValueIndexSent = this.game.rngSystem.values.length;

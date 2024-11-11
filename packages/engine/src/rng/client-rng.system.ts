@@ -5,6 +5,10 @@ import { type RngSystemOptions, type RngSystem } from './rng-system';
 export class MissingRngError extends Error {}
 
 export class ClientRngSystem extends System<RngSystemOptions> implements RngSystem {
+  name = 'RNG SYSTEM';
+
+  color = 'lime';
+
   values: number[] = [];
   seed = '';
 

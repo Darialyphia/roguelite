@@ -17,6 +17,10 @@ export const GAME_PHASE_TRANSITIONS = {
 export type GamePhaseTransition = Values<typeof GAME_PHASE_TRANSITIONS>;
 
 export class GamePhaseSystem extends System<never> {
+  name = 'GAME PHASE SYSTEM';
+
+  color = 'crimson';
+
   private stateMachine = new StateMachine<GamePhase, GamePhaseTransition>(
     GAME_PHASES.DEPLOYMENT,
     [
@@ -33,7 +37,7 @@ export class GamePhaseSystem extends System<never> {
   }
 
   async startBattle() {
-    console.log('start battle');
+    this.log('start battle');
     assert(
       this.stateMachine.can(GAME_PHASE_TRANSITIONS.START_BATTLE),
       `Cannot enter phase ${GAME_PHASES.BATTLE} from phase ${this.phase}`
@@ -47,6 +51,7 @@ export class GamePhaseSystem extends System<never> {
   }
 
   async endBattle() {
+    this.log('end battle');
     assert(
       this.stateMachine.can(GAME_PHASE_TRANSITIONS.END_BATTLE),
       `Cannot enter phase ${GAME_PHASES.END} from phase ${this.phase}`

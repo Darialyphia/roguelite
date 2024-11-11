@@ -4,9 +4,7 @@ import type { Input } from './input/input';
 import { ClientRngSystem } from './rng/client-rng.system';
 import type { SerializedInput } from './input/input-system';
 
-export type ClientSessionOptions = BetterOmit<GameOptions, 'rngCtor' | 'rngSeed'> & {
-  rngValues: number[];
-};
+export type ClientSessionOptions = BetterOmit<GameOptions, 'rngCtor' | 'rngSeed' | 'id'>;
 
 export type ClientDispatchMeta = { rngValues: number[] };
 
@@ -16,18 +14,19 @@ export class ClientSession {
 
   constructor(options: ClientSessionOptions) {
     this.game = new Game({
+      id: 'CLIENT',
       rngSeed: '',
       rngCtor: ClientRngSystem,
       mapId: options.mapId,
       teams: options.teams
     });
-    this.game.rngSystem.values = options.rngValues;
     this.game.on('*', evt => {
       this.eventsSinceLastInput.push(evt);
     });
   }
 
-  initialize() {
+  initialize(rngValues: number[]) {
+    this.game.rngSystem.values = rngValues;
     return this.game.initialize();
   }
 
@@ -50,7 +49,7 @@ export class ClientSession {
       // update for  this input has already been pushed
       if (latestInput === lastInput) return;
 
-      cb(lastInput.serialize(), this.eventsSinceLastInput);
+      cb(lastInput.serialize() as SerializedInput, this.eventsSinceLastInput);
       latestInput = lastInput;
     });
   }

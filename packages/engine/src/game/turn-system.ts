@@ -16,6 +16,10 @@ export type TurnEventMap = {
 };
 
 export class TurnSystem extends System<never> {
+  name = 'TURN SYSTEM';
+
+  color = 'magenta';
+
   private _turnCount = 0;
 
   private queue: Unit[] = [];

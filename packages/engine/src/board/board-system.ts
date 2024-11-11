@@ -1,5 +1,5 @@
-import { isDefined, isString, type BetterOmit, type Point3D } from '@game/shared';
-import { Cell, type CellOptions } from './cell';
+import { isDefined, isString, type Point3D } from '@game/shared';
+import { Cell } from './cell';
 import { createEntityId, type EntityId } from '../entity';
 import { pointToCellId } from './board-utils';
 import { System } from '../system';
@@ -10,6 +10,10 @@ export type BoardSystemOptions = {
 };
 
 export class BoardSystem extends System<BoardSystemOptions> {
+  name = 'BOARD SYSTEM';
+
+  color = 'green';
+
   map!: GameMap;
 
   cellsMap = new Map<EntityId, Cell>();

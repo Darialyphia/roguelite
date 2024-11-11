@@ -57,6 +57,7 @@ export const GAME_EVENTS = {
 } as const satisfies Record<string, keyof GameEventMap>;
 
 export type GameOptions = {
+  id: string;
   rngSeed: string;
   rngCtor: Constructor<RngSystem>;
   mapId: string;
@@ -82,11 +83,19 @@ export class Game {
 
   readonly config = config;
 
+  readonly id: string;
+
   constructor(private options: GameOptions) {
+    this.id = options.id;
     this.rngSystem = new options.rngCtor(this);
     this.setupStarEvents();
   }
 
+  log(...args: any[]) {
+    console.group(this.id);
+    console.log(...args);
+    console.groupEnd();
+  }
   // the event emitter doesnt provide the event name if you enable wildcards, so let's implement it ourselves
   private setupStarEvents() {
     Object.values(GAME_EVENTS).forEach(eventName => {
@@ -132,7 +141,7 @@ export class Game {
   }
 
   get emit() {
-    return this.emitter.emit;
+    return this.emitter.emit.bind(this.emitter);
   }
 
   get phase() {

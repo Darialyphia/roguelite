@@ -3,6 +3,10 @@ import type { RngSystem, RngSystemOptions } from './rng-system';
 import randoomSeed from 'seedrandom';
 
 export class ServerRngSystem extends System<RngSystemOptions> implements RngSystem {
+  name = 'RNG SYSTEM';
+
+  color = 'lime';
+
   private rng!: randoomSeed.PRNG;
 
   seed!: string;
