@@ -5,6 +5,7 @@ import UiAnimatedSprite from '@/ui/components/UiAnimatedSprite.vue';
 import { GAME_PHASES } from '@game/engine/src/game/game-phase.system';
 import type { CellViewModel } from '../models/cell.model';
 import { useBattleUiStore } from '@/pages/battle/battle-ui.store';
+import { isDefined } from '@game/shared';
 
 const { cell } = defineProps<{ cell: CellViewModel }>();
 
@@ -14,6 +15,13 @@ const ui = useBattleUiStore();
 
 const canMove = computed(() => {
   return activeUnit.value?.getUnit().canMoveTo(cell);
+});
+
+const canAttack = computed(() => {
+  return (
+    isDefined(cell.getCell().unit) &&
+    activeUnit.value?.getUnit().canAttackAt(cell)
+  );
 });
 
 const isOnPath = computed(() => {
@@ -34,6 +42,9 @@ const tag = computed(() => {
     return null;
   }
 
+  if (canAttack.value) {
+    return 'danger';
+  }
   if (isOnPath.value) {
     return 'movement-path';
   }

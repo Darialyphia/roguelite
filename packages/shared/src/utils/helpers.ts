@@ -60,3 +60,9 @@ export const shuffleArray = <T>(array: T[], rng: () => number) => {
 
   return result;
 };
+
+export const waitFor = (ms: number) => {
+  return new Promise<void>(res => {
+    setTimeout(res, ms);
+  });
+};

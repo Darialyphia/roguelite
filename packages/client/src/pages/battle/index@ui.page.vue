@@ -35,7 +35,7 @@ const options: Pick<GameOptions, 'mapId' | 'teams'> = {
               weapon: 'tier3',
               vfx: 'tier3'
             },
-            position: { x: 0, y: 0, z: 0 }
+            position: { x: 6, y: 0, z: 0 }
           }
         ],
         roster: []
@@ -66,7 +66,7 @@ const options: Pick<GameOptions, 'mapId' | 'teams'> = {
               weapon: 'tier4',
               vfx: 'tier4'
             },
-            position: { x: 8, y: 0, z: 0 }
+            position: { x: 7, y: 0, z: 0 }
           }
         ]
       }

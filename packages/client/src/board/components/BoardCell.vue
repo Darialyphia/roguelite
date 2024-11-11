@@ -13,19 +13,6 @@ const ui = useBattleUiStore();
 const battle = useBattleStore();
 
 const isHovered = computed(() => ui.hoveredCell?.equals(cell.getCell()));
-
-const move = () => {
-  if (battle.state.activeUnit?.getUnit().canMoveTo(cell.getCell())) {
-    battle.dispatch({
-      type: 'move',
-      payload: {
-        x: cell.x,
-        y: cell.y,
-        z: cell.z
-      }
-    });
-  }
-};
 </script>
 
 <template>
@@ -33,7 +20,34 @@ const move = () => {
     :position="cell"
     @pointerenter="ui.hoverAt(cell)"
     @pointerleave="ui.unHover()"
-    @pointerup="move"
+    @pointerup="
+      () => {
+        const _unit = battle.state.activeUnit?.getUnit();
+        if (!_unit) return;
+
+        if (_unit.canMoveTo(cell.getCell())) {
+          return battle.dispatch({
+            type: 'move',
+            payload: {
+              x: cell.x,
+              y: cell.y,
+              z: cell.z
+            }
+          });
+        }
+
+        if (_unit.canAttackAt(cell.getCell())) {
+          battle.dispatch({
+            type: 'attack',
+            payload: {
+              x: cell.x,
+              y: cell.y,
+              z: cell.z
+            }
+          });
+        }
+      }
+    "
   >
     <BoardCellSprite :cell="cell" />
     <BoardCellHighlights :cell="cell" />

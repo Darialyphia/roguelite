@@ -17,6 +17,7 @@ import { MeleeTargetingPatternStrategy } from '../targeting/melee-targeting.stra
 import { PointAOEShape } from '../targeting/aoe-shapes';
 import { TARGETING_TYPE } from '../targeting/targeting-strategy';
 import type { Damage } from '../combat/damage/damage';
+import { config } from '../config';
 
 export type UnitOptions = {
   id: string;
@@ -179,11 +180,17 @@ export class Unit extends Entity {
   }
 
   get canMove(): boolean {
-    return this.interceptors.canMove.getValue(true, {});
+    return this.interceptors.canMove.getValue(
+      this.ap.current >= config.AP_COST_PER_MOVEMENT,
+      {}
+    );
   }
 
   get canAttack(): boolean {
-    return this.interceptors.canAttack.getValue(true, {});
+    return this.interceptors.canAttack.getValue(
+      this.ap.current >= config.AP_COST_PER_ATTACK,
+      {}
+    );
   }
 
   get canPlayCardFromHand(): boolean {
@@ -220,11 +227,11 @@ export class Unit extends Entity {
   }
 
   isEnemy(unit: Unit) {
-    return unit.player.isEnemy(unit.player);
+    return this.player.isEnemy(unit.player);
   }
 
   isAlly(unit: Unit) {
-    return !unit.player.isEnemy(unit.player);
+    return !this.player.isEnemy(unit.player);
   }
 
   canMoveTo(point: Point3D) {

@@ -8,5 +8,9 @@ export const defaultKeyBindings = {
   rotateCCW: {
     label: 'Rotate map counter clockwise',
     control: { key: 'KeyQ', modifier: null }
+  },
+  endTurn: {
+    label: "End the current unit's turn",
+    control: { key: 'KeyT', modifier: null }
   }
 } as const satisfies Record<string, { label: string; control: Control }>;

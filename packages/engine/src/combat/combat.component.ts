@@ -62,7 +62,7 @@ export class CombatComponent {
   }
 
   canAttackAt(point: Point3D) {
-    if (!this.game.unitSystem.getUnitAt(point)) return;
+    if (this.unit.position.equals(point)) return false;
 
     return this.targeting.canTargetAt(point);
   }

@@ -14,8 +14,8 @@ const app = useApplication();
 
 const camera = useIsoCamera();
 const WORLD_PADDING = {
-  x: config.TILE_SIZE.x,
-  y: config.TILE_SIZE.y + config.TILE_SIZE.z
+  x: config.TILE_SIZE.x * 2,
+  y: (config.TILE_SIZE.y + config.TILE_SIZE.z) * 3
 };
 const worldSize = computed(() => ({
   width: ((width + height) / 2) * config.TILE_SIZE.x + WORLD_PADDING.x,
@@ -51,7 +51,10 @@ until(camera.viewport)
         allowButtons: true
       })
       .pinch({ noDrag: true })
-      .moveCenter(worldSize.value.width / 2, worldSize.value.height / 2);
+      .moveCenter(
+        worldSize.value.width / 2,
+        worldSize.value.height / 2 - WORLD_PADDING.y / 2
+      );
   });
 
 useEventListener('resize', () => {
@@ -63,7 +66,7 @@ useEventListener('resize', () => {
 const containerOffset = computed(() => {
   return {
     x: (height / 2) * config.TILE_SIZE.x,
-    y: WORLD_PADDING.y
+    y: WORLD_PADDING.y / 2
   };
 });
 </script>

@@ -66,6 +66,7 @@ export const useBattleStore = defineStore('battle', () => {
       syncState();
       internal.session.subscribe(async (input, events) => {
         isPlayingFx.value = true;
+
         for (const event of events) {
           const listeners = fxListeners[event.eventName];
           if (!listeners) continue;
@@ -116,7 +117,6 @@ export const useBattleStore = defineStore('battle', () => {
       // @ts-expect-error :shrughai:
       fxListeners[eventName] ??= new Set();
       fxListeners[eventName].add(handler);
-
       return () => this.off(eventName, handler);
     },
 
