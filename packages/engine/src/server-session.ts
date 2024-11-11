@@ -1,7 +1,8 @@
 import type { BetterOmit, Nullable } from '@game/shared';
 import { Game, type GameOptions } from './game/game';
 import { ServerRngSystem } from './rng/server-rng.system';
-import type { Input, SerializedInput } from './input/input';
+import type { Input } from './input/input';
+import type { SerializedInput } from './input/input-system';
 
 export type ServerSessionOptions = BetterOmit<GameOptions, 'rngCtor'>;
 
@@ -15,7 +16,10 @@ export class ServerSession {
       mapId: options.mapId,
       teams: options.teams
     });
-    this.game.initialize();
+  }
+
+  initialize() {
+    return this.game.initialize();
   }
 
   subscribe(cb: (input: SerializedInput, opts: { rngValues: number[] }) => void) {
@@ -36,6 +40,6 @@ export class ServerSession {
   }
 
   get dispatch() {
-    return this.game.dispatch;
+    return this.game.dispatch.bind(this.game);
   }
 }

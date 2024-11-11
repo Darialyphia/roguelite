@@ -80,7 +80,7 @@ export class SolidBodyPathfindingStrategy implements PathfindingStrategy {
       node,
       edges
         .filter(isDefined)
-        .filter(cell => this.isEdgeValid.bind(cell))
+        .filter(cell => this.isEdgeValid(cell))
         .map(point => {
           return {
             node: pointToCellId(point),
@@ -94,14 +94,13 @@ export class SolidBodyPathfindingStrategy implements PathfindingStrategy {
     if (this.origin.equals(cell)) return false;
 
     const entityAtPoint = this.game.unitSystem.getUnitAt(cell);
-    return !!entityAtPoint;
+    return !entityAtPoint;
   }
 
   getEdges(node: SerializedCoords): Array<Edge<SerializedCoords>> {
     if (!this.cache.has(node)) {
       this.computeNeighbors(node);
     }
-
     return this.cache.get(node)!;
   }
 }

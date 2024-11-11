@@ -39,15 +39,15 @@ export class MovementComponent {
   }
 
   get on() {
-    return this.emitter.on;
+    return this.emitter.on.bind(this.emitter);
   }
 
   get once() {
-    return this.emitter.once;
+    return this.emitter.once.bind(this.emitter);
   }
 
   get off() {
-    return this.emitter.off;
+    return this.emitter.off.bind(this.emitter);
   }
 
   get position() {

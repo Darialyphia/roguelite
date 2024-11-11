@@ -63,6 +63,10 @@
 
   --transparent: transparent;
 
+  --cursor-normal: url('/assets/ui/cursor.png'), auto;
+  --cursor-hover: url('/assets/ui/cursor-hover.png'), auto;
+  --cursor-disabled: url('/assets/ui/cursor-disabled.png'), auto;
+
   /* Additional values not present in Open props */
   --outline-offset: 3px;
   --radius-pill: 9999px;

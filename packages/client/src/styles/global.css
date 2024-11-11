@@ -11,6 +11,15 @@
     color: var(--text-1);
     height: 100dvh;
     overflow: hidden;
+    cursor: url('/assets/ui/cursor.png'), auto;
+  }
+
+  :is(button, a, input, select, textarea):hover {
+    cursor: url('/assets/ui/cursor-hover.png'), auto;
+  }
+
+  *:disabled {
+    cursor: url('/assets/ui/cursor-disabled.png'), auto;
   }
 }
 

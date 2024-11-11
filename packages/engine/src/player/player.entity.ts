@@ -65,6 +65,6 @@ export class Player extends Entity {
   }
 
   get deploy() {
-    return this.roster.deploy;
+    return this.roster.deploy.bind(this.roster);
   }
 }

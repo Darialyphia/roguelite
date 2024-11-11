@@ -1,9 +1,12 @@
 <script setup lang="ts">
 import Fps from '@/shared/components/Fps.vue';
+import { useBattleStore } from './battle.store';
 
 definePage({
   name: 'Battle'
 });
+
+const battleStore = useBattleStore();
 </script>
 
 <template>
@@ -15,6 +18,7 @@ definePage({
       </li>
     </ul>
   </nav>
+  <div>{{ battleStore.state.phase }}</div>
 </template>
 
 <style scoped lang="postcss"></style>

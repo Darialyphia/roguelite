@@ -32,25 +32,27 @@ export class GamePhaseSystem extends System<never> {
     return this.stateMachine.getState();
   }
 
-  startBattle() {
+  async startBattle() {
+    console.log('start battle');
     assert(
       this.stateMachine.can(GAME_PHASE_TRANSITIONS.START_BATTLE),
       `Cannot enter phase ${GAME_PHASES.BATTLE} from phase ${this.phase}`
     );
 
-    this.stateMachine.dispatch(GAME_PHASE_TRANSITIONS.START_BATTLE);
+    await this.stateMachine.dispatch(GAME_PHASE_TRANSITIONS.START_BATTLE);
+
     this.game.playerSystem.players.forEach(player => player.deploy());
     this.game.emit(GAME_EVENTS.START_BATTLE);
     this.game.turnSystem.startGameTurn();
   }
 
-  endBattle() {
+  async endBattle() {
     assert(
       this.stateMachine.can(GAME_PHASE_TRANSITIONS.END_BATTLE),
       `Cannot enter phase ${GAME_PHASES.END} from phase ${this.phase}`
     );
 
-    this.stateMachine.dispatch(GAME_PHASE_TRANSITIONS.END_BATTLE);
+    await this.stateMachine.dispatch(GAME_PHASE_TRANSITIONS.END_BATTLE);
     this.game.emit(GAME_EVENTS.END_BATTLE);
   }
 }

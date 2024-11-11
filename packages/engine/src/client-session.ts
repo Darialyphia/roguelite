@@ -1,7 +1,8 @@
 import type { BetterOmit, Nullable } from '@game/shared';
 import { Game, type GameOptions, type StarEvent } from './game/game';
-import type { Input, SerializedInput } from './input/input';
+import type { Input } from './input/input';
 import { ClientRngSystem } from './rng/client-rng.system';
+import type { SerializedInput } from './input/input-system';
 
 export type ClientSessionOptions = BetterOmit<GameOptions, 'rngCtor' | 'rngSeed'> & {
   rngValues: number[];
@@ -24,7 +25,10 @@ export class ClientSession {
     this.game.on('*', evt => {
       this.eventsSinceLastInput.push(evt);
     });
-    this.game.initialize();
+  }
+
+  initialize() {
+    return this.game.initialize();
   }
 
   async dispatch(input: SerializedInput, meta: ClientDispatchMeta) {

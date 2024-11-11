@@ -4,6 +4,7 @@ import type { CellViewModel } from '@/pages/battle/battle.store';
 import { useBattleUiStore } from '@/pages/battle/battle-ui.store';
 import BoardCellSprite from './BoardCellSprite.vue';
 import UiAnimatedSprite from '@/ui/components/UiAnimatedSprite.vue';
+import BoardCellHighlights from './BoardCellHighlights.vue';
 
 const { cell } = defineProps<{ cell: CellViewModel }>();
 
@@ -15,14 +16,11 @@ const isHovered = computed(() => ui.hoveredCell?.equals(cell.getCell()));
 <template>
   <AnimatedIsoPoint
     :position="cell"
-    @pointerenter="
-      () => {
-        ui.hoverAt(cell);
-      }
-    "
+    @pointerenter="ui.hoverAt(cell)"
     @pointerleave="ui.unHover()"
   >
     <BoardCellSprite :cell="cell" />
+    <BoardCellHighlights :cell="cell" />
     <UiAnimatedSprite assetId="hovered-cell" v-if="isHovered" />
   </AnimatedIsoPoint>
 </template>

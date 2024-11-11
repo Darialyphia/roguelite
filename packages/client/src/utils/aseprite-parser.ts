@@ -251,18 +251,8 @@ export const asepriteSpriteSheetParser = {
     );
   },
 
-  async parse(asset: any, resolvedAsset: any, loader: any) {
-    try {
-      const result = await parseAsepriteSheet(
-        asset,
-        resolvedAsset!.src!,
-        loader!
-      );
-      return result;
-    } catch (e) {
-      console.log('PARSE ERROR', e);
-      throw e;
-    }
+  parse(asset: any, resolvedAsset: any, loader: any) {
+    return parseAsepriteSheet(asset, resolvedAsset!.src!, loader!);
   }
 };
 

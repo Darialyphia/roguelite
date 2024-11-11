@@ -1,13 +1,12 @@
 <script setup lang="ts">
-import {
-  useBattleStore,
-  type UnitViewModel
-} from '@/pages/battle/battle.store';
+import { useBattleStore } from '@/pages/battle/battle.store';
 import { config } from '@/utils/config';
+import { useIsoCamera } from '@/iso/composables/useIsoCamera';
 import AnimatedIsoPoint from '@/iso/components/AnimatedIsoPoint.vue';
 import UnitSprite from './UnitSprite.vue';
 import UnitShadow from './UnitShadow.vue';
-import { useIsoCamera } from '@/iso/composables/useIsoCamera';
+import UnitStatBars from './UnitStatBars.vue';
+import type { UnitViewModel } from './unit.model';
 
 const { unit } = defineProps<{ unit: UnitViewModel }>();
 
@@ -58,6 +57,8 @@ const scaleX = computed(() => {
         <UnitShadow :unit="unit" />
         <UnitSprite :unit="unit" />
       </container>
+
+      <UnitStatBars :unit="unit" :x="config.TILE_SIZE.x / 3" />
     </container>
   </AnimatedIsoPoint>
 </template>

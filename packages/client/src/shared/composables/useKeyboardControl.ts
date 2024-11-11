@@ -36,10 +36,12 @@ const isMatch = <TControl extends Control>(
 };
 
 export const useKeyboardControl = <TControl extends Control>(
+  eventName: 'keydown' | 'keyup',
+
   control: MaybeRefOrGetter<TControl>,
   cb: (e: ValiatedKeyboardEvent<TControl>) => void
 ) => {
-  return useEventListener('keydown', e => {
+  return useEventListener(eventName, e => {
     const _control = toValue(control);
     if (!isMatch(e, _control)) return;
     cb(e);

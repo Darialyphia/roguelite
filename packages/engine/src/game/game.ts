@@ -11,9 +11,8 @@ import {
 import { UNIT_EVENTS, type UnitEvent, type UnitEventMap } from '../unit/unit.entity';
 import { config } from '../config';
 import { PlayerSystem } from '../player/player-system';
-import { InputSystem } from '../input/input-system';
+import { InputSystem, type SerializedInput } from '../input/input-system';
 import type { RngSystem } from '../rng/rng-system';
-import type { SerializedInput } from '../input/input';
 import { mapValues } from 'lodash-es';
 import { GamePhaseSystem } from './game-phase.system';
 import type { PlayerOptions } from '../player/player.entity';
@@ -32,6 +31,7 @@ type GameEventsBase = {
   'game.error': [{ error: Error }];
   'game.start-battle': [];
   'game.end-battle': [];
+  'game.ready': [];
   '*': [e: StarEvent];
 };
 
@@ -50,6 +50,7 @@ export const GAME_EVENTS = {
   ...mapValues(UNIT_EVENTS, evt => `unit.${evt}` as `unit.${typeof evt}`),
   ...mapValues(TURN_EVENTS, evt => `turn.${evt}` as `turn.${typeof evt}`),
   ERROR: 'game.error',
+  READY: 'game.ready',
   FLUSHED: 'game.input-queue-flushed',
   START_BATTLE: 'game.start-battle',
   END_BATTLE: 'game.end-battle'
@@ -97,7 +98,7 @@ export class Game {
     });
   }
 
-  initialize() {
+  async initialize() {
     this.rngSystem.initialize({ seed: this.options.rngSeed });
     this.gamePhaseSystem.initialize();
     const map = MAPS_DICTIONARY[this.options.mapId];
@@ -116,16 +117,18 @@ export class Game {
     this.inputSystem.initialize([]);
 
     if (this.playerSystem.players.every(p => p.isReady)) {
-      this.gamePhaseSystem.startBattle();
+      await this.gamePhaseSystem.startBattle();
     }
+
+    this.emit(GAME_EVENTS.READY);
   }
 
   get on() {
-    return this.emitter.on;
+    return this.emitter.on.bind(this.emitter);
   }
 
   get once() {
-    return this.emitter.once;
+    return this.emitter.once.bind(this.emitter);
   }
 
   get emit() {

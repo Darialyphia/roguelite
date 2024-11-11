@@ -9,11 +9,6 @@ export const defaultInputSchema = z.object({
 });
 export type DefaultSchema = typeof defaultInputSchema;
 
-export type SerializedInput = {
-  type: string;
-  payload: JSONValue;
-};
-
 export type AnyGameAction = Input<any>;
 
 export abstract class Input<TSchema extends DefaultSchema>

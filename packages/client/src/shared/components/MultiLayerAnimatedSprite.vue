@@ -64,10 +64,6 @@ watchEffect(() => {
   graphics.forEach(g => {
     textures.value.push(app.value.renderer.generateTexture(g));
   });
-  console.log(textures.value);
-});
-watchEffect(() => {
-  console.log(props);
 });
 </script>
 

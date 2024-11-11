@@ -1,11 +1,12 @@
 import type { AnyFunction, Constructor, Nullable, Values } from '@game/shared';
 import type { Game } from '../game/game';
-import type { DefaultSchema, Input, SerializedInput } from './input';
+import type { DefaultSchema, Input } from './input';
 import { MoveInput } from './inputs/move.input';
 import { AttackInput } from './inputs/attack.input';
 import { PlayCardInput } from './inputs/play-card.input';
 import { System } from '../system';
 import { DeployInput } from './inputs/deploy.input';
+import type { z } from 'zod';
 
 type GenericInputMap = Record<string, Constructor<Input<DefaultSchema>>>;
 
@@ -26,7 +27,20 @@ const inputMap = validateinputMap({
   deploy: DeployInput
 });
 
+type InputMap = typeof inputMap;
+
+export type SerializedInput = Values<{
+  [Name in keyof InputMap]: {
+    type: Name;
+    payload: InstanceType<InputMap[Name]> extends Input<infer Schema>
+      ? z.infer<Schema>
+      : never;
+  };
+}>;
+export type InputDispatcher = (input: SerializedInput) => void;
+
 export type InputSystemOptions = { game: Game };
+
 export class InputSystem extends System<SerializedInput[]> {
   private history: Input<any>[] = [];
 
@@ -80,9 +94,9 @@ export class InputSystem extends System<SerializedInput[]> {
     }
   }
 
-  dispatch({ type, payload }: SerializedInput) {
-    if (!this.isActionType(type)) return;
-    return this.schedule(() => this.handleInput({ type, payload }));
+  dispatch(input: SerializedInput) {
+    if (!this.isActionType(input.type)) return;
+    return this.schedule(() => this.handleInput(input));
   }
 
   handleInput({ type, payload }: SerializedInput) {

@@ -138,15 +138,15 @@ export class Unit extends Entity {
   }
 
   get on() {
-    return this.emitter.on;
+    return this.emitter.on.bind(this.emitter);
   }
 
   get once() {
-    return this.emitter.once;
+    return this.emitter.once.bind(this.emitter);
   }
 
   get off() {
-    return this.emitter.off;
+    return this.emitter.off.bind(this.emitter);
   }
 
   get speed(): number {
@@ -190,11 +190,11 @@ export class Unit extends Entity {
   }
 
   get isAt() {
-    return this.movement.isAt;
+    return this.movement.isAt.bind(this.movement);
   }
 
   get getCardAt() {
-    return this.cardManager.getCardAt;
+    return this.cardManager.getCardAt.bind(this.cardManager);
   }
 
   private forwardEvents() {

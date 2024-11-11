@@ -82,6 +82,48 @@
       "assets": [
         {
           "alias": [
+            "cursor-disabled.png"
+          ],
+          "src": [
+            "/assets/ui/cursor-disabled.png"
+          ],
+          "foo": "bar",
+          "data": {
+            "tags": {
+              "m": true
+            }
+          }
+        },
+        {
+          "alias": [
+            "cursor-hover.png"
+          ],
+          "src": [
+            "/assets/ui/cursor-hover.png"
+          ],
+          "foo": "bar",
+          "data": {
+            "tags": {
+              "m": true
+            }
+          }
+        },
+        {
+          "alias": [
+            "cursor.png"
+          ],
+          "src": [
+            "/assets/ui/cursor.png"
+          ],
+          "foo": "bar",
+          "data": {
+            "tags": {
+              "m": true
+            }
+          }
+        },
+        {
+          "alias": [
             "hovered-cell"
           ],
           "src": [

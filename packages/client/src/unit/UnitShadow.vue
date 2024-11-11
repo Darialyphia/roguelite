@@ -1,13 +1,11 @@
 <script setup lang="ts">
-import {
-  useBattleStore,
-  type UnitViewModel
-} from '@/pages/battle/battle.store';
+import { useBattleStore } from '@/pages/battle/battle.store';
 import { useSpritesheet } from '@/shared/composables/useSpritesheet';
 import type { Filter } from 'pixi.js';
 import { config } from '@/utils/config';
 import { useMultiLayerTexture } from '@/shared/composables/useMultiLayerTexture';
 import { useIsoWorld } from '@/iso/composables/useIsoWorld';
+import type { UnitViewModel } from './unit.model';
 
 const { unit } = defineProps<{ unit: UnitViewModel }>();
 

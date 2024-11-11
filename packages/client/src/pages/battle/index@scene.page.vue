@@ -44,29 +44,7 @@ const options: Pick<GameOptions, 'mapId' | 'teams'> = {
             position: { x: 0, y: 0, z: 0 }
           }
         ],
-        roster: [
-          {
-            blueprintId: 'test-unit',
-            deck: [
-              { blueprintId: 'test-card' },
-              { blueprintId: 'test-card' },
-              { blueprintId: 'test-card' },
-              { blueprintId: 'test-card' },
-              { blueprintId: 'test-card' },
-              { blueprintId: 'test-card' },
-              { blueprintId: 'test-card' },
-              { blueprintId: 'test-card' },
-              { blueprintId: 'test-card' },
-              { blueprintId: 'test-card' }
-            ],
-            spriteParts: {
-              armor: 'tier3',
-              helm: 'tier3',
-              weapon: 'tier3',
-              vfx: 'tier3'
-            }
-          }
-        ]
+        roster: []
       }
     ],
     [
@@ -111,16 +89,24 @@ const clientSession = new ClientSession({
 });
 
 const battleStore = useBattleStore();
-battleStore.init(clientSession);
+const start = async () => {
+  await serverSession.initialize();
+  battleStore.init(clientSession, input => {
+    serverSession.dispatch(input);
+  });
+};
+start();
 
 const settingsStore = useSettingsStore();
 const isoWorld = useTemplateRef('isoWorld');
 
 useKeyboardControl(
+  'keydown',
   () => settingsStore.settings.bindings.rotateCW.control,
   () => isoWorld.value?.camera.rotateCW()
 );
 useKeyboardControl(
+  'keydown',
   () => settingsStore.settings.bindings.rotateCCW.control,
   () => isoWorld.value?.camera.rotateCCW()
 );
@@ -129,7 +115,7 @@ useKeyboardControl(
 <template>
   <IsoWorld
     ref="isoWorld"
-    v-if="battleStore.session"
+    v-if="battleStore.session && battleStore.isReady"
     :angle="0"
     :width="battleStore.session.game.boardSystem.width"
     :height="battleStore.session.game.boardSystem.height"
