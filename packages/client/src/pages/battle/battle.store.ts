@@ -29,6 +29,7 @@ export const useBattleStore = defineStore('battle', () => {
   const cells = ref<CellViewModel[]>([]);
   const players = ref<PlayerViewModel[]>([]);
   const units = ref<UnitViewModel[]>([]);
+  const turnOrderUnits = ref<UnitViewModel[]>([]);
   const activeUnit = ref<UnitViewModel>();
 
   const phase = ref<GamePhase>('deployment');
@@ -46,6 +47,9 @@ export const useBattleStore = defineStore('battle', () => {
     );
     units.value = game.unitSystem.units.map(unit => makeUnitVModel(game, unit));
     activeUnit.value = makeUnitVModel(game, game.turnSystem.activeUnit);
+    turnOrderUnits.value = game.turnSystem.queue.map(unit =>
+      makeUnitVModel(game, unit)
+    );
   };
 
   const fxListeners: Partial<{
@@ -107,7 +111,8 @@ export const useBattleStore = defineStore('battle', () => {
       players,
       units,
       userPlayer: computed(() => players.value.find(p => p.id === PLAYER_ID)!),
-      activeUnit
+      activeUnit,
+      turnOrderUnits
     },
 
     on<T extends keyof GameEventMap>(
@@ -145,4 +150,10 @@ export const useActiveUnit = () => {
   const store = useBattleStore();
 
   return computed(() => store.state.activeUnit);
+};
+
+export const useUserPlayer = () => {
+  const store = useBattleStore();
+
+  return computed(() => store.state.players.find(p => p.id === PLAYER_ID)!);
 };

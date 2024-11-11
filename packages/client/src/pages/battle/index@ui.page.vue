@@ -1,8 +1,10 @@
 <script setup lang="ts">
 import Fps from '@/shared/components/Fps.vue';
-import { useBattleStore } from './battle.store';
+import { useBattleStore, useUserPlayer } from './battle.store';
 import { ClientSession, ServerSession } from '@game/engine';
 import type { GameOptions } from '@game/engine/src/game/game';
+import UnitIcon from '@/unit/components/UnitIcon.vue';
+import { useBattleUiStore } from './battle-ui.store';
 
 definePage({
   name: 'Battle'
@@ -35,7 +37,7 @@ const options: Pick<GameOptions, 'mapId' | 'teams'> = {
               weapon: 'tier3',
               vfx: 'tier3'
             },
-            position: { x: 6, y: 0, z: 0 }
+            position: { x: 1, y: 0, z: 0 }
           }
         ],
         roster: []
@@ -92,33 +94,87 @@ const start = async () => {
   });
 };
 start();
+
+const ui = useBattleUiStore();
+const userPlayer = useUserPlayer();
 </script>
 
 <template>
   <Fps />
-  <nav class="ml-11 mt-4">
-    <ul class="flex gap-2 pointer-events-auto">
-      <li>
-        <RouterLink :to="{ name: 'Home' }">Back to Home</RouterLink>
-      </li>
-      <li>
-        <button @click="() => console.log(serverSession)">
-          Debug server session
-        </button>
-      </li>
-      <li>
-        <button @click="() => console.log(clientSession)">
-          Debug client session
-        </button>
-      </li>
-      <li>
-        <button @click="battleStore.dispatch({ type: 'endTurn', payload: {} })">
-          End turn
-        </button>
-      </li>
-    </ul>
-  </nav>
-  <div>{{ battleStore.state.phase }}</div>
+  <div class="layout">
+    <nav class="ml-11 mt-4">
+      <ul class="flex gap-2 pointer-events-auto">
+        <li>
+          <RouterLink :to="{ name: 'Home' }">Back to Home</RouterLink>
+        </li>
+        <li>
+          <button @click="() => console.log(serverSession)">
+            Debug server session
+          </button>
+        </li>
+        <li>
+          <button @click="() => console.log(clientSession)">
+            Debug client session
+          </button>
+        </li>
+        <li>
+          <button
+            @click="battleStore.dispatch({ type: 'endTurn', payload: {} })"
+          >
+            End turn
+          </button>
+        </li>
+      </ul>
+    </nav>
+
+    <section class="turn-order">
+      <UnitIcon
+        v-for="unit in battleStore.state.turnOrderUnits"
+        :key="unit.id"
+        :unit="unit"
+        class="pointer-events-auto"
+        :class="{
+          highlighted: ui.highlightedUnit?.equals(unit),
+          ally: unit.getUnit().player.isAlly(userPlayer.getPlayer()),
+          enemy: unit.getUnit().player.isEnemy(userPlayer.getPlayer())
+        }"
+        @mouseenter="ui.highlightUnit(unit)"
+        @mouseleave="ui.unhighlight()"
+      />
+    </section>
+  </div>
 </template>
 
-<style scoped lang="postcss"></style>
+<style scoped lang="postcss">
+.layout {
+  display: grid;
+  height: 100%;
+  grid-template-rows: auto 1fr auto;
+}
+
+.turn-order {
+  grid-row: 3;
+  display: flex;
+  gap: var(--size-1);
+  align-items: flex-end;
+  margin: var(--size-3);
+
+  & > :not(:first-of-type) {
+    --unit-icon-size: calc(96px * 0.75);
+  }
+
+  .ally {
+    --unit-icon-bg: linear-gradient(135deg, #004ea6, #00bcff);
+  }
+
+  .enemy {
+    --unit-icon-bg: linear-gradient(135deg, #56002d, #a2005b);
+  }
+
+  .highlighted {
+    outline: solid 1px white;
+    box-shadow: 0 0 8px 2px hsl(0 0 100% / 0.4);
+    filter: brightness(125%) contrast(110%);
+  }
+}
+</style>

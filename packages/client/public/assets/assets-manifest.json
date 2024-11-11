@@ -15,6 +15,25 @@
       ]
     },
     {
+      "name": "icons",
+      "assets": [
+        {
+          "alias": [
+            "icon-wizard"
+          ],
+          "src": [
+            "/assets/icons/wizard.png"
+          ],
+          "foo": "bar",
+          "data": {
+            "tags": {
+              "m": true
+            }
+          }
+        }
+      ]
+    },
+    {
       "name": "tiles",
       "assets": [
         {
@@ -172,6 +191,20 @@
           ],
           "src": [
             "/assets/ui/tile-highlights.png"
+          ],
+          "foo": "bar",
+          "data": {
+            "tags": {
+              "m": true
+            }
+          }
+        },
+        {
+          "alias": [
+            "unit-icon-frame.png"
+          ],
+          "src": [
+            "/assets/ui/unit-icon-frame.png"
           ],
           "foo": "bar",
           "data": {

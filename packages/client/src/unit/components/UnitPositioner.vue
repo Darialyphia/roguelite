@@ -58,7 +58,7 @@ useBattleEvent('unit.before_attack', e => {
     })
       .to(unit.position, {
         ...recoilPoint,
-        duration: 0.1,
+        duration: 0.15,
         onComplete: resolve
       })
       .to(unit.position, {

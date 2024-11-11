@@ -14,7 +14,7 @@ const app = useApplication();
 
 const camera = useIsoCamera();
 const WORLD_PADDING = {
-  x: config.TILE_SIZE.x * 2,
+  x: window.innerWidth / 2,
   y: (config.TILE_SIZE.y + config.TILE_SIZE.z) * 3
 };
 const worldSize = computed(() => ({
@@ -63,9 +63,9 @@ useEventListener('resize', () => {
   }, 50);
 });
 
-const containerOffset = computed(() => {
-  return {
-    x: (height / 2) * config.TILE_SIZE.x,
+watchEffect(() => {
+  camera.offset.value = {
+    x: (height / 2) * config.TILE_SIZE.x + WORLD_PADDING.x / 2,
     y: WORLD_PADDING.y / 2
   };
 });
@@ -88,7 +88,7 @@ const containerOffset = computed(() => {
     :disable-on-context-menu="true"
     :sortable-children="true"
   >
-    <container :sortable-children="true" v-bind="containerOffset">
+    <container :sortable-children="true" v-bind="camera.offset.value">
       <slot />
     </container>
   </viewport>

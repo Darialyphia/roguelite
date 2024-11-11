@@ -13,16 +13,12 @@ const spritesheet = useSpritesheet(() => unit.spriteId);
 
 const ui = useBattleUiStore();
 
-const isHovered = computed(() =>
-  ui.hoveredCell?.position.equals(unit.position)
-);
-
 const selectedFilter = new OutlineFilter(1, 0xffffff);
 
 const filters = computed(() => {
   const result: Filter[] = [];
 
-  if (isHovered.value) {
+  if (ui.highlightedUnit?.equals(unit)) {
     result.push(selectedFilter);
   }
   return result;

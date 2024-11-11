@@ -5,6 +5,7 @@ import { type Nullable, type Point3D, type Values } from '@game/shared';
 import { StateMachine, t } from 'typescript-fsm';
 import type { Game } from '@game/engine';
 import type { InputDispatcher } from '@game/engine/src/input/input-system';
+import { type UnitViewModel, makeUnitVModel } from '@/unit/unit.model';
 
 export const UI_MODES = {
   BASIC: 'basic',
@@ -51,9 +52,21 @@ export class UiModeManager {
 export const useInternalBattleUiStore = defineStore(
   'internal-battle-ui',
   () => {
+    const store = useBattleStore();
     const hoveredCell = shallowRef<Nullable<Cell>>(null);
+    const highlightedUnit = ref<Nullable<UnitViewModel>>(null);
 
-    return { hoveredCell };
+    watch(hoveredCell, cell => {
+      if (!store.session) return;
+      if (cell?.unit) {
+        highlightedUnit.value = makeUnitVModel(
+          store.session.game as Game, // vue issue when unwrappign Refs containign  a class instance
+          cell.unit
+        );
+      }
+    });
+
+    return { hoveredCell, highlightedUnit };
   }
 );
 
@@ -69,6 +82,15 @@ export const useBattleUiStore = defineStore('battle-ui', () => {
     },
     unHover() {
       uiStore.hoveredCell = null;
+      uiStore.highlightedUnit = null;
+    },
+
+    highlightedUnit: computed(() => uiStore.highlightedUnit),
+    highlightUnit(unit: UnitViewModel) {
+      uiStore.highlightedUnit = unit;
+    },
+    unhighlight() {
+      uiStore.highlightedUnit = null;
     }
   };
 });

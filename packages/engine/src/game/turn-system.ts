@@ -19,7 +19,7 @@ export type TurnEventMap = {
 export class TurnSystem extends System<never> {
   private _turnCount = 0;
 
-  private queue: Unit[] = [];
+  queue: Unit[] = [];
 
   private emitter = new TypedEventEmitter<TurnEventMap>();
 

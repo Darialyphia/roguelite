@@ -12,6 +12,7 @@
     height: 100dvh;
     overflow: hidden;
     cursor: url('/assets/ui/cursor.png'), auto;
+    image-rendering: pixelated;
   }
 
   :is(button, a, input, select, textarea):hover {
