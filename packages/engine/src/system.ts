@@ -1,13 +1,14 @@
 import type { Game } from './game/game';
 
 export abstract class System<T> {
-  protected name!: string;
-  protected color!: string;
+  protected log: (...args: any[]) => void;
 
-  constructor(protected game: Game) {}
-
-  log(...args: any[]) {
-    this.game.log(`%c[${this.name}]`, `color: ${this.color}`, ...args);
+  constructor(
+    protected game: Game,
+    name: string,
+    color: string
+  ) {
+    this.log = this.game.makeLogger(name, color);
   }
 
   abstract initialize(options: T): void;

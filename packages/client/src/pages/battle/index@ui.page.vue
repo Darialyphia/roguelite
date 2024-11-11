@@ -111,6 +111,11 @@ start();
           Debug client session
         </button>
       </li>
+      <li>
+        <button @click="battleStore.dispatch({ type: 'endTurn', payload: {} })">
+          End turn
+        </button>
+      </li>
     </ul>
   </nav>
   <div>{{ battleStore.state.phase }}</div>

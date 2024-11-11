@@ -1,7 +1,7 @@
 import { Vec3, type Point3D, type Values } from '@game/shared';
 import { createEntityId, Entity } from '../entity';
 import { Card, type CardOptions } from '../card/card.entity';
-import type { Game } from '../game/game';
+import { GAME_EVENTS, type Game } from '../game/game';
 import { SolidBodyPathfindingStrategy } from '../pathfinding/strategies/solid-pathfinding.strategy';
 import type { UnitBlueprint } from './unit-blueprint';
 import { Interceptable } from '../utils/interceptable';
@@ -49,12 +49,12 @@ export type UnitEvent = Values<typeof UNIT_EVENTS>;
 export type UnitEventMap = {
   [UNIT_EVENTS.START_TURN]: [];
   [UNIT_EVENTS.END_TURN]: [];
-  [UNIT_EVENTS.BEFORE_MOVE]: [{ position: Vec3; destination: Vec3 }];
-  [UNIT_EVENTS.AFTER_MOVE]: [{ position: Vec3; previousPosition: Vec3 }];
+  [UNIT_EVENTS.BEFORE_MOVE]: [{ position: Vec3; destination: Vec3; cost: number }];
+  [UNIT_EVENTS.AFTER_MOVE]: [{ position: Vec3; previousPosition: Vec3; cost: number }];
   [UNIT_EVENTS.BEFORE_DRAW]: [];
   [UNIT_EVENTS.AFTER_DRAW]: [{ cards: Card[] }];
-  [UNIT_EVENTS.BEFORE_ATTACK]: [{ target: Point3D }];
-  [UNIT_EVENTS.AFTER_ATTACK]: [{ target: Point3D }];
+  [UNIT_EVENTS.BEFORE_ATTACK]: [{ target: Point3D; cost: number }];
+  [UNIT_EVENTS.AFTER_ATTACK]: [{ target: Point3D; cost: number }];
   [UNIT_EVENTS.BEFORE_DEAL_DAMAGE]: [{ targets: Unit[]; damage: Damage }];
   [UNIT_EVENTS.AFTER_DEAL_DAMAGE]: [{ targets: Unit[]; damage: Damage }];
   [UNIT_EVENTS.BEFORE_RECEIVE_DAMAGE]: [{ from: Unit; damage: Damage }];
@@ -114,6 +114,7 @@ export class Unit extends Entity {
       pathfindingStrategy: new SolidBodyPathfindingStrategy(this.game)
     });
 
+    this.game.on(GAME_EVENTS.TURN_START, this.onGameTurnStart.bind(this));
     this.forwardEvents();
   }
 
@@ -199,10 +200,16 @@ export class Unit extends Entity {
 
   private forwardEvents() {
     this.movement.on(MOVE_EVENTS.BEFORE_MOVE, e => {
-      this.emitter.emit(UNIT_EVENTS.BEFORE_MOVE, e);
+      this.emitter.emit(UNIT_EVENTS.BEFORE_MOVE, {
+        ...e,
+        cost: this.game.config.AP_COST_PER_MOVEMENT
+      });
     });
     this.movement.on(MOVE_EVENTS.AFTER_MOVE, e => {
-      this.emitter.emit(UNIT_EVENTS.AFTER_MOVE, e);
+      this.emitter.emit(UNIT_EVENTS.AFTER_MOVE, {
+        ...e,
+        cost: this.game.config.AP_COST_PER_MOVEMENT
+      });
     });
     this.cardManager.deck.on(DECK_EVENTS.BEFORE_DRAW, () => {
       this.emitter.emit(DECK_EVENTS.BEFORE_DRAW);
@@ -223,7 +230,10 @@ export class Unit extends Entity {
   canMoveTo(point: Point3D) {
     if (!this.canMove) return false;
 
-    return this.movement.canMoveTo(point, this.ap.current);
+    return this.movement.canMoveTo(
+      point,
+      this.ap.current / this.game.config.AP_COST_PER_MOVEMENT
+    );
   }
 
   move(to: Point3D) {
@@ -231,6 +241,10 @@ export class Unit extends Entity {
     if (!path) return;
 
     this.ap.remove(path.distance * this.game.config.AP_COST_PER_MOVEMENT);
+  }
+
+  getPathTo(to: Point3D) {
+    return this.movement.getPathTo(to);
   }
 
   dealDamage(targets: Unit[], damage: Damage) {
@@ -260,13 +274,19 @@ export class Unit extends Entity {
   }
 
   attack(target: Point3D) {
-    this.emitter.emit(UNIT_EVENTS.BEFORE_ATTACK, { target });
+    this.emitter.emit(UNIT_EVENTS.BEFORE_ATTACK, {
+      target,
+      cost: this.game.config.AP_COST_PER_ATTACK
+    });
     this.ap.remove(this.game.config.AP_COST_PER_ATTACK);
     this.combat.attackAt(target, {
       aoeShape: new PointAOEShape(this.game),
       allowFriendlyFire: false
     });
-    this.emitter.emit(UNIT_EVENTS.AFTER_ATTACK, { target });
+    this.emitter.emit(UNIT_EVENTS.AFTER_ATTACK, {
+      target,
+      cost: this.game.config.AP_COST_PER_ATTACK
+    });
   }
 
   canPlayCardAt(index: number) {
@@ -284,9 +304,12 @@ export class Unit extends Entity {
     this.emitter.emit(UNIT_EVENTS.AFTER_PLAY_CARD, { card });
   }
 
-  startTurn() {
+  onGameTurnStart() {
     this.ap.refill();
     this.cardManager.draw(this.game.config.CARDS_DRAWN_PER_TURN);
+  }
+
+  startTurn() {
     this.emitter.emit(UNIT_EVENTS.START_TURN);
   }
 

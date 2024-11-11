@@ -17,10 +17,6 @@ export const GAME_PHASE_TRANSITIONS = {
 export type GamePhaseTransition = Values<typeof GAME_PHASE_TRANSITIONS>;
 
 export class GamePhaseSystem extends System<never> {
-  name = 'GAME PHASE SYSTEM';
-
-  color = 'crimson';
-
   private stateMachine = new StateMachine<GamePhase, GamePhaseTransition>(
     GAME_PHASES.DEPLOYMENT,
     [

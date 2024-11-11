@@ -8,10 +8,6 @@ export type UnitSystemOptions = {
 };
 
 export class UnitSystem extends System<UnitSystemOptions> {
-  name = 'UNIT SYSTEM';
-
-  color = 'tomato';
-
   private unitMap = new Map<EntityId, Unit>();
 
   private nextUnitId = 0;

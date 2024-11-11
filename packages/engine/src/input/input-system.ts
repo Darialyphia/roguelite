@@ -7,15 +7,16 @@ import { PlayCardInput } from './inputs/play-card.input';
 import { System } from '../system';
 import { DeployInput } from './inputs/deploy.input';
 import type { z } from 'zod';
+import { EndTurnInput } from './inputs/endTurn.input';
 
 type GenericInputMap = Record<string, Constructor<Input<DefaultSchema>>>;
 
 type ValidatedInputMap<T extends GenericInputMap> = {
-  [Name in keyof T]: T[Name] extends Constructor<Input<DefaultSchema>>
+  [Name in keyof T & string]: T[Name] extends Constructor<Input<DefaultSchema>>
     ? Name extends InstanceType<T[Name]>['name']
       ? T[Name]
-      : never
-    : never;
+      : `input map mismatch: expected ${Name}, but Input name is ${InstanceType<T[Name]>['name']}`
+    : `input type mismatch: expected Input constructor`;
 };
 
 const validateinputMap = <T extends GenericInputMap>(data: ValidatedInputMap<T>) => data;
@@ -24,7 +25,8 @@ const inputMap = validateinputMap({
   move: MoveInput,
   attack: AttackInput,
   playCard: PlayCardInput,
-  deploy: DeployInput
+  deploy: DeployInput,
+  endTurn: EndTurnInput
 });
 
 type InputMap = typeof inputMap;
@@ -42,10 +44,6 @@ export type InputDispatcher = (input: SerializedInput) => void;
 export type InputSystemOptions = { game: Game };
 
 export class InputSystem extends System<SerializedInput[]> {
-  name = 'INPUT SYSTEM';
-
-  color = 'blue';
-
   private history: Input<any>[] = [];
 
   private isRunning = false;
@@ -53,10 +51,6 @@ export class InputSystem extends System<SerializedInput[]> {
   private queue: AnyFunction[] = [];
 
   private _currentAction?: Nullable<InstanceType<Values<typeof inputMap>>> = null;
-
-  constructor(game: Game) {
-    super(game);
-  }
 
   get currentAction() {
     return this._currentAction;
@@ -99,6 +93,7 @@ export class InputSystem extends System<SerializedInput[]> {
   }
 
   dispatch(input: SerializedInput) {
+    this.log(input);
     if (!this.isActionType(input.type)) return;
     return this.schedule(() => this.handleInput(input));
   }

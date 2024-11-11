@@ -4,8 +4,8 @@ import { GAME_PHASES } from '../../game/game-phase.system';
 
 const schema = defaultInputSchema;
 
-export class PlayCardInput extends Input<typeof schema> {
-  readonly name = 'playCard';
+export class EndTurnInput extends Input<typeof schema> {
+  readonly name = 'endTurn';
 
   readonly allowedPhases = [GAME_PHASES.BATTLE];
 

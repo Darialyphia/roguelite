@@ -77,6 +77,10 @@ export class MovementComponent {
     return path.distance <= maxDistance;
   }
 
+  getPathTo(point: Point3D) {
+    return this.pathfinding.getPathTo(this, point);
+  }
+
   move(to: Point3D) {
     const path = this.pathfinding.getPathTo(this, to);
     if (!path) return;

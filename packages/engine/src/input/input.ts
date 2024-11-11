@@ -54,7 +54,6 @@ export abstract class Input<TSchema extends DefaultSchema>
       `Cannot execute input ${this.name} during game phase ${this.game.phase}`
     );
 
-    this.game.log(this.name, this.payload);
     this.impl();
   }
 

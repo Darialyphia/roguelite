@@ -81,19 +81,19 @@ export type GameOptions = {
 export class Game {
   private readonly emitter = new TypedEventEmitter<GameEventMap>();
 
-  readonly gamePhaseSystem = new GamePhaseSystem(this);
+  readonly gamePhaseSystem = new GamePhaseSystem(this, 'GAME_PHASE', 'orange');
 
-  readonly boardSystem = new BoardSystem(this);
+  readonly boardSystem = new BoardSystem(this, 'BOARD', 'green');
 
-  readonly unitSystem = new UnitSystem(this);
+  readonly unitSystem = new UnitSystem(this, 'UNIT', 'purple');
 
-  readonly playerSystem = new PlayerSystem(this);
+  readonly playerSystem = new PlayerSystem(this, 'PLAYER', 'teal');
 
   readonly rngSystem: RngSystem;
 
-  readonly turnSystem = new TurnSystem(this);
+  readonly turnSystem = new TurnSystem(this, 'TURN', 'magenta');
 
-  readonly inputSystem = new InputSystem(this);
+  readonly inputSystem = new InputSystem(this, 'INPUT', 'blue');
 
   readonly config = config;
 
@@ -101,19 +101,22 @@ export class Game {
 
   constructor(private options: GameOptions) {
     this.id = options.id;
-    this.rngSystem = new options.rngCtor(this);
+    this.rngSystem = new options.rngCtor(this, 'RNG', 'lime');
     this.setupStarEvents();
   }
 
-  log(...args: any[]) {
-    console.group(this.id);
-    console.log(...args);
-    console.groupEnd();
+  makeLogger(topic: string, color: string) {
+    return (...messages: any[]) => {
+      console.groupCollapsed(`%c[${this.id}][${topic}]`, `color: ${color}`);
+      console.log(...messages);
+      console.groupEnd();
+    };
   }
   // the event emitter doesnt provide the event name if you enable wildcards, so let's implement it ourselves
   private setupStarEvents() {
     Object.values(GAME_EVENTS).forEach(eventName => {
       this.on(eventName as any, async event => {
+        this.makeLogger(eventName, 'black')(event);
         // this.logger(`%c[EVENT:${this.id}:${eventName}]`, 'color: #008b8b');
 
         await this.emit('*', { eventName, event } as any);

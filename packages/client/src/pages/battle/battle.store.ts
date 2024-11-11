@@ -11,7 +11,7 @@ import type {
   InputDispatcher,
   SerializedInput
 } from '@game/engine/src/input/input-system';
-import { assert, isDefined } from '@game/shared';
+import { assert, isDefined, type Override } from '@game/shared';
 import { defineStore } from 'pinia';
 
 const useInternalBattleStore = defineStore('battle-internal', () => {
@@ -82,8 +82,20 @@ export const useBattleStore = defineStore('battle', () => {
 
       isReady.value = true;
     },
-    dispatch(input: SerializedInput) {
-      dispatch(input);
+    dispatch(
+      input: Override<
+        SerializedInput,
+        { payload: Omit<SerializedInput['payload'], 'playerId'> }
+      >
+    ) {
+      // @ts-expect-error distributive union issue blablabla
+      dispatch({
+        type: input.type,
+        payload: {
+          ...input.payload,
+          playerId: internal.session!.game.turnSystem.activeUnit.player.id
+        }
+      });
     },
     isPlayingFx: readonly(isPlayingFx),
     isReady: computed(() => isDefined(internal.session)),
@@ -127,4 +139,10 @@ export const useBattleEvent = <T extends keyof GameEventMap>(
   const unsub = store.on(name, handler);
 
   onUnmounted(unsub);
+};
+
+export const useActiveUnit = () => {
+  const store = useBattleStore();
+
+  return computed(() => store.state.activeUnit);
 };

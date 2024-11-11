@@ -19,7 +19,6 @@ const move = () => {
     battle.dispatch({
       type: 'move',
       payload: {
-        playerId: battle.state.activeUnit.getUnit().player.id,
         x: cell.x,
         y: cell.y,
         z: cell.z

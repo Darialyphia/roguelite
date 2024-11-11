@@ -2,6 +2,7 @@ import type { Values } from '@game/shared';
 import { TypedEventEmitter } from '../utils/typed-emitter';
 import { System } from '../system';
 import type { Unit } from '../unit/unit.entity';
+import { GAME_EVENTS } from './game';
 
 export const TURN_EVENTS = {
   TURN_START: 'turn_start',
@@ -16,10 +17,6 @@ export type TurnEventMap = {
 };
 
 export class TurnSystem extends System<never> {
-  name = 'TURN SYSTEM';
-
-  color = 'magenta';
-
   private _turnCount = 0;
 
   private queue: Unit[] = [];
@@ -27,7 +24,14 @@ export class TurnSystem extends System<never> {
   private emitter = new TypedEventEmitter<TurnEventMap>();
 
   initialize() {
-    this.game.on('turn.turn_end', this.onUnitTurnEnd.bind(this));
+    console.groupEnd();
+    this.game.on('unit.end_turn', this.onUnitTurnEnd.bind(this));
+    this.on(TURN_EVENTS.TURN_START, e => {
+      this.game.emit(GAME_EVENTS.TURN_START, e);
+    });
+    this.on(TURN_EVENTS.TURN_END, e => {
+      this.game.emit(GAME_EVENTS.TURN_END, e);
+    });
   }
 
   get turnCount() {
@@ -57,6 +61,8 @@ export class TurnSystem extends System<never> {
       .sort((a, b) => b.speed - a.speed)
       .forEach(unit => this.queue.push(unit));
     this.emitter.emit(TURN_EVENTS.TURN_START, { turnCount: this.turnCount });
+
+    this.activeUnit.startTurn();
   }
 
   endGameTurn() {
@@ -68,6 +74,7 @@ export class TurnSystem extends System<never> {
 
     if (!this.activeUnit) {
       this.endGameTurn();
+      this.startGameTurn();
       return;
     }
 

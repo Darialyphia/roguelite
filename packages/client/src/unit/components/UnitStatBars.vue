@@ -1,43 +1,60 @@
 <script setup lang="ts">
 import { clamp } from '@game/shared';
-import type { UnitViewModel } from '@/pages/battle/battle.store';
 import { useSpritesheet } from '@/shared/composables/useSpritesheet';
 import { createSpritesheetFrameObject } from '@/utils/sprite';
+import type { UnitViewModel } from '../unit.model';
+import { useBattleEvent } from '@/pages/battle/battle.store';
 
 const { unit } = defineProps<{ unit: UnitViewModel }>();
 
-const sheet = useSpritesheet<'', 'base'>('unit-stat-bars');
+const tweenedAp = ref(unit.currentAp);
+const tweenedHp = ref(unit.currentHp);
+const roundedTweenedAp = computed(() => Math.floor(tweenedAp.value));
 
+const sheet = useSpritesheet<'', 'base'>('unit-stat-bars');
 const textures = computed(() => {
   if (!sheet.value) return null;
 
   return createSpritesheetFrameObject(
-    `${unit.currentAp}`,
+    `${roundedTweenedAp.value}`,
     sheet.value.sheets.base.base
   );
 });
 
-const tweenedAp = ref(unit.currentAp);
-const tweenedHp = ref(unit.currentHp);
+const animateAp = (newVal: number) => {
+  gsap.killTweensOf(tweenedAp);
+  gsap.to(tweenedAp, {
+    value: newVal,
+    duration: 0.4
+  });
+};
+const animateHp = (newVal: number) => {
+  gsap.killTweensOf(tweenedHp);
+  gsap.to(tweenedHp, {
+    value: newVal,
+    duration: 0.4
+  });
+};
 
-watch(
-  () => unit.currentAp,
-  newAp => {
-    gsap.to(tweenedAp, {
-      value: newAp,
-      duration: 0.5
-    });
-  }
-);
-watch(
-  () => unit.currentHp,
-  newHp => {
-    gsap.to(tweenedHp, {
-      value: newHp,
-      duration: 0.5
-    });
-  }
-);
+watch(() => unit.currentAp, animateAp);
+watch(() => unit.currentHp, animateHp);
+
+useBattleEvent('unit.after_move', e => {
+  return new Promise(resolve => {
+    if (!e.unit.equals(unit.getUnit())) return resolve();
+    // eslint-disable-next-line vue/no-mutating-props
+    unit.currentAp -= e.cost;
+    resolve();
+  });
+});
+useBattleEvent('unit.after_attack', e => {
+  return new Promise(resolve => {
+    if (!e.unit.equals(unit.getUnit())) return resolve();
+    // eslint-disable-next-line vue/no-mutating-props
+    unit.currentAp -= e.cost;
+    resolve();
+  });
+});
 </script>
 
 <template>
