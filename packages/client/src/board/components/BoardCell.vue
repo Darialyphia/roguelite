@@ -6,6 +6,8 @@ import UiAnimatedSprite from '@/ui/components/UiAnimatedSprite.vue';
 import BoardCellHighlights from './BoardCellHighlights.vue';
 import type { CellViewModel } from '../models/cell.model';
 import { useBattleStore } from '@/pages/battle/battle.store';
+import { useIsoCamera } from '@/iso/composables/useIsoCamera';
+import { until } from '@vueuse/core';
 
 const { cell } = defineProps<{ cell: CellViewModel }>();
 
@@ -13,6 +15,8 @@ const ui = useBattleUiStore();
 const battle = useBattleStore();
 
 const isHovered = computed(() => ui.hoveredCell?.equals(cell.getCell()));
+
+const camera = useIsoCamera();
 </script>
 
 <template>
@@ -22,6 +26,8 @@ const isHovered = computed(() => ui.hoveredCell?.equals(cell.getCell()));
     @pointerleave="ui.unHover()"
     @pointerup="
       () => {
+        if (camera.isDragging.value) return;
+
         const _unit = battle.state.activeUnit?.getUnit();
         if (!_unit) return;
 

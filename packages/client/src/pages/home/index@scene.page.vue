@@ -1,19 +1,11 @@
 <script lang="ts" setup>
-import { onTick, useScreen } from 'vue3-pixi';
+import { useScreen } from 'vue3-pixi';
 
 definePage({
   name: 'Home',
   path: '/'
 });
-const size = ref(0);
 const screen = useScreen();
-
-let count = 0;
-
-onTick(delta => {
-  count += delta * 0.025;
-  size.value = 60 + Math.sin(count) * 30;
-});
 </script>
 
 <template>
@@ -24,7 +16,7 @@ onTick(delta => {
       graphics => {
         graphics.clear();
         graphics.beginFill(0xde3249);
-        graphics.drawCircle(0, 0, size);
+        graphics.drawCircle(0, 0, 200);
         graphics.endFill();
       }
     "

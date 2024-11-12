@@ -45,27 +45,27 @@ useBattleEvent('unit.before_attack', e => {
       y: start.y + (end.y - start.y) * 0.55,
       z: start.z + (end.z - start.z) * 0.55
     };
-    console.log(start, impactPoint);
-    const recoilPoint = {
-      x: start.x - (end.x - start.x) * 0.1,
-      y: start.y - (end.y - start.y) * 0.1,
-      z: start.z - (end.z - start.z) * 0.1
+    const anticipation = {
+      x: start.x - (end.x - start.x) * 0.2,
+      y: start.y - (end.y - start.y) * 0.2,
+      z: start.z - (end.z - start.z) * 0.2
     };
     const tl = gsap.timeline();
 
     tl.to(unit.position, {
-      ...impactPoint,
-      duration: 0.05,
-      onComplete: resolve
+      ...anticipation,
+      duration: 0.15
     })
       .to(unit.position, {
-        ...recoilPoint,
-        duration: 0.15
+        ...impactPoint,
+        duration: 0.05,
+        ease: Power1.easeIn,
+        onComplete: resolve
       })
+
       .to(unit.position, {
         ...start,
-        duration: 0.1,
-        ease: Power1.easeOut
+        duration: 0.1
       });
     tl.play();
   });

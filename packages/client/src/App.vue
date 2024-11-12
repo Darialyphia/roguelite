@@ -8,7 +8,12 @@ const { loaded } = useAssets();
 
 <template>
   <div v-if="!loaded">Loading...</div>
-  <Application :resize-to="viewport" v-else>
+  <Application
+    v-else
+    :resize-to="viewport"
+    :width="viewport.innerWidth"
+    :height="viewport.innerHeight"
+  >
     <RouterView name="scene" />
     <External>
       <div class="ui">

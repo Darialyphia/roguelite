@@ -6,11 +6,13 @@ import { GAME_PHASES } from '@game/engine/src/game/game-phase.system';
 import type { CellViewModel } from '../models/cell.model';
 import { useBattleUiStore } from '@/pages/battle/battle-ui.store';
 import { isDefined } from '@game/shared';
+import { useIsoCamera } from '@/iso/composables/useIsoCamera';
 
 const { cell } = defineProps<{ cell: CellViewModel }>();
 
 const battleStore = useBattleStore();
 const activeUnit = useActiveUnit();
+const camera = useIsoCamera();
 const ui = useBattleUiStore();
 
 const canMove = computed(() => {
@@ -25,6 +27,7 @@ const canAttack = computed(() => {
 });
 
 const isOnPath = computed(() => {
+  if (camera.isDragging.value) return false;
   if (!activeUnit.value) return false;
   if (!ui.hoveredCell) return false;
   if (!activeUnit.value.getUnit().canMoveTo(ui.hoveredCell)) return false;

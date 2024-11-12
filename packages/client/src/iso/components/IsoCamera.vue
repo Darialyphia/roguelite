@@ -77,7 +77,7 @@ watchEffect(() => {
       (el: any) => {
         if (!el) return;
 
-        camera.viewport.value = el;
+        camera.provideViewport(el);
       }
     "
     :screen-width="app.view.width"
