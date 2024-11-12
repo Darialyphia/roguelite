@@ -67,6 +67,11 @@ const tag = computed(() => {
     :enter="{ alpha: 1 }"
     :leave="{ alpha: 0 }"
   >
-    <UiAnimatedSprite v-if="tag" assetId="tile-highlights" :tag="tag" />
+    <UiAnimatedSprite
+      v-if="tag"
+      assetId="tile-highlights"
+      :tag="tag"
+      :anchor="0.5"
+    />
   </PTransition>
 </template>

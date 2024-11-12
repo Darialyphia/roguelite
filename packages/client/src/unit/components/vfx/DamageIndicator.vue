@@ -62,7 +62,7 @@ const onEnter = (container: Container) => {
         strokeThickness: 8
       }"
       :scale="0.25"
-      :anchor="{ x: 0.5, y: 0.5 }"
+      :anchor="0.5"
     >
       {{ damageAmount }}
     </pixi-text>

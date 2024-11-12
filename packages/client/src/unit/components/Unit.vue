@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { config } from '@/utils/config';
 import UnitOrientation from './UnitOrientation.vue';
 import UnitSprite from './UnitSprite.vue';
 import UnitShadow from './UnitShadow.vue';
@@ -18,7 +17,7 @@ const { unit } = defineProps<{ unit: UnitViewModel }>();
       <UnitSprite :unit="unit" />
     </UnitOrientation>
     <UnitVFX :unit="unit" />
-    <UnitStatBars :unit="unit" :x="config.TILE_SIZE.x / 3" />
+    <UnitStatBars :unit="unit" />
   </UnitPositioner>
 </template>
 

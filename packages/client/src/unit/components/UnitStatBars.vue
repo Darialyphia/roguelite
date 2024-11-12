@@ -58,9 +58,15 @@ useBattleEvent('unit.after_attack', e => {
 </script>
 
 <template>
-  <container event-mode="none">
-    <animated-sprite v-if="textures" :textures="textures" playing loop />
-
+  <animated-sprite
+    v-if="textures"
+    :textures="textures"
+    :anchor="0.5"
+    event-mode="none"
+    playing
+    loop
+    :y="-45"
+  >
     <pixi-graphics
       v-if="sheet"
       @render="
@@ -99,5 +105,5 @@ useBattleEvent('unit.after_attack', e => {
         }
       "
     />
-  </container>
+  </animated-sprite>
 </template>

@@ -20,6 +20,7 @@ const textures = computed(() => {
     :x="0"
     :event-mode="'none'"
     playing
+    :anchor="0.5"
     :textures="textures"
   />
 </template>

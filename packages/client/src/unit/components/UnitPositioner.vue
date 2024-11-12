@@ -10,8 +10,10 @@ const { unit, bounce } = defineProps<{
 }>();
 
 const offset = {
-  x: -(config.UNIT_SPRITE_SIZE.width - config.TILE_SPRITE_SIZE.width) / 2,
-  y: -(config.UNIT_SPRITE_SIZE.height - config.TILE_SPRITE_SIZE.height)
+  // x: -(config.UNIT_SPRITE_SIZE.width - config.TILE_SPRITE_SIZE.width) / 2,
+  // y: -(config.UNIT_SPRITE_SIZE.height - config.TILE_SPRITE_SIZE.height)
+  x: 0,
+  y: -24
 };
 
 useBattleEvent('unit.after_move', e => {

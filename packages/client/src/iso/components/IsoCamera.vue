@@ -15,20 +15,18 @@ const app = useApplication();
 const camera = useIsoCamera();
 const WORLD_PADDING = {
   x: window.innerWidth / 2,
-  y: (config.TILE_SIZE.y + config.TILE_SIZE.z) * 3
+  y: window.innerHeight / 2
 };
-const worldSize = computed(() => ({
-  width: ((width + height) / 2) * config.TILE_SIZE.x + WORLD_PADDING.x,
-  // prettier-ignore
-  height: ((width + height) / 2) * config.TILE_SIZE.y + config.TILE_SIZE.z + WORLD_PADDING.y
+
+const boardSize = computed(() => ({
+  width: ((width + height) / 2) * config.TILE_SIZE.x,
+  height: ((width + height) / 2) * (config.TILE_SIZE.y + config.TILE_SIZE.z)
 }));
 
-watchEffect(() => {
-  camera.offset.value = {
-    x: worldSize.value.width / 2,
-    y: worldSize.value.height / 2
-  };
-});
+const worldSize = computed(() => ({
+  width: boardSize.value.width + WORLD_PADDING.x,
+  height: boardSize.value.height + WORLD_PADDING.y
+}));
 
 until(camera.viewport)
   .toBeTruthy()
@@ -51,10 +49,7 @@ until(camera.viewport)
         allowButtons: true
       })
       .pinch({ noDrag: true })
-      .moveCenter(
-        worldSize.value.width / 2,
-        worldSize.value.height / 2 - WORLD_PADDING.y / 2
-      );
+      .moveCenter(worldSize.value.width / 2, worldSize.value.height / 2);
   });
 
 useEventListener('resize', () => {
@@ -66,7 +61,7 @@ useEventListener('resize', () => {
 watchEffect(() => {
   camera.offset.value = {
     x: (height / 2) * config.TILE_SIZE.x + WORLD_PADDING.x / 2,
-    y: WORLD_PADDING.y / 2
+    y: boardSize.value.height / 4 + WORLD_PADDING.y / 2
   };
 });
 </script>

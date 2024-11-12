@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { useBattleEvent, useBattleStore } from '@/pages/battle/battle.store';
-import { config } from '@/utils/config';
 import { useIsoCamera } from '@/iso/composables/useIsoCamera';
 import type { UnitViewModel } from '../unit.model';
 import { useShaker } from '@/shared/composables/vfx/useShaker';
@@ -25,10 +24,6 @@ const scaleX = computed(() => {
   return value;
 });
 
-const offsetX = computed(() =>
-  scaleX.value === -1 ? config.TILE_SIZE.x * 1.5 : 0
-);
-
 const container = ref<Container>();
 const shaker = useShaker(container);
 
@@ -48,9 +43,7 @@ useBattleEvent('unit.before_receive_damage', async e => {
 </script>
 
 <template>
-  <container ref="container">
-    <container :scale-x="scaleX" :x="offsetX">
-      <slot />
-    </container>
+  <container :scale-x="scaleX" ref="container">
+    <slot />
   </container>
 </template>

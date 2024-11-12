@@ -53,10 +53,10 @@ const scaleY = computed(() => {
 });
 const y = computed(() => {
   if (camera.angle.value === 180 || camera.angle.value === 270) {
-    return config.UNIT_SPRITE_SIZE.height * 0.7 - config.TILE_SIZE.z - 4;
+    return 0;
   }
 
-  return config.UNIT_SPRITE_SIZE.height - config.TILE_SIZE.z - 4;
+  return config.UNIT_SPRITE_SIZE.height * 0.3;
 });
 
 useBattleEvent('unit.after_move', e => {
@@ -79,12 +79,12 @@ useBattleEvent('unit.after_move', e => {
     v-if="textures.length"
     :textures="textures"
     event-mode="none"
-    :filters="filters"
     :anchor="{ x: 0, y: 1 }"
-    :alpha="0.5"
-    :tint="0"
     :y="y"
-    :x="7"
+    :x="-56"
+    :tint="0"
+    :filters="filters"
+    :alpha="0.5"
     :scale-y="scaleY"
     :skew-x="skewX"
   />

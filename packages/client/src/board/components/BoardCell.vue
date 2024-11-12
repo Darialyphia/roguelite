@@ -7,7 +7,6 @@ import BoardCellHighlights from './BoardCellHighlights.vue';
 import type { CellViewModel } from '../models/cell.model';
 import { useBattleStore } from '@/pages/battle/battle.store';
 import { useIsoCamera } from '@/iso/composables/useIsoCamera';
-import { until } from '@vueuse/core';
 
 const { cell } = defineProps<{ cell: CellViewModel }>();
 

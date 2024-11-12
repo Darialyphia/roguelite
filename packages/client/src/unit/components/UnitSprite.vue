@@ -36,6 +36,7 @@ const textures = useMultiLayerTexture({
   <animated-sprite
     v-if="textures.length"
     :textures="textures"
+    :anchor="0.5"
     event-mode="none"
     :filters="filters"
   />
