@@ -13,6 +13,7 @@
     "format": "prettier --write src/"
   },
   "dependencies": {
+    "@formkit/auto-animate": "^0.8.2",
     "@game/engine": "^1.0.0",
     "@game/shared": "^1.0.0",
     "@pixi/filter-outline": "^5.2.0",
@@ -33,9 +34,9 @@
     "zod": "^3.23.8"
   },
   "devDependencies": {
+    "@assetpack/core": "^0.8.0",
     "@game/assetpack": "^1.0.0",
     "@game/unocss-config": "^0.0.0",
-    "@assetpack/core": "^0.8.0",
     "@tsconfig/node20": "^20.1.4",
     "@types/fs-extra": "^11.0.4",
     "@types/node": "^20.16.11",

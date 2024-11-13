@@ -27,6 +27,14 @@ export class Card extends Entity {
     return this.blueprint.cost;
   }
 
+  get name() {
+    return this.blueprint.name;
+  }
+
+  get description() {
+    return this.blueprint.description;
+  }
+
   play(targets: Point3D[]) {
     this.blueprint.onPlay(this.game, this, targets);
   }

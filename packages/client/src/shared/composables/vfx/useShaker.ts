@@ -38,13 +38,12 @@ export const useShaker = (container: Ref<Container | undefined>) => {
       state.shakeCount = 0;
       state.isShaking = false;
     } else {
-      container.value.position.set(
-        Math.floor(Math.random() * state.shakeAmount) - state.shakeAmount / 2,
-        state.isBidirectional
-          ? Math.floor(Math.random() * state.shakeAmount) -
-              state.shakeAmount / 2
-          : undefined
-      );
+      container.value.position.x =
+        Math.floor(Math.random() * state.shakeAmount) - state.shakeAmount / 2;
+      if (state.isBidirectional) {
+        container.value.position.y =
+          Math.floor(Math.random() * state.shakeAmount) - state.shakeAmount / 2;
+      }
       setTimeout(() => trigger(), state.shakeDelay);
     }
   };

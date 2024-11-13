@@ -1,10 +1,11 @@
 <script setup lang="ts">
 import Fps from '@/shared/components/Fps.vue';
-import { useBattleStore, useUserPlayer } from './battle.store';
+import { useBattleStore } from './battle.store';
 import { ClientSession, ServerSession } from '@game/engine';
 import type { GameOptions } from '@game/engine/src/game/game';
-import UnitIcon from '@/unit/components/UnitIcon.vue';
-import { useBattleUiStore } from './battle-ui.store';
+import TurnOrder from '@/unit/components/TurnOrder.vue';
+import Hand from '@/card/Hand.vue';
+import UnitStats from '@/unit/components/UnitStats.vue';
 
 definePage({
   name: 'Battle'
@@ -94,9 +95,6 @@ const start = async () => {
   });
 };
 start();
-
-const ui = useBattleUiStore();
-const userPlayer = useUserPlayer();
 </script>
 
 <template>
@@ -126,22 +124,13 @@ const userPlayer = useUserPlayer();
         </li>
       </ul>
     </nav>
-
-    <section class="turn-order">
-      <UnitIcon
-        v-for="unit in battleStore.state.turnOrderUnits"
-        :key="unit.id"
-        :unit="unit"
-        class="pointer-events-auto"
-        :class="{
-          highlighted: ui.highlightedUnit?.equals(unit),
-          ally: unit.getUnit().player.isAlly(userPlayer.getPlayer()),
-          enemy: unit.getUnit().player.isEnemy(userPlayer.getPlayer())
-        }"
-        @mouseenter="ui.highlightUnit(unit)"
-        @mouseleave="ui.unhighlight()"
-      />
-    </section>
+    <UnitStats
+      :unit="battleStore.state.activeUnit"
+      class="active-unit-stats pointer-events-auto"
+      v-if="battleStore.state.activeUnit"
+    />
+    <TurnOrder class="turn-order pointer-events-auto" />
+    <Hand class="hand pointer-events-auto" />
   </div>
 </template>
 
@@ -150,31 +139,27 @@ const userPlayer = useUserPlayer();
   display: grid;
   height: 100%;
   grid-template-rows: auto 1fr auto;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
 }
 
+nav {
+  grid-column: 1 / -1;
+}
+
+.active-unit-stats {
+  grid-row: 2;
+  justify-self: start;
+  align-self: start;
+  margin-block-start: var(--size-5);
+  margin-inline-start: var(--size-5);
+}
 .turn-order {
   grid-row: 3;
-  display: flex;
-  gap: var(--size-1);
-  align-items: flex-end;
-  margin: var(--size-3);
+  align-self: end;
+}
 
-  & > :not(:first-of-type) {
-    --unit-icon-size: calc(96px * 0.75);
-  }
-
-  .ally {
-    --unit-icon-bg: linear-gradient(135deg, #004ea6, #00bcff);
-  }
-
-  .enemy {
-    --unit-icon-bg: linear-gradient(135deg, #56002d, #a2005b);
-  }
-
-  .highlighted {
-    outline: solid 1px white;
-    box-shadow: 0 0 8px 2px hsl(0 0 100% / 0.4);
-    filter: brightness(125%) contrast(110%);
-  }
+.hand {
+  grid-row: 3;
+  max-width: 100%;
 }
 </style>

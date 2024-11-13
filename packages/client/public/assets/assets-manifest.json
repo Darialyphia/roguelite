@@ -101,6 +101,34 @@
       "assets": [
         {
           "alias": [
+            "ap.png"
+          ],
+          "src": [
+            "/assets/ui/ap.png"
+          ],
+          "foo": "bar",
+          "data": {
+            "tags": {
+              "m": true
+            }
+          }
+        },
+        {
+          "alias": [
+            "card.png"
+          ],
+          "src": [
+            "/assets/ui/card.png"
+          ],
+          "foo": "bar",
+          "data": {
+            "tags": {
+              "m": true
+            }
+          }
+        },
+        {
+          "alias": [
             "cursor-disabled.png"
           ],
           "src": [
@@ -162,6 +190,90 @@
           ],
           "src": [
             "/assets/ui/hovered-cell.png"
+          ],
+          "foo": "bar",
+          "data": {
+            "tags": {
+              "m": true
+            }
+          }
+        },
+        {
+          "alias": [
+            "hp.png"
+          ],
+          "src": [
+            "/assets/ui/hp.png"
+          ],
+          "foo": "bar",
+          "data": {
+            "tags": {
+              "m": true
+            }
+          }
+        },
+        {
+          "alias": [
+            "m-atk.png"
+          ],
+          "src": [
+            "/assets/ui/m-atk.png"
+          ],
+          "foo": "bar",
+          "data": {
+            "tags": {
+              "m": true
+            }
+          }
+        },
+        {
+          "alias": [
+            "m-def.png"
+          ],
+          "src": [
+            "/assets/ui/m-def.png"
+          ],
+          "foo": "bar",
+          "data": {
+            "tags": {
+              "m": true
+            }
+          }
+        },
+        {
+          "alias": [
+            "p-atk.png"
+          ],
+          "src": [
+            "/assets/ui/p-atk.png"
+          ],
+          "foo": "bar",
+          "data": {
+            "tags": {
+              "m": true
+            }
+          }
+        },
+        {
+          "alias": [
+            "p-def.png"
+          ],
+          "src": [
+            "/assets/ui/p-def.png"
+          ],
+          "foo": "bar",
+          "data": {
+            "tags": {
+              "m": true
+            }
+          }
+        },
+        {
+          "alias": [
+            "speed.png"
+          ],
+          "src": [
+            "/assets/ui/speed.png"
           ],
           "foo": "bar",
           "data": {

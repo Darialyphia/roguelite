@@ -30,6 +30,6 @@ export class Position extends Vec3 {
   }
 
   isAxisAligned(point: Point3D) {
-    return this.x === point.x || this.y === this.y;
+    return this.x === point.x || this.y === point.y;
   }
 }

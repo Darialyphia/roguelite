@@ -15,6 +15,6 @@ export type CardBlueprint = {
   description: string;
   cost: number;
   onPlay(game: Game, card: Card, targets: Point3D[]): void;
-  targets: CardBlueprintTarget[];
+  targets: [CardBlueprintTarget, ...CardBlueprintTarget[]];
   minTargets: number;
 };

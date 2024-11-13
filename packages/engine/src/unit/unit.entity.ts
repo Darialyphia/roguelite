@@ -151,6 +151,14 @@ export class Unit extends Entity {
     return this.emitter.off.bind(this.emitter);
   }
 
+  get name() {
+    return this.blueprint.name;
+  }
+
+  get hand() {
+    return [...this.cardManager.hand];
+  }
+
   get speed(): number {
     return this.interceptors.speed.getValue(this.blueprint.speed, {});
   }

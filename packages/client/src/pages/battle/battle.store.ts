@@ -1,4 +1,7 @@
-import { type CellViewModel, makeCellVModel } from '@/board/models/cell.model';
+import {
+  type CellViewModel,
+  makeCellViewModel
+} from '@/board/models/cell.model';
 import {
   type PlayerViewModel,
   makePlayerViewModel
@@ -40,7 +43,7 @@ export const useBattleStore = defineStore('battle', () => {
 
     phase.value = game.phase;
     cells.value = game.boardSystem.cells.map(cell =>
-      makeCellVModel(game, cell)
+      makeCellViewModel(game, cell)
     );
     players.value = game.playerSystem.players.map(player =>
       makePlayerViewModel(game, player)

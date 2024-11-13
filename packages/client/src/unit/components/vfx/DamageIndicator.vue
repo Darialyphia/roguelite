@@ -28,19 +28,23 @@ useBattleEvent('unit.before_receive_damage', e => {
   return Promise.resolve();
 });
 
+const offset = {
+  x: 0,
+  y: -50
+};
 const onEnter = (container: Container) => {
   const target = {
     x: 30 + randomInt(30),
-    y: -1 * (20 + randomInt(30))
+    y: -1 * (30 + randomInt(30))
   };
   gsap.to(container.position, {
     motionPath: [
-      { x: 0, y: 0 },
-      { x: (target.x / 2) * direction, y: target.y },
-      { x: target.x * direction, y: target.y / 2 }
+      { x: offset.x + 0, y: offset.y + 0 },
+      { x: offset.x + (target.x / 2) * direction, y: offset.y + target.y },
+      { x: offset.x + target.x * direction, y: offset.y + target.y * 0.25 }
     ],
     duration: 0.7,
-    ease: Power2.easeOut
+    ease: Power3.easeOut
   });
 };
 </script>
@@ -48,11 +52,12 @@ const onEnter = (container: Container) => {
 <template>
   <PTransition
     @enter="onEnter"
-    :duration="{ enter: 700, leave: 200 }"
+    :duration="{ enter: 0, leave: 200 }"
     :leave="{ alpha: 0 }"
   >
     <pixi-text
       v-if="damageAmount"
+      v-bind="offset"
       :style="{
         fontFamily: 'Silkscreen',
         align: 'center',

@@ -68,6 +68,8 @@ useBattleEvent('unit.after_attack', e => {
     :y="-45"
   >
     <pixi-graphics
+      :x="-sheet.meta.size.w / 2"
+      :y="-12"
       v-if="sheet"
       @render="
         g => {
