@@ -13,6 +13,8 @@
     overflow: hidden;
     cursor: url('/assets/ui/cursor.png'), auto;
     image-rendering: pixelated;
+    font-smooth: never;
+    -webkit-font-smoothing: none;
   }
 
   :is(button, a, input, select, textarea):hover {

@@ -1,4 +1,5 @@
 import { keyBy } from 'lodash-es';
-import { testCard } from './test.card';
+import { magicMissile } from './magic-missile';
+import { arcaneIntellect } from './arcane-intellect';
 
-export const CARDS_DICTIONARY = keyBy([testCard], 'id');
+export const CARDS_DICTIONARY = keyBy([magicMissile, arcaneIntellect], 'id');

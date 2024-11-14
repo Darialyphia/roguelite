@@ -213,6 +213,10 @@ export class Unit extends Entity {
     return this.cardManager.getCardAt.bind(this.cardManager);
   }
 
+  get draw() {
+    return this.cardManager.draw.bind(this.cardManager);
+  }
+
   private forwardEvents() {
     this.movement.on(MOVE_EVENTS.BEFORE_MOVE, e => {
       this.emitter.emit(UNIT_EVENTS.BEFORE_MOVE, {
@@ -315,7 +319,7 @@ export class Unit extends Entity {
     if (!card) return;
     this.emitter.emit(UNIT_EVENTS.BEFORE_PLAY_CARD, { card });
     this.ap.remove(card.cost);
-    card.play(targets);
+    this.cardManager.play(card, targets);
     this.emitter.emit(UNIT_EVENTS.AFTER_PLAY_CARD, { card });
   }
 

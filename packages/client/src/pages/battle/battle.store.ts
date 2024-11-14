@@ -65,6 +65,7 @@ export const useBattleStore = defineStore('battle', () => {
   const isReady = ref(false);
 
   let dispatch: InputDispatcher = () => {};
+
   return {
     init(session: ClientSession, dispatcher: InputDispatcher) {
       internal.session = session;

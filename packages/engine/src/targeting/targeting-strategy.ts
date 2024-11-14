@@ -1,6 +1,7 @@
 import type { Point3D, Values } from '@game/shared';
 
 export type TargetingStrategy = {
+  isWithinRange(point: Point3D): boolean;
   canTargetAt(point: Point3D): boolean;
 };
 

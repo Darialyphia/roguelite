@@ -11,7 +11,7 @@ const { unit } = defineProps<{ unit: UnitViewModel }>();
 
 const spritesheet = useSpritesheet(() => unit.spriteId);
 
-const blurFilter = new BlurFilter(0.5, 0.5);
+const blurFilter = new BlurFilter(0.3, 0.5);
 
 const filters = computed(() => {
   const result: Filter[] = [blurFilter];
@@ -64,7 +64,7 @@ useBattleEvent('unit.after_move', e => {
     if (!e.unit.equals(unit.getUnit())) return resolve();
 
     gsap.to(blurFilter, {
-      blur: 2.5,
+      blur: 2,
       duration: config.MOVEMENT_SPEED_PER_TILE / 2,
       repeat: 1,
       yoyo: true,

@@ -4,7 +4,7 @@ export const config = {
   INITIAL_HAND_SIZE: 4,
   MAX_HAND_SIZE: 7,
   CARDS_DRAWN_PER_TURN: 1,
-  BASE_ATTACK_DAAMGE: 1
+  BASE_ATTACK_DAAMGE: 0
 } as const;
 
 export type Config = typeof config;

@@ -29,6 +29,7 @@ const userPlayer = useUserPlayer();
 
 <style scoped lang="postcss">
 .turn-order {
+  user-select: none;
   display: flex;
   gap: var(--size-1);
   align-items: flex-end;

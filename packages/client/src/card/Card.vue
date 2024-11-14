@@ -1,11 +1,53 @@
 <script setup lang="ts">
 import type { CardViewModel } from './card.model';
+import { config } from '@/utils/config';
 
 const { card } = defineProps<{ card: CardViewModel }>();
+
+const nameFontSize = computed(() => {
+  const minFontSize = 8;
+  const maxFontSize = 14;
+  const minLineLength = 0;
+  const maxLineLength = 40;
+  const minViewportWidth = 1;
+  const maxViewportWidth = 1900;
+  const textLength = card.name.length;
+
+  const relativeMaxFontSize =
+    textLength < minLineLength
+      ? maxFontSize
+      : textLength > maxLineLength
+        ? minFontSize
+        : maxFontSize -
+          ((maxFontSize - minFontSize) * (textLength - minLineLength)) /
+            (maxLineLength - minLineLength);
+
+  const relativeMaxViewportWidth =
+    maxViewportWidth * (minFontSize / relativeMaxFontSize);
+
+  const relativeMinViewportWidth =
+    minViewportWidth * (maxFontSize / relativeMaxFontSize);
+
+  const viewportWidth =
+    (100 * (maxFontSize - minFontSize)) /
+    (relativeMaxViewportWidth - relativeMinViewportWidth);
+
+  const relativeFontSize =
+    (relativeMinViewportWidth * maxFontSize -
+      relativeMaxViewportWidth * minFontSize) /
+    (relativeMinViewportWidth - relativeMaxViewportWidth);
+
+  return `clamp(${minFontSize / 16}rem, ${viewportWidth}vw + ${
+    relativeFontSize / 16
+  }rem, ${relativeMaxFontSize / 16}rem)`;
+});
 </script>
 
 <template>
-  <div class="card">
+  <div
+    class="card"
+    :style="{ '--icon-bg': `url(/assets/icons/${card.iconId}.png)` }"
+  >
     <div class="cost">{{ card.cost }}</div>
 
     <div class="name">
@@ -18,9 +60,13 @@ const { card } = defineProps<{ card: CardViewModel }>();
 
 <style scoped lang="postcss">
 .card {
-  width: 230px;
-  height: 310px;
-  background: url('/assets/ui/card.png');
+  width: calc(1px * v-bind('config.CARD_WIDTH'));
+  height: calc(1px * v-bind('config.CARD_HEIGHT'));
+  background: url('/assets/ui/card.png'), var(--icon-bg);
+  background-repeat: no-repeat, no-repeat;
+  background-position:
+    top left,
+    53px 34px;
   color: #311929;
   font-family: 'Silkscreen';
   user-select: none;
@@ -39,19 +85,20 @@ const { card } = defineProps<{ card: CardViewModel }>();
 .name {
   font-weight: bold;
   position: absolute;
-  top: 160px;
+  top: 162px;
   width: 100%;
   text-align: center;
-  font-size: 14px;
+  font-size: v-bind(nameFontSize);
 }
 
 p {
-  font-family: 'VT323';
+  font-family: 'Press Start 2P', system-ui;
   position: absolute;
   top: 200px;
   text-align: center;
-  margin-inline: 38px;
-  font-size: 15px;
-  line-height: 1.25;
+  margin-inline: 47px;
+  font-size: 8px;
+  line-height: 1.5;
+  text-wrap: balance;
 }
 </style>

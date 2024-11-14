@@ -1,15 +1,24 @@
 import { Cell } from '@game/engine/src/board/cell';
 import { defineStore } from 'pinia';
 import { useBattleStore } from './battle.store';
-import { type Nullable, type Point3D, type Values } from '@game/shared';
+import {
+  assert,
+  isDefined,
+  type Nullable,
+  type Point3D,
+  type Values
+} from '@game/shared';
 import { StateMachine, t } from 'typescript-fsm';
 import type { Game } from '@game/engine';
 import type { InputDispatcher } from '@game/engine/src/input/input-system';
 import { type UnitViewModel, makeUnitVModel } from '@/unit/unit.model';
+import { whenever } from '@vueuse/core';
+import { makeCardViewModel, type CardViewModel } from '@/card/card.model';
+import { match } from 'ts-pattern';
 
 export const UI_MODES = {
   BASIC: 'basic',
-  SELECT_CARD_TARGETS: 'select_card_targets'
+  PLAY_CARD: 'play_card'
 } as const;
 export type UiMode = Values<typeof UI_MODES>;
 
@@ -19,33 +28,78 @@ export const UI_MODE_TRANSITIONS = {
 } as const;
 export type UiModeTransition = Values<typeof UI_MODE_TRANSITIONS>;
 
+type UiModeContext =
+  | {
+      mode: (typeof UI_MODES)['BASIC'];
+    }
+  | {
+      mode: (typeof UI_MODES)['PLAY_CARD'];
+      card: CardViewModel;
+      cardIndex: number;
+      targets: Point3D[];
+    };
+
 export class UiModeManager {
   private game: Game;
-  private dispatcher: InputDispatcher;
+  private selectedCardIndex: Nullable<number> = null;
+  private cardTargets: Nullable<Point3D[]> = null;
 
-  constructor(game: Game, dispatcher: InputDispatcher) {
+  constructor(game: Game) {
     this.game = game;
-    this.dispatcher = dispatcher;
   }
 
   private stateMachine = new StateMachine<UiMode, UiModeTransition>(
     UI_MODES.BASIC,
     [
-      t(
-        UI_MODES.BASIC,
-        UI_MODE_TRANSITIONS.SELECT_CARD,
-        UI_MODES.SELECT_CARD_TARGETS
-      ),
-      t(
-        UI_MODES.SELECT_CARD_TARGETS,
-        UI_MODE_TRANSITIONS.UNSELECT_CARD,
-        UI_MODES.BASIC
-      )
+      t(UI_MODES.BASIC, UI_MODE_TRANSITIONS.SELECT_CARD, UI_MODES.PLAY_CARD),
+      t(UI_MODES.PLAY_CARD, UI_MODE_TRANSITIONS.UNSELECT_CARD, UI_MODES.BASIC)
     ]
   );
 
+  getSelectedCard() {
+    if (!isDefined(this.selectedCardIndex)) return null;
+
+    return this.game.turnSystem.activeUnit.getCardAt(this.selectedCardIndex);
+  }
+
   get mode() {
     return this.stateMachine.getState();
+  }
+
+  async selectCardAtIndex(index: number) {
+    await this.stateMachine.dispatch(UI_MODE_TRANSITIONS.SELECT_CARD);
+
+    this.selectedCardIndex = index;
+    this.cardTargets = [];
+  }
+
+  async unselectCard() {
+    await this.stateMachine.dispatch(UI_MODE_TRANSITIONS.UNSELECT_CARD);
+
+    this.selectedCardIndex = null;
+    this.cardTargets = [];
+  }
+
+  addTarget(target: Point3D) {
+    assert(
+      this.mode === UI_MODES.PLAY_CARD,
+      `cannot add card taget in mode ${this.mode}`
+    );
+    this.cardTargets!.push(target);
+  }
+
+  getContext(): UiModeContext {
+    return match(this.mode)
+      .with(UI_MODES.BASIC, mode => ({
+        mode
+      }))
+      .with(UI_MODES.PLAY_CARD, mode => ({
+        mode,
+        card: makeCardViewModel(this.game, this.getSelectedCard()!),
+        cardIndex: this.selectedCardIndex!,
+        targets: this.cardTargets!
+      }))
+      .exhaustive();
   }
 }
 
@@ -74,6 +128,17 @@ export const useBattleUiStore = defineStore('battle-ui', () => {
   const uiStore = useInternalBattleUiStore();
   const battleStore = useBattleStore();
 
+  let modeManager: UiModeManager | null = null;
+  const modeContext = ref<UiModeContext>();
+
+  whenever(
+    () => battleStore.session?.game,
+    game => {
+      modeManager = new UiModeManager(game as Game);
+      modeContext.value = modeManager.getContext();
+    }
+  );
+
   return {
     hoveredCell: computed(() => uiStore.hoveredCell),
     hoverAt(point: Point3D) {
@@ -91,6 +156,58 @@ export const useBattleUiStore = defineStore('battle-ui', () => {
     },
     unhighlight() {
       uiStore.highlightedUnit = null;
-    }
+    },
+
+    mode: computed(() => modeContext.value?.mode),
+
+    async selectCardAtIndex(index: number) {
+      await modeManager?.selectCardAtIndex(index);
+      modeContext.value = modeManager?.getContext();
+    },
+    async unselectCard() {
+      await modeManager?.unselectCard();
+      modeContext.value = modeManager?.getContext();
+    },
+    addCardTarget(point: Point3D) {
+      modeManager?.addTarget(point);
+      modeContext.value = modeManager?.getContext();
+    },
+    canPlayCard() {
+      if (modeContext.value?.mode !== UI_MODES.PLAY_CARD) {
+        return false;
+      }
+      return modeContext.value.card.canPlayAt(modeContext.value.targets);
+    },
+    isTargetValid(point: Point3D) {
+      try {
+        if (modeContext.value?.mode !== UI_MODES.PLAY_CARD) {
+          return false;
+        }
+        return modeContext.value.card.areTargetsValid([
+          ...modeContext.value.targets,
+          point
+        ]);
+      } catch (err) {
+        return false;
+      }
+    },
+    selectedCard: computed(() => {
+      if (modeContext.value?.mode !== UI_MODES.PLAY_CARD) {
+        return null;
+      }
+      return modeContext.value.card;
+    }),
+    selectedCardIndex: computed(() => {
+      if (modeContext.value?.mode !== UI_MODES.PLAY_CARD) {
+        return null;
+      }
+      return modeContext.value.cardIndex;
+    }),
+    cardTargets: computed(() => {
+      if (modeContext.value?.mode !== UI_MODES.PLAY_CARD) {
+        return [];
+      }
+      return modeContext.value.targets;
+    })
   };
 });

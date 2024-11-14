@@ -5,12 +5,12 @@ export const testUnit: UnitBlueprint = {
   name: 'Wizard',
   spriteId: 'wizard',
   speed: 6,
-  pAtk: 10,
-  pDef: 5,
-  mAtk: 10,
-  mDef: 5,
+  pAtk: 30,
+  pDef: 12,
+  mAtk: 40,
+  mDef: 18,
   maxAp: 3,
-  maxHp: 100,
+  maxHp: 120,
   mDefPiercing: {
     flat: 0,
     percentage: 0

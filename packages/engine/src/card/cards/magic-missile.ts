@@ -7,12 +7,13 @@ import { TARGETING_TYPE } from '../../targeting/targeting-strategy';
 import type { CardBlueprint } from '../card-blueprint';
 import { getEnemyTargets } from '../card.utils';
 
-export const testCard: CardBlueprint = {
-  id: 'test-card',
+export const magicMissile: CardBlueprint = {
+  id: 'magic-missile',
+  iconId: 'magic-missile',
   name: 'Magic Missile',
   cost: 1,
-  description: 'Deal (5 + 50% MATK) magic damage to an enemy.',
-  minTargets: 0,
+  description: 'Deal (20+50% MATK) magic damage to an enemy.',
+  minTargets: 1,
   targets: [
     {
       getTargeting(game, card) {
@@ -27,7 +28,7 @@ export const testCard: CardBlueprint = {
     card.unit.dealDamage(
       getEnemyTargets(game, targets, card.unit),
       new Damage({
-        baseAmount: 10,
+        baseAmount: 20,
         source: card.unit,
         mitigation: new MagicalMitigationStrategy(),
         scalings: [new MagicalScalingStrategy(0.5)]

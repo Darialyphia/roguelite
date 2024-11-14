@@ -12,6 +12,7 @@ type CardBlueprintTarget = {
 export type CardBlueprint = {
   id: string;
   name: string;
+  iconId: string;
   description: string;
   cost: number;
   onPlay(game: Game, card: Card, targets: Point3D[]): void;

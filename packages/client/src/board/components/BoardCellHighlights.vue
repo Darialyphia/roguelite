@@ -4,7 +4,7 @@ import { useActiveUnit, useBattleStore } from '@/pages/battle/battle.store';
 import UiAnimatedSprite from '@/ui/components/UiAnimatedSprite.vue';
 import { GAME_PHASES } from '@game/engine/src/game/game-phase.system';
 import type { CellViewModel } from '../models/cell.model';
-import { useBattleUiStore } from '@/pages/battle/battle-ui.store';
+import { UI_MODES, useBattleUiStore } from '@/pages/battle/battle-ui.store';
 import { isDefined } from '@game/shared';
 import { useIsoCamera } from '@/iso/composables/useIsoCamera';
 
@@ -15,18 +15,34 @@ const activeUnit = useActiveUnit();
 const camera = useIsoCamera();
 const ui = useBattleUiStore();
 
+const isWithinCardRange = computed(() => {
+  if (!ui.selectedCard) return;
+
+  return ui.selectedCard.isWithinRange(cell, ui.cardTargets.length);
+});
+
+const canTarget = computed(() => {
+  if (!ui.selectedCard) return;
+
+  return ui.isTargetValid(cell);
+});
+
 const canMove = computed(() => {
-  return activeUnit.value?.getUnit().canMoveTo(cell);
+  return (
+    ui.mode === UI_MODES.BASIC && activeUnit.value?.getUnit().canMoveTo(cell)
+  );
 });
 
 const canAttack = computed(() => {
   return (
+    ui.mode === UI_MODES.BASIC &&
     isDefined(cell.getCell().unit) &&
     activeUnit.value?.getUnit().canAttackAt(cell)
   );
 });
 
 const isOnPath = computed(() => {
+  if (ui.mode !== UI_MODES.BASIC) return false;
   if (camera.isDragging.value) return false;
   if (!activeUnit.value) return false;
   if (!ui.hoveredCell) return false;
@@ -45,6 +61,12 @@ const tag = computed(() => {
     return null;
   }
 
+  if (canTarget.value) {
+    return 'targeting-valid';
+  }
+  if (isWithinCardRange.value) {
+    return 'targeting';
+  }
   if (canAttack.value) {
     return 'danger';
   }

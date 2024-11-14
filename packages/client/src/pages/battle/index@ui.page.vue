@@ -21,16 +21,21 @@ const options: Pick<GameOptions, 'mapId' | 'teams'> = {
           {
             blueprintId: 'test-unit',
             deck: [
-              { blueprintId: 'test-card' },
-              { blueprintId: 'test-card' },
-              { blueprintId: 'test-card' },
-              { blueprintId: 'test-card' },
-              { blueprintId: 'test-card' },
-              { blueprintId: 'test-card' },
-              { blueprintId: 'test-card' },
-              { blueprintId: 'test-card' },
-              { blueprintId: 'test-card' },
-              { blueprintId: 'test-card' }
+              { blueprintId: 'magic-missile' },
+              { blueprintId: 'magic-missile' },
+              { blueprintId: 'magic-missile' },
+              { blueprintId: 'magic-missile' },
+              { blueprintId: 'magic-missile' },
+              { blueprintId: 'magic-missile' },
+              { blueprintId: 'magic-missile' },
+              { blueprintId: 'magic-missile' },
+              { blueprintId: 'magic-missile' },
+              { blueprintId: 'magic-missile' },
+              { blueprintId: 'arcane-intellect' },
+              { blueprintId: 'arcane-intellect' },
+              { blueprintId: 'arcane-intellect' },
+              { blueprintId: 'arcane-intellect' },
+              { blueprintId: 'arcane-intellect' }
             ],
             spriteParts: {
               armor: 'tier3',
@@ -52,16 +57,21 @@ const options: Pick<GameOptions, 'mapId' | 'teams'> = {
           {
             blueprintId: 'test-unit',
             deck: [
-              { blueprintId: 'test-card' },
-              { blueprintId: 'test-card' },
-              { blueprintId: 'test-card' },
-              { blueprintId: 'test-card' },
-              { blueprintId: 'test-card' },
-              { blueprintId: 'test-card' },
-              { blueprintId: 'test-card' },
-              { blueprintId: 'test-card' },
-              { blueprintId: 'test-card' },
-              { blueprintId: 'test-card' }
+              { blueprintId: 'magic-missile' },
+              { blueprintId: 'magic-missile' },
+              { blueprintId: 'magic-missile' },
+              { blueprintId: 'magic-missile' },
+              { blueprintId: 'magic-missile' },
+              { blueprintId: 'magic-missile' },
+              { blueprintId: 'magic-missile' },
+              { blueprintId: 'magic-missile' },
+              { blueprintId: 'magic-missile' },
+              { blueprintId: 'magic-missile' },
+              { blueprintId: 'arcane-intellect' },
+              { blueprintId: 'arcane-intellect' },
+              { blueprintId: 'arcane-intellect' },
+              { blueprintId: 'arcane-intellect' },
+              { blueprintId: 'arcane-intellect' }
             ],
             spriteParts: {
               armor: 'tier4',
@@ -140,6 +150,7 @@ start();
   height: 100%;
   grid-template-rows: auto 1fr auto;
   grid-template-columns: repeat(2, minmax(0, 1fr));
+  user-select: none;
 }
 
 nav {
@@ -151,7 +162,7 @@ nav {
   justify-self: start;
   align-self: start;
   margin-block-start: var(--size-5);
-  margin-inline-start: var(--size-5);
+  margin-inline-start: 0;
 }
 .turn-order {
   grid-row: 3;

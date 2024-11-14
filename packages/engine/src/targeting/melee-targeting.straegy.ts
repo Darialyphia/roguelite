@@ -11,9 +11,15 @@ export class MeleeTargetingPatternStrategy implements TargetingStrategy {
     private type: TargetingType
   ) {}
 
-  canTargetAt(point: Point3D) {
+  isWithinRange(point: Point3D) {
     if (!this.unit.position.isAxisAligned(point)) return false;
     if (!this.unit.position.isNearby(point)) return false;
+
+    return true;
+  }
+
+  canTargetAt(point: Point3D) {
+    if (!this.isWithinRange(point)) return false;
 
     const unit = this.game.unitSystem.getUnitAt(point);
 

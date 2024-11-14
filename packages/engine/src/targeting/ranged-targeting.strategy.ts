@@ -2,7 +2,6 @@ import { type Point3D } from '@game/shared';
 import type { Game } from '../game/game';
 import type { Unit } from '../unit/unit.entity';
 import type { TargetingStrategy, TargetingType } from './targeting-strategy';
-import { Position } from '../utils/position';
 import { match } from 'ts-pattern';
 
 export class RangedTargetingStrategy implements TargetingStrategy {
@@ -13,10 +12,15 @@ export class RangedTargetingStrategy implements TargetingStrategy {
     public readonly range: number
   ) {}
 
+  isWithinRange(point: Point3D) {
+    if (this.unit.position.isNearby(point)) return false;
+    if (!this.unit.position.isWithinCells(point, this.range)) return false;
+
+    return true;
+  }
+
   canTargetAt(point: Point3D) {
-    const position = Position.fromPoint3D(point);
-    if (position.isNearby(point)) return false;
-    if (!position.isWithinCells(point, this.range)) return false;
+    if (!this.isWithinRange(point)) return false;
 
     const unit = this.game.unitSystem.getUnitAt(point);
 

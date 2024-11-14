@@ -27,6 +27,10 @@ export class Card extends Entity {
     return this.blueprint.cost;
   }
 
+  get iconId() {
+    return this.blueprint.iconId;
+  }
+
   get name() {
     return this.blueprint.name;
   }
@@ -36,23 +40,37 @@ export class Card extends Entity {
   }
 
   play(targets: Point3D[]) {
-    this.blueprint.onPlay(this.game, this, targets);
+    if (this.canPlayAt(targets)) {
+      this.blueprint.onPlay(this.game, this, targets);
+    }
   }
 
-  canPlayAt(targets: Point3D[]) {
+  isWithinRange(point: Point3D, index: number) {
+    if (index >= this.blueprint.targets.length) return false;
+
+    return this.blueprint.targets[index]
+      .getTargeting(this.game, this)
+      .isWithinRange(point);
+  }
+
+  areTargetsValid(targets: Point3D[]) {
     assert(
       targets.length <= this.blueprint.targets.length,
       'Cannot play card: too many targets.'
     );
+
+    return targets.every((target, index) => {
+      const targeting = this.blueprint.targets[index].getTargeting(this.game, this);
+      return targeting.canTargetAt(target);
+    });
+  }
+
+  canPlayAt(targets: Point3D[]) {
     assert(
       targets.length >= this.blueprint.minTargets,
       'Cannot play card: not enough targets.'
     );
 
-    return targets.every((target, index) => {
-      const targeting = this.blueprint.targets[index].getTargeting(this.game, this);
-
-      return targeting.canTargetAt(target);
-    });
+    return this.areTargetsValid(targets);
   }
 }

@@ -18,6 +18,7 @@ export type UnitViewModel = {
   mAtk: number;
   pDef: number;
   mDef: number;
+  speed: number;
   hand: CardViewModel[];
   getUnit(): Unit;
   isActive(): boolean;
@@ -39,6 +40,7 @@ export const makeUnitVModel = (game: Game, unit: Unit): UnitViewModel => {
     mAtk: unit.mAtk,
     pDef: unit.pDef,
     mDef: unit.mDef,
+    speed: unit.speed,
     hand: unit.hand.map(card => makeCardViewModel(game, card)),
     getUnit() {
       return unit;

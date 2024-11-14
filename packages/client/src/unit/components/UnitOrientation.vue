@@ -29,7 +29,7 @@ const shaker = useShaker(container);
 
 useBattleEvent('unit.before_receive_damage', async e => {
   if (!e.unit.equals(unit.getUnit())) return;
-  const duration = 250;
+  const duration = 200;
 
   shaker.trigger({
     isBidirectional: false,

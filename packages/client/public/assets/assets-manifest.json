@@ -19,6 +19,48 @@
       "assets": [
         {
           "alias": [
+            "icon-arcane-intellect"
+          ],
+          "src": [
+            "/assets/icons/arcane-intellect.png"
+          ],
+          "foo": "bar",
+          "data": {
+            "tags": {
+              "m": true
+            }
+          }
+        },
+        {
+          "alias": [
+            "icon-card-image-placeholder"
+          ],
+          "src": [
+            "/assets/icons/card-image-placeholder.png"
+          ],
+          "foo": "bar",
+          "data": {
+            "tags": {
+              "m": true
+            }
+          }
+        },
+        {
+          "alias": [
+            "icon-magic-missile"
+          ],
+          "src": [
+            "/assets/icons/magic-missile.png"
+          ],
+          "foo": "bar",
+          "data": {
+            "tags": {
+              "m": true
+            }
+          }
+        },
+        {
+          "alias": [
             "icon-wizard"
           ],
           "src": [

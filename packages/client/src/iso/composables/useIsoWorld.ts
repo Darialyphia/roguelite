@@ -1,6 +1,6 @@
-import type { Nullable, Point3D } from '@game/shared';
+import type { Nullable, Point, Point3D } from '@game/shared';
 import type { Ref, ComputedRef, MaybeRefOrGetter } from 'vue';
-import type { Angle } from './useIso';
+import { toIso, type Angle } from './useIso';
 import { useSafeInject } from '@/shared/composables/useSafeInject';
 
 export type IsoWorldContext = {
@@ -8,6 +8,7 @@ export type IsoWorldContext = {
   scale: ComputedRef<Point3D>;
   width: ComputedRef<number>;
   height: ComputedRef<number>;
+  toIso(point: Point3D): Point;
 };
 
 export const ISO_GRID_INJECTION_KEY = Symbol(
@@ -26,7 +27,13 @@ export const useIsoWorldProvider = (options: UseIsoWorldProviderOptions) => {
     angle,
     width: computed(() => toValue(options.width)),
     height: computed(() => toValue(options.height)),
-    scale: computed(() => toValue(options.tileSize) ?? { x: 1, y: 1, z: 1 })
+    scale: computed(() => toValue(options.tileSize) ?? { x: 1, y: 1, z: 1 }),
+    toIso(point) {
+      return toIso(point, ctx.angle.value, ctx.scale.value, {
+        width: ctx.width.value,
+        height: ctx.height.value
+      });
+    }
   };
 
   provide(ISO_GRID_INJECTION_KEY, ctx);

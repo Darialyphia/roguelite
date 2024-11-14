@@ -23,7 +23,7 @@ export class CardManagerComponent {
       this.game,
       options.deck.map(card => new Card(this.game, unit, card))
     );
-
+    this.deck.shuffle();
     this.draw(this.game.config.INITIAL_HAND_SIZE);
   }
 
