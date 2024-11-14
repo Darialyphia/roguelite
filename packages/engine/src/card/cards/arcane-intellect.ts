@@ -1,5 +1,5 @@
-import { AnywhereTargetingPatternStrategy } from '../../targeting/anywhere-targeting-strategy';
 import { PointAOEShape } from '../../targeting/aoe-shapes';
+import { SelfTargetingPatternStrategy } from '../../targeting/self-targeting-strategy';
 import type { CardBlueprint } from '../card-blueprint';
 
 export const arcaneIntellect: CardBlueprint = {
@@ -11,8 +11,8 @@ export const arcaneIntellect: CardBlueprint = {
   minTargets: 1,
   targets: [
     {
-      getTargeting() {
-        return new AnywhereTargetingPatternStrategy();
+      getTargeting(game, card) {
+        return new SelfTargetingPatternStrategy(card.unit);
       },
       getAoe(game) {
         return new PointAOEShape(game);
