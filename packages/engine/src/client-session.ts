@@ -20,14 +20,16 @@ export class ClientSession {
       mapId: options.mapId,
       teams: options.teams
     });
+  }
+
+  async initialize(rngValues: number[]) {
+    this.game.rngSystem.values = rngValues;
+    const result = await this.game.initialize();
     this.game.on('*', evt => {
       this.eventsSinceLastInput.push(evt);
     });
-  }
 
-  initialize(rngValues: number[]) {
-    this.game.rngSystem.values = rngValues;
-    return this.game.initialize();
+    return result;
   }
 
   async dispatch(input: SerializedInput, meta: ClientDispatchMeta) {

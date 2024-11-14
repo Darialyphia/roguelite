@@ -157,6 +157,20 @@
         },
         {
           "alias": [
+            "card-back.png"
+          ],
+          "src": [
+            "/assets/ui/card-back.png"
+          ],
+          "foo": "bar",
+          "data": {
+            "tags": {
+              "m": true
+            }
+          }
+        },
+        {
+          "alias": [
             "card.png"
           ],
           "src": [

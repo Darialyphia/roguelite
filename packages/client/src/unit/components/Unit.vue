@@ -36,6 +36,18 @@ useBattleEvent('unit.before_attack', e => {
   }
   return Promise.resolve();
 });
+useBattleEvent('unit.before_receive_damage', e => {
+  if (e.unit.equals(unit.getUnit())) {
+    centerCamera();
+  }
+  return Promise.resolve();
+});
+useBattleEvent('unit.before_play_card', e => {
+  if (e.unit.equals(unit.getUnit())) {
+    centerCamera();
+  }
+  return Promise.resolve();
+});
 </script>
 
 <template>

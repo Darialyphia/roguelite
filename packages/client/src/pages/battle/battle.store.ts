@@ -8,7 +8,7 @@ import {
 } from '@/player/player.model';
 import { type UnitViewModel, makeUnitVModel } from '@/unit/unit.model';
 import type { ClientSession } from '@game/engine';
-import type { GameEventMap } from '@game/engine/src/game/game';
+import type { Game, GameEventMap } from '@game/engine/src/game/game';
 import type { GamePhase } from '@game/engine/src/game/game-phase.system';
 import type {
   InputDispatcher,
@@ -38,6 +38,7 @@ export const useBattleStore = defineStore('battle', () => {
   const phase = ref<GamePhase>('deployment');
 
   const syncState = () => {
+    console.log('sync state');
     assert(isDefined(internal.session));
     const game = internal.session.game;
 
@@ -160,4 +161,16 @@ export const useUserPlayer = () => {
   const store = useBattleStore();
 
   return computed(() => store.state.players.find(p => p.id === PLAYER_ID)!);
+};
+
+export const useGame = () => {
+  const store = useBattleStore();
+
+  return computed(() => store.session!.game) as ComputedRef<Game>;
+};
+
+export const useGameClientState = () => {
+  const store = useBattleStore();
+
+  return computed(() => store.state);
 };

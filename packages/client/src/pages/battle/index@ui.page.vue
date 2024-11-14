@@ -6,6 +6,7 @@ import type { GameOptions } from '@game/engine/src/game/game';
 import TurnOrder from '@/unit/components/TurnOrder.vue';
 import Hand from '@/card/Hand.vue';
 import UnitStats from '@/unit/components/UnitStats.vue';
+import PlayedCard from '@/card/PlayedCard.vue';
 
 definePage({
   name: 'Battle'
@@ -141,6 +142,7 @@ start();
     />
     <TurnOrder class="turn-order pointer-events-auto" />
     <Hand class="hand pointer-events-auto" />
+    <PlayedCard />
   </div>
 </template>
 

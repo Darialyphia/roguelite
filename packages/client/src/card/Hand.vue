@@ -1,12 +1,20 @@
 <script setup lang="ts">
 import { Teleport } from 'vue';
-import { useActiveUnit } from '@/pages/battle/battle.store';
+import {
+  useActiveUnit,
+  useBattleEvent,
+  useBattleStore,
+  useGame,
+  useGameClientState
+} from '@/pages/battle/battle.store';
 import Card from './Card.vue';
-import type { Nullable } from '@game/shared';
+import { waitFor, type Nullable } from '@game/shared';
 import { useMouse } from '@vueuse/core';
 import { useBattleUiStore } from '@/pages/battle/battle-ui.store';
 import { config } from '@/utils/config';
 import { useApplication } from 'vue3-pixi';
+import { makeCardViewModel } from './card.model';
+import type { Game } from '@game/engine';
 
 const unit = useActiveUnit();
 const ui = useBattleUiStore();
@@ -62,6 +70,30 @@ const onMouseDown = (e: MouseEvent, index: number) => {
   };
   document.body.addEventListener('mouseup', stopDragging);
 };
+
+const activeUnit = useActiveUnit();
+const game = useGame();
+
+useBattleEvent('unit.before_play_card', async event => {
+  if (!activeUnit.value) return;
+  if (!activeUnit.value?.getUnit().equals(event.unit)) {
+    return;
+  }
+  activeUnit.value.hand = activeUnit.value.hand.filter(
+    card => !card.getCard().equals(event.card)
+  );
+});
+
+useBattleEvent('unit.after_draw', async event => {
+  if (!activeUnit.value) return;
+  if (!activeUnit.value?.getUnit().equals(event.unit)) {
+    return;
+  }
+  for (const card of event.cards) {
+    activeUnit.value.hand.push(makeCardViewModel(game.value, card));
+    await waitFor(500);
+  }
+});
 </script>
 
 <template>
@@ -72,13 +104,13 @@ const onMouseDown = (e: MouseEvent, index: number) => {
         :style="{
           '--x': `${x}px`,
           '--y': `${y}px`,
-          opacity: ui.hoveredCell ? 0.75 : 1
+          opacity: ui.hoveredCell ? 0.9 : 1
         }"
       />
     </Teleport>
     <li
       v-for="(card, index) in unit.hand"
-      :key="card.id"
+      :key="`${card.id}|${index}`"
       :class="!ui.selectedCard && 'hoverable'"
       @mousedown="onMouseDown($event, index)"
     >
@@ -114,7 +146,6 @@ const onMouseDown = (e: MouseEvent, index: number) => {
     &.hoverable:hover {
       transition:
         margin 0.3s var(--ease-out-2),
-        filter 0.2s var(--ease-out-2),
         z-index 0.15s var(--ease-in-4);
       filter: none;
       transform: scale(1.25);
@@ -134,11 +165,8 @@ const onMouseDown = (e: MouseEvent, index: number) => {
   top: 0;
   left: 0;
   transform-origin: center center;
-  transform: translateY(var(--y)) translateX(var(--x));
+  transform: translateY(calc(var(--y) + 3rem)) translateX(calc(var(--x) + 5rem));
 
-  /* opacity: var(--opacity); */
-
-  transition: opacity 0.5s;
   > * {
     position: absolute;
     left: calc(-0.5px * v-bind('config.CARD_WIDTH'));

@@ -71,7 +71,7 @@ watch(
 
 <style scoped lang="postcss">
 .unit-stats {
-  font-family: 'Silkscreen';
+  font-family: 'Press Start 2P';
   color: #ffdaad;
   user-select: none;
   background-color: #311929aa;
@@ -79,13 +79,14 @@ watch(
   border: solid 6px #ffdaad;
   border-right-color: #b59a79;
   border-bottom-color: #b59a79;
+  text-shadow: 0 4px 0px #4e3327;
 }
 
 header {
   display: grid;
   grid-template-columns: auto 1fr;
   gap: var(--size-4);
-  font-size: var(--font-size-5);
+  font-size: var(--font-size-4);
   line-height: 1;
   margin-bottom: var(--size-2);
 }
