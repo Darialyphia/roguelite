@@ -4,6 +4,7 @@ import { useSpritesheet } from '@/shared/composables/useSpritesheet';
 import { createSpritesheetFrameObject } from '@/utils/sprite';
 import type { UnitViewModel } from '../unit.model';
 import { useBattleEvent } from '@/pages/battle/battle.store';
+import type { AnimatedSprite } from 'pixi.js';
 
 const { unit } = defineProps<{ unit: UnitViewModel }>();
 
@@ -55,6 +56,18 @@ useBattleEvent('unit.after_attack', e => {
     resolve();
   });
 });
+
+const sprite = ref<AnimatedSprite>();
+useBattleEvent('unit.before_destroy', async e => {
+  if (!e.unit.equals(unit.getUnit())) return Promise.resolve();
+  await gsap.to(sprite.value!, {
+    pixi: {
+      alpha: 0,
+      ease: Power2.easeOut
+    },
+    duration: 0.8
+  });
+});
 </script>
 
 <template>
@@ -65,6 +78,7 @@ useBattleEvent('unit.after_attack', e => {
     event-mode="none"
     playing
     loop
+    ref="sprite"
     :y="-45"
   >
     <pixi-graphics

@@ -3,9 +3,7 @@ import { Teleport } from 'vue';
 import {
   useActiveUnit,
   useBattleEvent,
-  useBattleStore,
-  useGame,
-  useGameClientState
+  useGame
 } from '@/pages/battle/battle.store';
 import Card from './Card.vue';
 import { waitFor, type Nullable } from '@game/shared';
@@ -31,7 +29,7 @@ const computeMargin = () => {
   const totalWidth = unit.value.hand.length * config.CARD_WIDTH;
 
   const excess = totalWidth - allowedWidth;
-  return -excess / (unit.value.hand.length - 1); // last child has no margin
+  return Math.min(-excess / (unit.value.hand.length - 1), 0);
 };
 
 watch(
@@ -91,7 +89,7 @@ useBattleEvent('unit.after_draw', async event => {
   }
   for (const card of event.cards) {
     activeUnit.value.hand.push(makeCardViewModel(game.value, card));
-    await waitFor(500);
+    await waitFor(300);
   }
 });
 </script>
@@ -118,7 +116,9 @@ useBattleEvent('unit.after_draw', async event => {
         :is="draggedIndex === index ? Teleport : 'div'"
         to="#dragged-card"
       >
-        <Card :card="card" />
+        <Transition appear>
+          <Card :card="card" />
+        </Transition>
       </component>
     </li>
   </ul>
@@ -171,6 +171,16 @@ useBattleEvent('unit.after_draw', async event => {
     position: absolute;
     left: calc(-0.5px * v-bind('config.CARD_WIDTH'));
     top: calc(-0.25px * v-bind('config.CARD_HEIGHT'));
+  }
+}
+.card {
+  &:is(.v-enter-active) {
+    transition: all 0.3s;
+  }
+
+  &.v-enter-from {
+    opacity: 0.5;
+    transform: translateX(var(--size-7));
   }
 }
 </style>

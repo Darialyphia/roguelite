@@ -61,6 +61,20 @@
         },
         {
           "alias": [
+            "icon-stasis"
+          ],
+          "src": [
+            "/assets/icons/stasis.png"
+          ],
+          "foo": "bar",
+          "data": {
+            "tags": {
+              "m": true
+            }
+          }
+        },
+        {
+          "alias": [
             "icon-wizard"
           ],
           "src": [
@@ -217,6 +231,34 @@
           ],
           "src": [
             "/assets/ui/cursor.png"
+          ],
+          "foo": "bar",
+          "data": {
+            "tags": {
+              "m": true
+            }
+          }
+        },
+        {
+          "alias": [
+            "deck.png"
+          ],
+          "src": [
+            "/assets/ui/deck.png"
+          ],
+          "foo": "bar",
+          "data": {
+            "tags": {
+              "m": true
+            }
+          }
+        },
+        {
+          "alias": [
+            "hand.png"
+          ],
+          "src": [
+            "/assets/ui/hand.png"
           ],
           "foo": "bar",
           "data": {

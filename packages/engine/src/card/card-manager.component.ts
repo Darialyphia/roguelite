@@ -32,6 +32,10 @@ export class CardManagerComponent {
   }
 
   get remainingCardsInDeck() {
+    return this.deck.remaining;
+  }
+
+  get deckSize() {
     return this.deck.size;
   }
 

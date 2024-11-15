@@ -91,7 +91,7 @@ export class UnitSystem extends System<UnitSystemOptions> {
     return entity;
   }
 
-  removeEntity(entity: Entity) {
-    this.unitMap.delete(entity.id);
+  removeUnit(unit: Unit) {
+    this.unitMap.delete(unit.id);
   }
 }

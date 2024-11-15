@@ -21,14 +21,21 @@ export type DeckEventMap = {
 export class Deck extends Entity {
   private emitter = new TypedEventEmitter<DeckEventMap>();
 
+  private _size: number;
+
   constructor(
     private game: Game,
     public cards: Card[]
   ) {
     super(createEntityId(`deck_${nanoid(4)}`));
+    this._size = this.cards.length;
   }
 
   get size() {
+    return this._size;
+  }
+
+  get remaining() {
     return this.cards.length;
   }
 
@@ -60,10 +67,16 @@ export class Deck extends Entity {
 
   addToTop(card: Card) {
     this.cards.unshift(card);
+    if (this.size < this.remaining) {
+      this._size = this.remaining;
+    }
   }
 
   addToBottom(card: Card) {
     this.cards.push(card);
+    if (this.size < this.remaining) {
+      this._size = this.remaining;
+    }
   }
 
   peek(amount: number) {

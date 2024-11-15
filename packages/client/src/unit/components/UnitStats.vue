@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import type { UnitViewModel } from '../unit.model';
 import UnitIcon from './UnitIcon.vue';
+import { config as engineConfig } from '@game/engine/src/config';
 
 const { unit } = defineProps<{ unit: UnitViewModel }>();
 
@@ -65,6 +66,17 @@ watch(
           <dd>{{ unit.speed }}</dd>
         </div>
       </div>
+
+      <div class="grid grid-cols-5 gap-3">
+        <div class="stat left col-span-2">
+          <dt class="hand"><span class="sr-only">HAND</span></dt>
+          <dd>{{ unit.hand.length }} / {{ engineConfig.MAX_HAND_SIZE }}</dd>
+        </div>
+        <div class="stat left col-span-3">
+          <dt class="deck"><span class="sr-only">DECK</span></dt>
+          <dd>{{ unit.remainingCardsInDeck }} / {{ unit.deckSize }}</dd>
+        </div>
+      </div>
     </dl>
   </section>
 </template>
@@ -80,6 +92,7 @@ watch(
   border-right-color: #b59a79;
   border-bottom-color: #b59a79;
   text-shadow: 0 4px 0px #4e3327;
+  box-shadow: 3px 3px 0 black;
 }
 
 header {
@@ -102,6 +115,9 @@ header {
     font-size: var(--font-size-0);
   }
 
+  &.left {
+    display: flex;
+  }
   :not(:has(.bar)) {
     :nth-child(even) {
       justify-self: end;
@@ -122,8 +138,14 @@ header {
     content: '';
     position: absolute;
     height: 100%;
-    transition: width 0.5s var(--ease-out-3);
-    width: calc(1% * var(--percentage));
+    transition: clip-path 0.5s var(--ease-out-3);
+    width: 100%;
+    clip-path: polygon(
+      0% 0%,
+      calc(1% * var(--percentage)) 0,
+      calc(1% * var(--percentage) - 8px) 100%,
+      0% 100%
+    );
     background: linear-gradient(
       to right in oklab,
       var(--start-color),
@@ -188,5 +210,11 @@ dd {
 }
 .speed {
   --icon-bg: url('/assets/ui/speed.png');
+}
+.hand {
+  --icon-bg: url('/assets/ui/hand.png');
+}
+.deck {
+  --icon-bg: url('/assets/ui/deck.png');
 }
 </style>

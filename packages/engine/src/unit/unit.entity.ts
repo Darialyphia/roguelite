@@ -42,7 +42,9 @@ export const UNIT_EVENTS = {
   BEFORE_RECEIVE_DAMAGE: 'before_receive_damage',
   AFTER_RECEIVE_DAMAGE: 'after_receive_damage',
   BEFORE_PLAY_CARD: 'before_play_card',
-  AFTER_PLAY_CARD: 'after_play_card'
+  AFTER_PLAY_CARD: 'after_play_card',
+  BEFORE_DESTROY: 'before_destroy',
+  AFTER_DESTROY: 'after_destroy'
 } as const;
 
 export type UnitEvent = Values<typeof UNIT_EVENTS>;
@@ -62,6 +64,8 @@ export type UnitEventMap = {
   [UNIT_EVENTS.AFTER_RECEIVE_DAMAGE]: [{ from: Unit; damage: Damage }];
   [UNIT_EVENTS.BEFORE_PLAY_CARD]: [{ card: Card }];
   [UNIT_EVENTS.AFTER_PLAY_CARD]: [{ card: Card }];
+  [UNIT_EVENTS.BEFORE_DESTROY]: [{ source: Unit }];
+  [UNIT_EVENTS.AFTER_DESTROY]: [{ source: Unit }];
 };
 
 export class Unit extends Entity {
@@ -157,6 +161,14 @@ export class Unit extends Entity {
 
   get hand() {
     return [...this.cardManager.hand];
+  }
+
+  get deckSize() {
+    return this.cardManager.deckSize;
+  }
+
+  get remainingCardsInDeck() {
+    return this.cardManager.remainingCardsInDeck;
   }
 
   get speed(): number {
@@ -284,6 +296,10 @@ export class Unit extends Entity {
       from,
       damage
     });
+
+    if (this.hp.isDead) {
+      this.destroy(from);
+    }
   }
 
   canAttackAt(point: Point3D) {
@@ -306,6 +322,12 @@ export class Unit extends Entity {
       target,
       cost: this.game.config.AP_COST_PER_ATTACK
     });
+  }
+
+  destroy(source: Unit) {
+    this.emitter.emit(UNIT_EVENTS.BEFORE_DESTROY, { source });
+    this.game.unitSystem.removeUnit(this);
+    this.emitter.emit(UNIT_EVENTS.AFTER_DESTROY, { source });
   }
 
   canPlayCardAt(index: number) {

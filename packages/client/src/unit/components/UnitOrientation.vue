@@ -40,6 +40,18 @@ useBattleEvent('unit.before_receive_damage', async e => {
 
   await waitFor(duration);
 });
+
+useBattleEvent('unit.before_destroy', async e => {
+  if (!e.unit.equals(unit.getUnit())) return Promise.resolve();
+  await gsap.to(container.value!, {
+    pixi: {
+      y: 30,
+      alpha: 0,
+      ease: Power2.easeOut
+    },
+    duration: 1.2
+  });
+});
 </script>
 
 <template>
