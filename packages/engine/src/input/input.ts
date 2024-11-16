@@ -54,7 +54,12 @@ export abstract class Input<TSchema extends DefaultSchema>
       `Cannot execute input ${this.name} during game phase ${this.game.phase}`
     );
 
-    this.impl();
+    try {
+      this.impl();
+    } catch (err) {
+      this.game.makeLogger('ERROR', 'red')(this.payload);
+      throw err;
+    }
   }
 
   serialize() {

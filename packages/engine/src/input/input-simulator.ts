@@ -1,15 +1,14 @@
 import { Game } from '../game/game';
 import type { SerializedInput } from './input-system';
 
-let nextSimulationId = 0;
 export class InputSimulator {
   private clonedGame: Game;
   private inputs: SerializedInput[];
 
-  constructor(game: Game, inputs: SerializedInput[]) {
+  constructor(game: Game, inputs: SerializedInput[], id: number) {
     this.clonedGame = new Game({
       ...game.options,
-      id: `simulation_${nextSimulationId++}`,
+      id: `simulation_${id}`,
       history: game.inputSystem.serialize()
     });
     this.inputs = inputs;

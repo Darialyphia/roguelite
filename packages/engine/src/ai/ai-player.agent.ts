@@ -10,6 +10,8 @@ import type { Cell } from '../board/cell';
 import type { AiHeuristics } from './ai-heuristics';
 
 export class AIPlayerAgent implements AIAgent {
+  private nextSimulationId = 0;
+
   constructor(
     private game: Game,
     private player: Player,
@@ -21,11 +23,9 @@ export class AIPlayerAgent implements AIAgent {
   }
 
   async getNextInput(): Promise<SerializedInput> {
-    const [moveScores, combatScores, cardScores] = await Promise.all([
-      this.computeMoveScores(),
-      this.computeCombatScores(),
-      this.computeCardScores()
-    ]);
+    const moveScores = await this.computeMoveScores();
+    const combatScores = await this.computeCombatScores();
+    const cardScores = await this.computeCardScores();
 
     console.log({ moveScores, combatScores, cardScores });
     return (
@@ -37,20 +37,23 @@ export class AIPlayerAgent implements AIAgent {
   }
 
   private async runSimulation(input: SerializedInput) {
+    const id = this.nextSimulationId++;
     try {
-      const simulator = new InputSimulator(this.game, [input]);
+      console.log(`[Simulation ${id}]: start`);
+      const simulator = new InputSimulator(this.game, [input], id);
       // eslint-disable-next-line @typescript-eslint/no-empty-function
       await simulator.prepare();
       const game = simulator.run();
 
       const score = this.evaluateGameState(game);
       game.shutdown();
+      console.log(`[Simulation ${id}]: end`);
       return {
         input,
         score
       };
     } catch (err) {
-      console.error('Simulation error', err);
+      console.log(`[Simulation ${id}]: error`, err);
       return { input, score: Number.NEGATIVE_INFINITY };
     }
   }
@@ -105,16 +108,15 @@ export class AIPlayerAgent implements AIAgent {
   private async computeCardScores() {
     const results: ScoredInput[] = [];
 
-    const cards = this.activeUnit.hand.filter(
-      (card, index) =>
-        this.activeUnit.canPlayCardAt(index) &&
-        !this.heuristics.shouldAvoidPlayingCard(card) // @TODO make it so that AI plays a card it should avoid if it has no other possible option
-    );
-
     // cells is a computed getter, let's ealuate it early instead of doing it in every loop iteration
     const cells = this.game.boardSystem.cells;
 
-    for (const [index, card] of cards.entries()) {
+    for (const [index, card] of this.activeUnit.hand.entries()) {
+      const canPlay =
+        this.activeUnit.canPlayCardAt(index) &&
+        !this.heuristics.shouldAvoidPlayingCard(card); // @TODO make it so that AI plays a card it should avoid if it has no other possible option
+      if (!canPlay) continue;
+
       const targets = this.getPotentialTargets(card, cells);
       for (const permutation of targets) {
         results.push(

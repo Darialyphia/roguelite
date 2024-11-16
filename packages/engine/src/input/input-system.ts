@@ -91,7 +91,6 @@ export class InputSystem extends System<SerializedInput[]> {
       this.isRunning = false;
       this.game.emit('game.input-queue-flushed');
     } catch (err) {
-      console.error(err);
       this.game.emit('game.error', { error: err as Error });
     }
   }
