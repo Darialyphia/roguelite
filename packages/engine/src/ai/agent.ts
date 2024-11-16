@@ -7,7 +7,7 @@ export type ScoredInput = {
 };
 
 export type AIAgent = {
-  getNextInput(): Nullable<ScoredInput>;
+  getNextInput(): Promise<Nullable<ScoredInput>>;
 };
 
 export const getHighestScoredAction = (actions: ScoredInput[]) => {

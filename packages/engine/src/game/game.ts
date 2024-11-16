@@ -99,7 +99,7 @@ export class Game {
 
   readonly id: string;
 
-  constructor(private options: GameOptions) {
+  constructor(readonly options: GameOptions) {
     this.id = options.id;
     this.rngSystem = new options.rngCtor(this, 'RNG', 'lime');
     this.setupStarEvents();
@@ -167,5 +167,9 @@ export class Game {
 
   dispatch(input: SerializedInput) {
     return this.inputSystem.dispatch(input);
+  }
+
+  shutdown() {
+    this.emitter.removeAllListeners();
   }
 }

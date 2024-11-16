@@ -100,4 +100,8 @@ export class MovementComponent {
 
     return path;
   }
+
+  shutdown() {
+    this.emitter.removeAllListeners();
+  }
 }

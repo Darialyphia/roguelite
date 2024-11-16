@@ -15,6 +15,9 @@ export class ServerRngSystem extends System<RngSystemOptions> implements RngSyst
     this.next = this.next.bind(this);
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
+  shutdown() {}
+
   get values() {
     return [...this._values];
   }

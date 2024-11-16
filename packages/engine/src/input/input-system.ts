@@ -62,6 +62,9 @@ export class InputSystem extends System<SerializedInput[]> {
     }
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
+  shutdown() {}
+
   private isActionType(type: string): type is keyof typeof inputMap {
     return Object.keys(inputMap).includes(type);
   }

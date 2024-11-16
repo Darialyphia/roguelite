@@ -34,6 +34,10 @@ export class TurnSystem extends System<never> {
     });
   }
 
+  shutdown() {
+    this.emitter.removeAllListeners();
+  }
+
   get turnCount() {
     return this._turnCount;
   }

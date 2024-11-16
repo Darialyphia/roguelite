@@ -12,4 +12,6 @@ export abstract class System<T> {
   }
 
   abstract initialize(options: T): void;
+
+  abstract shutdown(): void;
 }

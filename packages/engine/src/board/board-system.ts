@@ -34,6 +34,9 @@ export class BoardSystem extends System<BoardSystemOptions> {
     });
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
+  shutdown() {}
+
   get width() {
     return this.map.width;
   }

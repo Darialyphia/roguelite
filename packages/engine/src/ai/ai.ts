@@ -29,7 +29,7 @@ export class AI {
   async evaluateNextAction(): Promise<SerializedInput> {
     const now = Date.now();
     const agent = new AIPlayerAgent(this.game, this.player);
-    const input = agent.getNextInput();
+    const input = await agent.getNextInput();
     console.log(`AI input computed in ${Date.now() - now}`, input);
 
     return input?.input ?? { type: 'endTurn', payload: { playerId: this.playerId } };

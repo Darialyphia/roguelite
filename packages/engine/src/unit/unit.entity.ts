@@ -250,6 +250,12 @@ export class Unit extends Entity {
     });
   }
 
+  shutdown() {
+    this.emitter.removeAllListeners();
+    this.cardManager.deck.shutdown();
+    this.movement.shutdown();
+  }
+
   isEnemy(unit: Unit) {
     return this.player.isEnemy(unit.player);
   }

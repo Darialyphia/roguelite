@@ -87,4 +87,8 @@ export class Deck extends Entity {
     this.cards = this.cards.filter(c => c !== card);
     return card;
   }
+
+  shutdown() {
+    this.emitter.removeAllListeners();
+  }
 }

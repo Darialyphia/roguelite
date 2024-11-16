@@ -28,6 +28,9 @@ export class GamePhaseSystem extends System<never> {
   // eslint-disable-next-line @typescript-eslint/no-empty-function
   initialize(): void {}
 
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
+  shutdown(): void {}
+
   get phase() {
     return this.stateMachine.getState();
   }

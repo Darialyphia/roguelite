@@ -20,6 +20,9 @@ export class PlayerSystem extends System<PlayerSystemOptions> {
     });
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
+  shutdown() {}
+
   getTeamById(id: EntityId) {
     return this.teamMap.get(id);
   }

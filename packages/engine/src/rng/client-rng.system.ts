@@ -10,6 +10,8 @@ export class ClientRngSystem extends System<RngSystemOptions> implements RngSyst
 
   // eslint-disable-next-line @typescript-eslint/no-empty-function
   initialize() {}
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
+  shutdown() {}
 
   private rng() {
     const val = this.values.shift();

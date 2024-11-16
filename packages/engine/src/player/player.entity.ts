@@ -56,6 +56,10 @@ export class Player extends Entity {
     return !player.team.equals(this.team);
   }
 
+  get units() {
+    return this.game.unitSystem.units.filter(u => u.player.equals(this));
+  }
+
   get commitDeployment() {
     return this.roster.commitDeployment;
   }

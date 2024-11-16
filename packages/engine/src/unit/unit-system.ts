@@ -1,5 +1,5 @@
 import { isDefined, type Point3D } from '@game/shared';
-import type { Entity, EntityId } from '../entity';
+import type { EntityId } from '../entity';
 import { Unit, UNIT_EVENTS, type UnitOptions } from './unit.entity';
 import { System } from '../system';
 
@@ -18,6 +18,10 @@ export class UnitSystem extends System<UnitSystemOptions> {
       this.unitMap.set(entity.id, entity);
       this.forwardListeners(entity);
     });
+  }
+
+  shutdown() {
+    this.units.forEach(unit => unit.shutdown());
   }
 
   get units() {
