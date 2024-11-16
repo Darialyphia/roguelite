@@ -73,6 +73,7 @@ const tag = computed(() => {
   if (isOnPath.value) {
     return 'movement-path';
   }
+
   if (canMove.value) {
     return 'movement';
   }

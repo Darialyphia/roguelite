@@ -58,7 +58,6 @@ export class InputSystem extends System<SerializedInput[]> {
 
   initialize(rawHistory: SerializedInput[]) {
     for (const input of rawHistory) {
-      this.game.emit(GAME_EVENTS.INPUT_START, input);
       this.schedule(() => this.handleInput(input));
     }
   }
@@ -104,10 +103,12 @@ export class InputSystem extends System<SerializedInput[]> {
   handleInput({ type, payload }: SerializedInput) {
     if (!this.isActionType(type)) return;
     const ctor = inputMap[type];
-    const action = new ctor(this.game, payload);
-    this._currentAction = action;
-    action.execute();
-    this.history.push(action);
+    const input = new ctor(this.game, payload);
+    this._currentAction = input;
+    this.game.emit(GAME_EVENTS.INPUT_START, { type, payload } as SerializedInput);
+
+    input.execute();
+    this.history.push(input);
     this._currentAction = null;
   }
 

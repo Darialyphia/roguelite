@@ -22,12 +22,12 @@ export class AIPlayerAgent implements AIAgent {
     return this.game.turnSystem.activeUnit;
   }
 
-  async getNextInput(): Promise<SerializedInput> {
-    const moveScores = await this.computeMoveScores();
-    const combatScores = await this.computeCombatScores();
-    const cardScores = await this.computeCardScores();
+  getNextInput(): SerializedInput {
+    const moveScores = this.computeMoveScores();
+    const combatScores = this.computeCombatScores();
+    const cardScores = this.computeCardScores();
 
-    console.log({ moveScores, combatScores, cardScores });
+    // console.log({ moveScores, combatScores, cardScores });
     return (
       getHighestScoredAction([...moveScores, ...combatScores, ...cardScores])?.input ?? {
         type: 'endTurn',
@@ -36,18 +36,17 @@ export class AIPlayerAgent implements AIAgent {
     );
   }
 
-  private async runSimulation(input: SerializedInput) {
+  private runSimulation(input: SerializedInput) {
     const id = this.nextSimulationId++;
     try {
-      console.log(`[Simulation ${id}]: start`);
       const simulator = new InputSimulator(this.game, [input], id);
       // eslint-disable-next-line @typescript-eslint/no-empty-function
-      await simulator.prepare();
+      simulator.prepare();
       const game = simulator.run();
 
       const score = this.evaluateGameState(game);
       game.shutdown();
-      console.log(`[Simulation ${id}]: end`);
+
       return {
         input,
         score
@@ -64,7 +63,7 @@ export class AIPlayerAgent implements AIAgent {
     return scorer.getScore();
   }
 
-  private async computeMoveScores() {
+  private computeMoveScores() {
     const results: ScoredInput[] = [];
 
     const cells = this.game.boardSystem
@@ -76,7 +75,7 @@ export class AIPlayerAgent implements AIAgent {
 
     for (const cell of cells) {
       results.push(
-        await this.runSimulation({
+        this.runSimulation({
           type: 'move',
           payload: { playerId: this.player.id, x: cell.x, y: cell.y, z: cell.z }
         })
@@ -86,7 +85,7 @@ export class AIPlayerAgent implements AIAgent {
     return results;
   }
 
-  private async computeCombatScores() {
+  private computeCombatScores() {
     const results: ScoredInput[] = [];
 
     const targets = this.game.unitSystem.units.filter(
@@ -95,7 +94,7 @@ export class AIPlayerAgent implements AIAgent {
 
     for (const target of targets) {
       results.push(
-        await this.runSimulation({
+        this.runSimulation({
           type: 'attack',
           payload: { playerId: this.player.id, x: target.x, y: target.y, z: target.z }
         })
@@ -105,22 +104,22 @@ export class AIPlayerAgent implements AIAgent {
     return results;
   }
 
-  private async computeCardScores() {
+  private computeCardScores() {
     const results: ScoredInput[] = [];
 
-    // cells is a computed getter, let's ealuate it early instead of doing it in every loop iteration
+    // cells is a computed getter, let's evaluate it early instead of doing it in every loop iteration
     const cells = this.game.boardSystem.cells;
 
     for (const [index, card] of this.activeUnit.hand.entries()) {
       const canPlay =
         this.activeUnit.canPlayCardAt(index) &&
-        !this.heuristics.shouldAvoidPlayingCard(card); // @TODO make it so that AI plays a card it should avoid if it has no other possible option
+        !this.heuristics.shouldAvoidPlayingCard(card); // @TODO make it so that AI plays a card it shouldn't avoid if it has no other possible option
       if (!canPlay) continue;
 
       const targets = this.getPotentialTargets(card, cells);
       for (const permutation of targets) {
         results.push(
-          await this.runSimulation({
+          this.runSimulation({
             type: 'playCard',
             payload: { playerId: this.player.id, index, targets: permutation }
           })

@@ -29,6 +29,10 @@ type Token =
       kind: 'unit';
       unit: Unit;
     }
+  | {
+      kind: 'input';
+      unit: Unit;
+    }
   | { kind: 'position'; point: Point3D }
   | { kind: 'turn_start'; unit: Unit }
   | { kind: 'action'; text: string };
@@ -38,13 +42,13 @@ const events = ref<Token[][]>([[]]);
 useBattleEvent('game.input-start', async event => {
   if (event.type === 'deploy') return;
   events.value.push([
-    { kind: 'unit', unit: activeUnit.value!.getUnit() },
+    { kind: 'input', unit: activeUnit.value!.getUnit() },
     {
       kind: 'action',
       text: match(event.type as Exclude<SerializedInput['type'], 'deploy'>)
         .with('attack', () => 'attacks')
         .with('endTurn', () => 'ends their turn')
-        .with('move', () => 'moves a unit')
+        .with('move', () => 'moves')
         .with('playCard', () => 'plays a card')
         .exhaustive()
     }
@@ -173,6 +177,9 @@ const isAction = (event: Pick<Token, 'kind'>[]) =>
           <template v-else-if="token.kind === 'unit'">
             {{ token.unit.name }}
           </template>
+          <template v-else-if="token.kind === 'input'">
+            {{ token.unit.name }}
+          </template>
           <template v-else-if="token.kind === 'position'">
             [{{ token.point.x }}, {{ token.point.y }}, {{ token.point.z }}]
           </template>
@@ -191,7 +198,7 @@ const isAction = (event: Pick<Token, 'kind'>[]) =>
 <style scoped lang="postcss">
 .combat-log {
   position: fixed;
-  top: 33%;
+  top: 35%;
 
   font-family: 'Press Start 2P';
   color: #ffdaad;
@@ -246,7 +253,7 @@ li {
   gap: 1ch;
 
   padding-block: var(--size-1);
-  padding-inline-start: var(--size-3);
+  padding-inline-start: var(--size-6);
 
   font-size: 10px;
 
@@ -291,13 +298,18 @@ li {
 
 .player,
 .unit,
+.input,
 .card,
 .position {
   font-weight: var(--font-weight-7);
 }
 
-.player {
+.input {
   color: var(--cyan-5);
+
+  li:has(&) {
+    padding-inline-start: var(--size-3);
+  }
 }
 
 .unit {

@@ -6,7 +6,7 @@ export type ScoredInput = {
 };
 
 export type AIAgent = {
-  getNextInput(): Promise<SerializedInput>;
+  getNextInput(): SerializedInput;
 };
 
 export const getHighestScoredAction = (actions: ScoredInput[]) => {

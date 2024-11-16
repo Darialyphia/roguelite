@@ -118,15 +118,15 @@ export class Game {
   // the event emitter doesnt provide the event name if you enable wildcards, so let's implement it ourselves
   private setupStarEvents() {
     Object.values(GAME_EVENTS).forEach(eventName => {
-      this.on(eventName as any, async event => {
-        // this.makeLogger(eventName, 'black')(event);
+      this.on(eventName as any, event => {
+        this.makeLogger(eventName, 'black')(event);
 
-        await this.emit('*', { eventName, event } as any);
+        this.emit('*', { eventName, event } as any);
       });
     });
   }
 
-  async initialize() {
+  initialize() {
     this.rngSystem.initialize({ seed: this.options.rngSeed });
     this.gamePhaseSystem.initialize();
     const map = MAPS_DICTIONARY[this.options.mapId];
@@ -144,7 +144,7 @@ export class Game {
     this.turnSystem.initialize();
 
     if (this.playerSystem.players.every(p => p.isReady)) {
-      await this.gamePhaseSystem.startBattle();
+      this.gamePhaseSystem.startBattle();
     }
 
     this.inputSystem.initialize(this.options.history ?? []);

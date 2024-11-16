@@ -44,7 +44,7 @@ export abstract class Input<TSchema extends DefaultSchema>
     return this.allowedPhases.includes(this.game.phase);
   }
 
-  async execute() {
+  execute() {
     this.parsePayload();
 
     assert(this.payload, 'input payload is required');

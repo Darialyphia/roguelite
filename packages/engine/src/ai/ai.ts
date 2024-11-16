@@ -22,17 +22,17 @@ export class AI {
     return this.game.playerSystem.getPlayerById(this.playerId)!;
   }
 
-  async onUpdate() {
+  onUpdate() {
     const isActive = this.game.turnSystem.activeUnit.player.equals(this.player);
     if (!isActive) return;
 
     return this.evaluateNextAction();
   }
 
-  private async evaluateNextAction(): Promise<SerializedInput> {
+  private evaluateNextAction(): SerializedInput {
     const now = Date.now();
     const agent = new AIPlayerAgent(this.game, this.player, this.heuristics);
-    const input = await agent.getNextInput();
+    const input = agent.getNextInput();
     console.log(`AI input computed ${input.type} in ${Date.now() - now}`, input);
 
     return input;

@@ -100,9 +100,9 @@ const serverSession = new ServerSession({
 const clientSession = new ClientSession(options);
 
 const battleStore = useBattleStore();
-const start = async () => {
-  await serverSession.initialize();
-  await clientSession.initialize([...serverSession.game.rngSystem.values]);
+const start = () => {
+  serverSession.initialize();
+  clientSession.initialize([...serverSession.game.rngSystem.values]);
   const ai = new AI(serverSession, AI_ID as EntityId);
 
   const handleAi = async (input: SerializedInput) => {

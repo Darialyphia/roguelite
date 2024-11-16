@@ -46,21 +46,25 @@ const { x, y } = useMouse();
 const offset = ref({ x: 0, y: 0 });
 
 const app = useApplication();
+
 const onMouseDown = (e: MouseEvent, index: number) => {
   ui.selectCardAtIndex(index);
 
   const rect = (e.target as HTMLElement).getBoundingClientRect();
   offset.value = {
-    x: e.clientX - rect.left,
-    y: e.clientY - rect.top
+    x: rect.left - x.value,
+    y: rect.top - y.value
   };
+  setTimeout(() => {
+    offset.value = { x: 0, y: 0 };
+  }, 0);
   draggedIndex.value = index;
 
   const stopDragging = (e: MouseEvent) => {
     if (app.value.view !== e.target) {
       ui.unselectCard();
     }
-    offset.value = { x: 0, y: 0 };
+
     nextTick(() => {
       draggedIndex.value = null;
     });
@@ -141,7 +145,7 @@ useBattleEvent('unit.after_draw', async event => {
       transform 0.15s var(--ease-in-4),
       z-index 0.15s var(--ease-in-4);
     transform: translateY(var(--size-11));
-    filter: drop-shadow(15px 0 0px hsl(0 0 0 /0.5));
+    filter: drop-shadow(15px 0 2px hsl(0 0 0 /0.5));
 
     &.hoverable:hover {
       transition:
@@ -155,6 +159,18 @@ useBattleEvent('unit.after_draw', async event => {
     &:not(:last-child) {
       margin-right: calc(1px * v-bind(margin));
     }
+
+    .card {
+      &:is(.v-enter-active) {
+        transition: all 0.3s;
+        transition: all 0.3s;
+      }
+
+      &.v-enter-from {
+        opacity: 0.5;
+        transform: translateX(var(--size-7));
+      }
+    }
   }
 }
 
@@ -167,20 +183,15 @@ useBattleEvent('unit.after_draw', async event => {
   transform-origin: center center;
   transform: translateY(calc(var(--y) + 3rem)) translateX(calc(var(--x) + 5rem));
 
-  > * {
+  > .card {
     position: absolute;
     left: calc(-0.5px * v-bind('config.CARD_WIDTH'));
     top: calc(-0.25px * v-bind('config.CARD_HEIGHT'));
-  }
-}
-.card {
-  &:is(.v-enter-active) {
-    transition: all 0.3s;
-  }
-
-  &.v-enter-from {
-    opacity: 0.5;
-    transform: translateX(var(--size-7));
+    transition: transform 0.3s var(--ease-out-2);
+    @starting-style {
+      transform: translateX(calc(1px * v-bind('offset.x')))
+        translateY(calc(1px * v-bind('offset.y'))) scale(1.25);
+    }
   }
 }
 </style>

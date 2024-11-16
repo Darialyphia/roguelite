@@ -7,8 +7,7 @@ const sum = (arr: number[]) => arr.reduce((total, curr) => total + curr, 0);
 
 const WEIGHTS = {
   HP: 1,
-  AP: 10,
-  CARD_IN_HAND: 5
+  CARD_IN_HAND: 2
 } as const;
 
 export class AIScorer {
@@ -22,31 +21,37 @@ export class AIScorer {
   }
 
   getScore() {
-    let finalScore = 0;
+    let result = 0;
 
-    this.getPlayerScores().forEach(({ player, score }) => {
-      const multiplier = player.isAlly(this.player) ? 1 : -1;
-      finalScore += score * multiplier;
+    this.getTeamScores().forEach(({ team, score }) => {
+      const multiplier = team.equals(this.player.team) ? 1 : -1;
+      result += score * multiplier;
     });
 
-    return finalScore;
+    return result;
   }
 
-  private getPlayerScores() {
-    return this.game.playerSystem.players
-      .filter(p => p.isAlly(this.player))
-      .map(player => ({
-        player,
-        score: sum(
-          player.units.map(
-            unit =>
-              unit.hp.current * WEIGHTS.HP +
-              unit.ap.current * WEIGHTS.AP +
-              unit.hand.length * WEIGHTS.CARD_IN_HAND -
-              this.getClosestDistanceFromEnemy(unit)
+  private getTeamScores() {
+    return this.game.playerSystem.teams.map(team => ({
+      team,
+      score: sum(
+        team.players.map(player =>
+          sum(
+            player.units.map(unit => {
+              let score =
+                unit.hp.current * WEIGHTS.HP + unit.hand.length * WEIGHTS.CARD_IN_HAND;
+
+              // Reward allies for being closer to enemy units
+              if (this.player.equals(unit.player)) {
+                score -= this.getClosestDistanceFromEnemy(unit);
+              }
+
+              return score;
+            })
           )
         )
-      }));
+      )
+    }));
   }
 
   private getClosestDistanceFromEnemy(unit: Unit) {

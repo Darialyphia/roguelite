@@ -8,9 +8,8 @@ import {
   type Point3D,
   type Values
 } from '@game/shared';
-import { StateMachine, t } from 'typescript-fsm';
+import { StateMachine, t } from '@game/shared';
 import type { Game } from '@game/engine';
-import type { InputDispatcher } from '@game/engine/src/input/input-system';
 import { type UnitViewModel, makeUnitVModel } from '@/unit/unit.model';
 import { whenever } from '@vueuse/core';
 import { makeCardViewModel, type CardViewModel } from '@/card/card.model';
@@ -66,15 +65,15 @@ export class UiModeManager {
     return this.stateMachine.getState();
   }
 
-  async selectCardAtIndex(index: number) {
-    await this.stateMachine.dispatch(UI_MODE_TRANSITIONS.SELECT_CARD);
+  selectCardAtIndex(index: number) {
+    this.stateMachine.dispatch(UI_MODE_TRANSITIONS.SELECT_CARD);
 
     this.selectedCardIndex = index;
     this.cardTargets = [];
   }
 
-  async unselectCard() {
-    await this.stateMachine.dispatch(UI_MODE_TRANSITIONS.UNSELECT_CARD);
+  unselectCard() {
+    this.stateMachine.dispatch(UI_MODE_TRANSITIONS.UNSELECT_CARD);
 
     this.selectedCardIndex = null;
     this.cardTargets = [];
@@ -136,7 +135,8 @@ export const useBattleUiStore = defineStore('battle-ui', () => {
     game => {
       modeManager = new UiModeManager(game as Game);
       modeContext.value = modeManager.getContext();
-    }
+    },
+    { immediate: true }
   );
 
   return {
@@ -160,12 +160,12 @@ export const useBattleUiStore = defineStore('battle-ui', () => {
 
     mode: computed(() => modeContext.value?.mode),
 
-    async selectCardAtIndex(index: number) {
-      await modeManager?.selectCardAtIndex(index);
+    selectCardAtIndex(index: number) {
+      modeManager?.selectCardAtIndex(index);
       modeContext.value = modeManager?.getContext();
     },
-    async unselectCard() {
-      await modeManager?.unselectCard();
+    unselectCard() {
+      modeManager?.unselectCard();
       modeContext.value = modeManager?.getContext();
     },
     addCardTarget(point: Point3D) {

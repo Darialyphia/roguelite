@@ -1,5 +1,4 @@
-import { assert, type Values } from '@game/shared';
-import { StateMachine, t } from 'typescript-fsm';
+import { StateMachine, t, assert, type Values } from '@game/shared';
 import { System } from '../system';
 import { GAME_EVENTS } from './game';
 
@@ -35,28 +34,28 @@ export class GamePhaseSystem extends System<never> {
     return this.stateMachine.getState();
   }
 
-  async startBattle() {
+  startBattle() {
     this.log('start battle');
     assert(
       this.stateMachine.can(GAME_PHASE_TRANSITIONS.START_BATTLE),
       `Cannot enter phase ${GAME_PHASES.BATTLE} from phase ${this.phase}`
     );
 
-    await this.stateMachine.dispatch(GAME_PHASE_TRANSITIONS.START_BATTLE);
+    this.stateMachine.dispatch(GAME_PHASE_TRANSITIONS.START_BATTLE);
 
     this.game.playerSystem.players.forEach(player => player.deploy());
     this.game.emit(GAME_EVENTS.START_BATTLE);
     this.game.turnSystem.startGameTurn();
   }
 
-  async endBattle() {
+  endBattle() {
     this.log('end battle');
     assert(
       this.stateMachine.can(GAME_PHASE_TRANSITIONS.END_BATTLE),
       `Cannot enter phase ${GAME_PHASES.END} from phase ${this.phase}`
     );
 
-    await this.stateMachine.dispatch(GAME_PHASE_TRANSITIONS.END_BATTLE);
+    this.stateMachine.dispatch(GAME_PHASE_TRANSITIONS.END_BATTLE);
     this.game.emit(GAME_EVENTS.END_BATTLE);
   }
 }

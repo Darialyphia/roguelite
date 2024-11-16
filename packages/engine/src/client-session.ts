@@ -22,9 +22,9 @@ export class ClientSession {
     });
   }
 
-  async initialize(rngValues: number[]) {
+  initialize(rngValues: number[]) {
     this.game.rngSystem.values = rngValues;
-    const result = await this.game.initialize();
+    const result = this.game.initialize();
     this.game.on('*', evt => {
       this.eventsSinceLastInput.push(evt);
     });
@@ -32,7 +32,7 @@ export class ClientSession {
     return result;
   }
 
-  async dispatch(input: SerializedInput, meta: ClientDispatchMeta) {
+  dispatch(input: SerializedInput, meta: ClientDispatchMeta) {
     try {
       this.game.rngSystem.values.push(...meta.rngValues);
 

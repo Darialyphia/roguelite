@@ -14,8 +14,8 @@ export class InputSimulator {
     this.inputs = inputs;
   }
 
-  async prepare(cb?: (game: Game) => void) {
-    await this.clonedGame.initialize();
+  prepare(cb?: (game: Game) => void) {
+    this.clonedGame.initialize();
     cb?.(this.clonedGame);
   }
 
