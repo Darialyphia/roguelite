@@ -16,6 +16,7 @@ import type {
 } from '@game/engine/src/input/input-system';
 import { assert, isDefined, type Override } from '@game/shared';
 import { defineStore } from 'pinia';
+import { AI } from '@game/engine/src/ai/ai';
 
 const useInternalBattleStore = defineStore('battle-internal', () => {
   const session = shallowRef<ClientSession>();
@@ -25,7 +26,9 @@ const useInternalBattleStore = defineStore('battle-internal', () => {
   };
 });
 
-const PLAYER_ID = 'player';
+export const PLAYER_ID = 'player';
+export const AI_ID = 'ai';
+
 export const useBattleStore = defineStore('battle', () => {
   const internal = useInternalBattleStore();
 
@@ -38,7 +41,6 @@ export const useBattleStore = defineStore('battle', () => {
   const phase = ref<GamePhase>('deployment');
 
   const syncState = () => {
-    console.log('sync state');
     assert(isDefined(internal.session));
     const game = internal.session.game;
 

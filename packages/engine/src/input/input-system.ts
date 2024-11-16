@@ -1,5 +1,5 @@
 import type { AnyFunction, Constructor, Nullable, Values } from '@game/shared';
-import type { Game } from '../game/game';
+import { GAME_EVENTS, type Game } from '../game/game';
 import type { DefaultSchema, Input } from './input';
 import { MoveInput } from './inputs/move.input';
 import { AttackInput } from './inputs/attack.input';
@@ -57,8 +57,9 @@ export class InputSystem extends System<SerializedInput[]> {
   }
 
   initialize(rawHistory: SerializedInput[]) {
-    for (const action of rawHistory) {
-      this.schedule(() => this.handleInput(action));
+    for (const input of rawHistory) {
+      this.game.emit(GAME_EVENTS.INPUT_START, input);
+      this.schedule(() => this.handleInput(input));
     }
   }
 
@@ -116,6 +117,6 @@ export class InputSystem extends System<SerializedInput[]> {
   }
 
   serialize() {
-    return this.history.map(action => action.serialize());
+    return this.history.map(action => action.serialize()) as SerializedInput[];
   }
 }

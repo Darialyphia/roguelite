@@ -18,4 +18,8 @@ export type CardBlueprint = {
   onPlay(game: Game, card: Card, targets: Point3D[]): void;
   targets: [CardBlueprintTarget, ...CardBlueprintTarget[]];
   minTargets: number;
+  aiHints: {
+    isRelevantTarget?: (point: Point3D, game: Game, card: Card, index: number) => boolean;
+    maxUsesPerTurn?: number;
+  };
 };

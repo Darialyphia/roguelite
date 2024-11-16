@@ -1,5 +1,5 @@
 import { Vec3, type Point3D, type Values } from '@game/shared';
-import { createEntityId, Entity } from '../entity';
+import { createEntityId, Entity, type EntityId } from '../entity';
 import { Card, type CardOptions } from '../card/card.entity';
 import { GAME_EVENTS, type Game } from '../game/game';
 import { SolidBodyPathfindingStrategy } from '../pathfinding/strategies/solid-pathfinding.strategy';
@@ -41,6 +41,8 @@ export const UNIT_EVENTS = {
   AFTER_DEAL_DAMAGE: 'after_deal_damage',
   BEFORE_RECEIVE_DAMAGE: 'before_receive_damage',
   AFTER_RECEIVE_DAMAGE: 'after_receive_damage',
+  BEFORE_RECEIVE_HEAL: 'before_receive_heal',
+  AFTER_RECEIVE_HEAL: 'after_receive_heal',
   BEFORE_PLAY_CARD: 'before_play_card',
   AFTER_PLAY_CARD: 'after_play_card',
   BEFORE_DESTROY: 'before_destroy',
@@ -50,8 +52,8 @@ export const UNIT_EVENTS = {
 export type UnitEvent = Values<typeof UNIT_EVENTS>;
 
 export type UnitEventMap = {
-  [UNIT_EVENTS.START_TURN]: [];
-  [UNIT_EVENTS.END_TURN]: [];
+  [UNIT_EVENTS.START_TURN]: [{ id: EntityId }];
+  [UNIT_EVENTS.END_TURN]: [{ id: EntityId }];
   [UNIT_EVENTS.BEFORE_MOVE]: [{ position: Vec3; destination: Vec3; cost: number }];
   [UNIT_EVENTS.AFTER_MOVE]: [{ position: Vec3; previousPosition: Vec3; cost: number }];
   [UNIT_EVENTS.BEFORE_DRAW]: [];
@@ -62,6 +64,8 @@ export type UnitEventMap = {
   [UNIT_EVENTS.AFTER_DEAL_DAMAGE]: [{ targets: Unit[]; damage: Damage }];
   [UNIT_EVENTS.BEFORE_RECEIVE_DAMAGE]: [{ from: Unit; damage: Damage }];
   [UNIT_EVENTS.AFTER_RECEIVE_DAMAGE]: [{ from: Unit; damage: Damage }];
+  [UNIT_EVENTS.BEFORE_RECEIVE_HEAL]: [{ from: Unit; amount: number }];
+  [UNIT_EVENTS.AFTER_RECEIVE_HEAL]: [{ from: Unit; amount: number }];
   [UNIT_EVENTS.BEFORE_PLAY_CARD]: [{ card: Card }];
   [UNIT_EVENTS.AFTER_PLAY_CARD]: [{ card: Card }];
   [UNIT_EVENTS.BEFORE_DESTROY]: [{ source: Unit }];
@@ -339,6 +343,8 @@ export class Unit extends Entity {
   canPlayCardAt(index: number) {
     const card = this.getCardAt(index);
 
+    if (!this.canPlayCardFromHand) return false;
+
     return card.cost <= this.ap.current;
   }
 
@@ -357,10 +363,10 @@ export class Unit extends Entity {
   }
 
   startTurn() {
-    this.emitter.emit(UNIT_EVENTS.START_TURN);
+    this.emitter.emit(UNIT_EVENTS.START_TURN, { id: this.id });
   }
 
   endTurn() {
-    this.emitter.emit(UNIT_EVENTS.END_TURN);
+    this.emitter.emit(UNIT_EVENTS.END_TURN, { id: this.id });
   }
 }

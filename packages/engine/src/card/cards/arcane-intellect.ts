@@ -21,5 +21,8 @@ export const arcaneIntellect: CardBlueprint = {
   ],
   onPlay(game, card) {
     card.unit.draw(2);
+  },
+  aiHints: {
+    maxUsesPerTurn: 1
   }
 };

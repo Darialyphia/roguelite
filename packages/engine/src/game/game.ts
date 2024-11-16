@@ -41,6 +41,7 @@ type GlobalTurnEvents = {
 };
 
 type GameEventsBase = {
+  'game.input-start': [SerializedInput];
   'game.input-queue-flushed': [];
   'game.error': [{ error: Error }];
   'game.start-battle': [];
@@ -66,6 +67,7 @@ export const GAME_EVENTS = {
   ERROR: 'game.error',
   READY: 'game.ready',
   FLUSHED: 'game.input-queue-flushed',
+  INPUT_START: 'game.input-start',
   START_BATTLE: 'game.start-battle',
   END_BATTLE: 'game.end-battle'
 } as const satisfies Record<string, keyof GameEventMap>;
@@ -76,6 +78,7 @@ export type GameOptions = {
   rngCtor: Constructor<RngSystem>;
   mapId: string;
   teams: Pick<PlayerOptions, 'id' | 'roster' | 'units'>[][];
+  history?: SerializedInput[];
 };
 
 export class Game {
@@ -116,8 +119,7 @@ export class Game {
   private setupStarEvents() {
     Object.values(GAME_EVENTS).forEach(eventName => {
       this.on(eventName as any, async event => {
-        this.makeLogger(eventName, 'black')(event);
-        // this.logger(`%c[EVENT:${this.id}:${eventName}]`, 'color: #008b8b');
+        // this.makeLogger(eventName, 'black')(event);
 
         await this.emit('*', { eventName, event } as any);
       });
@@ -140,11 +142,12 @@ export class Game {
     });
     this.unitSystem.initialize({ units: [] });
     this.turnSystem.initialize();
-    this.inputSystem.initialize([]);
 
     if (this.playerSystem.players.every(p => p.isReady)) {
       await this.gamePhaseSystem.startBattle();
     }
+
+    this.inputSystem.initialize(this.options.history ?? []);
 
     this.emit(GAME_EVENTS.READY);
   }

@@ -7,7 +7,9 @@ import vueDevTools from 'vite-plugin-vue-devtools';
 import autoImport from 'unplugin-auto-import/vite';
 import vueRouter from 'unplugin-vue-router/vite';
 import { VueRouterAutoImports } from 'unplugin-vue-router';
-import UnoCSS from 'unocss/vite';
+import unoCSS from 'unocss/vite';
+import icons from 'unplugin-icons/vite';
+
 import { isCustomElement, transformAssetUrls } from 'vue3-pixi/compiler';
 //@ts-expect-error no types for this package
 import assetpackConfig from '@game/assetpack';
@@ -85,7 +87,8 @@ export default defineConfig({
         enabled: true
       }
     }),
-    UnoCSS(),
+    unoCSS(),
+    icons({}),
     assetpackPlugin()
   ],
   resolve: {

@@ -23,6 +23,10 @@ export class Card extends Entity {
     this.blueprint = options.blueprint;
   }
 
+  get blueprintId() {
+    return this.blueprint.id;
+  }
+
   get cost() {
     return this.blueprint.cost;
   }
@@ -37,6 +41,22 @@ export class Card extends Entity {
 
   get description() {
     return this.blueprint.description;
+  }
+
+  get minTargets() {
+    return this.blueprint.minTargets;
+  }
+
+  get maxTargets() {
+    return this.blueprint.targets.length;
+  }
+
+  get targetsDefinition() {
+    return this.blueprint.targets;
+  }
+
+  get aiHints() {
+    return this.blueprint.aiHints;
   }
 
   play(targets: Point3D[]) {

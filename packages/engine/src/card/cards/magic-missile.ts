@@ -34,5 +34,6 @@ export const magicMissile: CardBlueprint = {
         scalings: [new MagicalScalingStrategy(0.5)]
       })
     );
-  }
+  },
+  aiHints: {}
 };

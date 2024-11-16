@@ -7,7 +7,7 @@ export class PhysicalMitigationStrategy implements DamageMitigationStrategy {
       target.pDef -
       target.pDef * (source.pDefPiercing.percentage / 100) -
       source.pDefPiercing.flat;
-    console.log(amount, reduction, amount * (100 / (100 + reduction)));
+
     return Math.round(amount * (100 / (100 + reduction)));
   }
 }

@@ -1,12 +1,18 @@
 <script setup lang="ts">
 import Fps from '@/shared/components/Fps.vue';
-import { useBattleStore } from './battle.store';
+import { AI_ID, PLAYER_ID, useBattleStore } from './battle.store';
 import { ClientSession, ServerSession } from '@game/engine';
 import type { GameOptions } from '@game/engine/src/game/game';
 import TurnOrder from '@/unit/components/TurnOrder.vue';
 import Hand from '@/card/Hand.vue';
 import UnitStats from '@/unit/components/UnitStats.vue';
 import PlayedCard from '@/card/PlayedCard.vue';
+import BattleLog from '@/player/BattleLog.vue';
+import { AI } from '@game/engine/src/ai/ai';
+import type { EntityId } from '@game/engine/src/entity';
+import { waitFor } from '@game/shared';
+import type { SerializedInput } from '@game/engine/src/input/input-system';
+import { until } from '@vueuse/core';
 
 definePage({
   name: 'Battle'
@@ -17,7 +23,7 @@ const options: Pick<GameOptions, 'mapId' | 'teams'> = {
   teams: [
     [
       {
-        id: 'player',
+        id: PLAYER_ID,
         units: [
           {
             blueprintId: 'test-unit',
@@ -52,7 +58,7 @@ const options: Pick<GameOptions, 'mapId' | 'teams'> = {
     ],
     [
       {
-        id: 'ai',
+        id: AI_ID,
         roster: [],
         units: [
           {
@@ -97,12 +103,28 @@ const battleStore = useBattleStore();
 const start = async () => {
   await serverSession.initialize();
   await clientSession.initialize([...serverSession.game.rngSystem.values]);
+  const ai = new AI(serverSession, AI_ID as EntityId);
+
+  const handleAi = async (input: SerializedInput) => {
+    const aiAction = await ai.onUpdate();
+    if (!aiAction) return;
+
+    await until(() => battleStore.isPlayingFx).not.toBeTruthy();
+
+    if (aiAction.type === 'move') {
+      await waitFor(500);
+    } else {
+      await waitFor(500);
+    }
+    serverSession.dispatch(aiAction);
+  };
 
   battleStore.init(clientSession, input => {
     serverSession.dispatch(input);
   });
   serverSession.subscribe((input, opts) => {
     clientSession.dispatch(input, opts);
+    handleAi(input);
   });
 };
 start();
@@ -135,6 +157,7 @@ start();
         </li>
       </ul>
     </nav>
+    <BattleLog class="pointer-events-auto" />
     <UnitStats
       :unit="battleStore.state.activeUnit"
       class="active-unit-stats pointer-events-auto"

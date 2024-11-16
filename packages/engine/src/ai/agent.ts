@@ -1,4 +1,3 @@
-import type { Nullable } from '@game/shared';
 import type { SerializedInput } from '../input/input-system';
 
 export type ScoredInput = {
@@ -7,7 +6,7 @@ export type ScoredInput = {
 };
 
 export type AIAgent = {
-  getNextInput(): Promise<Nullable<ScoredInput>>;
+  getNextInput(): Promise<SerializedInput>;
 };
 
 export const getHighestScoredAction = (actions: ScoredInput[]) => {

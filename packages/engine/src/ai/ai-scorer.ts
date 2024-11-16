@@ -42,9 +42,16 @@ export class AIScorer {
             unit =>
               unit.hp.current * WEIGHTS.HP +
               unit.ap.current * WEIGHTS.AP +
-              unit.hand.length * WEIGHTS.CARD_IN_HAND
+              unit.hand.length * WEIGHTS.CARD_IN_HAND -
+              this.getClosestDistanceFromEnemy(unit)
           )
         )
       }));
+  }
+
+  private getClosestDistanceFromEnemy(unit: Unit) {
+    const enemies = this.game.unitSystem.units.filter(u => u.isEnemy(unit));
+
+    return Math.min(...enemies.map(enemy => unit.position.dist(enemy.position)));
   }
 }

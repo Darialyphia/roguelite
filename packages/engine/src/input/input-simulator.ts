@@ -1,15 +1,18 @@
 import { Game } from '../game/game';
 import type { SerializedInput } from './input-system';
 
+let nextSimulationId = 0;
 export class InputSimulator {
   private clonedGame: Game;
-  private input: SerializedInput;
+  private inputs: SerializedInput[];
 
-  constructor(game: Game, input: SerializedInput) {
-    this.clonedGame = new Game({ ...game.options, id: 'simulation' });
-    // eslint-disable-next-line @typescript-eslint/no-empty-function
-    this.clonedGame.makeLogger = () => () => {};
-    this.input = input;
+  constructor(game: Game, inputs: SerializedInput[]) {
+    this.clonedGame = new Game({
+      ...game.options,
+      id: `simulation_${nextSimulationId++}`,
+      history: game.inputSystem.serialize()
+    });
+    this.inputs = inputs;
   }
 
   async prepare(cb?: (game: Game) => void) {
@@ -17,8 +20,11 @@ export class InputSimulator {
     cb?.(this.clonedGame);
   }
 
-  run() {
-    this.clonedGame.dispatch(this.input);
+  run(cb?: (game: Game) => void) {
+    for (const input of this.inputs) {
+      this.clonedGame.dispatch(input);
+      cb?.(this.clonedGame);
+    }
 
     return this.clonedGame;
   }
