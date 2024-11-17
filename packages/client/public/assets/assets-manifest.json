@@ -47,6 +47,20 @@
         },
         {
           "alias": [
+            "icon-frost-nova"
+          ],
+          "src": [
+            "/assets/icons/frost-nova.png"
+          ],
+          "foo": "bar",
+          "data": {
+            "tags": {
+              "m": true
+            }
+          }
+        },
+        {
+          "alias": [
             "icon-magic-missile"
           ],
           "src": [

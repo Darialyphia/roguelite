@@ -119,7 +119,7 @@ export class Game {
   private setupStarEvents() {
     Object.values(GAME_EVENTS).forEach(eventName => {
       this.on(eventName as any, event => {
-        this.makeLogger(eventName, 'black')(event);
+        // this.makeLogger(eventName, 'black')(event);
 
         this.emit('*', { eventName, event } as any);
       });

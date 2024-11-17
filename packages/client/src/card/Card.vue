@@ -67,6 +67,7 @@ const nameFontSize = computed(() => {
   background-position:
     top left,
     53px 34px;
+  background-size: cover cover;
   color: #311929;
   font-family: 'Silkscreen';
   user-select: none;
