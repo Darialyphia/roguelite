@@ -5,12 +5,12 @@ import { GAME_EVENTS, type Game } from '../game/game';
 import { SolidBodyPathfindingStrategy } from '../pathfinding/strategies/solid-pathfinding.strategy';
 import type { UnitBlueprint } from './unit-blueprint';
 import { Interceptable } from '../utils/interceptable';
-import { ActionPointComponent } from './action-point.component';
+import { ActionPointComponent } from './components/action-point.component';
 import { TypedEventEmitter } from '../utils/typed-emitter';
-import { HealthComponent } from './health.component';
+import { HealthComponent } from './components/health.component';
 import { CardManagerComponent } from '../card/card-manager.component';
 import { CombatComponent } from '../combat/combat.component';
-import { MOVE_EVENTS, MovementComponent } from './movement.component';
+import { MOVE_EVENTS, MovementComponent } from './components/movement.component';
 import { DECK_EVENTS } from '../card/deck.entity';
 import type { Player } from '../player/player.entity';
 import { MeleeTargetingPatternStrategy } from '../targeting/melee-targeting.straegy';
@@ -18,6 +18,8 @@ import { PointAOEShape } from '../targeting/aoe-shapes';
 import { TARGETING_TYPE } from '../targeting/targeting-strategy';
 import type { Damage } from '../combat/damage/damage';
 import { config } from '../config';
+import { UnitModifierManager } from './components/modifier-manager.component';
+import type { UnitModifier } from './unit-modifier.entity';
 
 export type UnitOptions = {
   id: string;
@@ -81,6 +83,8 @@ export class Unit extends Entity {
 
   private cardManager: CardManagerComponent;
 
+  private modifierManager: UnitModifierManager;
+
   private blueprint: UnitBlueprint;
 
   readonly ap: ActionPointComponent;
@@ -107,6 +111,7 @@ export class Unit extends Entity {
     this.blueprint = options.blueprint;
     this.cosmetics = options.cosmetics;
     this.cardManager = new CardManagerComponent(this.game, this, { deck: options.deck });
+    this.modifierManager = new UnitModifierManager(this);
     this.ap = new ActionPointComponent({ maxAp: this.blueprint.maxAp });
     this.hp = new HealthComponent({ maxHp: this.blueprint.maxHp });
     this.combat = new CombatComponent(this.game, {
@@ -324,10 +329,7 @@ export class Unit extends Entity {
       cost: this.game.config.AP_COST_PER_ATTACK
     });
     this.ap.remove(this.game.config.AP_COST_PER_ATTACK);
-    this.combat.attackAt(target, {
-      aoeShape: new PointAOEShape(this.game),
-      allowFriendlyFire: false
-    });
+    this.combat.attackAt(new PointAOEShape(this.game, target));
     this.emitter.emit(UNIT_EVENTS.AFTER_ATTACK, {
       target,
       cost: this.game.config.AP_COST_PER_ATTACK
@@ -368,5 +370,23 @@ export class Unit extends Entity {
 
   endTurn() {
     this.emitter.emit(UNIT_EVENTS.END_TURN, { id: this.id });
+  }
+
+  get removeModifier() {
+    return this.modifierManager.remove.bind(this.modifierManager);
+  }
+
+  get hasModifier() {
+    return this.modifierManager.has.bind(this.modifierManager);
+  }
+
+  get getModifier() {
+    return this.modifierManager.getById.bind(this.modifierManager);
+  }
+
+  addModifier(modifier: UnitModifier) {
+    this.modifierManager.add(modifier);
+
+    return () => this.removeModifier(modifier.id);
   }
 }

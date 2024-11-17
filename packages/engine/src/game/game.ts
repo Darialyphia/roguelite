@@ -160,6 +160,10 @@ export class Game {
     return this.emitter.once.bind(this.emitter);
   }
 
+  get off() {
+    return this.emitter.off.bind(this.emitter);
+  }
+
   get emit() {
     return this.emitter.emit.bind(this.emitter);
   }

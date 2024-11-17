@@ -1,6 +1,6 @@
 import { clamp } from './helpers';
-import type { Point } from '../types';
 import type { Matrix } from '../types/utils';
+import type { Point } from '../types/geometry';
 
 export const rotateMatrix = <T>(
   matrix: Matrix<T>,

@@ -1,4 +1,4 @@
-import type { BBox, Circle, Line, Rectangle } from '../types';
+import type { BBox, Circle, Line, Rectangle } from '../types/geometry';
 
 export const rectToBBox = (rect: Rectangle): BBox => ({
   ...rect,

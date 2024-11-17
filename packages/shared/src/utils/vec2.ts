@@ -1,4 +1,5 @@
-import type { Point, Serializable } from '../types';
+import type { Point } from '../types/geometry';
+import type { Serializable } from '../types/utils';
 
 export class Vec2 implements Serializable {
   static fromPoint(pt: Point) {

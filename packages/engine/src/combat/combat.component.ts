@@ -109,15 +109,8 @@ export class CombatComponent {
     };
   }
 
-  attackAt(point: Point3D, options: { aoeShape: AOEShape; allowFriendlyFire: boolean }) {
-    const targets = options.aoeShape
-      .getCells(point)
-      .map(cell => cell.unit)
-      .filter((target): target is Unit => {
-        if (!isDefined(target)) return false;
-        if (!options.allowFriendlyFire) return target.isEnemy(this.unit);
-        return true;
-      });
+  attackAt(aoeShape: AOEShape) {
+    const targets = aoeShape.getUnits();
 
     const damage = new Damage({
       baseAmount: config.BASE_ATTACK_DAAMGE,

@@ -15,6 +15,40 @@
       ]
     },
     {
+      "name": "fx",
+      "assets": [
+        {
+          "alias": [
+            "fx-frozen"
+          ],
+          "src": [
+            "/assets/fx/frozen.json"
+          ],
+          "loadParser": "aseprite_loader",
+          "foo": "bar",
+          "data": {
+            "tags": {
+              "m": true
+            }
+          }
+        },
+        {
+          "alias": [
+            "fx-frozen.png"
+          ],
+          "src": [
+            "/assets/fx/frozen.png"
+          ],
+          "foo": "bar",
+          "data": {
+            "tags": {
+              "m": true
+            }
+          }
+        }
+      ]
+    },
+    {
       "name": "icons",
       "assets": [
         {
@@ -65,6 +99,20 @@
           ],
           "src": [
             "/assets/icons/magic-missile.png"
+          ],
+          "foo": "bar",
+          "data": {
+            "tags": {
+              "m": true
+            }
+          }
+        },
+        {
+          "alias": [
+            "icon-modifier-frozen"
+          ],
+          "src": [
+            "/assets/icons/modifier-frozen.png"
           ],
           "foo": "bar",
           "data": {

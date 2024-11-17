@@ -1,4 +1,4 @@
-import { Interceptable, type inferInterceptor } from '../utils/interceptable';
+import { Interceptable, type inferInterceptor } from '../../utils/interceptable';
 
 export type HealthComponentOptions = {
   maxHp: number;

@@ -1,10 +1,9 @@
 import { Vec3, type Point3D, type Values } from '@game/shared';
-import type { PathfindingStrategy } from '../pathfinding/strategies/pathinding-strategy';
-import type { Game } from '../game/game';
-import { PathfinderComponent } from '../pathfinding/pathfinder.component';
-import { Interceptable } from '../utils/interceptable';
-import { TypedEventEmitter } from '../utils/typed-emitter';
-import { Position } from '../utils/position';
+import type { Game } from '../../game/game';
+import { PathfinderComponent } from '../../pathfinding/pathfinder.component';
+import type { PathfindingStrategy } from '../../pathfinding/strategies/pathinding-strategy';
+import { Position } from '../../utils/position';
+import { TypedEventEmitter } from '../../utils/typed-emitter';
 
 export type MovementComponentOptions = {
   position: Point3D;

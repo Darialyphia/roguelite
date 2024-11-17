@@ -1,4 +1,4 @@
-import { Interceptable } from '../utils/interceptable';
+import { Interceptable } from '../../utils/interceptable';
 
 export type ActionPointComponentOptions = {
   maxAp: number;

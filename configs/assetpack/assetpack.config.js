@@ -33,7 +33,7 @@ const prefixByAssetType = {
   tiles: "",
   ui: "",
   obstacles: "",
-  fx: "",
+  fx: "fx-",
   normals: "",
   modifiers: "",
   pedestals: "",
