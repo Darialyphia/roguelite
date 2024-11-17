@@ -1,7 +1,15 @@
 <script setup lang="ts">
+import { isDefined } from '@game/shared';
 import type { UnitViewModel } from '../unit.model';
 import UnitIcon from './UnitIcon.vue';
 import { config as engineConfig } from '@game/engine/src/config';
+import {
+  TooltipContent,
+  TooltipPortal,
+  TooltipProvider,
+  TooltipRoot,
+  TooltipTrigger
+} from 'radix-vue';
 
 const { unit } = defineProps<{ unit: UnitViewModel }>();
 
@@ -23,6 +31,8 @@ watch(
     });
   }
 );
+
+const modifiers = computed(() => unit.modifierInfos.filter(isDefined));
 </script>
 
 <template>
@@ -78,6 +88,28 @@ watch(
         </div>
       </div>
     </dl>
+    <ul class="flex gap-3 mt-2">
+      <li v-for="modifier in modifiers">
+        <TooltipProvider>
+          <TooltipRoot>
+            <TooltipTrigger as-child>
+              <button
+                class="modifier-icon"
+                :style="{ '--bg': `url(/assets/icons/${modifier.iconId}.png)` }"
+              />
+            </TooltipTrigger>
+            <TooltipPortal>
+              <TooltipContent as-child side="bottom">
+                <div class="modifier-tooltip">
+                  <div>{{ modifier.name }}</div>
+                  <div>{{ modifier.description }}</div>
+                </div>
+              </TooltipContent>
+            </TooltipPortal>
+          </TooltipRoot>
+        </TooltipProvider>
+      </li>
+    </ul>
   </section>
 </template>
 
@@ -216,5 +248,22 @@ dd {
 }
 .deck {
   --icon-bg: url('/assets/ui/deck.png');
+}
+
+.modifier-icon {
+  padding: 0;
+  width: 32px;
+  aspect-ratio: 1;
+  background-image: var(--bg);
+  background-size: cover;
+}
+.modifier-tooltip {
+  background-color: hsl(0 0 0 / 0.75);
+  padding: var(--size-2);
+  border-radius: var(--radius-2);
+  border: solid 2px #ffdaad;
+  font-family: 'Press Start 2P', system-ui;
+  max-width: 25ch;
+  font-size: 0.6em;
 }
 </style>

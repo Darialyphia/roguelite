@@ -108,18 +108,19 @@ export const useInternalBattleUiStore = defineStore(
     const store = useBattleStore();
     const hoveredCell = shallowRef<Nullable<Cell>>(null);
     const highlightedUnit = ref<Nullable<UnitViewModel>>(null);
+    const selectedUnit = ref<Nullable<UnitViewModel>>(null);
 
     watch(hoveredCell, cell => {
       if (!store.session) return;
       if (cell?.unit) {
         highlightedUnit.value = makeUnitVModel(
-          store.session.game as Game, // vue issue when unwrappign Refs containign  a class instance
+          store.session.game as Game, // vue issue when unwrapping Refs containign  a class instance
           cell.unit
         );
       }
     });
 
-    return { hoveredCell, highlightedUnit };
+    return { hoveredCell, highlightedUnit, selectedUnit };
   }
 );
 
@@ -154,8 +155,16 @@ export const useBattleUiStore = defineStore('battle-ui', () => {
     highlightUnit(unit: UnitViewModel) {
       uiStore.highlightedUnit = unit;
     },
-    unhighlight() {
+    unhighlightUnit() {
       uiStore.highlightedUnit = null;
+    },
+
+    selectedUnit: computed(() => uiStore.selectedUnit),
+    selectUnit(unit: UnitViewModel) {
+      uiStore.selectedUnit = unit;
+    },
+    unselectUnit() {
+      uiStore.selectedUnit = null;
     },
 
     mode: computed(() => modeContext.value?.mode),

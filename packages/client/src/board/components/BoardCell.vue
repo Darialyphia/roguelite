@@ -5,9 +5,10 @@ import BoardCellSprite from './BoardCellSprite.vue';
 import UiAnimatedSprite from '@/ui/components/UiAnimatedSprite.vue';
 import BoardCellHighlights from './BoardCellHighlights.vue';
 import type { CellViewModel } from '../models/cell.model';
-import { useBattleStore } from '@/pages/battle/battle.store';
+import { useBattleStore, useGame } from '@/pages/battle/battle.store';
 import { useIsoCamera } from '@/iso/composables/useIsoCamera';
 import { match } from 'ts-pattern';
+import { makeUnitVModel } from '@/unit/unit.model';
 
 const { cell } = defineProps<{ cell: CellViewModel }>();
 
@@ -17,6 +18,7 @@ const battle = useBattleStore();
 const isHovered = computed(() => ui.hoveredCell?.equals(cell.getCell()));
 
 const camera = useIsoCamera();
+const game = useGame();
 </script>
 
 <template>
@@ -25,12 +27,22 @@ const camera = useIsoCamera();
     @pointerenter="ui.hoverAt(cell)"
     @pointerleave="ui.unHover()"
     @pointerup="
-      () => {
+      e => {
         if (camera.isDragging.value) return;
         if (!ui.mode) return;
 
         const _unit = battle.state.activeUnit?.getUnit();
         if (!_unit) return;
+
+        if (e.button === 2) {
+          const cellUnit = cell.getCell().unit;
+          if (cellUnit) {
+            ui.selectUnit(makeUnitVModel(game, cellUnit));
+          } else {
+            ui.unselectUnit();
+          }
+          return;
+        }
 
         match(ui.mode)
           .with(UI_MODES.BASIC, () => {
@@ -59,19 +71,19 @@ const camera = useIsoCamera();
           .with(UI_MODES.PLAY_CARD, () => {
             if (ui.isTargetValid(cell)) {
               ui.addCardTarget({ x: cell.x, y: cell.y, z: cell.z });
-              if (ui.canPlayCard()) {
-                battle.dispatch({
-                  type: 'playCard',
-                  payload: {
-                    index: ui.selectedCardIndex,
-                    targets: ui.cardTargets
-                  }
-                });
-                ui.unselectCard();
-              }
-            } else {
-              ui.unselectCard();
+
+              if (!ui.canPlayCard()) return;
+              battle.dispatch({
+                type: 'playCard',
+                payload: {
+                  index: ui.selectedCardIndex,
+                  targets: ui.cardTargets
+                }
+              });
             }
+
+            ui.unselectCard();
+            ui.unselectUnit();
           })
           .exhaustive();
       }

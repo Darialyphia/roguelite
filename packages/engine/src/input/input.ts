@@ -57,7 +57,7 @@ export abstract class Input<TSchema extends DefaultSchema>
     try {
       this.impl();
     } catch (err) {
-      this.game.makeLogger('ERROR', 'red')(this.payload);
+      this.game.makeLogger('ERROR', 'red')(this.payload, err);
       throw err;
     }
   }

@@ -28,6 +28,7 @@
     "pinia": "^2.2.6",
     "pixi-viewport": "^5.0.2",
     "pixi.js": "^7.4.2",
+    "radix-vue": "^1.9.9",
     "stats.js": "^0.17.0",
     "ts-pattern": "^5.5.0",
     "vue": "^3.5.12",

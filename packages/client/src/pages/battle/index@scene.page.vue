@@ -68,6 +68,7 @@ useKeyboardControl(
     @pointerup="
       e => {
         if (e.target !== isoWorld?.camera.viewport.value) return;
+        uiStore.unselectUnit();
         if (uiStore.mode !== UI_MODES.PLAY_CARD) return;
         uiStore.unselectCard();
       }

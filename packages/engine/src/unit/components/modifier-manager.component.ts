@@ -1,5 +1,5 @@
 import type { EntityId, Entity } from '../../entity';
-import { UnitModifier } from '../unit-modifier.entity';
+import { UNIT_MODIFIER_EVENTS, UnitModifier } from '../unit-modifier.entity';
 import type { Unit } from '../unit.entity';
 
 export class UnitModifierManager {
@@ -31,11 +31,11 @@ export class UnitModifierManager {
   }
 
   remove(modifierId: EntityId) {
-    const idx = this.modifiers.findIndex(mod => mod.id !== modifierId);
+    const idx = this.modifiers.findIndex(mod => mod.id === modifierId);
     if (idx < 0) return;
 
-    this.modifiers[idx].remove();
-    this.modifiers.splice(idx, 1);
+    const [modifier] = this.modifiers.splice(idx, 1);
+    modifier.remove();
   }
 
   get modifierInfos() {

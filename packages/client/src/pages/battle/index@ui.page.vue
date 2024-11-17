@@ -13,6 +13,7 @@ import type { EntityId } from '@game/engine/src/entity';
 import { waitFor } from '@game/shared';
 import type { SerializedInput } from '@game/engine/src/input/input-system';
 import { until } from '@vueuse/core';
+import { useBattleUiStore } from './battle-ui.store';
 
 definePage({
   name: 'Battle'
@@ -102,6 +103,8 @@ const serverSession = new ServerSession({
 const clientSession = new ClientSession(options);
 
 const battleStore = useBattleStore();
+const uiStore = useBattleUiStore();
+
 const start = () => {
   serverSession.initialize();
   clientSession.initialize([...serverSession.game.rngSystem.values]);
@@ -165,6 +168,13 @@ start();
       class="active-unit-stats pointer-events-auto"
       v-if="battleStore.state.activeUnit"
     />
+    <Transition>
+      <UnitStats
+        :unit="uiStore.selectedUnit"
+        class="selected-unit-stats pointer-events-auto"
+        v-if="uiStore.selectedUnit"
+      />
+    </Transition>
     <TurnOrder class="turn-order pointer-events-auto" />
     <Hand class="hand pointer-events-auto" />
     <PlayedCard />
@@ -191,6 +201,24 @@ nav {
   margin-block-start: var(--size-5);
   margin-inline-start: 0;
 }
+
+.selected-unit-stats {
+  grid-row: 2;
+  justify-self: end;
+  align-self: start;
+  margin-block-start: var(--size-5);
+  margin-inline-start: 0;
+
+  &:is(.v-enter-active, .v-leave-active) {
+    transition: all 0.2s var(--ease-out-2);
+  }
+
+  &:is(.v-enter-from, .v-leave-to) {
+    opacity: 0;
+    transform: translateX(var(--size-9));
+  }
+}
+
 .turn-order {
   grid-row: 3;
   align-self: end;

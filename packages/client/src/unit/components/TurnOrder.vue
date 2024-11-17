@@ -21,8 +21,9 @@ const userPlayer = useUserPlayer();
         ally: unit.getUnit().player.isAlly(userPlayer.getPlayer()),
         enemy: unit.getUnit().player.isEnemy(userPlayer.getPlayer())
       }"
+      @click="ui.selectUnit(unit)"
       @mouseenter="ui.highlightUnit(unit)"
-      @mouseleave="ui.unhighlight()"
+      @mouseleave="ui.unhighlightUnit()"
     />
   </section>
 </template>

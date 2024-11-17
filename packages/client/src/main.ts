@@ -31,6 +31,13 @@ const router = createRouter({
 
 const pinia = createPinia();
 
+document.body.addEventListener('contextmenu', e => {
+  const target = e.target as HTMLElement;
+  if (target.nodeName === 'CANVAS') {
+    e.preventDefault();
+  }
+});
+
 app.use(router);
 app.use(pinia);
 app.use(autoAnimatePlugin);

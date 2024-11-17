@@ -11,14 +11,17 @@ export class FrozenModifier extends UnitModifier {
     super(MODIFIER_ID, game, {
       stackable: true,
       initialStacks: duration,
-      mixins: [new DurationModifierMixin(game)],
-      infos: {
-        name: 'Frozen',
-        description: 'This unit cannot move',
-        iconId: 'modifier-frozen',
-        spriteId: 'fx-frozen'
-      }
+      mixins: [new DurationModifierMixin(game)]
     });
+  }
+
+  get infos() {
+    return {
+      name: `Frozen ${this.stacks}`,
+      description: `This unit cannot move for ${this.stacks} turn${this.stacks > 1 ? 's' : ''}.`,
+      iconId: 'modifier-frozen',
+      spriteId: 'fx-frozen'
+    };
   }
 
   private interceptor = () => false;

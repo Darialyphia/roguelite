@@ -8,7 +8,7 @@ export const stasis: CardBlueprint = {
   iconId: 'stasis',
   name: 'Stasis',
   cost: 1,
-  description: 'Give a unit stasis until the end of the turn.',
+  description: 'Give a unit stasis 1.',
   minTargets: 1,
   targets: [
     {
