@@ -60,9 +60,10 @@ export class Card extends Entity {
   }
 
   play(targets: Point3D[]) {
-    if (this.canPlayAt(targets)) {
-      this.blueprint.onPlay(this.game, this, targets);
-    }
+    if (!this.canPlayAt(targets)) return;
+    const aoeShape = this.blueprint.getAoe(this.game, this, targets);
+
+    this.blueprint.onPlay(this.game, this, aoeShape.getCells(), aoeShape.getUnits());
   }
 
   isWithinRange(point: Point3D, index: number) {
@@ -83,6 +84,13 @@ export class Card extends Entity {
       const targeting = this.blueprint.targets[index].getTargeting(this.game, this);
       return targeting.canTargetAt(target);
     });
+  }
+
+  getAoe(targets: Point3D[]) {
+    if (!this.areTargetsValid(targets)) {
+      return null;
+    }
+    return this.blueprint.getAoe(this.game, this, targets);
   }
 
   canPlayAt(targets: Point3D[]) {

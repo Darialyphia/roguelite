@@ -1,7 +1,8 @@
 import type { Game } from '@game/engine';
 import type { Card } from '@game/engine/src/card/card.entity';
 import type { EntityId } from '@game/engine/src/entity';
-import type { Point3D } from '@game/shared';
+import type { AOEShape } from '@game/engine/src/targeting/aoe-shapes';
+import type { Nullable, Point3D } from '@game/shared';
 
 export type CardViewModel = {
   id: EntityId;
@@ -14,6 +15,7 @@ export type CardViewModel = {
   canPlayAt(points: Point3D[]): boolean;
   areTargetsValid(points: Point3D[]): boolean;
   isWithinRange(point: Point3D, index: number): boolean;
+  getAoe(points: Point3D[]): Nullable<AOEShape>;
 };
 
 export const makeCardViewModel = (game: Game, card: Card): CardViewModel => {
@@ -37,6 +39,9 @@ export const makeCardViewModel = (game: Game, card: Card): CardViewModel => {
     },
     isWithinRange(point, index) {
       return card.isWithinRange(point, index);
+    },
+    getAoe(points) {
+      return card.getAoe(points);
     }
   };
 };

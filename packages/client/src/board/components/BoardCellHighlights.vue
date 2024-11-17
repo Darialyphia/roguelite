@@ -53,6 +53,15 @@ const isOnPath = computed(() => {
   return path?.path.some(point => point.equals(cell));
 });
 
+const isInCardAoe = computed(() => {
+  if (!ui.selectedCard) return false;
+  if (!ui.hoveredCell) return false;
+  const aoe = ui.selectedCard.getAoe([...ui.cardTargets, ui.hoveredCell]);
+  if (!aoe) return false;
+
+  return aoe?.getCells().some(c => c.equals(cell.getCell()));
+});
+
 const tag = computed(() => {
   if (
     battleStore.state.phase !== GAME_PHASES.BATTLE ||
@@ -61,14 +70,14 @@ const tag = computed(() => {
     return null;
   }
 
+  if (canAttack.value || isInCardAoe.value) {
+    return 'danger';
+  }
   if (canTarget.value) {
     return 'targeting-valid';
   }
   if (isWithinCardRange.value) {
     return 'targeting';
-  }
-  if (canAttack.value) {
-    return 'danger';
   }
   if (isOnPath.value) {
     return 'movement-path';

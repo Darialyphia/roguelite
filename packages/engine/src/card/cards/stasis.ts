@@ -14,12 +14,12 @@ export const stasis: CardBlueprint = {
     {
       getTargeting(game, card) {
         return new AnywhereTargetingPatternStrategy(game, card.unit, TARGETING_TYPE.BOTH);
-      },
-      getAoe(game) {
-        return new PointAOEShape(game);
       }
     }
   ],
+  getAoe(game, card, points) {
+    return new PointAOEShape(game, points[0]);
+  },
   onPlay(game, card) {
     console.log('todo stasis');
   },

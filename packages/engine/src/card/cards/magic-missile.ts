@@ -5,7 +5,6 @@ import { PointAOEShape } from '../../targeting/aoe-shapes';
 import { RangedTargetingStrategy } from '../../targeting/ranged-targeting.strategy';
 import { TARGETING_TYPE } from '../../targeting/targeting-strategy';
 import type { CardBlueprint } from '../card-blueprint';
-import { getEnemyTargets } from '../card.utils';
 
 export const magicMissile: CardBlueprint = {
   id: 'magic-missile',
@@ -18,15 +17,15 @@ export const magicMissile: CardBlueprint = {
     {
       getTargeting(game, card) {
         return new RangedTargetingStrategy(game, card.unit, TARGETING_TYPE.ENEMY, 3);
-      },
-      getAoe(game) {
-        return new PointAOEShape(game);
       }
     }
   ],
-  onPlay(game, card, targets) {
+  getAoe(game, card, points) {
+    return new PointAOEShape(game, points[0]);
+  },
+  onPlay(game, card, targets, unitTargets) {
     card.unit.dealDamage(
-      getEnemyTargets(game, targets, card.unit),
+      unitTargets,
       new Damage({
         baseAmount: 20,
         source: card.unit,

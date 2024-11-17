@@ -7,22 +7,22 @@ export const frostNova: CardBlueprint = {
   id: 'frost-nova',
   iconId: 'frost-nova',
   name: 'Frost Nova',
-  cost: 2,
+  cost: 1,
   description: 'Freeze nearby enemies until the end of the turn',
   minTargets: 1,
   targets: [
     {
       getTargeting(game, card) {
         return new SelfTargetingPatternStrategy(card.unit);
-      },
-      getAoe(game, card) {
-        return new RingAOEShape(game, card.unit, {
-          allow3D: true,
-          targetingType: TARGETING_TYPE.ENEMY
-        });
       }
     }
   ],
+  getAoe(game, card, points) {
+    return new RingAOEShape(game, card.unit, points[0], {
+      allow3D: true,
+      targetingType: TARGETING_TYPE.ENEMY
+    });
+  },
   onPlay(game, card) {
     console.log('todo frost nova');
   },

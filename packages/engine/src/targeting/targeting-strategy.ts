@@ -14,3 +14,7 @@ export const TARGETING_TYPE = {
 } as const;
 
 export type TargetingType = Values<typeof TARGETING_TYPE>;
+export type NonEmptyTargetingType = Exclude<
+  TargetingType,
+  (typeof TARGETING_TYPE)['EMPTY'] | (typeof TARGETING_TYPE)['ANY']
+>;

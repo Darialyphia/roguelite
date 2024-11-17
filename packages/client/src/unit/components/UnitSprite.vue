@@ -6,6 +6,7 @@ import type { Filter } from 'pixi.js';
 import { useMultiLayerTexture } from '@/shared/composables/useMultiLayerTexture';
 import { config } from '@/utils/config';
 import type { UnitViewModel } from '../unit.model';
+import { ColorOverlayFilter } from '@pixi/filter-color-overlay';
 
 const { unit } = defineProps<{ unit: UnitViewModel }>();
 
@@ -14,12 +15,25 @@ const spritesheet = useSpritesheet(() => unit.spriteId);
 const ui = useBattleUiStore();
 
 const selectedFilter = new OutlineFilter(1, 0xffffff);
+const inAoeFilter = new ColorOverlayFilter(0xff0000, 0.5);
+
+const isInCardAoe = computed(() => {
+  if (!ui.selectedCard) return false;
+  if (!ui.hoveredCell) return false;
+  const aoe = ui.selectedCard.getAoe([...ui.cardTargets, ui.hoveredCell]);
+  if (!aoe) return false;
+  return aoe?.getUnits().some(u => u.equals(unit.getUnit()));
+});
 
 const filters = computed(() => {
   const result: Filter[] = [];
 
   if (ui.highlightedUnit?.equals(unit)) {
     result.push(selectedFilter);
+  }
+
+  if (isInCardAoe.value) {
+    result.push(inAoeFilter);
   }
   return result;
 });

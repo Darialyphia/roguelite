@@ -16,6 +16,7 @@
     "@formkit/auto-animate": "^0.8.2",
     "@game/engine": "^1.0.0",
     "@game/shared": "^1.0.0",
+    "@pixi/filter-color-overlay": "^5.1.1",
     "@pixi/filter-outline": "^5.2.0",
     "@pixi/layers": "^2.1.0",
     "@types/bezier-js": "^4.1.3",

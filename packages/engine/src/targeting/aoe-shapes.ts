@@ -1,48 +1,71 @@
 import type { Game } from '../game/game';
 import { isDefined, type Point3D } from '@game/shared';
 import type { Cell } from '../board/cell';
-import type { TargetingType } from './targeting-strategy';
+import type { NonEmptyTargetingType } from './targeting-strategy';
 import { match } from 'ts-pattern';
 import type { Unit } from '../unit/unit.entity';
 
 export type AOEShape = {
-  getCells(shapeOrigin: Point3D): Cell[];
+  getCells(): Cell[];
+  getUnits(): Unit[];
 };
 
-export class PointAOEShape implements AOEShape {
-  constructor(private game: Game) {}
+export class NoAOEShape implements AOEShape {
+  getCells() {
+    return [];
+  }
 
-  getCells(shapeOrigin: Point3D) {
-    return [this.game.boardSystem.getCellAt(shapeOrigin)].filter(isDefined);
+  getUnits(): Unit[] {
+    return [];
+  }
+}
+
+export class PointAOEShape implements AOEShape {
+  constructor(
+    private game: Game,
+    private point: Point3D
+  ) {}
+
+  getCells() {
+    return [this.game.boardSystem.getCellAt(this.point)].filter(isDefined);
+  }
+
+  getUnits(): Unit[] {
+    return this.getCells()
+      .map(cell => cell.unit)
+      .filter(isDefined);
   }
 }
 
 export type RingAOEShapeOptions = {
   allow3D: boolean;
-  targetingType: TargetingType;
+  targetingType: NonEmptyTargetingType;
 };
 export class RingAOEShape implements AOEShape {
   constructor(
     private game: Game,
     private unit: Unit,
+    private point: Point3D,
     private options: RingAOEShapeOptions
   ) {}
 
-  getCells(shapeOrigin: Point3D) {
-    const cells = this.options.allow3D
-      ? this.game.boardSystem.getNeighbors3D(shapeOrigin)
-      : this.game.boardSystem.getNeighbors(shapeOrigin);
+  getCells() {
+    return this.options.allow3D
+      ? this.game.boardSystem.getNeighbors3D(this.point)
+      : this.game.boardSystem.getNeighbors(this.point);
+  }
 
-    return cells.filter(cell => {
-      const unit = this.game.unitSystem.getUnitAt(cell);
+  getUnits() {
+    return this.getCells()
+      .map(cell => cell.unit)
+      .filter((unit): unit is Unit => {
+        if (!isDefined(unit)) return false;
 
-      match(this.options.targetingType)
-        .with('any', () => true)
-        .with('empty', () => !unit)
-        .with('ally', () => !!unit?.isAlly(this.unit))
-        .with('enemy', () => !!unit?.isEnemy(this.unit))
-        .with('both', () => !!unit)
-        .exhaustive();
-    });
+        return match(this.options.targetingType)
+          .with('ally', () => !!unit?.isAlly(this.unit))
+          .with('enemy', () => !!unit?.isEnemy(this.unit))
+          .with('both', () => !!unit)
+          .exhaustive();
+      });
   }
 }
