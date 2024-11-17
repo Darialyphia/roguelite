@@ -5,7 +5,7 @@ import { config } from '@/utils/config';
 const { card } = defineProps<{ card: CardViewModel }>();
 
 const nameFontSize = computed(() => {
-  const minFontSize = 8;
+  const minFontSize = 4;
   const maxFontSize = 14;
   const minLineLength = 0;
   const maxLineLength = 40;

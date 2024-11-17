@@ -2,6 +2,7 @@ import { isDefined, type Point3D } from '@game/shared';
 import type { EntityId } from '../entity';
 import { Unit, UNIT_EVENTS, type UnitOptions } from './unit.entity';
 import { System } from '../system';
+import { GAME_PHASES } from '../game/game-phase.system';
 
 export type UnitSystemOptions = {
   units: UnitOptions[];
@@ -88,11 +89,14 @@ export class UnitSystem extends System<UnitSystemOptions> {
 
   addUnit(unitOptions: Omit<UnitOptions, 'id'>) {
     const id = `unit_${++this.nextUnitId}`;
-    const entity = new Unit(this.game, { ...unitOptions, id });
-    this.unitMap.set(entity.id, entity);
-    this.forwardListeners(entity);
+    const unit = new Unit(this.game, { ...unitOptions, id });
+    this.unitMap.set(unit.id, unit);
+    this.forwardListeners(unit);
 
-    return entity;
+    if (this.game.phase === GAME_PHASES.BATTLE) {
+      this.game.turnSystem.insertInCurrentQueue(unit);
+    }
+    return unit;
   }
 
   removeUnit(unit: Unit) {

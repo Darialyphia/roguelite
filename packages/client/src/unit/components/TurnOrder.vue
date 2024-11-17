@@ -17,9 +17,9 @@ const userPlayer = useUserPlayer();
       :unit="unit"
       class="pointer-events-auto"
       :class="{
-        highlighted: ui.highlightedUnit?.equals(unit),
-        ally: unit.getUnit().player.isAlly(userPlayer.getPlayer()),
-        enemy: unit.getUnit().player.isEnemy(userPlayer.getPlayer())
+        highlighted: ui.highlightedUnit?.equals(unit)
+        // ally: unit.getUnit().player.isAlly(userPlayer.getPlayer()),
+        // enemy: unit.getUnit().player.isEnemy(userPlayer.getPlayer())
       }"
       @click="ui.selectUnit(unit)"
       @mouseenter="ui.highlightUnit(unit)"

@@ -77,6 +77,12 @@ export class TurnSystem extends System<never> {
     this.activeUnit.startTurn();
   }
 
+  insertInCurrentQueue(unit: Unit) {
+    let idx = this.queue.findIndex(u => u.speed < unit.speed);
+    if (idx === -1) idx = this.queue.length;
+    this.queue.splice(idx, 0, unit);
+  }
+
   endGameTurn() {
     this.emitter.emit(TURN_EVENTS.TURN_END, { turnCount: this.turnCount });
   }

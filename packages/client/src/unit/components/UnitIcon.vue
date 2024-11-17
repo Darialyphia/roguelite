@@ -3,7 +3,7 @@ import type { UnitViewModel } from '../unit.model';
 
 const { unit } = defineProps<{ unit: UnitViewModel }>();
 
-const bg = computed(() => `url(/assets/icons/${unit.spriteId}.png)`);
+const bg = computed(() => `url(/assets/icons/${unit.iconId}.png)`);
 </script>
 
 <template>

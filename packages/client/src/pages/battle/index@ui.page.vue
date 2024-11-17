@@ -27,24 +27,23 @@ const options: Pick<GameOptions, 'mapId' | 'teams'> = {
         id: PLAYER_ID,
         units: [
           {
-            blueprintId: 'test-unit',
+            blueprintId: 'wizard',
             deck: [
               { blueprintId: 'magic-missile' },
               { blueprintId: 'magic-missile' },
               { blueprintId: 'magic-missile' },
-              { blueprintId: 'magic-missile' },
               { blueprintId: 'arcane-intellect' },
               { blueprintId: 'arcane-intellect' },
               { blueprintId: 'arcane-intellect' },
-              { blueprintId: 'arcane-intellect' },
-              { blueprintId: 'stasis' },
               { blueprintId: 'stasis' },
               { blueprintId: 'stasis' },
               { blueprintId: 'stasis' },
               { blueprintId: 'frost-nova' },
               { blueprintId: 'frost-nova' },
               { blueprintId: 'frost-nova' },
-              { blueprintId: 'frost-nova' }
+              { blueprintId: 'summon-arcane-servant' },
+              { blueprintId: 'summon-arcane-servant' },
+              { blueprintId: 'summon-arcane-servant' }
             ],
             spriteParts: {
               armor: 'tier3',
@@ -52,7 +51,7 @@ const options: Pick<GameOptions, 'mapId' | 'teams'> = {
               weapon: 'tier3',
               vfx: 'tier3'
             },
-            position: { x: 6, y: 0, z: 0 }
+            position: { x: 1, y: 0, z: 0 }
           }
         ],
         roster: []
@@ -64,24 +63,23 @@ const options: Pick<GameOptions, 'mapId' | 'teams'> = {
         roster: [],
         units: [
           {
-            blueprintId: 'test-unit',
+            blueprintId: 'wizard',
             deck: [
-              // { blueprintId: 'magic-missile' },
-              // { blueprintId: 'magic-missile' },
-              // { blueprintId: 'magic-missile' },
-              // { blueprintId: 'magic-missile' },
-              // { blueprintId: 'arcane-intellect' },
-              // { blueprintId: 'arcane-intellect' },
-              // { blueprintId: 'arcane-intellect' },
-              // { blueprintId: 'arcane-intellect' },
-              // { blueprintId: 'stasis' },
-              // { blueprintId: 'stasis' },
-              // { blueprintId: 'stasis' },
-              // { blueprintId: 'stasis' },
-              // { blueprintId: 'frost-nova' },
-              // { blueprintId: 'frost-nova' },
-              // { blueprintId: 'frost-nova' },
-              // { blueprintId: 'frost-nova' }
+              { blueprintId: 'magic-missile' },
+              { blueprintId: 'magic-missile' },
+              { blueprintId: 'magic-missile' },
+              { blueprintId: 'arcane-intellect' },
+              { blueprintId: 'arcane-intellect' },
+              { blueprintId: 'arcane-intellect' },
+              { blueprintId: 'stasis' },
+              { blueprintId: 'stasis' },
+              { blueprintId: 'stasis' },
+              { blueprintId: 'frost-nova' },
+              { blueprintId: 'frost-nova' },
+              { blueprintId: 'frost-nova' },
+              { blueprintId: 'summon-arcane-servant' },
+              { blueprintId: 'summon-arcane-servant' },
+              { blueprintId: 'summon-arcane-servant' }
             ],
             spriteParts: {
               armor: 'tier4',

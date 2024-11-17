@@ -8,6 +8,7 @@ export type UnitViewModel = {
   id: EntityId;
   name: string;
   spriteId: string;
+  iconId: string;
   cosmetics: Record<string, string | null>;
   position: Vec3;
   currentAp: number;
@@ -33,6 +34,7 @@ export const makeUnitVModel = (game: Game, unit: Unit): UnitViewModel => {
     id: unit.id,
     name: unit.name,
     spriteId: unit.spriteId,
+    iconId: unit.iconId,
     cosmetics: unit.cosmetics,
     position: Vec3.fromPoint3D(unit.position),
     currentAp: unit.ap.current,

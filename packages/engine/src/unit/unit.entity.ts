@@ -138,6 +138,10 @@ export class Unit extends Entity {
     return this.blueprint.spriteId;
   }
 
+  get iconId() {
+    return this.blueprint.iconId;
+  }
+
   get position() {
     return this.movement.position;
   }

@@ -1,4 +1,5 @@
 import { keyBy } from 'lodash-es';
-import { testUnit } from './test.unit';
+import { wizard } from './wizard.unit';
+import { arcaneServant } from './arcane-servant';
 
-export const UNITS_DICTIONARY = keyBy([testUnit], 'id');
+export const UNITS_DICTIONARY = keyBy([wizard, arcaneServant], 'id');

@@ -67,6 +67,20 @@
         },
         {
           "alias": [
+            "icon-arcane-servant"
+          ],
+          "src": [
+            "/assets/icons/arcane-servant.png"
+          ],
+          "foo": "bar",
+          "data": {
+            "tags": {
+              "m": true
+            }
+          }
+        },
+        {
+          "alias": [
             "icon-card-image-placeholder"
           ],
           "src": [
@@ -137,10 +151,24 @@
         },
         {
           "alias": [
-            "icon-wizard"
+            "icon-unit-arcane-servant"
           ],
           "src": [
-            "/assets/icons/wizard.png"
+            "/assets/icons/unit-arcane-servant.png"
+          ],
+          "foo": "bar",
+          "data": {
+            "tags": {
+              "m": true
+            }
+          }
+        },
+        {
+          "alias": [
+            "icon-unit-wizard"
+          ],
+          "src": [
+            "/assets/icons/unit-wizard.png"
           ],
           "foo": "bar",
           "data": {
@@ -473,6 +501,21 @@
         },
         {
           "alias": [
+            "unit-icon-frame"
+          ],
+          "src": [
+            "/assets/ui/unit-icon-frame.json"
+          ],
+          "loadParser": "aseprite_loader",
+          "foo": "bar",
+          "data": {
+            "tags": {
+              "m": true
+            }
+          }
+        },
+        {
+          "alias": [
             "unit-icon-frame.png"
           ],
           "src": [
@@ -519,6 +562,35 @@
     {
       "name": "units",
       "assets": [
+        {
+          "alias": [
+            "arcane-servant"
+          ],
+          "src": [
+            "/assets/units/arcane-servant.json"
+          ],
+          "loadParser": "aseprite_loader",
+          "foo": "bar",
+          "data": {
+            "tags": {
+              "m": true
+            }
+          }
+        },
+        {
+          "alias": [
+            "arcane-servant.png"
+          ],
+          "src": [
+            "/assets/units/arcane-servant.png"
+          ],
+          "foo": "bar",
+          "data": {
+            "tags": {
+              "m": true
+            }
+          }
+        },
         {
           "alias": [
             "wizard"
