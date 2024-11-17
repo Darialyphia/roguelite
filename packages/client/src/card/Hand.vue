@@ -7,8 +7,8 @@ import {
 } from '@/pages/battle/battle.store';
 import Card from './Card.vue';
 import { waitFor, type Nullable } from '@game/shared';
-import { useMouse } from '@vueuse/core';
-import { useBattleUiStore } from '@/pages/battle/battle-ui.store';
+import { useMouse, usePageLeave } from '@vueuse/core';
+import { UI_MODES, useBattleUiStore } from '@/pages/battle/battle-ui.store';
 import { config } from '@/utils/config';
 import { useApplication } from 'vue3-pixi';
 import { makeCardViewModel } from './card.model';
@@ -46,6 +46,7 @@ const { x, y } = useMouse();
 const offset = ref({ x: 0, y: 0 });
 
 const app = useApplication();
+const isOutOfScreen = usePageLeave();
 
 const onMouseDown = (e: MouseEvent, index: number) => {
   ui.selectCardAtIndex(index);
@@ -60,17 +61,32 @@ const onMouseDown = (e: MouseEvent, index: number) => {
   }, 0);
   draggedIndex.value = index;
 
-  const stopDragging = (e: MouseEvent) => {
+  const stopDragging = () => {
+    nextTick(() => {
+      draggedIndex.value = null;
+    });
+    document.body.removeEventListener('mouseup', onMouseup);
+  };
+  const onMouseup = (e: MouseEvent) => {
     if (app.value.view !== e.target) {
       ui.unselectCard();
     }
 
-    nextTick(() => {
-      draggedIndex.value = null;
-    });
-    document.body.removeEventListener('mouseup', stopDragging);
+    stopDragging();
   };
-  document.body.addEventListener('mouseup', stopDragging);
+
+  document.body.addEventListener('mouseup', onMouseup);
+  const unwatch = watchEffect(() => {
+    if (ui.mode !== UI_MODES.PLAY_CARD) {
+      unwatch();
+      return;
+    }
+    if (isOutOfScreen.value) {
+      stopDragging();
+      ui.unselectCard();
+      unwatch();
+    }
+  });
 };
 
 const activeUnit = useActiveUnit();

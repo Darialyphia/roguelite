@@ -1,5 +1,5 @@
 import type { Game } from '../game/game';
-import { Interceptable } from '../utils/interceptable';
+import { Interceptable, type inferInterceptor } from '../utils/interceptable';
 import type { Unit } from '../unit/unit.entity';
 import type { TargetingStrategy } from '../targeting/targeting-strategy';
 import type { AOEShape } from '../targeting/aoe-shapes';
@@ -30,9 +30,9 @@ export type CombatComponentOptions = {
   attackPattern: TargetingStrategy;
 };
 
-export class CombatComponent {
-  private game: Game;
+type CombatInterceptor = CombatComponent['interceptors'];
 
+export class CombatComponent {
   private unit: Unit;
 
   private baseStats: CombatStats;
@@ -44,18 +44,11 @@ export class CombatComponent {
     pDef: new Interceptable<number>(),
     mAtk: new Interceptable<number>(),
     mDef: new Interceptable<number>(),
-    pDefPiercing: {
-      flat: new Interceptable<number>(),
-      percentage: new Interceptable<number>()
-    },
-    mDefPiercing: {
-      flat: new Interceptable<number>(),
-      percentage: new Interceptable<number>()
-    }
+    pDefPiercing: new Interceptable<{ flat: number; percentage: number }>(),
+    mDefPiercing: new Interceptable<{ flat: number; percentage: number }>()
   };
 
-  constructor(game: Game, options: CombatComponentOptions) {
-    this.game = game;
+  constructor(options: CombatComponentOptions) {
     this.unit = options.unit;
     this.baseStats = options.baseStats;
     this.targeting = options.attackPattern;
@@ -84,29 +77,11 @@ export class CombatComponent {
   }
 
   get pDefPiercing(): { flat: number; percentage: number } {
-    return {
-      flat: this.interceptors.pDefPiercing.flat.getValue(
-        this.baseStats.pDefPiercing.flat,
-        {}
-      ),
-      percentage: this.interceptors.pDefPiercing.percentage.getValue(
-        this.baseStats.pDefPiercing.percentage,
-        {}
-      )
-    };
+    return this.interceptors.pDefPiercing.getValue(this.baseStats.pDefPiercing, {});
   }
 
   get mDefPiercing(): { flat: number; percentage: number } {
-    return {
-      flat: this.interceptors.mDefPiercing.flat.getValue(
-        this.baseStats.mDefPiercing.flat,
-        {}
-      ),
-      percentage: this.interceptors.mDefPiercing.percentage.getValue(
-        this.baseStats.mDefPiercing.percentage,
-        {}
-      )
-    };
+    return this.interceptors.mDefPiercing.getValue(this.baseStats.mDefPiercing, {});
   }
 
   attackAt(aoeShape: AOEShape) {
@@ -120,5 +95,22 @@ export class CombatComponent {
     });
 
     this.unit.dealDamage(targets, damage);
+  }
+
+  addInterceptor<T extends keyof CombatInterceptor>(
+    key: T,
+    interceptor: inferInterceptor<CombatInterceptor[T]>,
+    priority?: number
+  ) {
+    this.interceptors[key].add(interceptor as any, priority);
+
+    return () => this.removeInterceptor(key, interceptor);
+  }
+
+  removeInterceptor<T extends keyof CombatInterceptor>(
+    key: T,
+    interceptor: inferInterceptor<CombatInterceptor[T]>
+  ) {
+    this.interceptors[key].remove(interceptor as any);
   }
 }

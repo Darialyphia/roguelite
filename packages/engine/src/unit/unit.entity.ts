@@ -4,7 +4,7 @@ import { Card, type CardOptions } from '../card/card.entity';
 import { GAME_EVENTS, type Game } from '../game/game';
 import { SolidBodyPathfindingStrategy } from '../pathfinding/strategies/solid-pathfinding.strategy';
 import type { UnitBlueprint } from './unit-blueprint';
-import { Interceptable } from '../utils/interceptable';
+import { Interceptable, type inferInterceptor } from '../utils/interceptable';
 import { ActionPointComponent } from './components/action-point.component';
 import { TypedEventEmitter } from '../utils/typed-emitter';
 import { HealthComponent } from './components/health.component';
@@ -74,6 +74,8 @@ export type UnitEventMap = {
   [UNIT_EVENTS.AFTER_DESTROY]: [{ source: Unit }];
 };
 
+type UnitInterceptor = Unit['interceptors'];
+
 export class Unit extends Entity {
   private game: Game;
 
@@ -114,7 +116,7 @@ export class Unit extends Entity {
     this.modifierManager = new UnitModifierManager(this);
     this.ap = new ActionPointComponent({ maxAp: this.blueprint.maxAp });
     this.hp = new HealthComponent({ maxHp: this.blueprint.maxHp });
-    this.combat = new CombatComponent(this.game, {
+    this.combat = new CombatComponent({
       baseStats: this.blueprint,
       unit: this,
       attackPattern: new MeleeTargetingPatternStrategy(
@@ -236,6 +238,35 @@ export class Unit extends Entity {
 
   get draw() {
     return this.cardManager.draw.bind(this.cardManager);
+  }
+
+  addInterceptor<T extends keyof UnitInterceptor>(
+    key: T,
+    interceptor: inferInterceptor<UnitInterceptor[T]>,
+    priority?: number
+  ) {
+    this.interceptors[key].add(interceptor as any, priority);
+
+    return () => this.removeInterceptor(key, interceptor);
+  }
+
+  removeInterceptor<T extends keyof UnitInterceptor>(
+    key: T,
+    interceptor: inferInterceptor<UnitInterceptor[T]>
+  ) {
+    this.interceptors[key].remove(interceptor as any);
+  }
+
+  get addCombatInterceptor() {
+    return this.combat.addInterceptor.bind(this.combat);
+  }
+
+  get addApInterceptor() {
+    return this.hp.addInterceptor.bind(this.ap);
+  }
+
+  get addHpInterceptor() {
+    return this.hp.addInterceptor.bind(this.hp);
   }
 
   private forwardEvents() {
@@ -382,6 +413,10 @@ export class Unit extends Entity {
 
   get getModifier() {
     return this.modifierManager.getById.bind(this.modifierManager);
+  }
+
+  get modifierInfos() {
+    return this.modifierManager.modifierInfos;
   }
 
   addModifier(modifier: UnitModifier) {

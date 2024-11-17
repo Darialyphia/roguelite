@@ -22,6 +22,7 @@ export type UnitViewModel = {
   hand: CardViewModel[];
   deckSize: number;
   remainingCardsInDeck: number;
+  modifierInfos: Unit['modifierInfos'];
   getUnit(): Unit;
   isActive(): boolean;
   equals(unit: UnitViewModel): boolean;
@@ -46,6 +47,7 @@ export const makeUnitVModel = (game: Game, unit: Unit): UnitViewModel => {
     hand: unit.hand.map(card => makeCardViewModel(game, card)),
     deckSize: unit.deckSize,
     remainingCardsInDeck: unit.remainingCardsInDeck,
+    modifierInfos: [...unit.modifierInfos],
     getUnit() {
       return unit;
     },

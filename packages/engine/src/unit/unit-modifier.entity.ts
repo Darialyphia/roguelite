@@ -35,7 +35,7 @@ export class UnitModifier extends Entity {
 
   readonly infos?: {
     iconId?: string;
-    sprite?: string;
+    spriteId?: string;
     name?: string;
     description?: string;
   };

@@ -21,15 +21,16 @@ export class FrozenModifier extends UnitModifier {
     });
   }
 
+  private interceptor = () => false;
+
   applyTo(unit: Unit): void {
     super.applyTo(unit);
 
-    console.log(`${unit.name} is frozen solid !`);
+    this.target.addInterceptor('canMove', this.interceptor);
   }
 
   remove(): void {
     super.remove();
-
-    console.log(`${this.target.name} is no longer frozen`);
+    this.target.removeInterceptor('canMove', this.interceptor);
   }
 }

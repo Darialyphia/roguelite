@@ -1,8 +1,10 @@
-import { Interceptable } from '../../utils/interceptable';
+import { Interceptable, type inferInterceptor } from '../../utils/interceptable';
 
 export type ActionPointComponentOptions = {
   maxAp: number;
 };
+
+type ActionPointInterceptor = ActionPointComponent['interceptors'];
 
 export class ActionPointComponent {
   private baseMaxAp: number;
@@ -40,5 +42,24 @@ export class ActionPointComponent {
 
   remove(amount: number) {
     this._current = Math.max(this._current - amount, 0);
+  }
+
+  addInterceptor<T extends keyof ActionPointInterceptor>(
+    key: T,
+    interceptor: inferInterceptor<ActionPointInterceptor[T]>,
+    priority?: number
+  ) {
+    this.interceptors[key].add(interceptor, priority);
+    this._current = Math.min(this._current, this.max);
+
+    return () => this.removeInterceptor(key, interceptor);
+  }
+
+  removeInterceptor<T extends keyof ActionPointInterceptor>(
+    key: T,
+    interceptor: inferInterceptor<ActionPointInterceptor[T]>
+  ) {
+    this.interceptors[key].remove(interceptor);
+    this._current = Math.min(this._current, this.max);
   }
 }

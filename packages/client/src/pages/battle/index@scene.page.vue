@@ -6,12 +6,14 @@ import IsoWorld from '@/iso/components/IsoWorld.vue';
 import IsoCamera from '@/iso/components/IsoCamera.vue';
 import { useKeyboardControl } from '@/shared/composables/useKeyboardControl';
 import { useSettingsStore } from '@/shared/composables/useSettings';
+import { UI_MODES, useBattleUiStore } from './battle-ui.store';
 
 definePage({
   name: 'Battle'
 });
 const battleStore = useBattleStore();
 const settingsStore = useSettingsStore();
+const uiStore = useBattleUiStore();
 const isoWorld = useTemplateRef('isoWorld');
 
 useKeyboardControl(
@@ -63,6 +65,13 @@ useKeyboardControl(
     :width="battleStore.session.game.boardSystem.width"
     :height="battleStore.session.game.boardSystem.height"
     :tile-size="config.TILE_SIZE"
+    @pointerup="
+      e => {
+        if (e.target !== isoWorld?.camera.viewport.value) return;
+        if (uiStore.mode !== UI_MODES.PLAY_CARD) return;
+        uiStore.unselectCard();
+      }
+    "
   >
     <IsoCamera
       :width="battleStore.session.game.boardSystem.width"

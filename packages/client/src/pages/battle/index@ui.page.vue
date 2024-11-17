@@ -51,7 +51,7 @@ const options: Pick<GameOptions, 'mapId' | 'teams'> = {
               weapon: 'tier3',
               vfx: 'tier3'
             },
-            position: { x: 1, y: 0, z: 0 }
+            position: { x: 6, y: 0, z: 0 }
           }
         ],
         roster: []
@@ -65,22 +65,22 @@ const options: Pick<GameOptions, 'mapId' | 'teams'> = {
           {
             blueprintId: 'test-unit',
             deck: [
-              { blueprintId: 'magic-missile' },
-              { blueprintId: 'magic-missile' },
-              { blueprintId: 'magic-missile' },
-              { blueprintId: 'magic-missile' },
-              { blueprintId: 'arcane-intellect' },
-              { blueprintId: 'arcane-intellect' },
-              { blueprintId: 'arcane-intellect' },
-              { blueprintId: 'arcane-intellect' },
-              { blueprintId: 'stasis' },
-              { blueprintId: 'stasis' },
-              { blueprintId: 'stasis' },
-              { blueprintId: 'stasis' },
-              { blueprintId: 'frost-nova' },
-              { blueprintId: 'frost-nova' },
-              { blueprintId: 'frost-nova' },
-              { blueprintId: 'frost-nova' }
+              // { blueprintId: 'magic-missile' },
+              // { blueprintId: 'magic-missile' },
+              // { blueprintId: 'magic-missile' },
+              // { blueprintId: 'magic-missile' },
+              // { blueprintId: 'arcane-intellect' },
+              // { blueprintId: 'arcane-intellect' },
+              // { blueprintId: 'arcane-intellect' },
+              // { blueprintId: 'arcane-intellect' },
+              // { blueprintId: 'stasis' },
+              // { blueprintId: 'stasis' },
+              // { blueprintId: 'stasis' },
+              // { blueprintId: 'stasis' },
+              // { blueprintId: 'frost-nova' },
+              // { blueprintId: 'frost-nova' },
+              // { blueprintId: 'frost-nova' },
+              // { blueprintId: 'frost-nova' }
             ],
             spriteParts: {
               armor: 'tier4',

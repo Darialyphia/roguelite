@@ -7,10 +7,19 @@ import { useMultiLayerTexture } from '@/shared/composables/useMultiLayerTexture'
 import { config } from '@/utils/config';
 import type { UnitViewModel } from '../unit.model';
 import { ColorOverlayFilter } from '@pixi/filter-color-overlay';
+import { isDefined } from '@game/shared';
+import UnitModifierSprite from './UnitModifierSprite.vue';
 
 const { unit } = defineProps<{ unit: UnitViewModel }>();
 
 const spritesheet = useSpritesheet(() => unit.spriteId);
+
+const textures = useMultiLayerTexture({
+  sheet: spritesheet,
+  parts: () => unit.cosmetics,
+  tag: 'idle',
+  dimensions: config.UNIT_SPRITE_SIZE
+});
 
 const ui = useBattleUiStore();
 
@@ -38,11 +47,8 @@ const filters = computed(() => {
   return result;
 });
 
-const textures = useMultiLayerTexture({
-  sheet: spritesheet,
-  parts: () => unit.cosmetics,
-  tag: 'idle',
-  dimensions: config.UNIT_SPRITE_SIZE
+const modifierSpriteIds = computed(() => {
+  return unit.modifierInfos.map(infos => infos?.spriteId).filter(isDefined);
 });
 </script>
 
@@ -53,7 +59,13 @@ const textures = useMultiLayerTexture({
     :anchor="0.5"
     event-mode="none"
     :filters="filters"
-  />
+  >
+    <UnitModifierSprite
+      v-for="modifier in modifierSpriteIds"
+      :key="modifier"
+      :sprite-id="modifier"
+    />
+  </animated-sprite>
 </template>
 
 <style scoped lang="postcss"></style>

@@ -33,14 +33,12 @@ export const useMultiLayerTexture = <
         sheet: _sheet.sheets[group][part]
       });
     });
-
     return result;
   });
 
   const texturesGroups = computed(() => {
     return sheets.value.map(({ sheet }) => {
       return sheet.animations[toValue(tag)];
-      // return createSpritesheetFrameObject(tag, sheet);
     });
   });
 
