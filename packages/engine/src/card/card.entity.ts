@@ -82,6 +82,9 @@ export class Card extends Entity {
 
     return targets.every((target, index) => {
       const targeting = this.blueprint.targets[index].getTargeting(this.game, this);
+      const unit = this.game.unitSystem.getUnitAt(target);
+      if (unit && !unit.canBeCardTarget) return false;
+
       return targeting.canTargetAt(target);
     });
   }

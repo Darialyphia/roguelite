@@ -95,7 +95,7 @@ const options: Pick<GameOptions, 'mapId' | 'teams'> = {
   ]
 };
 const serverSession = new ServerSession({
-  rngSeed: 'test-seed',
+  rngSeed: '123456',
   ...options
 });
 const clientSession = new ClientSession(options);

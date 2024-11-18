@@ -1,6 +1,7 @@
 import { AnywhereTargetingPatternStrategy } from '../../targeting/anywhere-targeting-strategy';
 import { PointAOEShape } from '../../targeting/aoe-shapes';
 import { TARGETING_TYPE } from '../../targeting/targeting-strategy';
+import { StasisModifier } from '../../unit/modifiers/stasis.modifier';
 import type { CardBlueprint } from '../card-blueprint';
 
 export const stasis: CardBlueprint = {
@@ -20,8 +21,10 @@ export const stasis: CardBlueprint = {
   getAoe(game, card, points) {
     return new PointAOEShape(game, points[0]);
   },
-  onPlay(game, card) {
-    console.log('todo stasis');
+  onPlay(game, card, cells, units) {
+    units.forEach(unit => {
+      unit.addModifier(new StasisModifier(game, 1));
+    });
   },
   aiHints: {
     isRelevantTarget(point, game, card) {

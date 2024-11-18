@@ -39,6 +39,8 @@ export class CombatComponent {
 
   private targeting: TargetingStrategy;
 
+  private game: Game;
+
   private interceptors = {
     pAtk: new Interceptable<number>(),
     pDef: new Interceptable<number>(),
@@ -48,7 +50,8 @@ export class CombatComponent {
     mDefPiercing: new Interceptable<{ flat: number; percentage: number }>()
   };
 
-  constructor(options: CombatComponentOptions) {
+  constructor(game: Game, options: CombatComponentOptions) {
+    this.game = game;
     this.unit = options.unit;
     this.baseStats = options.baseStats;
     this.targeting = options.attackPattern;
@@ -56,6 +59,8 @@ export class CombatComponent {
 
   canAttackAt(point: Point3D) {
     if (this.unit.position.equals(point)) return false;
+    const unit = this.game.unitSystem.getUnitAt(point);
+    if (unit && !unit.canBeAttacked) return false;
 
     return this.targeting.canTargetAt(point);
   }

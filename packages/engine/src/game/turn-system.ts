@@ -81,7 +81,7 @@ export class TurnSystem extends System<never> {
   }
 
   removeFromCurrentQueue(unit: Unit) {
-    const idx = this.queue.findIndex(u => u.speed < unit.speed);
+    const idx = this.queue.findIndex(u => u.equals(unit));
     if (idx === -1) return;
     this.queue.splice(idx, 1);
   }

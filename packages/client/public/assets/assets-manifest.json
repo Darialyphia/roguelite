@@ -45,6 +45,35 @@
               "m": true
             }
           }
+        },
+        {
+          "alias": [
+            "fx-stasis"
+          ],
+          "src": [
+            "/assets/fx/stasis.json"
+          ],
+          "loadParser": "aseprite_loader",
+          "foo": "bar",
+          "data": {
+            "tags": {
+              "m": true
+            }
+          }
+        },
+        {
+          "alias": [
+            "fx-stasis.png"
+          ],
+          "src": [
+            "/assets/fx/stasis.png"
+          ],
+          "foo": "bar",
+          "data": {
+            "tags": {
+              "m": true
+            }
+          }
         }
       ]
     },
@@ -127,6 +156,20 @@
           ],
           "src": [
             "/assets/icons/modifier-frozen.png"
+          ],
+          "foo": "bar",
+          "data": {
+            "tags": {
+              "m": true
+            }
+          }
+        },
+        {
+          "alias": [
+            "icon-modifier-stasis"
+          ],
+          "src": [
+            "/assets/icons/modifier-stasis.png"
           ],
           "foo": "bar",
           "data": {

@@ -102,6 +102,8 @@ export class Unit extends Entity {
   private interceptors = {
     canMove: new Interceptable<boolean>(),
     canAttack: new Interceptable<boolean>(),
+    canBeAttackTarget: new Interceptable<boolean>(),
+    canBeCardTarget: new Interceptable<boolean>(),
     canPlayCardFromHand: new Interceptable<boolean>(),
     speed: new Interceptable<number>()
   };
@@ -116,7 +118,7 @@ export class Unit extends Entity {
     this.modifierManager = new UnitModifierManager(this);
     this.ap = new ActionPointComponent({ maxAp: this.blueprint.maxAp });
     this.hp = new HealthComponent({ maxHp: this.blueprint.maxHp });
-    this.combat = new CombatComponent({
+    this.combat = new CombatComponent(this.game, {
       baseStats: this.blueprint,
       unit: this,
       attackPattern: new MeleeTargetingPatternStrategy(
@@ -188,6 +190,14 @@ export class Unit extends Entity {
 
   get speed(): number {
     return this.interceptors.speed.getValue(this.blueprint.speed, {});
+  }
+
+  get canBeAttacked(): boolean {
+    return this.interceptors.canBeAttackTarget.getValue(true, {});
+  }
+
+  get canBeCardTarget(): boolean {
+    return this.interceptors.canBeCardTarget.getValue(true, {});
   }
 
   get pAtk() {
