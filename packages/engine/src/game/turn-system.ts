@@ -26,8 +26,11 @@ export class TurnSystem extends System<never> {
   private emitter = new TypedEventEmitter<TurnEventMap>();
 
   initialize() {
-    console.groupEnd();
     this.game.on('unit.end_turn', this.onUnitTurnEnd.bind(this));
+    this.game.on('unit.after_destroy', e => {
+      this.removeFromCurrentQueue(e.unit);
+    });
+
     this.on(TURN_EVENTS.TURN_START, e => {
       this.game.emit(GAME_EVENTS.TURN_START, e);
     });
@@ -75,6 +78,12 @@ export class TurnSystem extends System<never> {
     this.emitter.emit(TURN_EVENTS.TURN_START, { turnCount: this.turnCount });
 
     this.activeUnit.startTurn();
+  }
+
+  removeFromCurrentQueue(unit: Unit) {
+    const idx = this.queue.findIndex(u => u.speed < unit.speed);
+    if (idx === -1) return;
+    this.queue.splice(idx, 1);
   }
 
   insertInCurrentQueue(unit: Unit) {
