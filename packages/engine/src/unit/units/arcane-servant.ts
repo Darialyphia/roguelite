@@ -6,7 +6,7 @@ export const arcaneServant: UnitBlueprint = {
   spriteId: 'arcane-servant',
   iconId: 'unit-arcane-servant',
   speed: 5,
-  pAtk: 20,
+  pAtk: 10,
   pDef: 8,
   mAtk: 0,
   mDef: 15,

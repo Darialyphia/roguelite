@@ -7,6 +7,8 @@ import type { Unit } from '../unit.entity';
 const MODIFIER_ID = 'UNIT_MODIFIER_FROZEN' as EntityId;
 
 export class FrozenModifier extends UnitModifier {
+  static MODIFIER_ID = MODIFIER_ID;
+
   constructor(game: Game, duration: number) {
     super(MODIFIER_ID, game, {
       stackable: true,

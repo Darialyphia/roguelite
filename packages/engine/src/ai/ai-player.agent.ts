@@ -40,12 +40,8 @@ export class AIPlayerAgent implements AIAgent {
     const id = this.nextSimulationId++;
     try {
       const simulator = new InputSimulator(this.game, [input], id);
-      // eslint-disable-next-line @typescript-eslint/no-empty-function
-      simulator.prepare();
-      const game = simulator.run();
-
-      const score = this.evaluateGameState(game);
-      game.shutdown();
+      const scorer = new AIScorer(this.player.id, this.heuristics, simulator);
+      const score = scorer.getScore();
 
       return {
         input,
@@ -55,12 +51,6 @@ export class AIPlayerAgent implements AIAgent {
       console.log(`[Simulation ${id}]: error`, err);
       return { input, score: Number.NEGATIVE_INFINITY };
     }
-  }
-
-  private evaluateGameState(game: Game) {
-    const scorer = new AIScorer(game, this.player.id);
-
-    return scorer.getScore();
   }
 
   private computeMoveScores() {

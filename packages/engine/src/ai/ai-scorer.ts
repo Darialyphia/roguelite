@@ -1,7 +1,9 @@
 import type { EntityId } from '../entity';
 import type { Game } from '../game/game';
+import type { InputSimulator } from '../input/input-simulator';
 import type { Player } from '../player/player.entity';
 import type { Unit } from '../unit/unit.entity';
+import type { AiHeuristics } from './ai-heuristics';
 
 const sum = (arr: number[]) => arr.reduce((total, curr) => total + curr, 0);
 
@@ -10,23 +12,46 @@ const WEIGHTS = {
   CARD_IN_HAND: 2
 } as const;
 
+export type ScoreModifier = {
+  pre: (game: Game) => number;
+  post: (game: Game, score: number) => number;
+};
 export class AIScorer {
   private player: Player;
 
   constructor(
-    private game: Game,
-    private playerId: EntityId
+    private playerId: EntityId,
+    private heuristics: AiHeuristics,
+    private simulator: InputSimulator
   ) {
-    this.player = game.playerSystem.getPlayerById(this.playerId)!;
+    this.simulator.prepare();
+    this.player = this.game.playerSystem.getPlayerById(this.playerId)!;
+  }
+
+  get game() {
+    return this.simulator.game;
   }
 
   getScore() {
     let result = 0;
 
+    let scoreModifier: ScoreModifier;
+    this.simulator.run({
+      onBeforeInput: (game, input) => {
+        scoreModifier = this.heuristics.getScoreModifier(game, input);
+        result += scoreModifier.pre(game);
+      },
+      onAfterInput: game => {
+        result = scoreModifier.post(game, result);
+      }
+    });
+
     this.getTeamScores().forEach(({ team, score }) => {
       const multiplier = team.equals(this.player.team) ? 1 : -1;
       result += score * multiplier;
     });
+
+    this.game.shutdown();
 
     return result;
   }

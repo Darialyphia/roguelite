@@ -30,6 +30,23 @@ export const frostNova: CardBlueprint = {
     });
   },
   aiHints: {
-    maxUsesPerTurn: 1
+    maxUsesPerTurn: 1,
+    preScoreModifier(game, card, targets) {
+      const aoeShape = card.getAoe(targets)!;
+      const enemies = aoeShape.getUnits().filter(unit => unit.isEnemy(card.unit));
+      if (!enemies.length) return Number.NEGATIVE_INFINITY;
+
+      return 0;
+    },
+    postScoreModifier(game, card, score, targets) {
+      const aoeShape = card.getAoe(targets)!;
+      const frozenEnemies = aoeShape
+        .getUnits()
+        .filter(
+          unit => unit.isEnemy(card.unit) && unit.hasModifier(FrozenModifier.MODIFIER_ID)
+        );
+
+      return score + 10 * frozenEnemies.length;
+    }
   }
 };

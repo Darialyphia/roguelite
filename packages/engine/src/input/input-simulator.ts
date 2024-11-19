@@ -2,11 +2,11 @@ import { Game } from '../game/game';
 import type { SerializedInput } from './input-system';
 
 export class InputSimulator {
-  private clonedGame: Game;
-  private inputs: SerializedInput[];
+  readonly game: Game;
+  readonly inputs: SerializedInput[];
 
   constructor(game: Game, inputs: SerializedInput[], id: number) {
-    this.clonedGame = new Game({
+    this.game = new Game({
       ...game.options,
       id: `simulation_${id}`,
       history: game.inputSystem.serialize()
@@ -15,16 +15,23 @@ export class InputSimulator {
   }
 
   prepare(cb?: (game: Game) => void) {
-    this.clonedGame.initialize();
-    cb?.(this.clonedGame);
+    this.game.initialize();
+    cb?.(this.game);
   }
 
-  run(cb?: (game: Game) => void) {
+  run({
+    onBeforeInput,
+    onAfterInput
+  }: {
+    onBeforeInput?: (game: Game, input: SerializedInput) => void;
+    onAfterInput?: (game: Game, input: SerializedInput) => void;
+  }) {
     for (const input of this.inputs) {
-      this.clonedGame.dispatch(input);
-      cb?.(this.clonedGame);
+      onBeforeInput?.(this.game, input);
+      this.game.dispatch(input);
+      onAfterInput?.(this.game, input);
     }
 
-    return this.clonedGame;
+    return this.game;
   }
 }

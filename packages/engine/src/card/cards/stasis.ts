@@ -36,6 +36,16 @@ export const stasis: CardBlueprint = {
         ? hasPlayedThisTurn
         : !hasPlayedThisTurn;
     },
-    maxUsesPerTurn: 1
+    maxUsesPerTurn: 1,
+    preScoreModifier(game, card) {
+      if (
+        card.unit.hp.current < card.unit.hp.max * 0.25 &&
+        card.unit.ap.current === card.cost
+      ) {
+        return 20;
+      }
+
+      return 0;
+    }
   }
 };
