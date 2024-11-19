@@ -17,9 +17,9 @@ const userPlayer = useUserPlayer();
       :unit="unit"
       class="pointer-events-auto"
       :class="{
-        highlighted: ui.highlightedUnit?.equals(unit)
-        // ally: unit.getUnit().player.isAlly(userPlayer.getPlayer()),
-        // enemy: unit.getUnit().player.isEnemy(userPlayer.getPlayer())
+        highlighted: ui.highlightedUnit?.equals(unit),
+        ally: unit.getUnit().player.isAlly(userPlayer.getPlayer()),
+        enemy: unit.getUnit().player.isEnemy(userPlayer.getPlayer())
       }"
       @click="ui.selectUnit(unit)"
       @mouseenter="ui.highlightUnit(unit)"
@@ -32,7 +32,7 @@ const userPlayer = useUserPlayer();
 .turn-order {
   user-select: none;
   display: flex;
-  gap: var(--size-1);
+  gap: var(--size-2);
   align-items: flex-end;
   margin: var(--size-3);
 
@@ -47,18 +47,19 @@ const userPlayer = useUserPlayer();
     --unit-icon-size: calc(96px * 0.75);
   }
 
-  .ally {
-    --unit-icon-bg: linear-gradient(135deg, #004ea6, #00bcff);
-  }
-
-  .enemy {
-    --unit-icon-bg: linear-gradient(135deg, #56002d, #a2005b);
-  }
-
-  .highlighted {
-    outline: solid 1px white;
+  & :is(.highlighted, .ally, .enemy) {
+    outline: solid 1px var(--highlight-color);
     box-shadow: 0 0 8px 2px hsl(0 0 100% / 0.4);
+  }
+  .highlighted {
+    --highlight-color: white;
     filter: brightness(125%) contrast(110%);
+  }
+  .ally {
+    --highlight-color: #00d8f7;
+  }
+  .enemy {
+    --highlight-color: #ff134b;
   }
 }
 </style>

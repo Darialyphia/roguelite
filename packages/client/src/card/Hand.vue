@@ -1,22 +1,16 @@
 <script setup lang="ts">
-import { Teleport } from 'vue';
 import {
   useActiveUnit,
   useBattleEvent,
   useGame
 } from '@/pages/battle/battle.store';
-import Card from './Card.vue';
-import { waitFor, type Nullable } from '@game/shared';
-import { useMouse, usePageLeave } from '@vueuse/core';
-import { UI_MODES, useBattleUiStore } from '@/pages/battle/battle-ui.store';
+import { waitFor } from '@game/shared';
 import { config } from '@/utils/config';
-import { useApplication } from 'vue3-pixi';
 import { makeCardViewModel } from './card.model';
-import type { Game } from '@game/engine';
+import DraggedCard from './DraggedCard.vue';
+import HandCard from './HandCard.vue';
 
 const unit = useActiveUnit();
-const ui = useBattleUiStore();
-
 const root = useTemplateRef('root');
 const margin = ref(0);
 
@@ -41,54 +35,7 @@ watch(
   { immediate: true }
 );
 
-const draggedIndex = ref<Nullable<number>>();
-const { x, y } = useMouse();
 const offset = ref({ x: 0, y: 0 });
-
-const app = useApplication();
-const isOutOfScreen = usePageLeave();
-
-const onMouseDown = (e: MouseEvent, index: number) => {
-  ui.selectCardAtIndex(index);
-
-  const rect = (e.target as HTMLElement).getBoundingClientRect();
-  offset.value = {
-    x: rect.left - x.value,
-    y: rect.top - y.value
-  };
-  setTimeout(() => {
-    offset.value = { x: 0, y: 0 };
-  }, 0);
-  draggedIndex.value = index;
-
-  const stopDragging = () => {
-    nextTick(() => {
-      draggedIndex.value = null;
-    });
-    document.body.removeEventListener('mouseup', onMouseup);
-  };
-  const onMouseup = (e: MouseEvent) => {
-    if (app.value.view !== e.target) {
-      ui.unselectCard();
-    }
-
-    stopDragging();
-  };
-
-  document.body.addEventListener('mouseup', onMouseup);
-  const unwatch = watchEffect(() => {
-    if (ui.mode !== UI_MODES.PLAY_CARD) {
-      unwatch();
-      return;
-    }
-    if (isOutOfScreen.value) {
-      stopDragging();
-      ui.unselectCard();
-      unwatch();
-    }
-  });
-};
-
 const activeUnit = useActiveUnit();
 const game = useGame();
 
@@ -116,31 +63,14 @@ useBattleEvent('unit.after_draw', async event => {
 
 <template>
   <ul class="hand" v-if="unit" ref="root" v-bind="$attrs">
-    <Teleport to="body">
-      <div
-        id="dragged-card"
-        :style="{
-          '--x': `${x}px`,
-          '--y': `${y}px`,
-          opacity: ui.hoveredCell ? 0.9 : 1
-        }"
-      />
-    </Teleport>
-    <li
+    <DraggedCard :offset="offset" />
+
+    <HandCard
       v-for="(card, index) in unit.hand"
       :key="`${card.id}|${index}`"
-      :class="!ui.selectedCard && 'hoverable'"
-      @mousedown="onMouseDown($event, index)"
-    >
-      <component
-        :is="draggedIndex === index ? Teleport : 'div'"
-        to="#dragged-card"
-      >
-        <Transition appear>
-          <Card :card="card" />
-        </Transition>
-      </component>
-    </li>
+      v-model:offset="offset"
+      :card="card"
+    />
   </ul>
 </template>
 
@@ -150,64 +80,8 @@ useBattleEvent('unit.after_draw', async event => {
   margin: v-bind(margin);
   display: flex;
 
-  > li {
-    width: calc(1px * v-bind('config.CARD_WIDTH'));
-    position: relative;
-    z-index: calc(var(--hand-size) - var(--child-index));
-    transform-origin: bottom right;
-    transition:
-      margin 0.3s var(--ease-out-2),
-      filter 0.2s var(--ease-out-2),
-      transform 0.15s var(--ease-in-4),
-      z-index 0.15s var(--ease-in-4);
-    transform: translateY(var(--size-11));
-    filter: drop-shadow(15px 0 2px hsl(0 0 0 /0.5));
-
-    &.hoverable:hover {
-      transition:
-        margin 0.3s var(--ease-out-2),
-        z-index 0.15s var(--ease-in-4);
-      filter: none;
-      transform: scale(1.25);
-      z-index: calc(var(--hand-size) + 1);
-    }
-
-    &:not(:last-child) {
-      margin-right: calc(1px * v-bind(margin));
-    }
-
-    .card {
-      &:is(.v-enter-active) {
-        transition: all 0.3s;
-        transition: all 0.3s;
-      }
-
-      &.v-enter-from {
-        opacity: 0.5;
-        transform: translateX(var(--size-7));
-      }
-    }
-  }
-}
-
-#dragged-card {
-  pointer-events: none !important;
-  position: fixed;
-  z-index: 999;
-  top: 0;
-  left: 0;
-  transform-origin: center center;
-  transform: translateY(calc(var(--y) + 3rem)) translateX(calc(var(--x) + 5rem));
-
-  > .card {
-    position: absolute;
-    left: calc(-0.5px * v-bind('config.CARD_WIDTH'));
-    top: calc(-0.25px * v-bind('config.CARD_HEIGHT'));
-    transition: transform 0.3s var(--ease-out-2);
-    @starting-style {
-      transform: translateX(calc(1px * v-bind('offset.x')))
-        translateY(calc(1px * v-bind('offset.y'))) scale(1.25);
-    }
+  > li:not(:last-child) {
+    margin-right: calc(1px * v-bind(margin));
   }
 }
 </style>

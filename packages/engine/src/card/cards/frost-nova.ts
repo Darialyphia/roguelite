@@ -38,7 +38,7 @@ export const frostNova: CardBlueprint = {
 
       return 0;
     },
-    postScoreModifier(game, card, score, targets) {
+    postScoreModifier(game, card, targets) {
       const aoeShape = card.getAoe(targets)!;
       const frozenEnemies = aoeShape
         .getUnits()
@@ -46,7 +46,7 @@ export const frostNova: CardBlueprint = {
           unit => unit.isEnemy(card.unit) && unit.hasModifier(FrozenModifier.MODIFIER_ID)
         );
 
-      return score + 10 * frozenEnemies.length;
+      return 10 * frozenEnemies.length;
     }
   }
 };

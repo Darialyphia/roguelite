@@ -23,11 +23,6 @@ export type CardBlueprint = {
     isRelevantTarget?: (point: Point3D, game: Game, card: Card, index: number) => boolean;
     maxUsesPerTurn?: number;
     preScoreModifier?: (game: Game, card: Card, targets: Point3D[]) => number;
-    postScoreModifier?: (
-      game: Game,
-      card: Card,
-      score: number,
-      targets: Point3D[]
-    ) => number;
+    postScoreModifier?: (game: Game, card: Card, targets: Point3D[]) => number;
   };
 };

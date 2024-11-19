@@ -24,7 +24,7 @@ const textures = useMultiLayerTexture({
 const ui = useBattleUiStore();
 
 const selectedFilter = new OutlineFilter(1, 0xffffff);
-const inAoeFilter = new ColorOverlayFilter(0xff0000, 0.5);
+const inAoeFilter = new ColorOverlayFilter(0xff0000, 0.3);
 
 const isInCardAoe = computed(() => {
   if (!ui.selectedCard) return false;

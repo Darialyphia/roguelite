@@ -27,6 +27,7 @@ export type UnitViewModel = {
   getUnit(): Unit;
   isActive(): boolean;
   equals(unit: UnitViewModel): boolean;
+  canPlayCardAt(index: number): boolean;
 };
 
 export const makeUnitVModel = (game: Game, unit: Unit): UnitViewModel => {
@@ -58,6 +59,9 @@ export const makeUnitVModel = (game: Game, unit: Unit): UnitViewModel => {
     },
     equals(unitVm: UnitViewModel) {
       return unitVm.getUnit().equals(unit);
+    },
+    canPlayCardAt(index) {
+      return unit.canPlayCardAt(index);
     }
   };
 };

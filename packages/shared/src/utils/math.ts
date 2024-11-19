@@ -53,9 +53,7 @@ export const smootherlerp = (num: number, [min, max]: [number, number]) => {
   return min + smootherStep(num) * (max - min);
 };
 
-export const lerp = (num: number, [min, max]: [number, number]) => {
-  return min + num * (max - min);
-};
+export const lerp = (a: number, b: number, t: number) => a + t * (b - a);
 
 export const dist = (p1: Point, p2: Point) => {
   const diffX = p2.x - p1.x;

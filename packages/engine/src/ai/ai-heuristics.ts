@@ -34,7 +34,7 @@ export class AiHeuristics {
   getScoreModifier(game: Game, input: SerializedInput): ScoreModifier {
     const defaultModifier: ScoreModifier = {
       pre: () => 0,
-      post: (game, score) => score
+      post: () => 0
     };
 
     if (input.type === 'playCard') {
@@ -46,8 +46,7 @@ export class AiHeuristics {
           ? (game: Game) => preScoreModifier(game, card, input.payload.targets)
           : defaultModifier.pre,
         post: postScoreModifier
-          ? (game: Game, score: number) =>
-              postScoreModifier(game, card, score, input.payload.targets)
+          ? (game: Game) => postScoreModifier(game, card, input.payload.targets)
           : defaultModifier.pre
       };
     }

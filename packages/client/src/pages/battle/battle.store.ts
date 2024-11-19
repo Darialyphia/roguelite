@@ -151,6 +151,8 @@ export const useBattleEvent = <T extends keyof GameEventMap>(
   const unsub = store.on(name, handler);
 
   onUnmounted(unsub);
+
+  return unsub;
 };
 
 export const useActiveUnit = () => {

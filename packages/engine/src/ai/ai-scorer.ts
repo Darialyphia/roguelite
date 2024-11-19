@@ -12,6 +12,10 @@ const WEIGHTS = {
   CARD_IN_HAND: 2
 } as const;
 
+const BASE_SCORES = {
+  UNIT: 20
+};
+
 export type ScoreModifier = {
   pre: (game: Game) => number;
   post: (game: Game, score: number) => number;
@@ -34,15 +38,15 @@ export class AIScorer {
 
   getScore() {
     let result = 0;
-
     let scoreModifier: ScoreModifier;
+
     this.simulator.run({
       onBeforeInput: (game, input) => {
         scoreModifier = this.heuristics.getScoreModifier(game, input);
         result += scoreModifier.pre(game);
       },
       onAfterInput: game => {
-        result = scoreModifier.post(game, result);
+        result += scoreModifier.post(game, result);
       }
     });
 
@@ -64,7 +68,10 @@ export class AIScorer {
           sum(
             player.units.map(unit => {
               let score =
-                unit.hp.current * WEIGHTS.HP + unit.hand.length * WEIGHTS.CARD_IN_HAND;
+                // base score for a unit just existing - helps the AI killing off a low hp unit rather than doing full damage on another one
+                BASE_SCORES.UNIT +
+                unit.hp.current * WEIGHTS.HP +
+                unit.hand.length * WEIGHTS.CARD_IN_HAND;
 
               // Reward allies for being closer to enemy units
               if (this.player.equals(unit.player)) {

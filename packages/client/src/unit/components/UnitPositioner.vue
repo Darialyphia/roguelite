@@ -3,6 +3,7 @@ import { config } from '@/utils/config';
 import AnimatedIsoPoint from '@/iso/components/AnimatedIsoPoint.vue';
 import type { UnitViewModel } from '../unit.model';
 import { useBattleEvent } from '@/pages/battle/battle.store';
+import { waitFor } from '@game/shared';
 
 const { unit, bounce } = defineProps<{
   unit: UnitViewModel;
@@ -36,41 +37,38 @@ useBattleEvent('unit.after_move', e => {
   });
 });
 
-useBattleEvent('unit.before_attack', e => {
-  return new Promise(resolve => {
-    if (!e.unit.equals(unit.getUnit())) return resolve();
+useBattleEvent('unit.before_attack', async e => {
+  if (!e.unit.equals(unit.getUnit())) return Promise.resolve();
 
-    const start = e.unit.position;
-    const end = e.target;
-    const impactPoint = {
-      x: start.x + (end.x - start.x) * 0.55,
-      y: start.y + (end.y - start.y) * 0.55,
-      z: start.z + (end.z - start.z) * 0.55
-    };
-    const anticipation = {
-      x: start.x - (end.x - start.x) * 0.2,
-      y: start.y - (end.y - start.y) * 0.2,
-      z: start.z - (end.z - start.z) * 0.2
-    };
-    const tl = gsap.timeline();
+  const start = e.unit.position;
+  const end = e.target;
+  const impactPoint = {
+    x: start.x + (end.x - start.x) * 0.55,
+    y: start.y + (end.y - start.y) * 0.55,
+    z: start.z + (end.z - start.z) * 0.55
+  };
+  const anticipation = {
+    x: start.x - (end.x - start.x) * 0.2,
+    y: start.y - (end.y - start.y) * 0.2,
+    z: start.z - (end.z - start.z) * 0.2
+  };
+  const tl = gsap.timeline();
 
-    tl.to(unit.position, {
-      ...anticipation,
-      duration: 0.15
+  tl.to(unit.position, {
+    ...anticipation,
+    duration: 0.15
+  })
+    .to(unit.position, {
+      ...impactPoint,
+      duration: 0.05,
+      ease: Power1.easeIn
     })
-      .to(unit.position, {
-        ...impactPoint,
-        duration: 0.05,
-        ease: Power1.easeIn,
-        onComplete: resolve
-      })
 
-      .to(unit.position, {
-        ...start,
-        duration: 0.1
-      });
-    tl.play();
-  });
+    .to(unit.position, {
+      ...start,
+      duration: 0.1
+    });
+  await tl.play();
 });
 </script>
 
