@@ -97,7 +97,7 @@ p {
   position: absolute;
   top: 200px;
   text-align: center;
-  margin-inline: 47px;
+  margin-inline: 44px;
   font-size: 8px;
   line-height: 1.5;
   text-wrap: balance;

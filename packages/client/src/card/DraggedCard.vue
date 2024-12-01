@@ -10,6 +10,7 @@ let prev = { x: x.value, y: y.value };
 let delta = { x: 0, y: 0 };
 const MAX_ANGLE = 45;
 const SCALE_FACTOR = 1.4;
+const LERP_FACTOR = 0.3;
 
 useRafFn(() => {
   delta = {
@@ -25,14 +26,14 @@ useRafFn(() => {
       Math.round(
         Math.max(Math.min(delta.y * SCALE_FACTOR, MAX_ANGLE), -MAX_ANGLE) * -1
       ),
-      0.25
+      LERP_FACTOR
     ),
     y: lerp(
       cardRotation.value.y,
       Math.round(
         Math.max(Math.min(delta.x * SCALE_FACTOR, MAX_ANGLE), -MAX_ANGLE)
       ),
-      0.25
+      LERP_FACTOR
     )
   };
 });
@@ -65,20 +66,16 @@ const ui = useBattleUiStore();
 #dragged-card {
   pointer-events: none !important;
   position: fixed;
-  z-index: 999;
+  z-index: 99;
   top: 0;
   left: 0;
   transform-style: preserve-3d;
   transform-origin: center center;
-  transform: translateY(calc(var(--y))) translateX(calc(var(--x)))
+  transform: translateY(var(--y)) translateX(var(--x))
     rotateX(calc(1deg * v-bind('cardRotation.x')))
     rotateY(calc(1deg * v-bind('cardRotation.y')));
 }
 :global(#dragged-card > *) {
-  /* position: absolute;
-
-  left: calc(-0.5px * v-bind('config.CARD_WIDTH'));
-  top: calc(-0.25px * v-bind('config.CARD_HEIGHT')); */
   transition: transform 0.3s var(--ease-out-2);
 
   @starting-style {

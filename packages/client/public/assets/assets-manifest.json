@@ -180,6 +180,20 @@
         },
         {
           "alias": [
+            "icon-spell-spark"
+          ],
+          "src": [
+            "/assets/icons/spell-spark.png"
+          ],
+          "foo": "bar",
+          "data": {
+            "tags": {
+              "m": true
+            }
+          }
+        },
+        {
+          "alias": [
             "icon-stasis"
           ],
           "src": [

@@ -6,19 +6,19 @@ import { RangedTargetingStrategy } from '../../targeting/ranged-targeting.strate
 import { TARGETING_TYPE } from '../../targeting/targeting-strategy';
 import type { CardBlueprint } from '../card-blueprint';
 
-export const magicMissile: CardBlueprint = {
-  id: 'magic-missile',
-  iconId: 'magic-missile',
-  name: 'Magic Missile',
+export const spellSpark: CardBlueprint = {
+  id: 'spell-spark',
+  iconId: 'spell-spark',
+  name: 'Spellspark',
   cost: 1,
-  description: 'Deal (20+50% MATK) magic damage to an enemy.',
+  description: 'Deal (10+40% MATK) magic damage to an enemy. Draw a card.',
   minTargets: 1,
   targets: [
     {
       getTargeting(game, card) {
         return new RangedTargetingStrategy(game, card.unit, TARGETING_TYPE.ENEMY, {
-          minRange: 1,
-          maxRange: 3
+          minRange: 0,
+          maxRange: 2
         });
       }
     }
@@ -30,12 +30,14 @@ export const magicMissile: CardBlueprint = {
     card.unit.dealDamage(
       unitTargets,
       new Damage({
-        baseAmount: 20,
+        baseAmount: 10,
         source: card.unit,
         mitigation: new MagicalMitigationStrategy(),
-        scalings: [new MagicalScalingStrategy(0.5)]
+        scalings: [new MagicalScalingStrategy(0.4)]
       })
     );
+
+    card.unit.draw(1);
   },
   aiHints: {}
 };

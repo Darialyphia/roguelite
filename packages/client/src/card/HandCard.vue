@@ -15,17 +15,23 @@ import { makeCardViewModel, type CardViewModel } from './card.model';
 
 const { card } = defineProps<{ card: CardViewModel }>();
 const offset = defineModel<Point>('offset', { required: true });
+
+const activeUnit = useActiveUnit();
+const ui = useBattleUiStore();
+
 const index = computed(
   () => activeUnit.value?.hand.findIndex(c => c.equals(card))!
 );
-const ui = useBattleUiStore();
 
 const { x, y } = useMouse();
 const app = useApplication();
 const isOutOfScreen = usePageLeave();
 const isDragging = ref(false);
+const canPlay = computed(() => activeUnit.value?.canPlayCardAt(index.value));
 
 const onMouseDown = (e: MouseEvent) => {
+  if (!canPlay.value) return;
+
   ui.selectCardAtIndex(index.value);
   isDragging.value = true;
   const rect = (e.target as HTMLElement).getBoundingClientRect();
@@ -33,9 +39,6 @@ const onMouseDown = (e: MouseEvent) => {
     x: rect.left - x.value,
     y: rect.top - y.value
   };
-  setTimeout(() => {
-    offset.value = { x: 0, y: 0 };
-  }, 0);
 
   const stopDragging = () => {
     nextTick(() => {
@@ -64,37 +67,13 @@ const onMouseDown = (e: MouseEvent) => {
     }
   });
 };
-
-const activeUnit = useActiveUnit();
-const game = useGame();
-
-useBattleEvent('unit.before_play_card', async event => {
-  if (!activeUnit.value) return;
-  if (!activeUnit.value?.getUnit().equals(event.unit)) {
-    return;
-  }
-  activeUnit.value.hand = activeUnit.value.hand.filter(
-    card => !card.getCard().equals(event.card)
-  );
-});
-
-useBattleEvent('unit.after_draw', async event => {
-  if (!activeUnit.value) return;
-  if (!activeUnit.value?.getUnit().equals(event.unit)) {
-    return;
-  }
-  for (const card of event.cards) {
-    activeUnit.value.hand.push(makeCardViewModel(game.value, card));
-    await waitFor(300);
-  }
-});
 </script>
 
 <template>
   <li
     :class="{
       hoverable: !ui.selectedCard,
-      disabled: !activeUnit?.canPlayCardAt(index)
+      disabled: !canPlay
     }"
     @mousedown="onMouseDown($event)"
   >

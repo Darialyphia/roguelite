@@ -4,17 +4,22 @@ import type { Unit } from '../unit/unit.entity';
 import type { TargetingStrategy, TargetingType } from './targeting-strategy';
 import { match } from 'ts-pattern';
 
+export type RangedTargetingStrategyOptions = {
+  minRange: number;
+  maxRange: number;
+};
+
 export class RangedTargetingStrategy implements TargetingStrategy {
   constructor(
     private game: Game,
     private unit: Unit,
     private type: TargetingType,
-    public readonly range: number
+    public readonly options: RangedTargetingStrategyOptions
   ) {}
 
   isWithinRange(point: Point3D) {
-    if (this.unit.position.isNearby(point)) return false;
-    if (!this.unit.position.isWithinCells(point, this.range)) return false;
+    if (this.unit.position.isWithinCells(point, this.options.minRange)) return false;
+    if (!this.unit.position.isWithinCells(point, this.options.maxRange)) return false;
 
     return true;
   }

@@ -56,6 +56,14 @@ useBattleEvent('unit.after_attack', e => {
     resolve();
   });
 });
+useBattleEvent('unit.after_play_card', e => {
+  return new Promise(resolve => {
+    if (!e.unit.equals(unit.getUnit())) return resolve();
+    // eslint-disable-next-line vue/no-mutating-props
+    unit.currentAp -= e.card.cost;
+    resolve();
+  });
+});
 
 const sprite = ref<AnimatedSprite>();
 useBattleEvent('unit.before_destroy', async e => {

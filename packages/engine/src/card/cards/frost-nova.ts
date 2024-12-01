@@ -9,7 +9,7 @@ export const frostNova: CardBlueprint = {
   iconId: 'frost-nova',
   name: 'Frost Nova',
   cost: 1,
-  description: 'Give Frozen 1 to nearby enemies',
+  description: 'Give Frozen 1 to nearby enemies.',
   minTargets: 1,
   targets: [
     {

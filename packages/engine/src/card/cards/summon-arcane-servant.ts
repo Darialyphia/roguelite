@@ -1,5 +1,5 @@
 import { PointAOEShape } from '../../targeting/aoe-shapes';
-import { MeleeTargetingPatternStrategy } from '../../targeting/melee-targeting.straegy';
+import { MeleeTargetingStrategy } from '../../targeting/melee-targeting.straegy';
 import { TARGETING_TYPE } from '../../targeting/targeting-strategy';
 import { arcaneServant } from '../../unit/units/arcane-servant';
 import type { CardBlueprint } from '../card-blueprint';
@@ -14,7 +14,9 @@ export const summonArcaneServant: CardBlueprint = {
   targets: [
     {
       getTargeting(game, card) {
-        return new MeleeTargetingPatternStrategy(game, card.unit, TARGETING_TYPE.EMPTY);
+        return new MeleeTargetingStrategy(game, card.unit, TARGETING_TYPE.EMPTY, {
+          allowDiagonals: true
+        });
       }
     }
   ],

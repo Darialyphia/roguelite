@@ -13,7 +13,7 @@ import { CombatComponent } from '../combat/combat.component';
 import { MOVE_EVENTS, MovementComponent } from './components/movement.component';
 import { DECK_EVENTS } from '../card/deck.entity';
 import type { Player } from '../player/player.entity';
-import { MeleeTargetingPatternStrategy } from '../targeting/melee-targeting.straegy';
+import { MeleeTargetingStrategy } from '../targeting/melee-targeting.straegy';
 import { PointAOEShape } from '../targeting/aoe-shapes';
 import { TARGETING_TYPE } from '../targeting/targeting-strategy';
 import type { Damage } from '../combat/damage/damage';
@@ -121,11 +121,9 @@ export class Unit extends Entity {
     this.combat = new CombatComponent(this.game, {
       baseStats: this.blueprint,
       unit: this,
-      attackPattern: new MeleeTargetingPatternStrategy(
-        this.game,
-        this,
-        TARGETING_TYPE.BOTH
-      )
+      attackPattern: new MeleeTargetingStrategy(this.game, this, TARGETING_TYPE.BOTH, {
+        allowDiagonals: false
+      })
     });
     this.movement = new MovementComponent(this.game, {
       position: options.position,

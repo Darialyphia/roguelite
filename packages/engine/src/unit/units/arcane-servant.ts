@@ -11,7 +11,7 @@ export const arcaneServant: UnitBlueprint = {
   mAtk: 0,
   mDef: 15,
   maxAp: 3,
-  maxHp: 80,
+  maxHp: 70,
   mDefPiercing: {
     flat: 0,
     percentage: 0
