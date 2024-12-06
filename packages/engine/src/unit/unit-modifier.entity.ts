@@ -6,7 +6,7 @@ import type { Unit } from './unit.entity';
 import { TypedEventEmitter } from '../utils/typed-emitter';
 
 export type UnitModifierOptions = {
-  mixins: [UnitModifierMixin, ...UnitModifierMixin[]];
+  mixins: UnitModifierMixin[];
 } & (
   | {
       stackable: true;

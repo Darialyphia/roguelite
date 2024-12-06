@@ -8,7 +8,7 @@ import type { CellViewModel } from '../models/cell.model';
 import { useBattleStore, useGame } from '@/pages/battle/battle.store';
 import { useIsoCamera } from '@/iso/composables/useIsoCamera';
 import { match } from 'ts-pattern';
-import { makeUnitVModel } from '@/unit/unit.model';
+import { makeUnitViewModel } from '@/unit/unit.model';
 
 const { cell } = defineProps<{ cell: CellViewModel }>();
 
@@ -31,13 +31,12 @@ const game = useGame();
         if (camera.isDragging.value) return;
         if (!ui.mode) return;
 
-        const _unit = battle.state.activeUnit?.getUnit();
-        if (!_unit) return;
+        const activeUnit = battle.state.activeUnit?.getUnit();
+        if (!activeUnit) return;
 
         if (e.button === 2) {
-          const cellUnit = cell.getCell().unit;
-          if (cellUnit) {
-            ui.selectUnit(makeUnitVModel(game, cellUnit));
+          if (cell.unit) {
+            ui.selectUnit(cell.unit);
           } else {
             ui.unselectUnit();
           }
@@ -46,7 +45,7 @@ const game = useGame();
 
         match(ui.mode)
           .with(UI_MODES.BASIC, () => {
-            if (_unit.canMoveTo(cell.getCell())) {
+            if (activeUnit.canMoveTo(cell.getCell())) {
               return battle.dispatch({
                 type: 'move',
                 payload: {
@@ -57,7 +56,7 @@ const game = useGame();
               });
             }
 
-            if (_unit.canAttackAt(cell.getCell())) {
+            if (activeUnit.canAttackAt(cell.getCell())) {
               battle.dispatch({
                 type: 'attack',
                 payload: {

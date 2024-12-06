@@ -30,7 +30,7 @@ export type UnitViewModel = {
   canPlayCardAt(index: number): boolean;
 };
 
-export const makeUnitVModel = (game: Game, unit: Unit): UnitViewModel => {
+export const makeUnitViewModel = (game: Game, unit: Unit): UnitViewModel => {
   return {
     id: unit.id,
     name: unit.name,

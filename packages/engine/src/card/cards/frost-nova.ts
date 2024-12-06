@@ -9,7 +9,7 @@ export const frostNova: CardBlueprint = {
   iconId: 'frost-nova',
   name: 'Frost Nova',
   cost: 1,
-  description: 'Give Frozen 1 to nearby enemies.',
+  description: 'Freeze nearby enemies.',
   minTargets: 1,
   targets: [
     {
@@ -26,7 +26,7 @@ export const frostNova: CardBlueprint = {
   },
   onPlay(game, card, cells, units) {
     units.forEach(unit => {
-      unit.addModifier(new FrozenModifier(game, 1));
+      unit.addModifier(new FrozenModifier(game));
     });
   },
   aiHints: {

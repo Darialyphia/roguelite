@@ -1,6 +1,5 @@
 import type { EntityId } from '../../entity';
 import type { Game } from '../../game/game';
-import { DurationModifierMixin } from '../modifier-mixins/duration.mixin';
 import { UnitModifier } from '../unit-modifier.entity';
 import type { Unit } from '../unit.entity';
 
@@ -9,18 +8,17 @@ const MODIFIER_ID = 'UNIT_MODIFIER_STASIS' as EntityId;
 export class StasisModifier extends UnitModifier {
   static MODIFIER_ID = MODIFIER_ID;
 
-  constructor(game: Game, duration: number) {
+  constructor(game: Game) {
     super(MODIFIER_ID, game, {
-      stackable: true,
-      initialStacks: duration,
-      mixins: [new DurationModifierMixin(game)]
+      stackable: false,
+      mixins: []
     });
   }
 
   get infos() {
     return {
       name: `Stasis ${this.stacks}`,
-      description: `This unit cannot move, attack, use cards, or be targeted for ${this.stacks} turn${this.stacks > 1 ? 's' : ''}.`,
+      description: `This unit cannot move, attack, use cards, or be targeted until the end of this turn.`,
       iconId: 'modifier-stasis',
       spriteId: 'fx-stasis'
     };
@@ -36,6 +34,7 @@ export class StasisModifier extends UnitModifier {
     this.target.addInterceptor('canPlayCardFromHand', this.interceptor);
     this.target.addInterceptor('canBeAttackTarget', this.interceptor);
     this.target.addInterceptor('canBeCardTarget', this.interceptor);
+    this.game.once('turn.turn_end', this.remove.bind(this));
   }
 
   remove(): void {

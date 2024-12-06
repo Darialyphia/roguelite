@@ -10,7 +10,7 @@ import {
 } from '@game/shared';
 import { StateMachine, t } from '@game/shared';
 import type { Game } from '@game/engine';
-import { type UnitViewModel, makeUnitVModel } from '@/unit/unit.model';
+import { type UnitViewModel, makeUnitViewModel } from '@/unit/unit.model';
 import { whenever } from '@vueuse/core';
 import { makeCardViewModel, type CardViewModel } from '@/card/card.model';
 import { match } from 'ts-pattern';
@@ -113,7 +113,7 @@ export const useInternalBattleUiStore = defineStore(
     watch(hoveredCell, cell => {
       if (!store.session) return;
       if (cell?.unit) {
-        highlightedUnit.value = makeUnitVModel(
+        highlightedUnit.value = makeUnitViewModel(
           store.session.game as Game, // vue issue when unwrapping Refs containign  a class instance
           cell.unit
         );

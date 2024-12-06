@@ -6,7 +6,7 @@ import {
   type PlayerViewModel,
   makePlayerViewModel
 } from '@/player/player.model';
-import { type UnitViewModel, makeUnitVModel } from '@/unit/unit.model';
+import { type UnitViewModel, makeUnitViewModel } from '@/unit/unit.model';
 import type { ClientSession } from '@game/engine';
 import type { Game, GameEventMap } from '@game/engine/src/game/game';
 import type { GamePhase } from '@game/engine/src/game/game-phase.system';
@@ -51,10 +51,12 @@ export const useBattleStore = defineStore('battle', () => {
     players.value = game.playerSystem.players.map(player =>
       makePlayerViewModel(game, player)
     );
-    units.value = game.unitSystem.units.map(unit => makeUnitVModel(game, unit));
-    activeUnit.value = makeUnitVModel(game, game.turnSystem.activeUnit);
+    units.value = game.unitSystem.units.map(unit =>
+      makeUnitViewModel(game, unit)
+    );
+    activeUnit.value = makeUnitViewModel(game, game.turnSystem.activeUnit);
     turnOrderUnits.value = game.turnSystem.queue.map(unit =>
-      makeUnitVModel(game, unit)
+      makeUnitViewModel(game, unit)
     );
   };
 

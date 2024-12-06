@@ -1,6 +1,5 @@
 import type { EntityId } from '../../entity';
 import type { Game } from '../../game/game';
-import { DurationModifierMixin } from '../modifier-mixins/duration.mixin';
 import { UnitModifier } from '../unit-modifier.entity';
 import type { Unit } from '../unit.entity';
 
@@ -9,18 +8,17 @@ const MODIFIER_ID = 'UNIT_MODIFIER_FROZEN' as EntityId;
 export class FrozenModifier extends UnitModifier {
   static MODIFIER_ID = MODIFIER_ID;
 
-  constructor(game: Game, duration: number) {
+  constructor(game: Game) {
     super(MODIFIER_ID, game, {
-      stackable: true,
-      initialStacks: duration,
-      mixins: [new DurationModifierMixin(game)]
+      stackable: false,
+      mixins: []
     });
   }
 
   get infos() {
     return {
       name: `Frozen ${this.stacks}`,
-      description: `This unit cannot move for ${this.stacks} turn${this.stacks > 1 ? 's' : ''}.`,
+      description: `This unit cannot move until the end of its next turn.`,
       iconId: 'modifier-frozen',
       spriteId: 'fx-frozen'
     };
@@ -32,6 +30,7 @@ export class FrozenModifier extends UnitModifier {
     super.applyTo(unit);
 
     this.target.addInterceptor('canMove', this.interceptor);
+    this.target.once('end_turn', this.remove.bind(this));
   }
 
   remove(): void {

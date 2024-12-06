@@ -9,7 +9,7 @@ export const stasis: CardBlueprint = {
   iconId: 'stasis',
   name: 'Stasis',
   cost: 1,
-  description: 'Give a unit stasis 1.',
+  description: 'Give a unit stasis.',
   minTargets: 1,
   targets: [
     {
@@ -23,7 +23,7 @@ export const stasis: CardBlueprint = {
   },
   onPlay(game, card, cells, units) {
     units.forEach(unit => {
-      unit.addModifier(new StasisModifier(game, 1));
+      unit.addModifier(new StasisModifier(game));
     });
   },
   aiHints: {
