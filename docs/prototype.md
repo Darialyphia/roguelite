@@ -11,7 +11,8 @@ Note: all numbers provide din this design document  are subject to change and ar
 - The goal of the game is to accumulate more victory points (VP) than your opponent (see more below about victory points).
 
 ## TURN ORDER
-- There are no player turns. Instead, every unit has a speed attribute. Units get to act in decreasing order of speed.
+- There are no player specific turns. Instead, every unit has a speed attribute. Units get to act in decreasing order of speed.
+- The game still has a game turn count. Once all units on the board have spent their turn, the game turn increases.
 - In case of units with similar speed, priority is given to the unit from the opposing team of the last unit that got to act. If both units are of the same team, they are both given a hidden bonus to their speed between 0 and 0.1 at random. This bonus changes every turn and is just a technical detail.
 - During a unit turn, the player can
     - move the unit
@@ -35,12 +36,14 @@ Note: all numbers provide din this design document  are subject to change and ar
     - type: Minion / General. A Player only has one general, and it sonly difference with a regular unit is that it starts the game already deployed.
     - Gold cost: the amount of gold needed to play the unit.
     - Rune cost: the runes requirement to play the card. A white rune means "a rune of any color"
-    - Attack (ATK): the amount of damage this unit inflicts when it attacks
+    - Attack (ATK): the amount of damage this unit inflicts when it attacks.
     - Health Points (HP): the amount of damage a unit can take before being destroyed
     - Speed (SPD): the unit's speed that determines its place in the turn order
     - Reward Points (RP): the amount of Victory Points awarded to your opponent when the unit is destroyed.
+- Units cannot act the turn they are summoned (unless specified otherwise on the card text, in which case they are placed on the turn order according to their SPD).
 - Unit can move on the board by spending one AP per tile.
 - Unit can attack another nearby unit as long as they are axis aligned (no diagonals), by spending 1AP. The cost increases by 2 for every attack (1, then 3, then 5, etc...)
+- When attacked for the first time in a turn, a unit will counterattack.
 - [REALLY NOT SURE ABOUT THIS ONE] Units have a class. They can play Spell Cards by spending AP as long as their class align with the spell's class (mages can play mage cards, fighters can play fighter cards, etc...).
 - Units may also have activated abilities that are used by spending the correspondiong AP cost. 
 - Abilities and unit passive effect gated by a higher rune requirement than what they needed to be played.
