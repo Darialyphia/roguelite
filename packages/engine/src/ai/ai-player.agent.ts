@@ -100,9 +100,9 @@ export class AIPlayerAgent implements AIAgent {
     // cells is a computed getter, let's evaluate it early instead of doing it in every loop iteration
     const cells = this.game.boardSystem.cells;
 
-    for (const [index, card] of this.activeUnit.hand.entries()) {
+    for (const [index, card] of this.activeUnit.player.hand.entries()) {
       const canPlay =
-        this.activeUnit.canPlayCardAt(index) &&
+        this.activeUnit.player.canPlayCardAt(index) &&
         !this.heuristics.shouldAvoidPlayingCard(card); // @TODO make it so that AI plays a card it shouldn't avoid if it has no other possible option
       if (!canPlay) continue;
 

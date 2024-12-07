@@ -1,0 +1,52 @@
+import { type Point3D } from '@game/shared';
+import type { Unit } from '../unit/unit.entity';
+import { Card } from './card.entity';
+import type { UnitCardBlueprint } from './card-blueprint';
+
+export class UnitCard extends Card<UnitCardBlueprint> {
+  unit!: Unit;
+
+  get cost() {
+    return this.blueprint.cost;
+  }
+
+  get atk() {
+    return this.blueprint.atk;
+  }
+
+  get maxHp() {
+    return this.blueprint.maxHp;
+  }
+
+  get reward() {
+    return this.blueprint.reward;
+  }
+
+  get speed() {
+    return this.blueprint.speed;
+  }
+
+  get spriteId() {
+    return this.blueprint.spriteId;
+  }
+
+  get canPlay() {
+    return (
+      this.player.canSpendGold(this.cost.gold) &&
+      this.player.hasUnlockedRunes(this.cost.runes)
+    );
+  }
+
+  get attackPattern() {
+    return this.blueprint.getAttackPattern(this.game, this.unit);
+  }
+
+  play(targets: Point3D[]) {
+    if (!this.canPlayAt(targets)) return;
+
+    this.player.spendGold(this.blueprint.cost.gold);
+    this.unit = this.game.unitSystem.addUnit(this, targets[0]);
+    const aoeShape = this.blueprint.getAoe(this.game, this, targets);
+    this.blueprint.onPlay(this.game, this, aoeShape.getCells(), aoeShape.getUnits());
+  }
+}

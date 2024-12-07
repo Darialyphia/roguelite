@@ -1,16 +1,17 @@
+import type { Card } from '../../card/card.entity';
 import type { Unit } from '../../unit/unit.entity';
 import type { DamageMitigationStrategy } from './mitigation/mitigation-strategy';
 import type { DamageScalingStrategy } from './scaling/scaling-strategy';
 
 export type DamageOptions = {
-  source: Unit;
+  source: Card;
   baseAmount: number;
   scalings: DamageScalingStrategy[];
   mitigation: DamageMitigationStrategy;
 };
 
 export class Damage {
-  private source: Unit;
+  private source: Card;
 
   private baseAmount: number;
 
@@ -30,7 +31,7 @@ export class Damage {
       this.baseAmount +
       this.scalings.reduce(
         (acc, scaling) =>
-          acc + scaling.getExtraDamage(this.baseAmount, this.source, target),
+          acc + scaling.getDealtDamage(this.baseAmount, this.source, target),
         0
       )
     );

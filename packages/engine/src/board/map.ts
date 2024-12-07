@@ -5,7 +5,7 @@ export type GameMap = {
   height: number;
   width: number;
   cells: { terrain: Terrain }[][][];
-  deployZones: Point3D[][][];
+  startPositions: Point3D[][];
 };
 
 export const TERRAINS = {

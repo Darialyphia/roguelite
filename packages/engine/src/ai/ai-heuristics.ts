@@ -38,7 +38,7 @@ export class AiHeuristics {
     };
 
     if (input.type === 'playCard') {
-      const card = game.turnSystem.activeUnit.getCardAt(input.payload.index);
+      const card = game.turnSystem.activeUnit.player.getCardAt(input.payload.index);
       const { preScoreModifier, postScoreModifier } = card.aiHints;
 
       return {

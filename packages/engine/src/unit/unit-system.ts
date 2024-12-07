@@ -3,23 +3,18 @@ import type { EntityId } from '../entity';
 import { Unit, UNIT_EVENTS, type UnitOptions } from './unit.entity';
 import { System } from '../system';
 import { GAME_PHASES } from '../game/game-phase.system';
+import type { UnitCard } from '../card/unit-card.entity';
 
-export type UnitSystemOptions = {
-  units: UnitOptions[];
-};
+// eslint-disable-next-line @typescript-eslint/ban-types
+export type UnitSystemOptions = {};
 
 export class UnitSystem extends System<UnitSystemOptions> {
   private unitMap = new Map<EntityId, Unit>();
 
   private nextUnitId = 0;
 
-  initialize(options: UnitSystemOptions) {
-    options.units.forEach(rawEntity => {
-      const entity = new Unit(this.game, rawEntity);
-      this.unitMap.set(entity.id, entity);
-      this.forwardListeners(entity);
-    });
-  }
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
+  initialize() {}
 
   shutdown() {
     this.units.forEach(unit => unit.shutdown());
@@ -87,9 +82,9 @@ export class UnitSystem extends System<UnitSystemOptions> {
     });
   }
 
-  addUnit(unitOptions: Omit<UnitOptions, 'id'>) {
+  addUnit(card: UnitCard, position: Point3D) {
     const id = `unit_${++this.nextUnitId}`;
-    const unit = new Unit(this.game, { ...unitOptions, id });
+    const unit = new Unit(this.game, card, { id, player: card.player, position });
     this.unitMap.set(unit.id, unit);
     this.forwardListeners(unit);
 

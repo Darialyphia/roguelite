@@ -17,18 +17,12 @@ export const testMap1v1: GameMap = {
     ]
   ],
   //prettier-ignore
-  deployZones: [
+  startPositions: [
     [
-      [
-        new Vec3(0,0,0), new Vec3(0,1,0), new Vec3(0,2,0),new Vec3(0,3,0), new Vec3(0,4,0),
-        new Vec3(1,0,0), new Vec3(1,1,0), new Vec3(1,2,0),new Vec3(1,3,0), new Vec3(1,4,0)
-      ]
+      new Vec3(0,2,0)
     ], 
     [
-      [
-        new Vec3(7,0,0), new Vec3(7,1,0), new Vec3(7,2,0),new Vec3(7,3,0), new Vec3(7,4,0),
-        new Vec3(8,0,0), new Vec3(8,1,0), new Vec3(8,2,0),new Vec3(8,3,0), new Vec3(8,4,0)
-      ]
+      new Vec3(8,2,0)
     ]
   ]
 };

@@ -20,7 +20,13 @@ import { InputSystem, type SerializedInput } from '../input/input-system';
 import type { RngSystem } from '../rng/rng-system';
 import { mapValues } from 'lodash-es';
 import { GamePhaseSystem } from './game-phase.system';
-import type { PlayerOptions } from '../player/player.entity';
+import {
+  PLAYER_EVENTS,
+  type Player,
+  type PlayerEvent,
+  type PlayerEventMap,
+  type PlayerOptions
+} from '../player/player.entity';
 import { MAPS_DICTIONARY } from '../board/maps/_index';
 
 type EnrichEvent<TTuple extends [...any[]], TAdditional extends AnyObject> = {
@@ -33,6 +39,13 @@ type GlobalUnitEvents = {
   [Event in UnitEvent as `unit.${Event}`]: EnrichEvent<
     UnitEventMap[Event],
     { unit: Unit }
+  >;
+};
+
+type GlobalPlayerEvents = {
+  [Event in PlayerEvent as `player.${Event}`]: EnrichEvent<
+    PlayerEventMap[Event],
+    { player: Player }
   >;
 };
 
@@ -50,7 +63,9 @@ type GameEventsBase = {
   '*': [e: StarEvent];
 };
 
-export type GameEventMap = Prettify<GameEventsBase & GlobalUnitEvents & GlobalTurnEvents>;
+export type GameEventMap = Prettify<
+  GameEventsBase & GlobalUnitEvents & GlobalTurnEvents & GlobalPlayerEvents
+>;
 export type GameEventName = keyof GameEventMap;
 export type GameEvent = Values<GameEventMap>;
 
@@ -63,6 +78,7 @@ export type StarEvent<
 
 export const GAME_EVENTS = {
   ...mapValues(UNIT_EVENTS, evt => `unit.${evt}` as `unit.${typeof evt}`),
+  ...mapValues(PLAYER_EVENTS, evt => `player.${evt}` as `player.${typeof evt}`),
   ...mapValues(TURN_EVENTS, evt => `turn.${evt}` as `turn.${typeof evt}`),
   ERROR: 'game.error',
   READY: 'game.ready',
@@ -77,7 +93,7 @@ export type GameOptions = {
   rngSeed: string;
   rngCtor: Constructor<RngSystem>;
   mapId: string;
-  teams: Pick<PlayerOptions, 'id' | 'roster' | 'units'>[][];
+  teams: Pick<PlayerOptions, 'id' | 'deck'>[][];
   history?: SerializedInput[];
 };
 
@@ -136,16 +152,12 @@ export class Game {
         id: `team.${teamIndex}`,
         players: team.map((player, playerIndex) => ({
           ...player,
-          deployZone: map.deployZones[teamIndex][playerIndex]
+          startPosition: map.startPositions[teamIndex][playerIndex]
         }))
       }))
     });
-    this.unitSystem.initialize({ units: [] });
+    this.unitSystem.initialize();
     this.turnSystem.initialize();
-
-    if (this.playerSystem.players.every(p => p.isReady)) {
-      this.gamePhaseSystem.startBattle();
-    }
 
     this.inputSystem.initialize(this.options.history ?? []);
 

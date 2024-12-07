@@ -1,25 +1,28 @@
 import { assert, type Point3D } from '@game/shared';
 import { createEntityId, Entity } from '../entity';
 import type { CardBlueprint } from './card-blueprint';
-import type { Unit } from '../unit/unit.entity';
 import type { Game } from '../game/game';
+import type { Player } from '../player/player.entity';
 
 export type CardOptions = {
   id: string;
   blueprint: CardBlueprint;
 };
 
-export class Card extends Entity {
-  private game: Game;
+export abstract class Card<
+  TBlueprint extends CardBlueprint = CardBlueprint
+> extends Entity {
+  protected game: Game;
 
-  private blueprint: CardBlueprint;
+  protected blueprint: TBlueprint;
 
-  readonly unit: Unit;
+  readonly player: Player;
 
-  constructor(game: Game, unit: Unit, options: CardOptions) {
+  constructor(game: Game, player: Player, options: CardOptions) {
     super(createEntityId(options.id));
     this.game = game;
-    this.unit = unit;
+    this.player = player;
+    // @ts-expect-error
     this.blueprint = options.blueprint;
   }
 
@@ -59,12 +62,9 @@ export class Card extends Entity {
     return this.blueprint.aiHints;
   }
 
-  play(targets: Point3D[]) {
-    if (!this.canPlayAt(targets)) return;
-    const aoeShape = this.blueprint.getAoe(this.game, this, targets);
+  abstract play(targets: Point3D[]): void;
 
-    this.blueprint.onPlay(this.game, this, aoeShape.getCells(), aoeShape.getUnits());
-  }
+  abstract get canPlay(): boolean;
 
   isWithinRange(point: Point3D, index: number) {
     if (index >= this.blueprint.targets.length) return false;
@@ -93,15 +93,14 @@ export class Card extends Entity {
     if (!this.areTargetsValid(targets)) {
       return null;
     }
-    return this.blueprint.getAoe(this.game, this, targets);
+    return this.blueprint.getAoe(this.game, this as any, targets);
   }
 
   canPlayAt(targets: Point3D[]) {
-    assert(
-      targets.length >= this.blueprint.minTargets,
-      'Cannot play card: not enough targets.'
-    );
+    if (targets.length < this.blueprint.minTargets) {
+      return false;
+    }
 
-    return this.areTargetsValid(targets);
+    return this.canPlay && this.areTargetsValid(targets);
   }
 }

@@ -71,7 +71,7 @@ export class AIScorer {
                 // base score for a unit just existing - helps the AI killing off a low hp unit rather than doing full damage on another one
                 BASE_SCORES.UNIT +
                 unit.hp.current * WEIGHTS.HP +
-                unit.hand.length * WEIGHTS.CARD_IN_HAND;
+                unit.player.hand.length * WEIGHTS.CARD_IN_HAND;
 
               // Reward allies for being closer to enemy units
               if (this.player.equals(unit.player)) {

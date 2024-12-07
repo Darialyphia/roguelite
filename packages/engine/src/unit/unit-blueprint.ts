@@ -1,21 +1,17 @@
+import type { Game } from '../game/game';
+import type { TargetingStrategy } from '../targeting/targeting-strategy';
+import type { Unit } from './unit.entity';
+
 export type UnitBlueprint = {
   id: string;
   name: string;
   spriteId: string;
   iconId: string;
   maxAp: number;
-  speed: number;
   maxHp: number;
-  pAtk: number;
-  pDef: number;
-  mAtk: number;
-  mDef: number;
-  pDefPiercing: {
-    percentage: number;
-    flat: number;
-  };
-  mDefPiercing: {
-    percentage: number;
-    flat: number;
-  };
+  atk: number;
+  speed: number;
+  reward: number;
+  goldCost: number;
+  getAttackPattern: (game: Game, unit: Unit) => TargetingStrategy;
 };

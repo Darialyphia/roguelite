@@ -3,7 +3,7 @@ import { System } from '../system';
 import { GAME_EVENTS } from './game';
 
 export const GAME_PHASES = {
-  DEPLOYMENT: 'deployment',
+  MULLIGAN: 'mulligan',
   BATTLE: 'battle',
   END: 'end'
 } as const;
@@ -17,9 +17,9 @@ export type GamePhaseTransition = Values<typeof GAME_PHASE_TRANSITIONS>;
 
 export class GamePhaseSystem extends System<never> {
   private stateMachine = new StateMachine<GamePhase, GamePhaseTransition>(
-    GAME_PHASES.DEPLOYMENT,
+    GAME_PHASES.MULLIGAN,
     [
-      t(GAME_PHASES.DEPLOYMENT, GAME_PHASE_TRANSITIONS.START_BATTLE, GAME_PHASES.BATTLE),
+      t(GAME_PHASES.MULLIGAN, GAME_PHASE_TRANSITIONS.START_BATTLE, GAME_PHASES.BATTLE),
       t(GAME_PHASES.BATTLE, GAME_PHASE_TRANSITIONS.END_BATTLE, GAME_PHASES.END)
     ]
   );
@@ -43,7 +43,9 @@ export class GamePhaseSystem extends System<never> {
 
     this.stateMachine.dispatch(GAME_PHASE_TRANSITIONS.START_BATTLE);
 
-    this.game.playerSystem.players.forEach(player => player.deploy());
+    this.game.playerSystem.players.forEach(player => {
+      player.mulligan();
+    });
     this.game.emit(GAME_EVENTS.START_BATTLE);
     this.game.turnSystem.startGameTurn();
   }

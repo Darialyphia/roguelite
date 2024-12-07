@@ -14,7 +14,7 @@ export const DECK_EVENTS = {
 export type DeckEvent = Values<typeof DECK_EVENTS>;
 
 export type DeckEventMap = {
-  [DECK_EVENTS.BEFORE_DRAW]: [];
+  [DECK_EVENTS.BEFORE_DRAW]: [{ amount: number }];
   [DECK_EVENTS.AFTER_DRAW]: [{ cards: Card[] }];
 };
 
@@ -56,13 +56,34 @@ export class Deck extends Entity {
   }
 
   draw(amount: number) {
-    this.emitter.emit(DECK_EVENTS.BEFORE_DRAW);
+    this.emitter.emit(DECK_EVENTS.BEFORE_DRAW, { amount });
 
     const cards = this.cards.splice(0, amount);
 
     this.emitter.emit(DECK_EVENTS.AFTER_DRAW, { cards: cards });
 
     return cards;
+  }
+
+  replace(replacedCard: Card) {
+    let replacement: Card;
+    let index: number;
+
+    const shouldForceDifferentCard = this.cards.some(
+      c => c.blueprintId !== replacedCard.blueprintId
+    );
+
+    do {
+      index = this.game.rngSystem.nextInt(this.cards.length - 1);
+      replacement = this.cards[index];
+    } while (
+      shouldForceDifferentCard &&
+      replacement.blueprintId === replacedCard.blueprintId
+    );
+
+    this.cards[index] = replacedCard;
+
+    return replacement;
   }
 
   addToTop(card: Card) {

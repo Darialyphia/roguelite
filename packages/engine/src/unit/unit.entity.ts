@@ -8,25 +8,22 @@ import { Interceptable, type inferInterceptor } from '../utils/interceptable';
 import { ActionPointComponent } from './components/action-point.component';
 import { TypedEventEmitter } from '../utils/typed-emitter';
 import { HealthComponent } from './components/health.component';
-import { CardManagerComponent } from '../card/card-manager.component';
-import { CombatComponent } from '../combat/combat.component';
 import { MOVE_EVENTS, MovementComponent } from './components/movement.component';
-import { DECK_EVENTS } from '../card/deck.entity';
 import type { Player } from '../player/player.entity';
-import { MeleeTargetingStrategy } from '../targeting/melee-targeting.straegy';
 import { PointAOEShape } from '../targeting/aoe-shapes';
-import { TARGETING_TYPE } from '../targeting/targeting-strategy';
-import type { Damage } from '../combat/damage/damage';
+import { Damage } from '../combat/damage/damage';
 import { config } from '../config';
 import { UnitModifierManager } from './components/modifier-manager.component';
 import type { UnitModifier } from './unit-modifier.entity';
+import type { TargetingStrategy } from '../targeting/targeting-strategy';
+import type { UnitCard } from '../card/unit-card.entity';
+import { NoMitigationStrategy } from '../combat/damage/mitigation/no-mitigation.strategy';
+import { CombatScalingStrategy } from '../combat/damage/scaling/combat-scaling.strategy';
+import type { CardManagerComponent } from '../card/card-manager.component';
 
 export type UnitOptions = {
   id: string;
   position: Point3D;
-  deck: CardOptions[];
-  blueprint: UnitBlueprint;
-  cosmetics: Record<string, string | null>;
   player: Player;
 };
 
@@ -83,11 +80,7 @@ export class Unit extends Entity {
 
   private emitter = new TypedEventEmitter<UnitEventMap>();
 
-  private cardManager: CardManagerComponent;
-
   private modifierManager: UnitModifierManager;
-
-  private blueprint: UnitBlueprint;
 
   readonly ap: ActionPointComponent;
 
@@ -95,9 +88,7 @@ export class Unit extends Entity {
 
   readonly movement: MovementComponent;
 
-  readonly combat: CombatComponent;
-
-  readonly cosmetics: Record<string, string | null>;
+  private attacksPerformedThisTurn = 0;
 
   private interceptors = {
     canMove: new Interceptable<boolean>(),
@@ -105,26 +96,25 @@ export class Unit extends Entity {
     canBeAttackTarget: new Interceptable<boolean>(),
     canBeCardTarget: new Interceptable<boolean>(),
     canPlayCardFromHand: new Interceptable<boolean>(),
-    speed: new Interceptable<number>()
+
+    speed: new Interceptable<number>(),
+    attack: new Interceptable<number>(),
+    attackPattern: new Interceptable<TargetingStrategy>(),
+
+    damageDealt: new Interceptable<number, { attacker: Unit; defender: Unit }>(),
+    damageReceived: new Interceptable<number, { attacker: Unit; defender: Unit }>()
   };
 
-  constructor(game: Game, options: UnitOptions) {
+  readonly card: UnitCard;
+
+  constructor(game: Game, card: UnitCard, options: UnitOptions) {
     super(createEntityId(options.id));
     this.game = game;
+    this.card = card;
     this.player = options.player;
-    this.blueprint = options.blueprint;
-    this.cosmetics = options.cosmetics;
-    this.cardManager = new CardManagerComponent(this.game, this, { deck: options.deck });
     this.modifierManager = new UnitModifierManager(this);
-    this.ap = new ActionPointComponent({ maxAp: this.blueprint.maxAp });
-    this.hp = new HealthComponent({ maxHp: this.blueprint.maxHp });
-    this.combat = new CombatComponent(this.game, {
-      baseStats: this.blueprint,
-      unit: this,
-      attackPattern: new MeleeTargetingStrategy(this.game, this, TARGETING_TYPE.BOTH, {
-        allowDiagonals: false
-      })
-    });
+    this.ap = new ActionPointComponent({ maxAp: config.UNIT_BASE_AP });
+    this.hp = new HealthComponent({ maxHp: this.card.maxHp });
     this.movement = new MovementComponent(this.game, {
       position: options.position,
       pathfindingStrategy: new SolidBodyPathfindingStrategy(this.game)
@@ -135,11 +125,11 @@ export class Unit extends Entity {
   }
 
   get spriteId() {
-    return this.blueprint.spriteId;
+    return this.card.spriteId;
   }
 
   get iconId() {
-    return this.blueprint.iconId;
+    return this.card.iconId;
   }
 
   get position() {
@@ -171,23 +161,15 @@ export class Unit extends Entity {
   }
 
   get name() {
-    return this.blueprint.name;
+    return this.card.name;
   }
 
-  get hand() {
-    return [...this.cardManager.hand];
-  }
-
-  get deckSize() {
-    return this.cardManager.deckSize;
-  }
-
-  get remainingCardsInDeck() {
-    return this.cardManager.remainingCardsInDeck;
+  get description() {
+    return this.card.description;
   }
 
   get speed(): number {
-    return this.interceptors.speed.getValue(this.blueprint.speed, {});
+    return this.interceptors.speed.getValue(this.card.speed, {});
   }
 
   get canBeAttacked(): boolean {
@@ -198,30 +180,24 @@ export class Unit extends Entity {
     return this.interceptors.canBeCardTarget.getValue(true, {});
   }
 
-  get pAtk() {
-    return this.combat.pAtk;
+  get atk() {
+    return this.interceptors.attack.getValue(this.card.atk, {});
   }
 
-  get mAtk() {
-    return this.combat.mAtk;
+  get reward() {
+    return this.card.reward;
   }
 
-  get pDef() {
-    return this.combat.pDef;
+  get nextAttackApCost() {
+    return (
+      config.AP_COST_PER_ATTACK +
+      config.AP_INCREASE_PER_ATTACK * this.attacksPerformedThisTurn
+    );
   }
 
-  get mDef() {
-    return this.combat.mDef;
+  get attackPattern() {
+    return this.interceptors.attackPattern.getValue(this.card.attackPattern, {});
   }
-
-  get pDefPiercing() {
-    return this.combat.pDefPiercing;
-  }
-
-  get mDefPiercing() {
-    return this.combat.mDefPiercing;
-  }
-
   get canMove(): boolean {
     return this.interceptors.canMove.getValue(
       this.ap.current >= config.AP_COST_PER_MOVEMENT,
@@ -231,7 +207,7 @@ export class Unit extends Entity {
 
   get canAttack(): boolean {
     return this.interceptors.canAttack.getValue(
-      this.ap.current >= config.AP_COST_PER_ATTACK,
+      this.ap.current >= this.nextAttackApCost,
       {}
     );
   }
@@ -242,14 +218,6 @@ export class Unit extends Entity {
 
   get isAt() {
     return this.movement.isAt.bind(this.movement);
-  }
-
-  get getCardAt() {
-    return this.cardManager.getCardAt.bind(this.cardManager);
-  }
-
-  get draw() {
-    return this.cardManager.draw.bind(this.cardManager);
   }
 
   addInterceptor<T extends keyof UnitInterceptor>(
@@ -267,10 +235,6 @@ export class Unit extends Entity {
     interceptor: inferInterceptor<UnitInterceptor[T]>
   ) {
     this.interceptors[key].remove(interceptor as any);
-  }
-
-  get addCombatInterceptor() {
-    return this.combat.addInterceptor.bind(this.combat);
   }
 
   get addApInterceptor() {
@@ -294,17 +258,10 @@ export class Unit extends Entity {
         cost: this.game.config.AP_COST_PER_MOVEMENT
       });
     });
-    this.cardManager.deck.on(DECK_EVENTS.BEFORE_DRAW, () => {
-      this.emitter.emit(DECK_EVENTS.BEFORE_DRAW);
-    });
-    this.cardManager.deck.on(DECK_EVENTS.AFTER_DRAW, e => {
-      this.emitter.emit(DECK_EVENTS.AFTER_DRAW, e);
-    });
   }
 
   shutdown() {
     this.emitter.removeAllListeners();
-    this.cardManager.deck.shutdown();
     this.movement.shutdown();
   }
 
@@ -325,6 +282,10 @@ export class Unit extends Entity {
     );
   }
 
+  canSpendAp(amount: number) {
+    return this.ap.current >= amount;
+  }
+
   move(to: Point3D) {
     const path = this.movement.move(to);
     if (!path) return;
@@ -334,6 +295,20 @@ export class Unit extends Entity {
 
   getPathTo(to: Point3D) {
     return this.movement.getPathTo(to);
+  }
+
+  getDealtDamage(baseAmount: number, target: Unit) {
+    return this.interceptors.damageDealt.getValue(baseAmount + this.atk, {
+      attacker: this,
+      defender: target
+    });
+  }
+
+  getReceivedDamage(baseAmount: number, from: Unit) {
+    return this.interceptors.damageReceived.getValue(baseAmount, {
+      attacker: from,
+      defender: this
+    });
   }
 
   dealDamage(targets: Unit[], damage: Damage) {
@@ -363,7 +338,11 @@ export class Unit extends Entity {
   canAttackAt(point: Point3D) {
     if (!this.canAttack) return;
 
-    return this.combat.canAttackAt(point);
+    if (this.position.equals(point)) return false;
+    const target = this.game.unitSystem.getUnitAt(point);
+    if (target && !target.canBeAttacked) return false;
+
+    return this.attackPattern.canTargetAt(point);
   }
 
   attack(target: Point3D) {
@@ -372,7 +351,16 @@ export class Unit extends Entity {
       cost: this.game.config.AP_COST_PER_ATTACK
     });
     this.ap.remove(this.game.config.AP_COST_PER_ATTACK);
-    this.combat.attackAt(new PointAOEShape(this.game, target));
+    const targets = new PointAOEShape(this.game, target).getUnits();
+
+    const damage = new Damage({
+      baseAmount: config.ATTACK_BASE_DAMAGE,
+      source: this.card,
+      scalings: [new CombatScalingStrategy()],
+      mitigation: new NoMitigationStrategy()
+    });
+
+    this.dealDamage(targets, damage);
     this.emitter.emit(UNIT_EVENTS.AFTER_ATTACK, {
       target,
       cost: this.game.config.AP_COST_PER_ATTACK
@@ -385,26 +373,15 @@ export class Unit extends Entity {
     this.emitter.emit(UNIT_EVENTS.AFTER_DESTROY, { source });
   }
 
-  canPlayCardAt(index: number) {
-    const card = this.getCardAt(index);
-
-    if (!this.canPlayCardFromHand) return false;
-
-    return card.cost <= this.ap.current;
-  }
-
-  playCard(index: number, targets: Point3D[]) {
-    const card = this.cardManager.getCardAt(index);
-    if (!card) return;
+  playCard(card: Card, targets: Point3D[], manager: CardManagerComponent) {
     this.emitter.emit(UNIT_EVENTS.BEFORE_PLAY_CARD, { card });
-    this.ap.remove(card.cost);
-    this.cardManager.play(card, targets);
+    manager.play(card, targets);
     this.emitter.emit(UNIT_EVENTS.AFTER_PLAY_CARD, { card });
   }
 
   onGameTurnStart() {
     this.ap.refill();
-    this.cardManager.draw(this.game.config.CARDS_DRAWN_PER_TURN);
+    this.attacksPerformedThisTurn = 0;
   }
 
   startTurn() {

@@ -1,6 +1,6 @@
 import type { EntityId } from '../entity';
 import { System } from '../system';
-import type { Player } from './player.entity';
+import { PLAYER_EVENTS, type Player } from './player.entity';
 import { Team, type TeamOptions } from './team.entity';
 
 export type PlayerSystemOptions = { teams: TeamOptions[] };
@@ -20,8 +20,9 @@ export class PlayerSystem extends System<PlayerSystemOptions> {
     });
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
-  shutdown() {}
+  shutdown() {
+    this.players.forEach(player => player.shutdown());
+  }
 
   getTeamById(id: EntityId) {
     return this.teamMap.get(id);
@@ -37,5 +38,13 @@ export class PlayerSystem extends System<PlayerSystemOptions> {
 
   get players() {
     return [...this.playerMap.values()];
+  }
+
+  forwardListeners(player: Player) {
+    Object.values(PLAYER_EVENTS).forEach(eventName => {
+      player.on(eventName, event => {
+        this.game.emit(`player.${eventName}`, { ...event, player } as any);
+      });
+    });
   }
 }

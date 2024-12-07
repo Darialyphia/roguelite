@@ -1,51 +1,154 @@
-import { type Point3D } from '@game/shared';
 import { createEntityId, Entity } from '../entity';
 import type { Team } from './team.entity';
-import type { Game } from '../game/game';
-import { PlayerRosterComponent, type RosterUnit } from './player-roster.component';
-import { UNITS_DICTIONARY } from '../unit/units/_index';
-import { CARDS_DICTIONARY } from '../card/cards/_index';
-import { nanoid } from 'nanoid';
+import { GAME_EVENTS, type Game } from '../game/game';
+import { CardManagerComponent } from '../card/card-manager.component';
+import type { Card, CardOptions } from '../card/card.entity';
+import { GoldManagerComponent } from './components/gold-manager';
+import { config } from '../config';
+import { DECK_EVENTS } from '../card/deck.entity';
+import type { Point3D, Values } from '@game/shared';
+import { TypedEventEmitter } from '../utils/typed-emitter';
+import { RuneManager } from './components/rune-manager';
+import { match } from 'ts-pattern';
+import { RUNES } from '../utils/rune';
+import { UnitCard } from '../card/unit-card.entity';
+import { CARD_KINDS } from '../card/card-blueprint';
 
 export type PlayerOptions = {
   id: string;
-  roster: RosterUnit[];
-  deployZone: Point3D[];
-  units: Array<RosterUnit & { position: Point3D }>;
+  deck: CardOptions[];
+  startPosition: Point3D;
 };
+
+export const PLAYER_EVENTS = {
+  BEFORE_DRAW: 'before_draw',
+  AFTER_DRAW: 'after_draw'
+} as const;
+
+export type PlayerEvent = Values<typeof PLAYER_EVENTS>;
+export type PlayerEventMap = {
+  [PLAYER_EVENTS.BEFORE_DRAW]: [{ amount: number }];
+  [PLAYER_EVENTS.AFTER_DRAW]: [{ cards: Card[] }];
+};
+
+type ResourceAction =
+  | { type: 'draw'; payload: Record<string, never> }
+  | { type: 'gold'; payload: Record<string, never> }
+  | { type: 'rune'; payload: { rune: string } };
 
 export class Player extends Entity {
   private game: Game;
 
   readonly team: Team;
 
-  readonly roster: PlayerRosterComponent;
+  private readonly cardManager: CardManagerComponent;
+
+  private readonly goldManager: GoldManagerComponent;
+
+  private readonly runeManager: RuneManager;
+
+  private readonly startPosition: Point3D;
+
+  private emitter = new TypedEventEmitter<PlayerEventMap>();
+
+  public mulliganIndices: number[] = [];
+
+  private resourceActionsTaken = 0;
+
+  private generalCard: UnitCard;
 
   constructor(game: Game, team: Team, options: PlayerOptions) {
     super(createEntityId(options.id));
     this.game = game;
     this.team = team;
+    this.startPosition = options.startPosition;
+    this.runeManager = new RuneManager();
+    const [general] = options.deck.splice(
+      options.deck.findIndex(card => card.blueprint.kind === CARD_KINDS.GENERAL),
+      1
+    );
+    this.generalCard = new UnitCard(this.game, this, general);
 
-    this.roster = new PlayerRosterComponent(this.game, {
-      player: this,
-      units: options.roster,
-      deployZone: options.deployZone
+    this.cardManager = new CardManagerComponent(this.game, this, {
+      deck: options.deck
     });
+    this.goldManager = new GoldManagerComponent(this.game, config.INITIAL_GOLD);
+    this.forwardEvents();
 
-    options.units.forEach(unit => {
-      this.game.unitSystem.addUnit({
-        blueprint: UNITS_DICTIONARY[unit.blueprintId],
-        player: this,
-        position: unit.position,
-        cosmetics: unit.spriteParts,
-        deck: unit.deck.map(card => {
-          return {
-            blueprint: CARDS_DICTIONARY[card.blueprintId],
-            id: `card_${card.blueprintId}_${nanoid(4)}`
-          };
-        })
-      });
-    });
+    this.game.on(GAME_EVENTS.TURN_START, this.onGameTurnStart.bind(this));
+    this.game.on('game.start-battle', this.onBattleStart.bind(this));
+  }
+
+  shutdown() {
+    this.emitter.removeAllListeners();
+  }
+
+  get on() {
+    return this.emitter.on.bind(this.emitter);
+  }
+
+  get once() {
+    return this.emitter.once.bind(this.emitter);
+  }
+
+  get off() {
+    return this.emitter.off.bind(this.emitter);
+  }
+
+  get gold() {
+    return this.goldManager.amount;
+  }
+
+  get addGold() {
+    return this.goldManager.deposit.bind(this.goldManager);
+  }
+
+  get spendGold() {
+    return this.goldManager.spend.bind(this.goldManager);
+  }
+
+  get runes() {
+    return this.runeManager.runes;
+  }
+
+  get addRune() {
+    return this.runeManager.add.bind(this.runeManager);
+  }
+
+  get removeRune() {
+    return this.runeManager.remove.bind(this.runeManager);
+  }
+
+  get canSpendGold() {
+    return this.goldManager.canSpend.bind(this.goldManager);
+  }
+
+  get canPerformResourceAction(): boolean {
+    return this.resourceActionsTaken < config.MAX_RESOURCE_ACTION_PER_TURN;
+  }
+
+  get hasUnlockedRunes() {
+    return this.runeManager.hasUnlocked.bind(this.runeManager);
+  }
+
+  get hand() {
+    return [...this.cardManager.hand];
+  }
+
+  get deckSize() {
+    return this.cardManager.deckSize;
+  }
+
+  get remainingCardsInDeck() {
+    return this.cardManager.remainingCardsInDeck;
+  }
+
+  get getCardAt() {
+    return this.cardManager.getCardAt.bind(this.cardManager);
+  }
+
+  get draw() {
+    return this.cardManager.draw.bind(this.cardManager);
   }
 
   isAlly(player: Player) {
@@ -60,15 +163,68 @@ export class Player extends Entity {
     return this.game.unitSystem.units.filter(u => u.player.equals(this));
   }
 
-  get commitDeployment() {
-    return this.roster.commitDeployment;
+  private forwardEvents() {
+    this.cardManager.deck.on(DECK_EVENTS.BEFORE_DRAW, e => {
+      this.emitter.emit(DECK_EVENTS.BEFORE_DRAW, e);
+    });
+    this.cardManager.deck.on(DECK_EVENTS.AFTER_DRAW, e => {
+      this.emitter.emit(DECK_EVENTS.AFTER_DRAW, e);
+    });
   }
 
-  get isReady() {
-    return this.roster.isReady;
+  placeGeneral() {
+    this.game.unitSystem.addUnit(this.generalCard, this.startPosition);
   }
 
-  get deploy() {
-    return this.roster.deploy.bind(this.roster);
+  performResourceAction(action: ResourceAction) {
+    match(action)
+      .with({ type: 'draw' }, () => {
+        this.draw(1);
+      })
+      .with({ type: 'gold' }, () => {
+        this.goldManager.deposit(1);
+      })
+      .with({ type: 'rune' }, action => {
+        this.addRune(RUNES[action.payload.rune as keyof typeof RUNES]);
+      })
+      .exhaustive();
+    this.resourceActionsTaken++;
+  }
+
+  replaceCard(index: number) {
+    const card = this.hand[index];
+    if (!card) return;
+
+    const replacement = this.cardManager.deck.replace(card);
+    this.hand[index] = replacement;
+  }
+
+  mulligan() {
+    for (const index of this.mulliganIndices) {
+      this.replaceCard(index);
+    }
+  }
+
+  canPlayCardAt(index: number) {
+    const card = this.getCardAt(index);
+
+    if (!this.game.turnSystem.activeUnit.canPlayCardFromHand) return false;
+
+    return card.canPlay;
+  }
+
+  playCard(index: number, targets: Point3D[]) {
+    const card = this.cardManager.getCardAt(index);
+    if (!card) return;
+    this.game.turnSystem.activeUnit.playCard(card, targets, this.cardManager);
+  }
+
+  onGameTurnStart() {
+    this.resourceActionsTaken = 0;
+    this.draw(config.CARDS_DRAWN_PER_TURN);
+  }
+
+  onBattleStart() {
+    this.placeGeneral();
   }
 }

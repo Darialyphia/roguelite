@@ -5,9 +5,11 @@ import { MoveInput } from './inputs/move.input';
 import { AttackInput } from './inputs/attack.input';
 import { PlayCardInput } from './inputs/play-card.input';
 import { System } from '../system';
-import { DeployInput } from './inputs/deploy.input';
 import type { z } from 'zod';
 import { EndTurnInput } from './inputs/endTurn.input';
+import { GoldResourceActionInput } from './inputs/gold-resource-action.input';
+import { DrawResourceActionInput } from './inputs/draw-resource-action.input';
+import { RuneResourceActionInput } from './inputs/rune-resource-action';
 
 type GenericInputMap = Record<string, Constructor<Input<DefaultSchema>>>;
 
@@ -25,8 +27,10 @@ const inputMap = validateinputMap({
   move: MoveInput,
   attack: AttackInput,
   playCard: PlayCardInput,
-  deploy: DeployInput,
-  endTurn: EndTurnInput
+  endTurn: EndTurnInput,
+  goldResourceAction: GoldResourceActionInput,
+  drawResourceAction: DrawResourceActionInput,
+  runeResourceAction: RuneResourceActionInput
 });
 
 type InputMap = typeof inputMap;

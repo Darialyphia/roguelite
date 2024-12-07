@@ -25,11 +25,11 @@ export class PlayCardInput extends Input<typeof schema> {
       throw new Error('You are not the active player.');
     }
 
-    const card = this.game.turnSystem.activeUnit.getCardAt(this.payload.index);
+    const card = this.player.getCardAt(this.payload.index);
     if (!card.canPlayAt(this.payload.targets)) {
       throw new Error(`Cannot play card at index ${this.payload.index}`);
     }
 
-    this.game.turnSystem.activeUnit.playCard(this.payload.index, this.payload.targets);
+    this.player.playCard(this.payload.index, this.payload.targets);
   }
 }
