@@ -1,6 +1,6 @@
 import { assert, type Point3D } from '@game/shared';
 import { createEntityId, Entity } from '../entity';
-import type { CardBlueprint } from './card-blueprint';
+import { isGeneralBlueprint, type CardBlueprint } from './card-blueprint';
 import type { Game } from '../game/game';
 import type { Player } from '../player/player.entity';
 
@@ -30,8 +30,8 @@ export abstract class Card<
     return this.blueprint.id;
   }
 
-  get cost() {
-    return this.blueprint.cost;
+  get kind() {
+    return this.blueprint.kind;
   }
 
   get iconId() {
@@ -47,14 +47,17 @@ export abstract class Card<
   }
 
   get minTargets() {
+    if (isGeneralBlueprint(this.blueprint)) return 0;
     return this.blueprint.minTargets;
   }
 
   get maxTargets() {
+    if (isGeneralBlueprint(this.blueprint)) return 0;
     return this.blueprint.targets.length;
   }
 
   get targetsDefinition() {
+    if (isGeneralBlueprint(this.blueprint)) return [];
     return this.blueprint.targets;
   }
 
@@ -67,6 +70,8 @@ export abstract class Card<
   abstract get canPlay(): boolean;
 
   isWithinRange(point: Point3D, index: number) {
+    if (isGeneralBlueprint(this.blueprint)) return true;
+
     if (index >= this.blueprint.targets.length) return false;
 
     return this.blueprint.targets[index]
@@ -75,13 +80,13 @@ export abstract class Card<
   }
 
   areTargetsValid(targets: Point3D[]) {
-    assert(
-      targets.length <= this.blueprint.targets.length,
-      'Cannot play card: too many targets.'
-    );
+    const bp = this.blueprint;
+    if (isGeneralBlueprint(bp)) return true;
+
+    assert(targets.length <= bp.targets.length, 'Cannot play card: too many targets.');
 
     return targets.every((target, index) => {
-      const targeting = this.blueprint.targets[index].getTargeting(this.game, this);
+      const targeting = bp.targets[index].getTargeting(this.game, this);
       const unit = this.game.unitSystem.getUnitAt(target);
       if (unit && !unit.canBeCardTarget) return false;
 
@@ -97,7 +102,7 @@ export abstract class Card<
   }
 
   canPlayAt(targets: Point3D[]) {
-    if (targets.length < this.blueprint.minTargets) {
+    if (targets.length < this.minTargets) {
       return false;
     }
 

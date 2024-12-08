@@ -8,6 +8,7 @@ import { AIScorer } from './ai-scorer';
 import type { Card } from '../card/card.entity';
 import type { Cell } from '../board/cell';
 import type { AiHeuristics } from './ai-heuristics';
+import { GAME_PHASES } from '../game/game-phase.system';
 
 export class AIPlayerAgent implements AIAgent {
   private nextSimulationId = 0;
@@ -23,6 +24,9 @@ export class AIPlayerAgent implements AIAgent {
   }
 
   getNextInput(): SerializedInput {
+    if (this.game.phase === GAME_PHASES.MULLIGAN) {
+      return this.handleMulligan();
+    }
     const moveScores = this.computeMoveScores();
     const combatScores = this.computeCombatScores();
     const cardScores = this.computeCardScores();
@@ -34,6 +38,10 @@ export class AIPlayerAgent implements AIAgent {
         payload: { playerId: this.player.id }
       }
     );
+  }
+
+  handleMulligan(): SerializedInput {
+    return { type: 'mulligan', payload: { playerId: this.player.id, indices: [] } };
   }
 
   private runSimulation(input: SerializedInput) {

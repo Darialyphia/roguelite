@@ -58,7 +58,9 @@ export class UiModeManager {
   getSelectedCard() {
     if (!isDefined(this.selectedCardIndex)) return null;
 
-    return this.game.turnSystem.activeUnit.getCardAt(this.selectedCardIndex);
+    return this.game.turnSystem.activeUnit.player.getCardAt(
+      this.selectedCardIndex
+    );
   }
 
   get mode() {

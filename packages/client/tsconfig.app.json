@@ -12,7 +12,13 @@
     "composite": true,
     "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.app.tsbuildinfo",
     "moduleResolution": "Bundler",
+    "lib": [
+      "ES2022",
+      "DOM",
+      "DOM.Iterable"
 
+      // No `ScriptHost` because Vue 3 dropped support for IE
+    ],
     "baseUrl": ".",
     "paths": {
       "@/*": ["./src/*"]

@@ -21,7 +21,7 @@ const filters = computed(() => {
 
 const textures = useMultiLayerTexture({
   sheet: spritesheet,
-  parts: () => unit.cosmetics,
+  parts: {},
   tag: 'idle',
   dimensions: config.UNIT_SPRITE_SIZE
 });

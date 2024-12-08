@@ -1,9 +1,8 @@
 import { Vec3, type Point3D, type Values } from '@game/shared';
 import { createEntityId, Entity, type EntityId } from '../entity';
-import { Card, type CardOptions } from '../card/card.entity';
+import { Card } from '../card/card.entity';
 import { GAME_EVENTS, type Game } from '../game/game';
 import { SolidBodyPathfindingStrategy } from '../pathfinding/strategies/solid-pathfinding.strategy';
-import type { UnitBlueprint } from './unit-blueprint';
 import { Interceptable, type inferInterceptor } from '../utils/interceptable';
 import { ActionPointComponent } from './components/action-point.component';
 import { TypedEventEmitter } from '../utils/typed-emitter';
@@ -20,6 +19,8 @@ import type { UnitCard } from '../card/unit-card.entity';
 import { NoMitigationStrategy } from '../combat/damage/mitigation/no-mitigation.strategy';
 import { CombatScalingStrategy } from '../combat/damage/scaling/combat-scaling.strategy';
 import type { CardManagerComponent } from '../card/card-manager.component';
+import { CARD_KINDS } from '../card/card-blueprint';
+import type { GeneralCard } from '../card/general-card.entity';
 
 export type UnitOptions = {
   id: string;
@@ -61,14 +62,14 @@ export type UnitEventMap = {
   [UNIT_EVENTS.AFTER_ATTACK]: [{ target: Point3D; cost: number }];
   [UNIT_EVENTS.BEFORE_DEAL_DAMAGE]: [{ targets: Unit[]; damage: Damage }];
   [UNIT_EVENTS.AFTER_DEAL_DAMAGE]: [{ targets: Unit[]; damage: Damage }];
-  [UNIT_EVENTS.BEFORE_RECEIVE_DAMAGE]: [{ from: Unit; damage: Damage }];
-  [UNIT_EVENTS.AFTER_RECEIVE_DAMAGE]: [{ from: Unit; damage: Damage }];
+  [UNIT_EVENTS.BEFORE_RECEIVE_DAMAGE]: [{ from: Card; damage: Damage }];
+  [UNIT_EVENTS.AFTER_RECEIVE_DAMAGE]: [{ from: Card; damage: Damage }];
   [UNIT_EVENTS.BEFORE_RECEIVE_HEAL]: [{ from: Unit; amount: number }];
   [UNIT_EVENTS.AFTER_RECEIVE_HEAL]: [{ from: Unit; amount: number }];
   [UNIT_EVENTS.BEFORE_PLAY_CARD]: [{ card: Card }];
   [UNIT_EVENTS.AFTER_PLAY_CARD]: [{ card: Card }];
-  [UNIT_EVENTS.BEFORE_DESTROY]: [{ source: Unit }];
-  [UNIT_EVENTS.AFTER_DESTROY]: [{ source: Unit }];
+  [UNIT_EVENTS.BEFORE_DESTROY]: [{ source: Card }];
+  [UNIT_EVENTS.AFTER_DESTROY]: [{ source: Card }];
 };
 
 type UnitInterceptor = Unit['interceptors'];
@@ -105,9 +106,9 @@ export class Unit extends Entity {
     damageReceived: new Interceptable<number, { attacker: Unit; defender: Unit }>()
   };
 
-  readonly card: UnitCard;
+  readonly card: UnitCard | GeneralCard;
 
-  constructor(game: Game, card: UnitCard, options: UnitOptions) {
+  constructor(game: Game, card: UnitCard | GeneralCard, options: UnitOptions) {
     super(createEntityId(options.id));
     this.game = game;
     this.card = card;
@@ -146,6 +147,14 @@ export class Unit extends Entity {
 
   get z() {
     return this.movement.z;
+  }
+
+  get isGeneral() {
+    return this.card.kind === CARD_KINDS.GENERAL;
+  }
+
+  get isUnit() {
+    return this.card.kind === CARD_KINDS.UNIT;
   }
 
   get on() {
@@ -314,12 +323,12 @@ export class Unit extends Entity {
   dealDamage(targets: Unit[], damage: Damage) {
     this.emitter.emit(UNIT_EVENTS.BEFORE_DEAL_DAMAGE, { targets, damage });
     targets.forEach(target => {
-      target.takeDamage(this, damage);
+      target.takeDamage(this.card, damage);
     });
     this.emitter.emit(UNIT_EVENTS.AFTER_DEAL_DAMAGE, { targets, damage });
   }
 
-  takeDamage(from: Unit, damage: Damage) {
+  takeDamage(from: Card, damage: Damage) {
     this.emitter.emit(UNIT_EVENTS.BEFORE_RECEIVE_DAMAGE, {
       from,
       damage
@@ -367,7 +376,7 @@ export class Unit extends Entity {
     });
   }
 
-  destroy(source: Unit) {
+  destroy(source: Card) {
     this.emitter.emit(UNIT_EVENTS.BEFORE_DESTROY, { source });
     this.game.unitSystem.removeUnit(this);
     this.emitter.emit(UNIT_EVENTS.AFTER_DESTROY, { source });

@@ -82,7 +82,6 @@ export class Deck extends Entity {
     );
 
     this.cards[index] = replacedCard;
-
     return replacement;
   }
 

@@ -54,28 +54,7 @@ const modifiers = computed(() => unit.modifierInfos.filter(isDefined));
         </div>
       </header>
 
-      <div class="flex gap-3 justify-between">
-        <div class="stat">
-          <dt class="patk"><span class="sr-only">PATK</span></dt>
-          <dd>{{ unit.pAtk }}</dd>
-        </div>
-        <div class="stat">
-          <dt class="matk"><span class="sr-only">MATK</span></dt>
-          <dd>{{ unit.mAtk }}</dd>
-        </div>
-        <div class="stat">
-          <dt class="pdef"><span class="sr-only">PDEF</span></dt>
-          <dd>{{ unit.pDef }}</dd>
-        </div>
-        <div class="stat">
-          <dt class="mdef"><span class="sr-only">MDEF</span></dt>
-          <dd>{{ unit.mDef }}</dd>
-        </div>
-        <div class="stat">
-          <dt class="speed"><span class="sr-only">SPD</span></dt>
-          <dd>{{ unit.speed }}</dd>
-        </div>
-      </div>
+      <div class="flex gap-3 justify-between"></div>
 
       <div class="grid grid-cols-5 gap-3">
         <div class="stat left col-span-2">

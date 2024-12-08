@@ -3,17 +3,17 @@ import {
   useActiveUnit,
   useBattleEvent,
   useGame,
-  useGameClientState,
-  useUserPlayer
+  useGameClientState
 } from '@/pages/battle/battle.store';
 import type { Card } from '@game/engine/src/card/card.entity';
 import type { SerializedInput } from '@game/engine/src/input/input-system';
-import type { Player } from '@game/engine/src/player/player.entity';
 import type { Unit } from '@game/engine/src/unit/unit.entity';
 import type { Point3D } from '@game/shared';
 import { vOnClickOutside } from '@vueuse/components';
 import { match } from 'ts-pattern';
 import { Icon } from '@iconify/vue';
+import type { EntityId } from '@game/engine/src/entity';
+import type { Player } from '@game/engine/src/player/player.entity';
 
 const state = useGameClientState();
 const activeUnit = useActiveUnit();
@@ -31,7 +31,7 @@ type Token =
     }
   | {
       kind: 'input';
-      unit: Unit;
+      player: Player;
     }
   | { kind: 'position'; point: Point3D }
   | { kind: 'turn_start'; unit: Unit }
@@ -40,9 +40,13 @@ type Token =
 const events = ref<Token[][]>([[]]);
 
 useBattleEvent('game.input-start', async event => {
-  if (event.type === 'deploy') return;
   events.value.push([
-    { kind: 'input', unit: activeUnit.value!.getUnit() },
+    {
+      kind: 'input',
+      player: game.value.playerSystem.getPlayerById(
+        event.payload.playerId as EntityId
+      )!
+    },
     {
       kind: 'action',
       text: match(event.type as Exclude<SerializedInput['type'], 'deploy'>)
@@ -50,6 +54,10 @@ useBattleEvent('game.input-start', async event => {
         .with('endTurn', () => 'ends their turn')
         .with('move', () => 'moves')
         .with('playCard', () => 'plays a card')
+        .with('drawResourceAction', () => 'draws a card')
+        .with('goldResourceAction', () => 'gains 1 gold')
+        .with('runeResourceAction', () => 'adds a rune')
+        .with('mulligan', () => 'mulligans')
         .exhaustive()
     }
   ]);
@@ -82,7 +90,7 @@ useBattleEvent('unit.after_receive_damage', async event => {
       kind: 'text',
       text: `took ${event.damage.getMitigatedAmount(event.unit)} damage from`
     },
-    { kind: 'unit', unit: event.from }
+    { kind: 'card', card: event.from }
   ]);
 });
 
@@ -178,7 +186,7 @@ const isAction = (event: Pick<Token, 'kind'>[]) =>
             {{ token.unit.name }}
           </template>
           <template v-else-if="token.kind === 'input'">
-            {{ token.unit.name }}
+            {{ token.player.name }}
           </template>
           <template v-else-if="token.kind === 'position'">
             [{{ token.point.x }}, {{ token.point.y }}, {{ token.point.z }}]
@@ -203,7 +211,7 @@ const isAction = (event: Pick<Token, 'kind'>[]) =>
   font-family: 'Press Start 2P';
   color: #ffdaad;
   user-select: none;
-  background-color: #311929aa;
+  background-color: #311929;
   padding: var(--size-5);
   border: solid 6px #ffdaad;
   border-right-color: #b59a79;
@@ -278,7 +286,7 @@ li {
   font-family: 'Press Start 2P';
   color: #ffdaad;
   user-select: none;
-  background-color: #311929aa;
+  background-color: #311929;
   border: solid 6px #ffdaad;
   border-right-color: #b59a79;
   border-bottom-color: #b59a79;
@@ -323,7 +331,7 @@ li {
 .turn_start {
   flex-grow: 1;
 
-  font-size: var(--font-size-2);
+  font-size: var(--font-size-0);
   font-weight: var(--font-weight-6);
   text-align: center;
 

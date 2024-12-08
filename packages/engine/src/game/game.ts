@@ -1,4 +1,4 @@
-import type { AnyObject, Constructor, Prettify, Values } from '@game/shared';
+import type { AnyObject, BetterOmit, Constructor, Prettify, Values } from '@game/shared';
 import { TypedEventEmitter } from '../utils/typed-emitter';
 import { BoardSystem } from '../board/board-system';
 import { UnitSystem } from '../unit/unit-system';
@@ -28,6 +28,7 @@ import {
   type PlayerOptions
 } from '../player/player.entity';
 import { MAPS_DICTIONARY } from '../board/maps/_index';
+import type { TeamOptions } from '../player/team.entity';
 
 type EnrichEvent<TTuple extends [...any[]], TAdditional extends AnyObject> = {
   [Index in keyof TTuple]: TTuple[Index] extends AnyObject
@@ -93,7 +94,7 @@ export type GameOptions = {
   rngSeed: string;
   rngCtor: Constructor<RngSystem>;
   mapId: string;
-  teams: Pick<PlayerOptions, 'id' | 'deck'>[][];
+  teams: BetterOmit<TeamOptions['players'][number], 'startPosition'>[][];
   history?: SerializedInput[];
 };
 

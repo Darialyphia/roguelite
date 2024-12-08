@@ -9,12 +9,15 @@ import {
 import { type UnitViewModel, makeUnitViewModel } from '@/unit/unit.model';
 import type { ClientSession } from '@game/engine';
 import type { Game, GameEventMap } from '@game/engine/src/game/game';
-import type { GamePhase } from '@game/engine/src/game/game-phase.system';
+import {
+  GAME_PHASES,
+  type GamePhase
+} from '@game/engine/src/game/game-phase.system';
 import type {
   InputDispatcher,
   SerializedInput
 } from '@game/engine/src/input/input-system';
-import { assert, isDefined, type Override } from '@game/shared';
+import { assert, isDefined, type Override, type PartialBy } from '@game/shared';
 import { defineStore } from 'pinia';
 import { AI } from '@game/engine/src/ai/ai';
 
@@ -38,7 +41,7 @@ export const useBattleStore = defineStore('battle', () => {
   const turnOrderUnits = ref<UnitViewModel[]>([]);
   const activeUnit = ref<UnitViewModel>();
 
-  const phase = ref<GamePhase>('deployment');
+  const phase = ref<GamePhase>('mulligan');
 
   const syncState = () => {
     assert(isDefined(internal.session));
@@ -51,10 +54,12 @@ export const useBattleStore = defineStore('battle', () => {
     players.value = game.playerSystem.players.map(player =>
       makePlayerViewModel(game, player)
     );
-    units.value = game.unitSystem.units.map(unit =>
-      makeUnitViewModel(game, unit)
-    );
-    activeUnit.value = makeUnitViewModel(game, game.turnSystem.activeUnit);
+    units.value = game.unitSystem.units.map(unit => {
+      return makeUnitViewModel(game, unit);
+    });
+    if (game.phase !== GAME_PHASES.MULLIGAN) {
+      activeUnit.value = makeUnitViewModel(game, game.turnSystem.activeUnit);
+    }
     turnOrderUnits.value = game.turnSystem.queue.map(unit =>
       makeUnitViewModel(game, unit)
     );
@@ -96,18 +101,19 @@ export const useBattleStore = defineStore('battle', () => {
 
       isReady.value = true;
     },
-    dispatch(
-      input: Override<
-        SerializedInput,
-        { payload: Omit<SerializedInput['payload'], 'playerId'> }
-      >
-    ) {
+    dispatch<T extends SerializedInput['type']>(input: {
+      type: T;
+      payload: PartialBy<
+        (SerializedInput & { type: T })['payload'],
+        'playerId'
+      >;
+    }) {
       // @ts-expect-error distributive union issue blablabla
       dispatch({
         type: input.type,
         payload: {
-          ...input.payload,
-          playerId: internal.session!.game.turnSystem.activeUnit.player.id
+          playerId: internal.session!.game.turnSystem.activeUnit?.player.id,
+          ...input.payload
         }
       });
     },

@@ -10,6 +10,10 @@ export class UnitCard extends Card<UnitCardBlueprint> {
     return this.blueprint.cost;
   }
 
+  get jobs() {
+    return this.blueprint.jobs;
+  }
+
   get atk() {
     return this.blueprint.atk;
   }
@@ -45,7 +49,10 @@ export class UnitCard extends Card<UnitCardBlueprint> {
     if (!this.canPlayAt(targets)) return;
 
     this.player.spendGold(this.blueprint.cost.gold);
-    this.unit = this.game.unitSystem.addUnit(this, targets[0]);
+
+    const [summonPosition] = targets;
+    this.unit = this.game.unitSystem.addUnit(this, summonPosition);
+
     const aoeShape = this.blueprint.getAoe(this.game, this, targets);
     this.blueprint.onPlay(this.game, this, aoeShape.getCells(), aoeShape.getUnits());
   }

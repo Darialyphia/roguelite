@@ -1,12 +1,13 @@
+import { makeCardViewModel, type CardViewModel } from '@/card/card.model';
 import type { Game } from '@game/engine';
 import type { EntityId } from '@game/engine/src/entity';
-import type { RosterUnit } from '@game/engine/src/player/player-roster.component';
 import type { Player } from '@game/engine/src/player/player.entity';
 
 export type PlayerViewModel = {
   id: EntityId;
-  roster: RosterUnit[];
   getPlayer(): Player;
+  hand: Array<CardViewModel>;
+  canPerformResourceAction: boolean;
 };
 
 export const makePlayerViewModel = (
@@ -15,7 +16,8 @@ export const makePlayerViewModel = (
 ): PlayerViewModel => {
   return {
     id: player.id,
-    roster: player.roster.units,
+    hand: player.hand.map(card => makeCardViewModel(game, card)),
+    canPerformResourceAction: player.canPerformResourceAction,
     getPlayer() {
       return player;
     }

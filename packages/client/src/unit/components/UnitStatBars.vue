@@ -5,6 +5,7 @@ import { createSpritesheetFrameObject } from '@/utils/sprite';
 import type { UnitViewModel } from '../unit.model';
 import { useBattleEvent } from '@/pages/battle/battle.store';
 import type { AnimatedSprite } from 'pixi.js';
+import { SpellCard } from '@game/engine/src/card/spell-card.entity';
 
 const { unit } = defineProps<{ unit: UnitViewModel }>();
 
@@ -59,8 +60,10 @@ useBattleEvent('unit.after_attack', e => {
 useBattleEvent('unit.after_play_card', e => {
   return new Promise(resolve => {
     if (!e.unit.equals(unit.getUnit())) return resolve();
-    // eslint-disable-next-line vue/no-mutating-props
-    unit.currentAp -= e.card.cost;
+    if (e.card instanceof SpellCard) {
+      // eslint-disable-next-line vue/no-mutating-props
+      unit.currentAp -= e.card.cost.ap;
+    }
     resolve();
   });
 });

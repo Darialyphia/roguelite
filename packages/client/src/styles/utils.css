@@ -60,8 +60,8 @@
 
 .fancy-scrollbar {
   --scrollbar-foreground: hsl(var(--color-primary-hsl) / 0.75);
-  --scrollbar-background: transparent scrollbar-color: var(--scrollbar-foreground)
-    var(--scrollbar-background);
+  --scrollbar-background: transparent scrollbar-color:
+    var(--scrollbar-foreground) var(--scrollbar-background);
   &::-webkit-scrollbar {
     width: 8px;
     height: 8px;

@@ -1,11 +1,19 @@
-import { Player, type PlayerOptions } from './player.entity';
+import { Player } from './player.entity';
 import { createEntityId, Entity, type EntityId } from '../entity';
 import type { Game } from '../game/game';
 import type { Unit } from '../unit/unit.entity';
+import type { Point3D } from '@game/shared';
+import { CARDS_DICTIONARY } from '../card/cards/_index';
+import { nanoid } from 'nanoid';
 
 export type TeamOptions = {
   id: string;
-  players: PlayerOptions[];
+  players: Array<{
+    id: string;
+    name: string;
+    deck: { cards: { blueprintId: string }[] };
+    startPosition: Point3D;
+  }>;
 };
 
 export class Team extends Entity {
@@ -19,7 +27,15 @@ export class Team extends Entity {
     super(createEntityId(options.id));
     this.game = game;
     options.players.forEach(player => {
-      const entity = new Player(game, this, player);
+      const entity = new Player(game, this, {
+        startPosition: player.startPosition,
+        id: player.id,
+        name: player.name,
+        deck: player.deck.cards.map(card => ({
+          id: `${player.id}_card_${card.blueprintId}_${nanoid(4)}`,
+          blueprint: CARDS_DICTIONARY[card.blueprintId as keyof typeof CARDS_DICTIONARY]
+        }))
+      });
       this.playerMap.set(entity.id, entity);
     });
 

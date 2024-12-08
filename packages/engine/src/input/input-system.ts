@@ -1,4 +1,4 @@
-import type { AnyFunction, Constructor, Nullable, Values } from '@game/shared';
+import type { AnyFunction, Constructor, Nullable, Prettify, Values } from '@game/shared';
 import { GAME_EVENTS, type Game } from '../game/game';
 import type { DefaultSchema, Input } from './input';
 import { MoveInput } from './inputs/move.input';
@@ -10,6 +10,7 @@ import { EndTurnInput } from './inputs/endTurn.input';
 import { GoldResourceActionInput } from './inputs/gold-resource-action.input';
 import { DrawResourceActionInput } from './inputs/draw-resource-action.input';
 import { RuneResourceActionInput } from './inputs/rune-resource-action';
+import { MulliganInput } from './inputs/mulligan.input';
 
 type GenericInputMap = Record<string, Constructor<Input<DefaultSchema>>>;
 
@@ -28,6 +29,7 @@ const inputMap = validateinputMap({
   attack: AttackInput,
   playCard: PlayCardInput,
   endTurn: EndTurnInput,
+  mulligan: MulliganInput,
   goldResourceAction: GoldResourceActionInput,
   drawResourceAction: DrawResourceActionInput,
   runeResourceAction: RuneResourceActionInput
@@ -35,14 +37,16 @@ const inputMap = validateinputMap({
 
 type InputMap = typeof inputMap;
 
-export type SerializedInput = Values<{
-  [Name in keyof InputMap]: {
-    type: Name;
-    payload: InstanceType<InputMap[Name]> extends Input<infer Schema>
-      ? z.infer<Schema>
-      : never;
-  };
-}>;
+export type SerializedInput = Prettify<
+  Values<{
+    [Name in keyof InputMap]: {
+      type: Name;
+      payload: InstanceType<InputMap[Name]> extends Input<infer Schema>
+        ? z.infer<Schema>
+        : never;
+    };
+  }>
+>;
 export type InputDispatcher = (input: SerializedInput) => void;
 
 export type InputSystemOptions = { game: Game };

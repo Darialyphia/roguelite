@@ -4,7 +4,7 @@ import type { Game } from '../game/game';
 import type { Unit } from '../unit/unit.entity';
 import { match } from 'ts-pattern';
 
-export class AnywhereTargetingPatternStrategy implements TargetingStrategy {
+export class AnywhereTargetingStrategy implements TargetingStrategy {
   constructor(
     private game: Game,
     private unit: Unit,

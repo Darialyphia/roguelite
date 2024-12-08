@@ -16,10 +16,10 @@ useBattleEvent('unit.before_receive_damage', e => {
   if (!e.unit.equals(unit.getUnit())) return Promise.resolve();
   damageAmount.value = e.damage.getMitigatedAmount(unit.getUnit());
 
-  direction = e.from.position.x < e.unit.position.x ? 1 : -1;
-  if (camera.angle.value === 90 || camera.angle.value === 180) {
-    direction *= -1;
-  }
+  // direction = e.from.position.x < e.unit.position.x ? 1 : -1;
+  // if (camera.angle.value === 90 || camera.angle.value === 180) {
+  //   direction *= -1;
+  // }
 
   setTimeout(() => {
     damageAmount.value = 0;

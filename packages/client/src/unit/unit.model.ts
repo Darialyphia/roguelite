@@ -9,16 +9,12 @@ export type UnitViewModel = {
   name: string;
   spriteId: string;
   iconId: string;
-  cosmetics: Record<string, string | null>;
   position: Vec3;
   currentAp: number;
   currentHp: number;
   maxAp: number;
   maxHp: number;
-  pAtk: number;
-  mAtk: number;
-  pDef: number;
-  mDef: number;
+  atk: number;
   speed: number;
   hand: CardViewModel[];
   deckSize: number;
@@ -36,20 +32,16 @@ export const makeUnitViewModel = (game: Game, unit: Unit): UnitViewModel => {
     name: unit.name,
     spriteId: unit.spriteId,
     iconId: unit.iconId,
-    cosmetics: unit.cosmetics,
     position: Vec3.fromPoint3D(unit.position),
     currentAp: unit.ap.current,
     currentHp: unit.hp.current,
     maxAp: unit.ap.max,
     maxHp: unit.hp.max,
-    pAtk: unit.pAtk,
-    mAtk: unit.mAtk,
-    pDef: unit.pDef,
-    mDef: unit.mDef,
+    atk: unit.atk,
     speed: unit.speed,
-    hand: unit.hand.map(card => makeCardViewModel(game, card)),
-    deckSize: unit.deckSize,
-    remainingCardsInDeck: unit.remainingCardsInDeck,
+    hand: unit.player.hand.map(card => makeCardViewModel(game, card)),
+    deckSize: unit.player.deckSize,
+    remainingCardsInDeck: unit.player.remainingCardsInDeck,
     modifierInfos: [...unit.modifierInfos],
     getUnit() {
       return unit;
@@ -61,7 +53,7 @@ export const makeUnitViewModel = (game: Game, unit: Unit): UnitViewModel => {
       return unitVm.getUnit().equals(unit);
     },
     canPlayCardAt(index) {
-      return unit.canPlayCardAt(index);
+      return unit.player.canPlayCardAt(index);
     }
   };
 };

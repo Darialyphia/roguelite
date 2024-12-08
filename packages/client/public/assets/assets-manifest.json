@@ -180,6 +180,20 @@
         },
         {
           "alias": [
+            "icon-spell-arcane-intellect"
+          ],
+          "src": [
+            "/assets/icons/spell-arcane-intellect.png"
+          ],
+          "foo": "bar",
+          "data": {
+            "tags": {
+              "m": true
+            }
+          }
+        },
+        {
+          "alias": [
             "icon-spell-spark"
           ],
           "src": [
@@ -212,6 +226,34 @@
           ],
           "src": [
             "/assets/icons/unit-arcane-servant.png"
+          ],
+          "foo": "bar",
+          "data": {
+            "tags": {
+              "m": true
+            }
+          }
+        },
+        {
+          "alias": [
+            "icon-unit-flame-lord"
+          ],
+          "src": [
+            "/assets/icons/unit-flame-lord.png"
+          ],
+          "foo": "bar",
+          "data": {
+            "tags": {
+              "m": true
+            }
+          }
+        },
+        {
+          "alias": [
+            "icon-unit-lancer"
+          ],
+          "src": [
+            "/assets/icons/unit-lancer.png"
           ],
           "foo": "bar",
           "data": {
@@ -304,6 +346,20 @@
       "assets": [
         {
           "alias": [
+            "action-wheel.png"
+          ],
+          "src": [
+            "/assets/ui/action-wheel.png"
+          ],
+          "foo": "bar",
+          "data": {
+            "tags": {
+              "m": true
+            }
+          }
+        },
+        {
+          "alias": [
             "ap.png"
           ],
           "src": [
@@ -318,10 +374,66 @@
         },
         {
           "alias": [
+            "atk.png"
+          ],
+          "src": [
+            "/assets/ui/atk.png"
+          ],
+          "foo": "bar",
+          "data": {
+            "tags": {
+              "m": true
+            }
+          }
+        },
+        {
+          "alias": [
             "card-back.png"
           ],
           "src": [
             "/assets/ui/card-back.png"
+          ],
+          "foo": "bar",
+          "data": {
+            "tags": {
+              "m": true
+            }
+          }
+        },
+        {
+          "alias": [
+            "card-front.png"
+          ],
+          "src": [
+            "/assets/ui/card-front.png"
+          ],
+          "foo": "bar",
+          "data": {
+            "tags": {
+              "m": true
+            }
+          }
+        },
+        {
+          "alias": [
+            "card-icon-border.png"
+          ],
+          "src": [
+            "/assets/ui/card-icon-border.png"
+          ],
+          "foo": "bar",
+          "data": {
+            "tags": {
+              "m": true
+            }
+          }
+        },
+        {
+          "alias": [
+            "card-image-background.png"
+          ],
+          "src": [
+            "/assets/ui/card-image-background.png"
           ],
           "foo": "bar",
           "data": {
@@ -402,6 +514,48 @@
         },
         {
           "alias": [
+            "draw-action.png"
+          ],
+          "src": [
+            "/assets/ui/draw-action.png"
+          ],
+          "foo": "bar",
+          "data": {
+            "tags": {
+              "m": true
+            }
+          }
+        },
+        {
+          "alias": [
+            "gold-action.png"
+          ],
+          "src": [
+            "/assets/ui/gold-action.png"
+          ],
+          "foo": "bar",
+          "data": {
+            "tags": {
+              "m": true
+            }
+          }
+        },
+        {
+          "alias": [
+            "gold.png"
+          ],
+          "src": [
+            "/assets/ui/gold.png"
+          ],
+          "foo": "bar",
+          "data": {
+            "tags": {
+              "m": true
+            }
+          }
+        },
+        {
+          "alias": [
             "hand.png"
           ],
           "src": [
@@ -459,10 +613,10 @@
         },
         {
           "alias": [
-            "m-atk.png"
+            "mulligan-selected.png"
           ],
           "src": [
-            "/assets/ui/m-atk.png"
+            "/assets/ui/mulligan-selected.png"
           ],
           "foo": "bar",
           "data": {
@@ -473,10 +627,10 @@
         },
         {
           "alias": [
-            "m-def.png"
+            "rune-blue-small.png"
           ],
           "src": [
-            "/assets/ui/m-def.png"
+            "/assets/ui/rune-blue-small.png"
           ],
           "foo": "bar",
           "data": {
@@ -487,10 +641,10 @@
         },
         {
           "alias": [
-            "p-atk.png"
+            "rune-blue.png"
           ],
           "src": [
-            "/assets/ui/p-atk.png"
+            "/assets/ui/rune-blue.png"
           ],
           "foo": "bar",
           "data": {
@@ -501,10 +655,136 @@
         },
         {
           "alias": [
-            "p-def.png"
+            "rune-colorless-small.png"
           ],
           "src": [
-            "/assets/ui/p-def.png"
+            "/assets/ui/rune-colorless-small.png"
+          ],
+          "foo": "bar",
+          "data": {
+            "tags": {
+              "m": true
+            }
+          }
+        },
+        {
+          "alias": [
+            "rune-colorless.png"
+          ],
+          "src": [
+            "/assets/ui/rune-colorless.png"
+          ],
+          "foo": "bar",
+          "data": {
+            "tags": {
+              "m": true
+            }
+          }
+        },
+        {
+          "alias": [
+            "rune-green-small.png"
+          ],
+          "src": [
+            "/assets/ui/rune-green-small.png"
+          ],
+          "foo": "bar",
+          "data": {
+            "tags": {
+              "m": true
+            }
+          }
+        },
+        {
+          "alias": [
+            "rune-green.png"
+          ],
+          "src": [
+            "/assets/ui/rune-green.png"
+          ],
+          "foo": "bar",
+          "data": {
+            "tags": {
+              "m": true
+            }
+          }
+        },
+        {
+          "alias": [
+            "rune-purple-small.png"
+          ],
+          "src": [
+            "/assets/ui/rune-purple-small.png"
+          ],
+          "foo": "bar",
+          "data": {
+            "tags": {
+              "m": true
+            }
+          }
+        },
+        {
+          "alias": [
+            "rune-purple.png"
+          ],
+          "src": [
+            "/assets/ui/rune-purple.png"
+          ],
+          "foo": "bar",
+          "data": {
+            "tags": {
+              "m": true
+            }
+          }
+        },
+        {
+          "alias": [
+            "rune-red-small.png"
+          ],
+          "src": [
+            "/assets/ui/rune-red-small.png"
+          ],
+          "foo": "bar",
+          "data": {
+            "tags": {
+              "m": true
+            }
+          }
+        },
+        {
+          "alias": [
+            "rune-red.png"
+          ],
+          "src": [
+            "/assets/ui/rune-red.png"
+          ],
+          "foo": "bar",
+          "data": {
+            "tags": {
+              "m": true
+            }
+          }
+        },
+        {
+          "alias": [
+            "rune-yellow-small.png"
+          ],
+          "src": [
+            "/assets/ui/rune-yellow-small.png"
+          ],
+          "foo": "bar",
+          "data": {
+            "tags": {
+              "m": true
+            }
+          }
+        },
+        {
+          "alias": [
+            "rune-yellow.png"
+          ],
+          "src": [
+            "/assets/ui/rune-yellow.png"
           ],
           "foo": "bar",
           "data": {
@@ -519,6 +799,34 @@
           ],
           "src": [
             "/assets/ui/speed.png"
+          ],
+          "foo": "bar",
+          "data": {
+            "tags": {
+              "m": true
+            }
+          }
+        },
+        {
+          "alias": [
+            "stat-circle-small.png"
+          ],
+          "src": [
+            "/assets/ui/stat-circle-small.png"
+          ],
+          "foo": "bar",
+          "data": {
+            "tags": {
+              "m": true
+            }
+          }
+        },
+        {
+          "alias": [
+            "stat-circle.png"
+          ],
+          "src": [
+            "/assets/ui/stat-circle.png"
           ],
           "foo": "bar",
           "data": {
@@ -613,6 +921,20 @@
               "m": true
             }
           }
+        },
+        {
+          "alias": [
+            "vp.png"
+          ],
+          "src": [
+            "/assets/ui/vp.png"
+          ],
+          "foo": "bar",
+          "data": {
+            "tags": {
+              "m": true
+            }
+          }
         }
       ]
     },
@@ -640,6 +962,64 @@
           ],
           "src": [
             "/assets/units/arcane-servant.png"
+          ],
+          "foo": "bar",
+          "data": {
+            "tags": {
+              "m": true
+            }
+          }
+        },
+        {
+          "alias": [
+            "flame-lord"
+          ],
+          "src": [
+            "/assets/units/flame-lord.json"
+          ],
+          "loadParser": "aseprite_loader",
+          "foo": "bar",
+          "data": {
+            "tags": {
+              "m": true
+            }
+          }
+        },
+        {
+          "alias": [
+            "flame-lord.png"
+          ],
+          "src": [
+            "/assets/units/flame-lord.png"
+          ],
+          "foo": "bar",
+          "data": {
+            "tags": {
+              "m": true
+            }
+          }
+        },
+        {
+          "alias": [
+            "lancer"
+          ],
+          "src": [
+            "/assets/units/lancer.json"
+          ],
+          "loadParser": "aseprite_loader",
+          "foo": "bar",
+          "data": {
+            "tags": {
+              "m": true
+            }
+          }
+        },
+        {
+          "alias": [
+            "lancer.png"
+          ],
+          "src": [
+            "/assets/units/lancer.png"
           ],
           "foo": "bar",
           "data": {

@@ -11,11 +11,12 @@ import { TypedEventEmitter } from '../utils/typed-emitter';
 import { RuneManager } from './components/rune-manager';
 import { match } from 'ts-pattern';
 import { RUNES } from '../utils/rune';
-import { UnitCard } from '../card/unit-card.entity';
 import { CARD_KINDS } from '../card/card-blueprint';
+import { GeneralCard } from '../card/general-card.entity';
 
 export type PlayerOptions = {
   id: string;
+  name: string;
   deck: CardOptions[];
   startPosition: Point3D;
 };
@@ -41,42 +42,48 @@ export class Player extends Entity {
 
   readonly team: Team;
 
+  readonly name: string;
+
   private readonly cardManager: CardManagerComponent;
 
   private readonly goldManager: GoldManagerComponent;
 
   private readonly runeManager: RuneManager;
 
-  private readonly startPosition: Point3D;
+  readonly startPosition: Point3D;
 
   private emitter = new TypedEventEmitter<PlayerEventMap>();
 
   public mulliganIndices: number[] = [];
 
+  public hasMulliganed = false;
+
   private resourceActionsTaken = 0;
 
-  private generalCard: UnitCard;
+  private generalCard: GeneralCard;
 
   constructor(game: Game, team: Team, options: PlayerOptions) {
     super(createEntityId(options.id));
     this.game = game;
     this.team = team;
+    this.name = options.name;
     this.startPosition = options.startPosition;
     this.runeManager = new RuneManager();
+
     const [general] = options.deck.splice(
       options.deck.findIndex(card => card.blueprint.kind === CARD_KINDS.GENERAL),
       1
     );
-    this.generalCard = new UnitCard(this.game, this, general);
+    this.generalCard = new GeneralCard(this.game, this, general);
 
     this.cardManager = new CardManagerComponent(this.game, this, {
       deck: options.deck
     });
     this.goldManager = new GoldManagerComponent(this.game, config.INITIAL_GOLD);
     this.forwardEvents();
-
+    this.draw(config.INITIAL_HAND_SIZE);
     this.game.on(GAME_EVENTS.TURN_START, this.onGameTurnStart.bind(this));
-    this.game.on('game.start-battle', this.onBattleStart.bind(this));
+    this.game.on(GAME_EVENTS.START_BATTLE, this.onBattleStart.bind(this));
   }
 
   shutdown() {
@@ -151,6 +158,10 @@ export class Player extends Entity {
     return this.cardManager.draw.bind(this.cardManager);
   }
 
+  get general() {
+    return this.units.find(u => u.card.kind === CARD_KINDS.GENERAL)!;
+  }
+
   isAlly(player: Player) {
     return player.team.equals(this.team);
   }
@@ -172,10 +183,6 @@ export class Player extends Entity {
     });
   }
 
-  placeGeneral() {
-    this.game.unitSystem.addUnit(this.generalCard, this.startPosition);
-  }
-
   performResourceAction(action: ResourceAction) {
     match(action)
       .with({ type: 'draw' }, () => {
@@ -191,23 +198,15 @@ export class Player extends Entity {
     this.resourceActionsTaken++;
   }
 
-  replaceCard(index: number) {
-    const card = this.hand[index];
-    if (!card) return;
-
-    const replacement = this.cardManager.deck.replace(card);
-    this.hand[index] = replacement;
-  }
-
   mulligan() {
     for (const index of this.mulliganIndices) {
-      this.replaceCard(index);
+      this.cardManager.replaceCardAt(index);
     }
   }
 
   canPlayCardAt(index: number) {
     const card = this.getCardAt(index);
-
+    if (!card) return false;
     if (!this.game.turnSystem.activeUnit.canPlayCardFromHand) return false;
 
     return card.canPlay;
@@ -225,6 +224,6 @@ export class Player extends Entity {
   }
 
   onBattleStart() {
-    this.placeGeneral();
+    this.generalCard.play();
   }
 }

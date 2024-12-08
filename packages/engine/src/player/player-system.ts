@@ -11,8 +11,8 @@ export class PlayerSystem extends System<PlayerSystemOptions> {
   private playerMap = new Map<EntityId, Player>();
 
   initialize(options: PlayerSystemOptions): void {
-    options.teams.forEach(t => {
-      const team = new Team(this.game, t);
+    options.teams.forEach(teamInfo => {
+      const team = new Team(this.game, teamInfo);
       this.teamMap.set(team.id, team);
       team.players.forEach(player => {
         this.playerMap.set(player.id, player);

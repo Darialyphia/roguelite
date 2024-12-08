@@ -9,6 +9,7 @@ import type { UnitViewModel } from '../unit.model';
 import { ColorOverlayFilter } from '@pixi/filter-color-overlay';
 import { isDefined } from '@game/shared';
 import UnitModifierSprite from './UnitModifierSprite.vue';
+import { useIsoCamera } from '@/iso/composables/useIsoCamera';
 
 const { unit } = defineProps<{ unit: UnitViewModel }>();
 
@@ -16,14 +17,21 @@ const spritesheet = useSpritesheet(() => unit.spriteId);
 
 const textures = useMultiLayerTexture({
   sheet: spritesheet,
-  parts: () => unit.cosmetics,
+  parts: {},
   tag: 'idle',
   dimensions: config.UNIT_SPRITE_SIZE
 });
 
 const ui = useBattleUiStore();
 
-const selectedFilter = new OutlineFilter(1, 0xffffff);
+const camera = useIsoCamera();
+const selectedFilter = new OutlineFilter(
+  camera.viewport.value!.scale.x,
+  0xffffff
+);
+camera.viewport.value?.on('zoomed-end', () => {
+  selectedFilter.thickness = Math.round(camera.viewport.value!.scale.x);
+});
 const inAoeFilter = new ColorOverlayFilter(0xff0000, 0.3);
 
 const isInCardAoe = computed(() => {

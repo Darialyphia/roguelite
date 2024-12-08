@@ -3,10 +3,10 @@ import Fps from '@/shared/components/Fps.vue';
 import { AI_ID, PLAYER_ID, useBattleStore } from './battle.store';
 import { ClientSession, ServerSession } from '@game/engine';
 import type { GameOptions } from '@game/engine/src/game/game';
-import TurnOrder from '@/unit/components/TurnOrder.vue';
-import Hand from '@/card/Hand.vue';
+import ActionWheel from '@/player/ActionWheel.vue';
+import Hand from '@/card/components/Hand.vue';
 import UnitStats from '@/unit/components/UnitStats.vue';
-import PlayedCard from '@/card/PlayedCard.vue';
+import PlayedCard from '@/card/components/PlayedCard.vue';
 import BattleLog from '@/player/BattleLog.vue';
 import { AI } from '@game/engine/src/ai/ai';
 import type { EntityId } from '@game/engine/src/entity';
@@ -14,6 +14,7 @@ import { waitFor } from '@game/shared';
 import type { SerializedInput } from '@game/engine/src/input/input-system';
 import { until } from '@vueuse/core';
 import { useBattleUiStore } from './battle-ui.store';
+import MulliganOverlay from '@/card/components/MulliganOverlay.vue';
 
 definePage({
   name: 'Battle'
@@ -25,77 +26,43 @@ const options: Pick<GameOptions, 'mapId' | 'teams'> = {
     [
       {
         id: PLAYER_ID,
-        units: [
-          {
-            blueprintId: 'wizard',
-            deck: [
-              { blueprintId: 'magic-missile' },
-              { blueprintId: 'magic-missile' },
-              { blueprintId: 'magic-missile' },
-              { blueprintId: 'spell-spark' },
-              { blueprintId: 'spell-spark' },
-              { blueprintId: 'spell-spark' },
-              { blueprintId: 'arcane-intellect' },
-              { blueprintId: 'arcane-intellect' },
-              { blueprintId: 'arcane-intellect' },
-              { blueprintId: 'stasis' },
-              { blueprintId: 'stasis' },
-              { blueprintId: 'stasis' },
-              { blueprintId: 'frost-nova' },
-              { blueprintId: 'frost-nova' },
-              { blueprintId: 'frost-nova' },
-              { blueprintId: 'summon-arcane-servant' },
-              { blueprintId: 'summon-arcane-servant' },
-              { blueprintId: 'summon-arcane-servant' }
-            ],
-            spriteParts: {
-              armor: 'tier3',
-              helm: 'tier3',
-              weapon: 'tier3',
-              vfx: 'tier3'
-            },
-            position: { x: 1, y: 0, z: 0 }
-          }
-        ],
-        roster: []
+        name: 'Daria',
+        deck: {
+          cards: [
+            { blueprintId: 'testGeneral' },
+            { blueprintId: 'testUnit' },
+            { blueprintId: 'testUnit' },
+            { blueprintId: 'testUnit' },
+            { blueprintId: 'testUnit' },
+            { blueprintId: 'testUnit' },
+            { blueprintId: 'testSpell' },
+            { blueprintId: 'testSpell' },
+            { blueprintId: 'testSpell' },
+            { blueprintId: 'testSpell' },
+            { blueprintId: 'testSpell' }
+          ]
+        }
       }
     ],
     [
       {
         id: AI_ID,
-        roster: [],
-        units: [
-          {
-            blueprintId: 'wizard',
-            deck: [
-              { blueprintId: 'magic-missile' },
-              { blueprintId: 'magic-missile' },
-              { blueprintId: 'magic-missile' },
-              { blueprintId: 'spell-spark' },
-              { blueprintId: 'spell-spark' },
-              { blueprintId: 'spell-spark' },
-              { blueprintId: 'arcane-intellect' },
-              { blueprintId: 'arcane-intellect' },
-              { blueprintId: 'arcane-intellect' },
-              { blueprintId: 'stasis' },
-              { blueprintId: 'stasis' },
-              { blueprintId: 'stasis' },
-              { blueprintId: 'frost-nova' },
-              { blueprintId: 'frost-nova' },
-              { blueprintId: 'frost-nova' },
-              { blueprintId: 'summon-arcane-servant' },
-              { blueprintId: 'summon-arcane-servant' },
-              { blueprintId: 'summon-arcane-servant' }
-            ],
-            spriteParts: {
-              armor: 'tier4',
-              helm: null,
-              weapon: 'tier4',
-              vfx: 'tier4'
-            },
-            position: { x: 7, y: 0, z: 0 }
-          }
-        ]
+        name: 'AI',
+        deck: {
+          cards: [
+            { blueprintId: 'testGeneral' },
+            { blueprintId: 'testUnit' },
+            { blueprintId: 'testUnit' },
+            { blueprintId: 'testUnit' },
+            { blueprintId: 'testUnit' },
+            { blueprintId: 'testUnit' },
+            { blueprintId: 'testSpell' },
+            { blueprintId: 'testSpell' },
+            { blueprintId: 'testSpell' },
+            { blueprintId: 'testSpell' },
+            { blueprintId: 'testSpell' }
+          ]
+        }
       }
     ]
   ]
@@ -142,6 +109,7 @@ start();
 <template>
   <Fps />
   <div class="layout">
+    <MulliganOverlay />
     <nav class="ml-11 mt-4">
       <ul class="flex gap-2 pointer-events-auto">
         <li>
@@ -167,11 +135,6 @@ start();
       </ul>
     </nav>
     <BattleLog class="pointer-events-auto" />
-    <UnitStats
-      :unit="battleStore.state.activeUnit"
-      class="active-unit-stats pointer-events-auto"
-      v-if="battleStore.state.activeUnit"
-    />
     <Transition>
       <UnitStats
         :unit="uiStore.selectedUnit"
@@ -179,8 +142,8 @@ start();
         v-if="uiStore.selectedUnit"
       />
     </Transition>
-    <TurnOrder class="turn-order pointer-events-auto" />
-    <Hand class="hand pointer-events-auto" />
+    <Hand class="hand" />
+    <ActionWheel />
     <PlayedCard />
   </div>
 </template>
@@ -223,9 +186,12 @@ nav {
   }
 }
 
-.turn-order {
+.action-wheel {
   grid-row: 3;
   align-self: end;
+  justify-self: end;
+  margin-block-end: var(--size-9);
+  margin-inline-end: var(--size-9);
 }
 
 .hand {

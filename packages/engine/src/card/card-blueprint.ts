@@ -8,6 +8,7 @@ import type { Rune } from '../utils/rune';
 import type { Job } from '../utils/job';
 import type { UnitCard } from './unit-card.entity';
 import type { SpellCard } from './spell-card.entity';
+import type { GeneralCard } from './general-card.entity';
 
 type CardBlueprintTarget = {
   getTargeting(game: Game, card: Card): TargetingStrategy;
@@ -26,8 +27,6 @@ export type CardBlueprintBase = {
   name: string;
   iconId: string;
   description: string;
-  targets: [CardBlueprintTarget, ...CardBlueprintTarget[]];
-  minTargets: number;
   aiHints: {
     isRelevantTarget?: (point: Point3D, game: Game, card: Card, index: number) => boolean;
     maxUsesPerTurn?: number;
@@ -37,22 +36,34 @@ export type CardBlueprintBase = {
 };
 
 export type UnitCardBlueprint = CardBlueprintBase & {
-  kind: Extract<CardKind, typeof CARD_KINDS.GENERAL | typeof CARD_KINDS.UNIT>;
-  targets: [CardBlueprintTarget, ...CardBlueprintTarget[]];
-  minTargets: number;
+  kind: Extract<CardKind, typeof CARD_KINDS.UNIT>;
   spriteId: string;
   maxHp: number;
   atk: number;
   speed: number;
   reward: number;
-  goldCost: number;
-  job: Job;
+  jobs: Job[];
   cost: {
     gold: number;
     runes: Rune[];
   };
+  minTargets: number;
+  targets: [CardBlueprintTarget, ...CardBlueprintTarget[]];
   getAoe: (game: Game, card: UnitCard, points: Point3D[]) => AOEShape;
   onPlay(game: Game, card: UnitCard, cellTargets: Point3D[], unitTargets: Unit[]): void;
+  getAttackPattern: (game: Game, unit: Unit) => TargetingStrategy;
+};
+
+export type GeneralCardBlueprint = CardBlueprintBase & {
+  kind: Extract<CardKind, typeof CARD_KINDS.GENERAL>;
+  spriteId: string;
+  maxHp: number;
+  atk: number;
+  speed: number;
+  reward: number;
+  jobs: Job[];
+  getAoe: (game: Game, card: UnitCard, points: Point3D[]) => AOEShape;
+  onPlay(game: Game, card: GeneralCard): void;
   getAttackPattern: (game: Game, unit: Unit) => TargetingStrategy;
 };
 
@@ -63,8 +74,17 @@ export type SpellCardBlueprint = CardBlueprintBase & {
     runes: Rune[];
     job: Job[];
   };
+  minTargets: number;
+  targets: [CardBlueprintTarget, ...CardBlueprintTarget[]];
   getAoe: (game: Game, card: SpellCard, points: Point3D[]) => AOEShape;
   onPlay(game: Game, card: SpellCard, cellTargets: Point3D[], unitTargets: Unit[]): void;
 };
 
-export type CardBlueprint = UnitCardBlueprint | SpellCardBlueprint;
+export type CardBlueprint = UnitCardBlueprint | SpellCardBlueprint | GeneralCardBlueprint;
+
+export const isUnitBlueprint = (bp: CardBlueprint): bp is UnitCardBlueprint =>
+  bp.kind === CARD_KINDS.UNIT;
+export const isSpellBlueprint = (bp: CardBlueprint): bp is SpellCardBlueprint =>
+  bp.kind === CARD_KINDS.SPELL;
+export const isGeneralBlueprint = (bp: CardBlueprint): bp is GeneralCardBlueprint =>
+  bp.kind === CARD_KINDS.GENERAL;
