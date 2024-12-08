@@ -13,7 +13,9 @@ import type { Game } from '@game/engine';
 import { type UnitViewModel, makeUnitViewModel } from '@/unit/unit.model';
 import { whenever } from '@vueuse/core';
 import { makeCardViewModel, type CardViewModel } from '@/card/card.model';
+import { Layer } from '@pixi/layers';
 import { match } from 'ts-pattern';
+import type { DisplayObject } from 'pixi.js';
 
 export const UI_MODES = {
   BASIC: 'basic',
@@ -143,8 +145,27 @@ export const useBattleUiStore = defineStore('battle-ui', () => {
   );
 
   const isBoardAppearAnimationDone = ref(false);
+
+  type LayerName = 'ui' | 'scene' | 'fx';
+
+  const layers: Record<LayerName, Ref<Layer | undefined>> = {
+    ui: ref(),
+    scene: ref(),
+    fx: ref()
+  };
+
   return {
     isBoardAppearAnimationDone,
+    registerLayer(layer: Layer, name: LayerName) {
+      if (!layer) return;
+      layers[name].value = layer;
+      layer.group.enableSort = true;
+      layer.sortableChildren = true;
+    },
+    assignLayer(obj: Nullable<DisplayObject>, name: LayerName) {
+      if (!isDefined(obj)) return;
+      obj.parentLayer = layers[name].value;
+    },
     hoveredCell: computed(() => uiStore.hoveredCell),
     hoverAt(point: Point3D) {
       uiStore.hoveredCell =

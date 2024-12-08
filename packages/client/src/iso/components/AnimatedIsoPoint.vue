@@ -24,7 +24,7 @@ watch(
       pixi: {
         x: pos.x,
         y: pos.y,
-        zIndex: z
+        zOrder: z
       },
       ease: Power1.easeInOut
     });
@@ -34,8 +34,13 @@ watch(
 </script>
 
 <template>
-  <container ref="containerRef" :pivot="{ x: 0, y: scale.z }">
-    <slot :isoPosition="isoPosition" :z-index="zIndex" />
+  <container
+    ref="containerRef"
+    :pivot="{ x: 0, y: scale.z }"
+    :z-order="zIndex"
+    :z-index="zIndex"
+  >
+    <slot :isoPosition="isoPosition" :z-order="zIndex" />
   </container>
 </template>
 

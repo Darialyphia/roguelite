@@ -4,6 +4,7 @@ import AnimatedIsoPoint from '@/iso/components/AnimatedIsoPoint.vue';
 import type { UnitViewModel } from '../unit.model';
 import { useBattleEvent } from '@/pages/battle/battle.store';
 import { waitFor } from '@game/shared';
+import { useBattleUiStore } from '@/pages/battle/battle-ui.store';
 
 const { unit, bounce } = defineProps<{
   unit: UnitViewModel;
@@ -70,11 +71,16 @@ useBattleEvent('unit.before_attack', async e => {
     });
   await tl.play();
 });
+
+const ui = useBattleUiStore();
 </script>
 
 <template>
   <AnimatedIsoPoint :position="unit.position" :z-index-offset="32">
-    <container :position="offset">
+    <container
+      :position="offset"
+      :ref="(container: any) => ui.assignLayer(container, 'scene')"
+    >
       <slot />
     </container>
   </AnimatedIsoPoint>

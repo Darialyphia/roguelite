@@ -1,26 +1,21 @@
 <script setup lang="ts">
-import { Application, External } from 'vue3-pixi';
+import { External } from 'vue3-pixi';
 import { useAssets } from './shared/composables/useAssets';
+import PixiApp from './PixiApp.vue';
 
-const viewport = window;
 const { loaded } = useAssets();
 </script>
 
 <template>
   <div v-if="!loaded">Loading...</div>
-  <Application
-    v-else
-    :resize-to="viewport"
-    :width="viewport.innerWidth"
-    :height="viewport.innerHeight"
-  >
+  <PixiApp v-else>
     <RouterView name="scene" />
     <External>
       <div class="ui">
         <RouterView name="ui" />
       </div>
     </External>
-  </Application>
+  </PixiApp>
 </template>
 
 <style scoped>

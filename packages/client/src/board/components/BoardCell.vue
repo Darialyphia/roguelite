@@ -111,7 +111,7 @@ const spawnAnimation = (container: Container) => {
       :duration="{ enter: 1000, leave: 0 }"
       @enter="spawnAnimation"
     >
-      <container>
+      <container :ref="(container: any) => ui.assignLayer(container, 'scene')">
         <BoardCellSprite :cell="cell" />
         <BoardCellHighlights :cell="cell" />
         <UiAnimatedSprite assetId="hovered-cell" v-if="isHovered" />

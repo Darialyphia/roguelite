@@ -4,6 +4,7 @@ import { BLEND_MODES, Matrix } from 'pixi.js';
 import { PTransitionGroup } from 'vue3-pixi';
 import { radialGradient } from '@/utils/sprite';
 import { config } from '@/utils/config';
+import { useBattleUiStore } from '@/pages/battle/battle-ui.store';
 
 let nextId = 1;
 
@@ -30,55 +31,61 @@ const addLight = async (config: BetterOmit<Light, 'id'>, duration?: number) => {
 };
 
 addLight({
-  alpha: 1,
+  alpha: config.AMBIENT_LIGHT_ALPHA,
   blendMode: config.AMBIENT_LIGHT_BLEND_MODE,
   color: 'rgba(0,0,0,0)',
   offset: { x: 0, y: 0 },
   radius: config.AMBIENT_LIGHT_UNIT_SIZE / 2
 });
+
+const ui = useBattleUiStore();
 </script>
 
 <template>
-  <PTransitionGroup
-    :duration="{ enter: 300, leave: 300 }"
-    :before-enter="{ alpha: 0 }"
-    :enter="{ alpha: 1 }"
-    :leave="{ alpha: 0 }"
+  <container
+    :ref="(container: any) => ui.assignLayer(container, 'fx')"
+    :sortable-children="true"
+    event-mode="none"
   >
-    <container v-for="light in lights" :key="light.id">
-      <graphics
-        :alpha="light.alpha"
-        :blend-mode="light.blendMode"
-        :z-index="999"
-        :z-order="999"
-        @render="
-          g => {
-            try {
-              g.clear();
-              const texture = radialGradient(
-                light.radius * 2,
-                light.radius * 2,
-                [
-                  [0, light.color],
-                  [0.9, config.AMBIENT_LIGHT_COLOR]
-                ]
-              );
+    <PTransitionGroup
+      :duration="{ enter: 300, leave: 300 }"
+      :before-enter="{ alpha: 0 }"
+      :enter="{ alpha: 1 }"
+      :leave="{ alpha: 0 }"
+    >
+      <container v-for="light in lights" :key="light.id" :z-order="999">
+        <graphics
+          :alpha="light.alpha"
+          :blend-mode="light.blendMode"
+          @render="
+            g => {
+              try {
+                g.clear();
+                const texture = radialGradient(
+                  light.radius * 2,
+                  light.radius * 2,
+                  [
+                    [0, light.color],
+                    [0.9, config.AMBIENT_LIGHT_COLOR]
+                  ]
+                );
 
-              g.beginTextureFill({
-                texture,
-                matrix: new Matrix().translate(
-                  light.offset.x + light.radius,
-                  light.offset.y + light.radius
-                )
-              });
-              g.drawCircle(0, 0, light.radius);
-              g.endFill();
-            } catch (err) {
-              console.log(err);
+                g.beginTextureFill({
+                  texture,
+                  matrix: new Matrix().translate(
+                    light.offset.x + light.radius,
+                    light.offset.y + light.radius
+                  )
+                });
+                g.drawCircle(0, 0, light.radius);
+                g.endFill();
+              } catch (err) {
+                console.log(err);
+              }
             }
-          }
-        "
-      />
-    </container>
-  </PTransitionGroup>
+          "
+        />
+      </container>
+    </PTransitionGroup>
+  </container>
 </template>
