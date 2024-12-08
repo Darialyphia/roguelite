@@ -1,4 +1,8 @@
 import { makeCardViewModel, type CardViewModel } from '@/card/card.model';
+import {
+  makePlayerViewModel,
+  type PlayerViewModel
+} from '@/player/player.model';
 import type { Game } from '@game/engine';
 import type { EntityId } from '@game/engine/src/entity';
 import type { Unit } from '@game/engine/src/unit/unit.entity';
@@ -20,6 +24,7 @@ export type UnitViewModel = {
   deckSize: number;
   remainingCardsInDeck: number;
   modifierInfos: Unit['modifierInfos'];
+  player: PlayerViewModel;
   getUnit(): Unit;
   isActive(): boolean;
   equals(unit: UnitViewModel): boolean;
@@ -43,6 +48,7 @@ export const makeUnitViewModel = (game: Game, unit: Unit): UnitViewModel => {
     deckSize: unit.player.deckSize,
     remainingCardsInDeck: unit.player.remainingCardsInDeck,
     modifierInfos: [...unit.modifierInfos],
+    player: makePlayerViewModel(game, unit.player),
     getUnit() {
       return unit;
     },

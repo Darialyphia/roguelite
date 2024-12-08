@@ -29,7 +29,6 @@ const iconPath = computed(() => `url(/assets/ui/${icon}.png)`);
   z-index: 0;
 
   > div {
-    color: black;
     place-self: center;
     background: linear-gradient(
       #fffe00,

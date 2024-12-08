@@ -67,3 +67,9 @@
 *:nth-child(10) {
   --child-index: 10;
 }
+*:nth-child(11) {
+  --child-index: 11;
+}
+*:nth-child(12) {
+  --child-index: 12;
+}

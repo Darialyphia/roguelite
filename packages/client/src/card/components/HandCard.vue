@@ -87,7 +87,7 @@ li {
   --disabled-filter: ;
   width: calc(1px * v-bind('config.CARD_WIDTH'));
   position: relative;
-  z-index: calc(var(--hand-size) - var(--child-index));
+  z-index: var(--child-index);
   transform-origin: bottom right;
   transition:
     margin 0.3s var(--ease-out-2),

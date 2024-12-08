@@ -528,6 +528,20 @@
         },
         {
           "alias": [
+            "end-turn-action.png"
+          ],
+          "src": [
+            "/assets/ui/end-turn-action.png"
+          ],
+          "foo": "bar",
+          "data": {
+            "tags": {
+              "m": true
+            }
+          }
+        },
+        {
+          "alias": [
             "gold-action.png"
           ],
           "src": [
@@ -617,6 +631,20 @@
           ],
           "src": [
             "/assets/ui/mulligan-selected.png"
+          ],
+          "foo": "bar",
+          "data": {
+            "tags": {
+              "m": true
+            }
+          }
+        },
+        {
+          "alias": [
+            "player-battle-info.png"
+          ],
+          "src": [
+            "/assets/ui/player-battle-info.png"
           ],
           "foo": "bar",
           "data": {
@@ -914,6 +942,20 @@
           ],
           "src": [
             "/assets/ui/unit-stat-bars.png"
+          ],
+          "foo": "bar",
+          "data": {
+            "tags": {
+              "m": true
+            }
+          }
+        },
+        {
+          "alias": [
+            "vp-empty.png"
+          ],
+          "src": [
+            "/assets/ui/vp-empty.png"
           ],
           "foo": "bar",
           "data": {

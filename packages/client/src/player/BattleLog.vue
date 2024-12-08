@@ -14,9 +14,9 @@ import { match } from 'ts-pattern';
 import { Icon } from '@iconify/vue';
 import type { EntityId } from '@game/engine/src/entity';
 import type { Player } from '@game/engine/src/player/player.entity';
+import { GAME_PHASES } from '@game/engine/src/game/game-phase.system';
 
 const state = useGameClientState();
-const activeUnit = useActiveUnit();
 const game = useGame();
 
 type Token =
@@ -159,6 +159,7 @@ const isAction = (event: Pick<Token, 'kind'>[]) =>
 
 <template>
   <div
+    v-if="state.phase === GAME_PHASES.BATTLE"
     v-on-click-outside="close"
     class="combat-log fancy-scrollbar"
     :class="isCollapsed && 'is-collapsed'"
@@ -206,7 +207,7 @@ const isAction = (event: Pick<Token, 'kind'>[]) =>
 <style scoped lang="postcss">
 .combat-log {
   position: fixed;
-  top: 35%;
+  top: 25%;
 
   font-family: 'Press Start 2P';
   color: #ffdaad;
@@ -224,7 +225,7 @@ const isAction = (event: Pick<Token, 'kind'>[]) =>
 
   width: 26rem;
   height: var(--size-15);
-
+  z-index: 1;
   @screen lt-lg {
     width: 20rem;
     height: var(--size-13);

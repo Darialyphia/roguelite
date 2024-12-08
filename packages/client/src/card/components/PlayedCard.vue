@@ -16,7 +16,7 @@ useBattleEvent('unit.before_play_card', async event => {
 </script>
 
 <template>
-  <div class="backdrop">
+  <div class="played-card-backdrop">
     <Transition :duration="{ enter: 1000, leave: 500 }">
       <div class="wrapper" v-if="card">
         <Card :card="card" class="card-front" />
@@ -27,7 +27,7 @@ useBattleEvent('unit.before_play_card', async event => {
 </template>
 
 <style scoped lang="postcss">
-.backdrop {
+.played-card-backdrop {
   position: fixed;
   width: 100vw;
   height: 100dvh;

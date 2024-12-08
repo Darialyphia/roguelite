@@ -1,6 +1,12 @@
 <script setup lang="ts">
 import Fps from '@/shared/components/Fps.vue';
-import { AI_ID, PLAYER_ID, useBattleStore } from './battle.store';
+import {
+  AI_ID,
+  PLAYER_ID,
+  useBattleStore,
+  useGame,
+  useUserPlayer
+} from './battle.store';
 import { ClientSession, ServerSession } from '@game/engine';
 import type { GameOptions } from '@game/engine/src/game/game';
 import ActionWheel from '@/player/ActionWheel.vue';
@@ -15,6 +21,8 @@ import type { SerializedInput } from '@game/engine/src/input/input-system';
 import { until } from '@vueuse/core';
 import { useBattleUiStore } from './battle-ui.store';
 import MulliganOverlay from '@/card/components/MulliganOverlay.vue';
+import PlayerBattleInfos from '@/player/PlayerBattleInfos.vue';
+import { makePlayerViewModel } from '@/player/player.model';
 
 definePage({
   name: 'Battle'
@@ -76,6 +84,12 @@ const clientSession = new ClientSession(options);
 const battleStore = useBattleStore();
 const uiStore = useBattleUiStore();
 
+const userPlayer = useUserPlayer();
+const game = useGame();
+const opponent = computed(() =>
+  makePlayerViewModel(game.value, userPlayer.value.getPlayer().opponents[0])
+);
+
 const start = () => {
   serverSession.initialize();
   clientSession.initialize([...serverSession.game.rngSystem.values]);
@@ -110,11 +124,10 @@ start();
   <Fps />
   <div class="layout">
     <MulliganOverlay />
-    <nav class="ml-11 mt-4">
+    <PlayedCard />
+
+    <nav class="ml-11 mt-4 absolute top-0 left-12">
       <ul class="flex gap-2 pointer-events-auto">
-        <li>
-          <RouterLink :to="{ name: 'Home' }">Back to Home</RouterLink>
-        </li>
         <li>
           <button @click="() => console.log(serverSession)">
             Debug server session
@@ -125,15 +138,11 @@ start();
             Debug client session
           </button>
         </li>
-        <li>
-          <button
-            @click="battleStore.dispatch({ type: 'endTurn', payload: {} })"
-          >
-            End turn
-          </button>
-        </li>
       </ul>
     </nav>
+
+    <PlayerBattleInfos :player="opponent" class="opponent-battle-infos" />
+
     <BattleLog class="pointer-events-auto" />
     <Transition>
       <UnitStats
@@ -142,9 +151,11 @@ start();
         v-if="uiStore.selectedUnit"
       />
     </Transition>
-    <Hand class="hand" />
-    <ActionWheel />
-    <PlayedCard />
+    <div class="bottom-row">
+      <PlayerBattleInfos :player="userPlayer" class="player-battle-infos" />
+      <Hand class="hand" />
+      <ActionWheel />
+    </div>
   </div>
 </template>
 
@@ -153,12 +164,7 @@ start();
   display: grid;
   height: 100%;
   grid-template-rows: auto 1fr auto;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
   user-select: none;
-}
-
-nav {
-  grid-column: 1 / -1;
 }
 
 .active-unit-stats {
@@ -186,16 +192,35 @@ nav {
   }
 }
 
-.action-wheel {
+.bottom-row {
+  display: grid;
   grid-row: 3;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 2fr) minmax(0, 1fr);
+}
+.action-wheel {
   align-self: end;
   justify-self: end;
-  margin-block-end: var(--size-9);
-  margin-inline-end: var(--size-9);
+  margin-block-end: var(--size-6);
+  margin-inline-end: var(--size-6);
+  justify-self: end;
 }
 
 .hand {
-  grid-row: 3;
   max-width: 100%;
+  justify-self: center;
+}
+
+.player-battle-infos {
+  align-self: end;
+  justify-self: start;
+  margin-block-end: var(--size-6);
+  margin-inline-start: var(--size-9);
+}
+
+.opponent-battle-infos {
+  grid-row: 1;
+  justify-self: end;
+  margin-block-start: var(--size-8);
+  margin-inline-end: var(--size-6);
 }
 </style>

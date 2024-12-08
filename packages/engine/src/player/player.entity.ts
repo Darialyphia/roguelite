@@ -162,6 +162,10 @@ export class Player extends Entity {
     return this.units.find(u => u.card.kind === CARD_KINDS.GENERAL)!;
   }
 
+  get opponents() {
+    return this.game.playerSystem.players.filter(player => this.isEnemy(player));
+  }
+
   isAlly(player: Player) {
     return player.team.equals(this.team);
   }
