@@ -200,5 +200,13 @@ const runeCosts = computed(() => {
   width: 30px;
   aspect-ratio: 1;
   background: var(--bg);
+  display: grid;
+  place-content: center;
+  font-family: 'SilkScreen';
+  color: black;
+  text-align: center;
+  font-size: var(--font-size-4);
+  text-shadow: 0 3px #d7ad42;
+  padding-left: 9px;
 }
 </style>

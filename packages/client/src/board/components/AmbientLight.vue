@@ -17,13 +17,13 @@ const camera = useIsoCamera();
 const isoWorld = useIsoWorld();
 const ui = useBattleUiStore();
 const state = useGameClientState();
-const lightTint = ref('#FF0000');
-const lightAlpha = ref(127);
+const lightTint = ref('#FFDD00');
+const lightAlpha = ref(40);
 const lightColor = computed(
   () => `${lightTint.value}${lightAlpha.value.toString(16)}`
 );
 const shadowTint = ref(config.AMBIENT_LIGHT_COLOR);
-const shadowAlpha = ref(127);
+const shadowAlpha = ref(30);
 const shadowColor = computed(
   () => `${shadowTint.value}${shadowAlpha.value.toString(16)}`
 );
@@ -42,7 +42,7 @@ const renderLights = (g: PixiGraphics) => {
       [
         [0, lightColor.value],
         [0.15, lightColor.value],
-        [0.9, 'rgba(0,0,0,0)']
+        [1, 'rgba(0,0,0,0)']
       ]
     );
 
@@ -66,7 +66,7 @@ const renderLights = (g: PixiGraphics) => {
     :z-index="9999"
   >
     <graphics
-      :filters="[getBlendFilter(BLEND_MODES.OVERLAY)]"
+      :filters="[getBlendFilter(BLEND_MODES.SOFT_LIGHT)]"
       event-mode="none"
       :x="-camera.offset.value.x"
       :y="-camera.offset.value.y"
