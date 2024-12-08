@@ -18,7 +18,7 @@ until(computed(() => readyCells.value === battleStore.state.cells.length))
   .then(() => {
     setTimeout(() => {
       ui.isBoardAppearAnimationDone = true;
-    }, 500);
+    }, 300);
   });
 </script>
 

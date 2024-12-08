@@ -135,14 +135,14 @@ const isUserPlayerTurn = computed(() =>
   display: grid;
   grid-template-columns: repeat(6, minmax(0, var(--half-item-size)));
   grid-template-rows:
-    calc(var(--item-size) * 0.75)
-    calc(var(--item-size) * 0.25)
-    calc(var(--item-size) * 0.5)
-    calc(var(--item-size) * 0.25)
-    calc(var(--item-size) * 0.5)
-    calc(var(--item-size) * 0.5)
-    calc(var(--item-size) * 0.25)
-    calc(var(--item-size) * 0.75);
+    calc((var(--item-size) * 0.75) - 1px)
+    calc((var(--item-size) * 0.25) - 1px)
+    calc((var(--item-size) * 0.5) - 1px)
+    calc((var(--item-size) * 0.25) - 1px)
+    calc((var(--item-size) * 0.5) - 1px)
+    calc((var(--item-size) * 0.5) - 1px)
+    calc((var(--item-size) * 0.25) - 1px)
+    calc((var(--item-size) * 0.75) - 1px);
 
   > * {
     clip-path: polygon(50% 0, 100% 25%, 100% 75%, 50% 100%, 0 75%, 0 25%);
@@ -184,7 +184,7 @@ const isUserPlayerTurn = computed(() =>
 }
 
 .action-wheel {
-  --item-size: calc(1px * v-bind('config.ACTION_WHEEL_BUTTON_SIZE'));
+  --item-size: calc(1px * (v-bind('config.ACTION_WHEEL_BUTTON_SIZE')));
   --half-item-size: calc(var(--item-size) / 2);
 
   background: url('/assets/ui/action-wheel.png');

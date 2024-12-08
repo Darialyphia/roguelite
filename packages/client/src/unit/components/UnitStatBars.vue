@@ -6,6 +6,7 @@ import type { UnitViewModel } from '../unit.model';
 import { useBattleEvent } from '@/pages/battle/battle.store';
 import type { AnimatedSprite } from 'pixi.js';
 import { SpellCard } from '@game/engine/src/card/spell-card.entity';
+import { useBattleUiStore } from '@/pages/battle/battle-ui.store';
 
 const { unit } = defineProps<{ unit: UnitViewModel }>();
 
@@ -79,17 +80,25 @@ useBattleEvent('unit.before_destroy', async e => {
     duration: 0.8
   });
 });
+
+const ui = useBattleUiStore();
 </script>
 
 <template>
   <animated-sprite
     v-if="textures"
+    :ref="
+      (obj: any) => {
+        ui.assignLayer(obj, 'ui');
+        if (!obj) return;
+        sprite = obj;
+      }
+    "
     :textures="textures"
     :anchor="0.5"
     event-mode="none"
     playing
     loop
-    ref="sprite"
     :y="-55"
   >
     <pixi-graphics

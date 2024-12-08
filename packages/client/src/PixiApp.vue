@@ -20,6 +20,7 @@ onMounted(async () => {
   // We create the pixi app manually instead of using vue3-pixi's <Application /> component
   // because we want to override the Stage wih the one from @pixi/layers
   pixiApp.value = new Application({
+    backgroundColor: 0x000000,
     view: canvas.value!,
     width: window.innerWidth,
     height: window.innerHeight,

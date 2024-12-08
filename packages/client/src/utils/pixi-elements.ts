@@ -17,3 +17,21 @@ renderer.use({
     return patchProp(el, key, prevValue, nextValue);
   }
 });
+
+// renderer.use({
+//   name: 'PointLight',
+//   createElement: props => {
+//     return new PointLight(props.color, props.brightness, props.radius);
+//   },
+//   patchProp(el, key, prevValue, nextValue) {
+//     patchProp(el, key, prevValue, nextValue);
+//   }
+// });
+
+// renderer.use({
+//   name: 'AmbientLight',
+//   createElement: props => new AmbientLight(props.color, props.brightness),
+//   patchProp(el, key, prevValue, nextValue) {
+//     patchProp(el, key, prevValue, nextValue);
+//   }
+// });

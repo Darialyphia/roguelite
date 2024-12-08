@@ -9,7 +9,8 @@ import { useBattleUiStore } from '@/pages/battle/battle-ui.store';
 let nextId = 1;
 
 type Light = {
-  color: string;
+  startColor: string;
+  endColor: string;
   offset: Point;
   alpha: number;
   radius: number;
@@ -30,13 +31,14 @@ const addLight = async (config: BetterOmit<Light, 'id'>, duration?: number) => {
   }
 };
 
-addLight({
-  alpha: config.AMBIENT_LIGHT_ALPHA,
-  blendMode: config.AMBIENT_LIGHT_BLEND_MODE,
-  color: 'rgba(0,0,0,0)',
-  offset: { x: 0, y: 0 },
-  radius: config.AMBIENT_LIGHT_UNIT_SIZE / 2
-});
+// addLight({
+//   alpha: 0.7,
+//   blendMode: BLEND_MODES.ADD,
+//   startColor: 'hsl(50,60%,60%)',
+//   endColor: 'rgba(0,0,0,0)',
+//   offset: { x: 0, y: 0 },
+//   radius: config.AMBIENT_LIGHT_UNIT_SIZE / 2
+// });
 
 const ui = useBattleUiStore();
 </script>
@@ -65,8 +67,8 @@ const ui = useBattleUiStore();
                   light.radius * 2,
                   light.radius * 2,
                   [
-                    [0, light.color],
-                    [0.9, config.AMBIENT_LIGHT_COLOR]
+                    [0, light.startColor],
+                    [0.75, light.endColor]
                   ]
                 );
 

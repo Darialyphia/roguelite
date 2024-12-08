@@ -17,7 +17,7 @@ useBattleEvent('unit.before_play_card', async event => {
 
 <template>
   <div class="played-card-backdrop">
-    <Transition :duration="{ enter: 1000, leave: 500 }">
+    <Transition :duration="{ enter: 1500, leave: 500 }">
       <div class="wrapper" v-if="card">
         <Card :card="card" class="card-front" />
         <div class="card-back" />
@@ -56,6 +56,7 @@ useBattleEvent('unit.before_play_card', async event => {
   &.v-enter-active {
     > * {
       transition: all 1s var(--ease-3);
+      transition-delay: 500ms;
     }
   }
 

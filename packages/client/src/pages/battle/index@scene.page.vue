@@ -7,10 +7,12 @@ import IsoCamera from '@/iso/components/IsoCamera.vue';
 import { useKeyboardControl } from '@/shared/composables/useKeyboardControl';
 import { useSettingsStore } from '@/shared/composables/useSettings';
 import { UI_MODES, useBattleUiStore } from './battle-ui.store';
+import type { Layer } from '@pixi/layers';
 
 definePage({
   name: 'Battle'
 });
+
 const battleStore = useBattleStore();
 const settingsStore = useSettingsStore();
 const uiStore = useBattleUiStore();
@@ -81,9 +83,10 @@ const ui = useBattleUiStore();
       v-slot="{ worldSize }"
     >
       <Board :world-size="worldSize" />
-      <Layer :ref="(layer: any) => ui.registerLayer(layer, 'scene')" />
-      <Layer :ref="(layer: any) => ui.registerLayer(layer, 'fx')" />
-      <Layer :ref="(layer: any) => ui.registerLayer(layer, 'ui')" />
     </IsoCamera>
+
+    <Layer :ref="(layer: any) => ui.registerLayer(layer, 'scene')" />
+    <Layer :ref="(layer: any) => ui.registerLayer(layer, 'fx')" />
+    <Layer :ref="(layer: any) => ui.registerLayer(layer, 'ui')" />
   </IsoWorld>
 </template>

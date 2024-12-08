@@ -2,7 +2,7 @@
 import { useSpritesheet } from '@/shared/composables/useSpritesheet';
 import { useBattleUiStore } from '@/pages/battle/battle-ui.store';
 import { OutlineFilter } from '@pixi/filter-outline';
-import type { Filter } from 'pixi.js';
+import { type Filter } from 'pixi.js';
 import { useMultiLayerTexture } from '@/shared/composables/useMultiLayerTexture';
 import { config } from '@/utils/config';
 import type { UnitViewModel } from '../unit.model';
@@ -75,5 +75,3 @@ const modifierSpriteIds = computed(() => {
     />
   </animated-sprite>
 </template>
-
-<style scoped lang="postcss"></style>

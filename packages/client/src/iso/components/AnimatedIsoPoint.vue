@@ -24,7 +24,8 @@ watch(
       pixi: {
         x: pos.x,
         y: pos.y,
-        zOrder: z
+        zOrder: z,
+        zIndex: z
       },
       ease: Power1.easeInOut
     });
