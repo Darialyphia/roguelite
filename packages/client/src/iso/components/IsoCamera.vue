@@ -1,10 +1,12 @@
 <script setup lang="ts">
 import { useApplication } from 'vue3-pixi';
 import { type Viewport } from 'pixi-viewport';
-import { Container } from 'pixi.js';
+import { Container, Matrix } from 'pixi.js';
 import { until, useEventListener } from '@vueuse/core';
 import { useIsoCamera } from '../composables/useIsoCamera';
 import { config } from '@/utils/config';
+import { useGameClientState } from '@/pages/battle/battle.store';
+import { useIsoWorld } from '../composables/useIsoWorld';
 
 const { width, height } = defineProps<{
   width: number;
@@ -84,7 +86,7 @@ watchEffect(() => {
     :sortable-children="true"
   >
     <container :sortable-children="true" v-bind="camera.offset.value">
-      <slot />
+      <slot :worldSize="worldSize" />
     </container>
   </viewport>
 </template>

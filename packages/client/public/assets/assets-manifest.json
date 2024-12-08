@@ -48,6 +48,49 @@
         },
         {
           "alias": [
+            "fx-light-mask"
+          ],
+          "src": [
+            "/assets/fx/light-mask.json"
+          ],
+          "loadParser": "aseprite_loader",
+          "foo": "bar",
+          "data": {
+            "tags": {
+              "m": true
+            }
+          }
+        },
+        {
+          "alias": [
+            "fx-light-mask.png"
+          ],
+          "src": [
+            "/assets/fx/light-mask.png"
+          ],
+          "foo": "bar",
+          "data": {
+            "tags": {
+              "m": true
+            }
+          }
+        },
+        {
+          "alias": [
+            "fx-shadow.png"
+          ],
+          "src": [
+            "/assets/fx/shadow.png"
+          ],
+          "foo": "bar",
+          "data": {
+            "tags": {
+              "m": true
+            }
+          }
+        },
+        {
+          "alias": [
             "fx-stasis"
           ],
           "src": [
@@ -350,6 +393,35 @@
           ],
           "src": [
             "/assets/ui/action-wheel.png"
+          ],
+          "foo": "bar",
+          "data": {
+            "tags": {
+              "m": true
+            }
+          }
+        },
+        {
+          "alias": [
+            "active-unit-indicator"
+          ],
+          "src": [
+            "/assets/ui/active-unit-indicator.json"
+          ],
+          "loadParser": "aseprite_loader",
+          "foo": "bar",
+          "data": {
+            "tags": {
+              "m": true
+            }
+          }
+        },
+        {
+          "alias": [
+            "active-unit-indicator.png"
+          ],
+          "src": [
+            "/assets/ui/active-unit-indicator.png"
           ],
           "foo": "bar",
           "data": {

@@ -3,6 +3,7 @@ import { GAME_PHASES } from '@game/engine/src/game/game-phase.system';
 import { useBattleStore, useUserPlayer } from '@/pages/battle/battle.store';
 import Card from './Card.vue';
 import UiButton from '@/ui/components/UiButton.vue';
+import { useBattleUiStore } from '@/pages/battle/battle-ui.store';
 
 const indices = ref<number[]>([]);
 
@@ -10,63 +11,101 @@ const userPlayer = useUserPlayer();
 
 const hasConfirmed = ref(false);
 const battle = useBattleStore();
+const ui = useBattleUiStore();
 </script>
 
 <template>
-  <div
-    class="mulligan-overlay"
-    v-if="battle.state.phase === GAME_PHASES.MULLIGAN"
-  >
-    <div class="flex justify-evenly gap-8">
-      <label
-        v-for="(card, index) in userPlayer.hand"
-        :key="`${index}:${card.id}`"
-      >
-        <input
-          v-model="indices"
-          type="checkbox"
-          :value="index"
-          class="sr-only"
-        />
-        <div class="card-wrapper">
-          <Card :card="card" />
-        </div>
-      </label>
+  <Transition appear :duration="500">
+    <div
+      class="mulligan-overlay"
+      v-if="
+        battle.state.phase === GAME_PHASES.MULLIGAN &&
+        ui.isBoardAppearAnimationDone
+      "
+    >
+      <div class="flex justify-evenly gap-8">
+        <label
+          v-for="(card, index) in userPlayer.hand"
+          :key="`${index}:${card.id}`"
+        >
+          <input
+            v-model="indices"
+            type="checkbox"
+            :value="index"
+            class="sr-only"
+          />
+          <div class="card-wrapper">
+            <Card :card="card" />
+          </div>
+        </label>
+      </div>
+      <p class="explainer">Select the cards you wish to replace</p>
+      <div class="mt-5 flex justify-center">
+        <UiButton
+          class="primary-button"
+          :disabled="hasConfirmed"
+          @click="
+            () => {
+              battle.dispatch({
+                type: 'mulligan',
+                payload: {
+                  playerId: userPlayer.id,
+                  indices
+                }
+              });
+              indices = [];
+            }
+          "
+        >
+          Confirm
+        </UiButton>
+      </div>
+      <p v-if="hasConfirmed">Waiting for opponent...</p>
     </div>
-    <p class="explainer">Select the cards you wish to replace</p>
-    <div class="mt-5 flex justify-center">
-      <UiButton
-        class="primary-button"
-        :disabled="hasConfirmed"
-        @click="
-          () => {
-            battle.dispatch({
-              type: 'mulligan',
-              payload: {
-                playerId: userPlayer.id,
-                indices
-              }
-            });
-            indices = [];
-          }
-        "
-      >
-        Confirm
-      </UiButton>
-    </div>
-    <p v-if="hasConfirmed">Waiting for opponent...</p>
-  </div>
+  </Transition>
 </template>
 
 <style scoped lang="postcss">
+@property --mulligan-overlay-backdrop-opacity-start {
+  syntax: '<color>';
+  inherits: false;
+  initial-value: hsl(0 0 0 /0.15);
+}
+@property --mulligan-overlay-backdrop-opacity-end {
+  syntax: '<color>';
+  inherits: false;
+  initial-value: hsl(0 0 0 /0.85);
+}
+
+.v-enter-active,
+.v-leave-active {
+  transition:
+    --mulligan-overlay-backdrop-opacity-start 0.5s var(--ease-4),
+    --mulligan-overlay-backdrop-opacity-end 0.5s var(--ease-4);
+  > * {
+    transition: all 0.5s var(--ease-4);
+  }
+}
+
+.v-enter-from,
+.v-leave-to {
+  --mulligan-overlay-backdrop-opacity-start: 0;
+  --mulligan-overlay-backdrop-opacity-end: 0;
+
+  > * {
+    opacity: 0;
+    transform: scale(0);
+  }
+}
+
 .mulligan-overlay {
   position: fixed;
   inset: 0;
   z-index: 1;
   background: radial-gradient(
     circle at center,
-    hsl(0 0 0 /0.5),
-    hsl(0 0 0 /0.85)
+    var(--mulligan-overlay-backdrop-opacity-start),
+    var(--mulligan-overlay-backdrop-opacity-end)
   );
   display: grid;
   place-content: center;

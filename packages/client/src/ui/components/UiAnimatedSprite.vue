@@ -18,7 +18,7 @@ const textures = computed(() => {
   <animated-sprite
     v-if="textures"
     :x="0"
-    :event-mode="'none'"
+    event-mode="none"
     playing
     :anchor="0.5"
     :textures="textures"

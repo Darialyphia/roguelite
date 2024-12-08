@@ -359,7 +359,7 @@ export class Unit extends Entity {
       target,
       cost: this.game.config.AP_COST_PER_ATTACK
     });
-    this.ap.remove(this.game.config.AP_COST_PER_ATTACK);
+    this.ap.remove(this.nextAttackApCost);
     const targets = new PointAOEShape(this.game, target).getUnits();
 
     const damage = new Damage({
@@ -370,6 +370,7 @@ export class Unit extends Entity {
     });
 
     this.dealDamage(targets, damage);
+    this.attacksPerformedThisTurn++;
     this.emitter.emit(UNIT_EVENTS.AFTER_ATTACK, {
       target,
       cost: this.game.config.AP_COST_PER_ATTACK

@@ -4,6 +4,7 @@ import { config } from '@/utils/config';
 import StatCircle from './StatCircle.vue';
 import { CARD_KINDS } from '@game/engine/src/card/card-blueprint';
 import { match } from 'ts-pattern';
+import { RUNES, type Rune } from '@game/engine/src/utils/rune';
 
 const { card } = defineProps<{ card: CardViewModel }>();
 
@@ -54,6 +55,21 @@ const metaString = computed(() =>
     )
     .exhaustive()
 );
+const getCostByRune = (rune: Rune) => {
+  if (card.kind === CARD_KINDS.GENERAL) return 0;
+  return card.cost.runes.filter(r => r.equals(rune)).length;
+};
+
+const runeCosts = computed(() => {
+  return [
+    { rune: RUNES.YELLOW, count: getCostByRune(RUNES.YELLOW) },
+    { rune: RUNES.PURPLE, count: getCostByRune(RUNES.PURPLE) },
+    { rune: RUNES.GREEN, count: getCostByRune(RUNES.GREEN) },
+    { rune: RUNES.RED, count: getCostByRune(RUNES.RED) },
+    { rune: RUNES.BLUE, count: getCostByRune(RUNES.BLUE) },
+    { rune: RUNES.COLORLESS, count: getCostByRune(RUNES.COLORLESS) }
+  ];
+});
 </script>
 
 <template>
@@ -70,6 +86,22 @@ const metaString = computed(() =>
           :value="card.cost.ap"
           icon="ap"
         />
+
+        <ul
+          v-if="card.kind === CARD_KINDS.UNIT || card.kind === CARD_KINDS.SPELL"
+        >
+          <li
+            v-for="(rune, index) in runeCosts"
+            :key="rune.rune.id"
+            v-show="rune.count > 0"
+            class="rune"
+            :style="{
+              '--bg': `url('/assets/ui/rune-${rune.rune.id.toLowerCase()}-small.png')`
+            }"
+          >
+            {{ rune.count }}
+          </li>
+        </ul>
       </div>
       <div
         class="stats"
@@ -162,5 +194,11 @@ const metaString = computed(() =>
   width: 156px;
   line-height: 1;
   text-align: center;
+}
+
+.rune {
+  width: 30px;
+  aspect-ratio: 1;
+  background: var(--bg);
 }
 </style>

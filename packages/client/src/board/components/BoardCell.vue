@@ -8,17 +8,35 @@ import type { CellViewModel } from '../models/cell.model';
 import { useBattleStore, useGame } from '@/pages/battle/battle.store';
 import { useIsoCamera } from '@/iso/composables/useIsoCamera';
 import { match } from 'ts-pattern';
-import { makeUnitViewModel } from '@/unit/unit.model';
+
+import { PTransition } from 'vue3-pixi';
+import type { Container } from 'pixi.js';
 
 const { cell } = defineProps<{ cell: CellViewModel }>();
-
+const emit = defineEmits<{ ready: [] }>();
 const ui = useBattleUiStore();
 const battle = useBattleStore();
 
 const isHovered = computed(() => ui.hoveredCell?.equals(cell.getCell()));
 
 const camera = useIsoCamera();
-const game = useGame();
+
+const spawnAnimation = (container: Container) => {
+  container.y = -400;
+  container.alpha = 0;
+  gsap.to(container, {
+    y: 0,
+    duration: 1,
+    ease: Bounce.easeOut,
+    delay: Math.random() * 0.5,
+    onStart() {
+      container.alpha = 1;
+    },
+    onComplete() {
+      emit('ready');
+    }
+  });
+};
 </script>
 
 <template>
@@ -75,7 +93,7 @@ const game = useGame();
               battle.dispatch({
                 type: 'playCard',
                 payload: {
-                  index: ui.selectedCardIndex,
+                  index: ui.selectedCardIndex!,
                   targets: ui.cardTargets
                 }
               });
@@ -88,8 +106,16 @@ const game = useGame();
       }
     "
   >
-    <BoardCellSprite :cell="cell" />
-    <BoardCellHighlights :cell="cell" />
-    <UiAnimatedSprite assetId="hovered-cell" v-if="isHovered" />
+    <PTransition
+      appear
+      :duration="{ enter: 1000, leave: 0 }"
+      @enter="spawnAnimation"
+    >
+      <container>
+        <BoardCellSprite :cell="cell" />
+        <BoardCellHighlights :cell="cell" />
+        <UiAnimatedSprite assetId="hovered-cell" v-if="isHovered" />
+      </container>
+    </PTransition>
   </AnimatedIsoPoint>
 </template>

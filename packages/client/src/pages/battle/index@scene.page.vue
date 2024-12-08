@@ -7,6 +7,7 @@ import IsoCamera from '@/iso/components/IsoCamera.vue';
 import { useKeyboardControl } from '@/shared/composables/useKeyboardControl';
 import { useSettingsStore } from '@/shared/composables/useSettings';
 import { UI_MODES, useBattleUiStore } from './battle-ui.store';
+import AmbientLight from '@/board/components/AmbientLight.vue';
 
 definePage({
   name: 'Battle'
@@ -77,8 +78,10 @@ useKeyboardControl(
     <IsoCamera
       :width="battleStore.session.game.boardSystem.width"
       :height="battleStore.session.game.boardSystem.height"
+      v-slot="{ worldSize }"
     >
       <Board />
+      <AmbientLight :world-size="worldSize" />
     </IsoCamera>
   </IsoWorld>
 </template>

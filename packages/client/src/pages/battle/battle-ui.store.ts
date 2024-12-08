@@ -142,7 +142,9 @@ export const useBattleUiStore = defineStore('battle-ui', () => {
     { immediate: true }
   );
 
+  const isBoardAppearAnimationDone = ref(false);
   return {
+    isBoardAppearAnimationDone,
     hoveredCell: computed(() => uiStore.hoveredCell),
     hoverAt(point: Point3D) {
       uiStore.hoveredCell =

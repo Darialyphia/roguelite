@@ -90,7 +90,7 @@ useBattleEvent('unit.before_destroy', async e => {
     playing
     loop
     ref="sprite"
-    :y="-45"
+    :y="-55"
   >
     <pixi-graphics
       :x="-sheet.meta.size.w / 2"

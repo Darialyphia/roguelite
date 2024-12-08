@@ -1,18 +1,19 @@
 <script setup lang="ts">
-import { useUserPlayer } from '@/pages/battle/battle.store';
+import { useGameClientState, useUserPlayer } from '@/pages/battle/battle.store';
 import type { PlayerViewModel } from './player.model';
 import { config } from '@/utils/config';
 import { config as engineConfig } from '@game/engine/src/config';
 import { type Rune, RUNES } from '@game/engine/src/utils/rune';
+import { GAME_PHASES } from '@game/engine/src/game/game-phase.system';
 const { player } = defineProps<{ player: PlayerViewModel }>();
-const emit = defineEmits<{}>();
 
 const getRuneCountByType = (rune: Rune) =>
   player.runes.filter(r => r.equals(rune)).length;
+const state = useGameClientState();
 </script>
 
 <template>
-  <div class="player-battle-infos">
+  <div class="player-battle-infos" v-if="state.phase === GAME_PHASES.BATTLE">
     <div class="circles">
       <div class="vp circle-layout">
         <div

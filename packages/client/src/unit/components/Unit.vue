@@ -9,7 +9,10 @@ import UnitVFX from './vfx/UnitVFX.vue';
 import { whenever } from '@vueuse/core';
 import { useIsoCamera } from '@/iso/composables/useIsoCamera';
 import { useIsoPoint } from '@/iso/composables/useIsoPoint';
-import { useBattleEvent } from '@/pages/battle/battle.store';
+import { useActiveUnit, useBattleEvent } from '@/pages/battle/battle.store';
+import { PTransition } from 'vue3-pixi';
+import UiAnimatedSprite from '@/ui/components/UiAnimatedSprite.vue';
+import type { Container } from 'pixi.js';
 
 const { unit } = defineProps<{ unit: UnitViewModel }>();
 
@@ -48,17 +51,49 @@ useBattleEvent('unit.before_play_card', e => {
   }
   return Promise.resolve();
 });
+
+const isSpawnAnimationDone = ref(false);
+const spawnAnimation = (container: Container) => {
+  container.y = -100;
+  container.alpha = 0;
+  gsap.to(container, {
+    y: 0,
+    duration: 1,
+    ease: Bounce.easeOut,
+    delay: Math.random() * 0.5,
+    onStart() {
+      container.alpha = 1;
+    },
+    onComplete() {
+      isSpawnAnimationDone.value = true;
+    }
+  });
+};
+
+const activeUnit = useActiveUnit();
+const isActive = computed(() => activeUnit.value?.equals(unit));
 </script>
 
 <template>
   <UnitPositioner :unit="unit" bounce>
-    <UnitOrientation :unit="unit">
-      <UnitShadow :unit="unit" />
-      <UnitSprite :unit="unit" />
-    </UnitOrientation>
+    <PTransition
+      appear
+      :duration="{ enter: 1000, leave: 0 }"
+      @enter="spawnAnimation"
+    >
+      <UnitOrientation :unit="unit">
+        <UnitShadow :unit="unit" />
+        <UnitSprite :unit="unit" />
+      </UnitOrientation>
+    </PTransition>
     <UnitVFX :unit="unit" />
-    <UnitStatBars :unit="unit" />
+    <template v-if="isSpawnAnimationDone">
+      <UiAnimatedSprite
+        assetId="active-unit-indicator"
+        v-if="isActive && isSpawnAnimationDone"
+        :y="-40"
+      />
+      <UnitStatBars :unit="unit" v-if="isSpawnAnimationDone" />
+    </template>
   </UnitPositioner>
 </template>
-
-<style scoped lang="postcss"></style>
