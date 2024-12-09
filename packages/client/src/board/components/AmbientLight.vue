@@ -143,7 +143,7 @@ const renderLights = (g: PixiGraphics, color: string, size: number) => {
               <label>
                 <input
                   type="radio"
-                  name="blend-mode"
+                  name="blend-mode-1"
                   v-model="lightBlendModeFirstPass"
                   :value="BLEND_MODES.ADD"
                 />
@@ -152,7 +152,7 @@ const renderLights = (g: PixiGraphics, color: string, size: number) => {
               <label>
                 <input
                   type="radio"
-                  name="blend-mode"
+                  name="blend-mode-1"
                   v-model="lightBlendModeFirstPass"
                   :value="BLEND_MODES.SCREEN"
                 />
@@ -161,7 +161,7 @@ const renderLights = (g: PixiGraphics, color: string, size: number) => {
               <label>
                 <input
                   type="radio"
-                  name="blend-mode"
+                  name="blend-mode-1"
                   v-model="lightBlendModeFirstPass"
                   :value="BLEND_MODES.OVERLAY"
                 />
@@ -170,7 +170,7 @@ const renderLights = (g: PixiGraphics, color: string, size: number) => {
               <label>
                 <input
                   type="radio"
-                  name="blend-mode"
+                  name="blend-mode-1"
                   v-model="lightBlendModeFirstPass"
                   :value="BLEND_MODES.SOFT_LIGHT"
                 />
@@ -179,7 +179,7 @@ const renderLights = (g: PixiGraphics, color: string, size: number) => {
               <label>
                 <input
                   type="radio"
-                  name="blend-mode"
+                  name="blend-mode-1"
                   v-model="lightBlendModeFirstPass"
                   :value="BLEND_MODES.HARD_LIGHT"
                 />
@@ -222,7 +222,7 @@ const renderLights = (g: PixiGraphics, color: string, size: number) => {
               <label>
                 <input
                   type="radio"
-                  name="blend-mode"
+                  name="blend-mode-2"
                   v-model="lightBlendModeSecondPass"
                   :value="BLEND_MODES.ADD"
                 />
@@ -231,7 +231,7 @@ const renderLights = (g: PixiGraphics, color: string, size: number) => {
               <label>
                 <input
                   type="radio"
-                  name="blend-mode"
+                  name="blend-mode-2"
                   v-model="lightBlendModeSecondPass"
                   :value="BLEND_MODES.SCREEN"
                 />
@@ -240,7 +240,7 @@ const renderLights = (g: PixiGraphics, color: string, size: number) => {
               <label>
                 <input
                   type="radio"
-                  name="blend-mode"
+                  name="blend-mode-2"
                   v-model="lightBlendModeSecondPass"
                   :value="BLEND_MODES.OVERLAY"
                 />
@@ -249,7 +249,7 @@ const renderLights = (g: PixiGraphics, color: string, size: number) => {
               <label>
                 <input
                   type="radio"
-                  name="blend-mode"
+                  name="blend-mode-2"
                   v-model="lightBlendModeSecondPass"
                   :value="BLEND_MODES.SOFT_LIGHT"
                 />
@@ -258,7 +258,7 @@ const renderLights = (g: PixiGraphics, color: string, size: number) => {
               <label>
                 <input
                   type="radio"
-                  name="blend-mode"
+                  name="blend-mode-2"
                   v-model="lightBlendModeSecondPass"
                   :value="BLEND_MODES.HARD_LIGHT"
                 />
