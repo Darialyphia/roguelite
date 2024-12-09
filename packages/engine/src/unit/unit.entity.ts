@@ -1,7 +1,7 @@
-import { Vec3, type Point3D, type Values } from '@game/shared';
+import { Vec3, type Point3D } from '@game/shared';
 import { createEntityId, Entity, type EntityId } from '../entity';
 import { Card } from '../card/card.entity';
-import { GAME_EVENTS, type Game } from '../game/game';
+import { type Game } from '../game/game';
 import { SolidBodyPathfindingStrategy } from '../pathfinding/strategies/solid-pathfinding.strategy';
 import { Interceptable, type inferInterceptor } from '../utils/interceptable';
 import { ActionPointComponent } from './components/action-point.component';
@@ -19,8 +19,9 @@ import type { UnitCard } from '../card/unit-card.entity';
 import { NoMitigationStrategy } from '../combat/damage/mitigation/no-mitigation.strategy';
 import { CombatScalingStrategy } from '../combat/damage/scaling/combat-scaling.strategy';
 import type { CardManagerComponent } from '../card/card-manager.component';
-import { CARD_KINDS } from '../card/card-blueprint';
+import { CARD_KINDS } from '../card/card-enums';
 import type { GeneralCard } from '../card/general-card.entity';
+import { UNIT_EVENTS } from './unit-enums';
 
 export type UnitOptions = {
   id: string;
@@ -28,30 +29,8 @@ export type UnitOptions = {
   player: Player;
 };
 
-export const UNIT_EVENTS = {
-  START_TURN: 'start_turn',
-  END_TURN: 'end_turn',
-  BEFORE_MOVE: 'before_move',
-  AFTER_MOVE: 'after_move',
-  BEFORE_DRAW: 'before_draw',
-  AFTER_DRAW: 'after_draw',
-  BEFORE_ATTACK: 'before_attack',
-  AFTER_ATTACK: 'after_attack',
-  BEFORE_DEAL_DAMAGE: 'before_deal_damage',
-  AFTER_DEAL_DAMAGE: 'after_deal_damage',
-  BEFORE_RECEIVE_DAMAGE: 'before_receive_damage',
-  AFTER_RECEIVE_DAMAGE: 'after_receive_damage',
-  BEFORE_RECEIVE_HEAL: 'before_receive_heal',
-  AFTER_RECEIVE_HEAL: 'after_receive_heal',
-  BEFORE_PLAY_CARD: 'before_play_card',
-  AFTER_PLAY_CARD: 'after_play_card',
-  BEFORE_DESTROY: 'before_destroy',
-  AFTER_DESTROY: 'after_destroy'
-} as const;
-
-export type UnitEvent = Values<typeof UNIT_EVENTS>;
-
 export type UnitEventMap = {
+  [UNIT_EVENTS.CREATED]: [];
   [UNIT_EVENTS.START_TURN]: [{ id: EntityId }];
   [UNIT_EVENTS.END_TURN]: [{ id: EntityId }];
   [UNIT_EVENTS.BEFORE_MOVE]: [{ position: Vec3; destination: Vec3; cost: number }];
@@ -121,7 +100,7 @@ export class Unit extends Entity {
       pathfindingStrategy: new SolidBodyPathfindingStrategy(this.game)
     });
 
-    this.game.on(GAME_EVENTS.TURN_START, this.onGameTurnStart.bind(this));
+    this.game.on('turn.turn_start', this.onGameTurnStart.bind(this));
     this.forwardEvents();
   }
 
@@ -267,6 +246,10 @@ export class Unit extends Entity {
         cost: this.game.config.AP_COST_PER_MOVEMENT
       });
     });
+  }
+
+  onAddedToBoard() {
+    this.emitter.emit(UNIT_EVENTS.CREATED);
   }
 
   shutdown() {

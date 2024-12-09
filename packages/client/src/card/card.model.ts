@@ -1,9 +1,6 @@
 import type { Game } from '@game/engine';
-import {
-  CARD_KINDS,
-  type CardBlueprint,
-  type CardKind
-} from '@game/engine/src/card/card-blueprint';
+import { type CardBlueprint } from '@game/engine/src/card/card-blueprint';
+import { CARD_KINDS, type CardKind } from '@game/engine/src/card/card-enums';
 import type { Card } from '@game/engine/src/card/card.entity';
 import type { GeneralCard } from '@game/engine/src/card/general-card.entity';
 import type { SpellCard } from '@game/engine/src/card/spell-card.entity';

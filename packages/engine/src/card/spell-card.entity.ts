@@ -1,5 +1,5 @@
 import { type Point3D } from '@game/shared';
-import { Card } from './card.entity';
+import { Card, CARD_EVENTS } from './card.entity';
 import type { SpellCardBlueprint } from './card-blueprint';
 
 export class SpellCard extends Card<SpellCardBlueprint> {
@@ -18,8 +18,16 @@ export class SpellCard extends Card<SpellCardBlueprint> {
   play(targets: Point3D[]) {
     if (!this.canPlayAt(targets)) return;
 
+    this.emitter.emit(CARD_EVENTS.BEFORE_PLAY, {
+      targets,
+      vfx: this.blueprint.vfx.play(this.game, this)
+    });
     this.game.turnSystem.activeUnit.ap.remove(this.blueprint.cost.ap);
     const aoeShape = this.blueprint.getAoe(this.game, this, targets);
     this.blueprint.onPlay(this.game, this, aoeShape.getCells(), aoeShape.getUnits());
+    this.emitter.emit(CARD_EVENTS.AFTER_PLAY, {
+      targets,
+      vfx: this.blueprint.vfx.play(this.game, this)
+    });
   }
 }

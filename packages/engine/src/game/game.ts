@@ -8,12 +8,7 @@ import {
   type TurnEvent,
   type TurnEventMap
 } from './turn-system';
-import {
-  Unit,
-  UNIT_EVENTS,
-  type UnitEvent,
-  type UnitEventMap
-} from '../unit/unit.entity';
+import { Unit, type UnitEventMap } from '../unit/unit.entity';
 import { config } from '../config';
 import { PlayerSystem } from '../player/player-system';
 import { InputSystem, type SerializedInput } from '../input/input-system';
@@ -24,11 +19,17 @@ import {
   PLAYER_EVENTS,
   type Player,
   type PlayerEvent,
-  type PlayerEventMap,
-  type PlayerOptions
+  type PlayerEventMap
 } from '../player/player.entity';
 import { MAPS_DICTIONARY } from '../board/maps/_index';
 import type { TeamOptions } from '../player/team.entity';
+import {
+  CARD_EVENTS,
+  type Card,
+  type CardEvent,
+  type CardEventMap
+} from '../card/card.entity';
+import { UNIT_EVENTS, type UnitEvent } from '../unit/unit-enums';
 
 type EnrichEvent<TTuple extends [...any[]], TAdditional extends AnyObject> = {
   [Index in keyof TTuple]: TTuple[Index] extends AnyObject
@@ -40,6 +41,13 @@ type GlobalUnitEvents = {
   [Event in UnitEvent as `unit.${Event}`]: EnrichEvent<
     UnitEventMap[Event],
     { unit: Unit }
+  >;
+};
+
+type GlobalCardEvents = {
+  [Event in CardEvent as `card.${Event}`]: EnrichEvent<
+    CardEventMap[Event],
+    { card: Card }
   >;
 };
 
@@ -65,7 +73,11 @@ type GameEventsBase = {
 };
 
 export type GameEventMap = Prettify<
-  GameEventsBase & GlobalUnitEvents & GlobalTurnEvents & GlobalPlayerEvents
+  GameEventsBase &
+    GlobalUnitEvents &
+    GlobalTurnEvents &
+    GlobalPlayerEvents &
+    GlobalCardEvents
 >;
 export type GameEventName = keyof GameEventMap;
 export type GameEvent = Values<GameEventMap>;
@@ -76,9 +88,9 @@ export type StarEvent<
   eventName: T;
   event: GameEventMap[T];
 };
-
 export const GAME_EVENTS = {
   ...mapValues(UNIT_EVENTS, evt => `unit.${evt}` as `unit.${typeof evt}`),
+  ...mapValues(CARD_EVENTS, evt => `card.${evt}` as `card.${typeof evt}`),
   ...mapValues(PLAYER_EVENTS, evt => `player.${evt}` as `player.${typeof evt}`),
   ...mapValues(TURN_EVENTS, evt => `turn.${evt}` as `turn.${typeof evt}`),
   ERROR: 'game.error',

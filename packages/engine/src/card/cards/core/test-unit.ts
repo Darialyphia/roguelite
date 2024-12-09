@@ -4,7 +4,8 @@ import { TARGETING_TYPE } from '../../../targeting/targeting-strategy';
 import { UnitSummonTargetingtrategy } from '../../../targeting/unit-summon-targeting.strategy';
 import { JOBS } from '../../../utils/job';
 import { RUNES } from '../../../utils/rune';
-import { CARD_KINDS, type UnitCardBlueprint } from '../../card-blueprint';
+import { type UnitCardBlueprint } from '../../card-blueprint';
+import { CARD_KINDS } from '../../card-enums';
 
 export const testUnit: UnitCardBlueprint = {
   id: 'testUnit',
@@ -38,6 +39,14 @@ export const testUnit: UnitCardBlueprint = {
   },
   getAoe(game, card, points) {
     return new PointAOEShape(game, points[0]);
+  },
+  vfx: {
+    play(game, card) {
+      return { tracks: [] };
+    },
+    destroy(game, card) {
+      return { tracks: [] };
+    }
   },
   onPlay() {
     console.log('playing test unit');

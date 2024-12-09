@@ -1,6 +1,6 @@
 import { type Point3D } from '@game/shared';
 import type { Unit } from '../unit/unit.entity';
-import { Card } from './card.entity';
+import { Card, CARD_EVENTS } from './card.entity';
 import type { UnitCardBlueprint } from './card-blueprint';
 
 export class UnitCard extends Card<UnitCardBlueprint> {
@@ -48,6 +48,11 @@ export class UnitCard extends Card<UnitCardBlueprint> {
   play(targets: Point3D[]) {
     if (!this.canPlayAt(targets)) return;
 
+    this.emitter.emit(CARD_EVENTS.BEFORE_PLAY, {
+      targets,
+      vfx: this.blueprint.vfx.play(this.game, this)
+    });
+
     this.player.spendGold(this.blueprint.cost.gold);
 
     const [summonPosition] = targets;
@@ -55,5 +60,10 @@ export class UnitCard extends Card<UnitCardBlueprint> {
 
     const aoeShape = this.blueprint.getAoe(this.game, this, targets);
     this.blueprint.onPlay(this.game, this, aoeShape.getCells(), aoeShape.getUnits());
+
+    this.emitter.emit(CARD_EVENTS.AFTER_PLAY, {
+      targets,
+      vfx: this.blueprint.vfx.play(this.game, this)
+    });
   }
 }

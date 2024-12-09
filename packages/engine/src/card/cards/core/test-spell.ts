@@ -5,7 +5,8 @@ import { PointAOEShape } from '../../../targeting/aoe-shapes';
 import { SelfTargetingStrategy } from '../../../targeting/self-targeting.strategy';
 import { JOBS } from '../../../utils/job';
 import { RUNES } from '../../../utils/rune';
-import { CARD_KINDS, type SpellCardBlueprint } from '../../card-blueprint';
+import { type SpellCardBlueprint } from '../../card-blueprint';
+import { CARD_KINDS } from '../../card-enums';
 
 export const testSpell: SpellCardBlueprint = {
   id: 'testSpell',
@@ -29,6 +30,11 @@ export const testSpell: SpellCardBlueprint = {
   ],
   getAoe(game, card, points) {
     return new PointAOEShape(game, points[0]);
+  },
+  vfx: {
+    play(game, card) {
+      return { tracks: [] };
+    }
   },
   onPlay(game, card, cellTargets, unitTargets) {
     unitTargets.forEach(target => {

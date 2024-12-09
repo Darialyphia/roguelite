@@ -1,12 +1,26 @@
-import { assert, type Point3D } from '@game/shared';
+import { assert, type Point3D, type Values } from '@game/shared';
 import { createEntityId, Entity } from '../entity';
 import { isGeneralBlueprint, type CardBlueprint } from './card-blueprint';
 import type { Game } from '../game/game';
 import type { Player } from '../player/player.entity';
+import type { VFXSequence } from '../vfx/vfx-sequencer';
+import { TypedEventEmitter } from '../utils/typed-emitter';
 
 export type CardOptions = {
   id: string;
   blueprint: CardBlueprint;
+};
+
+export const CARD_EVENTS = {
+  BEFORE_PLAY: 'BEFORE_PLAY',
+  AFTER_PLAY: 'AFTER_PLAY'
+} as const;
+
+export type CardEvent = Values<typeof CARD_EVENTS>;
+
+export type CardEventMap = {
+  [CARD_EVENTS.BEFORE_PLAY]: [{ vfx: VFXSequence; targets: Point3D[] }];
+  [CARD_EVENTS.AFTER_PLAY]: [{ vfx: VFXSequence; targets: Point3D[] }];
 };
 
 export abstract class Card<
@@ -15,6 +29,8 @@ export abstract class Card<
   protected game: Game;
 
   protected blueprint: TBlueprint;
+
+  protected emitter = new TypedEventEmitter<CardEventMap>();
 
   readonly player: Player;
 

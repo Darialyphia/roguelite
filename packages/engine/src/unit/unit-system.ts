@@ -1,10 +1,11 @@
 import { isDefined, type Point3D } from '@game/shared';
 import type { EntityId } from '../entity';
-import { Unit, UNIT_EVENTS, type UnitOptions } from './unit.entity';
+import { Unit } from './unit.entity';
 import { System } from '../system';
 import { GAME_PHASES } from '../game/game-phase.system';
 import type { UnitCard } from '../card/unit-card.entity';
 import type { GeneralCard } from '../card/general-card.entity';
+import { UNIT_EVENTS } from './unit-enums';
 
 // eslint-disable-next-line @typescript-eslint/ban-types
 export type UnitSystemOptions = {};
@@ -88,6 +89,7 @@ export class UnitSystem extends System<UnitSystemOptions> {
     const unit = new Unit(this.game, card, { id, player: card.player, position });
     this.unitMap.set(unit.id, unit);
     this.forwardListeners(unit);
+    unit.onAddedToBoard();
 
     if (this.game.phase === GAME_PHASES.BATTLE) {
       this.game.turnSystem.insertInCurrentQueue(unit);

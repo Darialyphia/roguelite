@@ -1,15 +1,12 @@
+import { assert } from '@game/shared';
 import EventEmitter2 from 'eventemitter2';
-
-type PrefixedEvents<T extends string, TEventMap extends Record<string, any>, TCtx> = {
-  [Event in keyof TEventMap as `${T}.${Event extends string ? Event : ''}`]: [
-    TEventMap[Event][0] & TCtx
-  ];
-};
 
 export class TypedEventEmitter<TEvents extends Record<string, any>> {
   private emitter = new EventEmitter2();
+  private isAsync: boolean;
 
-  constructor() {
+  constructor(isAsync = false) {
+    this.isAsync = isAsync;
     this.emitter.setMaxListeners(99999);
   }
 
@@ -22,6 +19,17 @@ export class TypedEventEmitter<TEvents extends Record<string, any>> {
     ...eventArg: TEvents[TEventName]
   ) {
     return this.emitter.emit(eventName, ...(eventArg as []));
+  }
+
+  emitAsync<TEventName extends keyof TEvents & string>(
+    eventName: TEventName,
+    ...eventArg: TEvents[TEventName]
+  ) {
+    assert(
+      this.isAsync,
+      'Not allowed to emit async events on this emitter. instanciate the emitter with new TypedEventEmitter(true) to enable async emits'
+    );
+    return this.emitter.emitAsync(eventName, ...(eventArg as []));
   }
 
   on<TEventName extends keyof TEvents & string>(
@@ -47,23 +55,5 @@ export class TypedEventEmitter<TEvents extends Record<string, any>> {
     handler: (...eventArg: TEvents[TEventName]) => void
   ) {
     this.emitter.off(eventName, handler as any);
-  }
-
-  forward<
-    TPrefix extends string,
-    TCtx,
-    TEventMap extends PrefixedEvents<TPrefix, TEvents, TCtx>
-  >(
-    emitter: TypedEventEmitter<TEventMap>,
-    ns: string,
-    events: Array<string & keyof TEvents>,
-    ctx: () => TCtx
-  ) {
-    events.forEach(eventName => {
-      this.emitter.on(eventName, e => {
-        // @ts-expect-error
-        emitter.emit(`${ns}.${eventName}`, { ...e, ...ctx() });
-      });
-    });
   }
 }

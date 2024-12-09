@@ -1,26 +1,20 @@
-import type { Point3D, Values } from '@game/shared';
+import type { Point3D } from '@game/shared';
 import type { Game } from '../game/game';
 import type { Card } from './card.entity';
 import type { TargetingStrategy } from '../targeting/targeting-strategy';
 import type { AOEShape } from '../targeting/aoe-shapes';
-import type { Unit } from '../unit/unit.entity';
+import { type Unit } from '../unit/unit.entity';
 import type { Rune } from '../utils/rune';
 import type { Job } from '../utils/job';
 import type { UnitCard } from './unit-card.entity';
 import type { SpellCard } from './spell-card.entity';
 import type { GeneralCard } from './general-card.entity';
+import type { VFXSequence } from '../vfx/vfx-sequencer';
+import { CARD_KINDS, type CardKind } from './card-enums';
 
 type CardBlueprintTarget = {
   getTargeting(game: Game, card: Card): TargetingStrategy;
 };
-
-export const CARD_KINDS = {
-  UNIT: 'unit',
-  GENERAL: 'general',
-  SPELL: 'spell'
-} as const;
-
-export type CardKind = Values<typeof CARD_KINDS>;
 
 export type CardBlueprintBase = {
   id: string;
@@ -47,6 +41,10 @@ export type UnitCardBlueprint = CardBlueprintBase & {
     gold: number;
     runes: Rune[];
   };
+  vfx: {
+    play(game: Game, card: UnitCard): VFXSequence;
+    destroy(game: Game, card: UnitCard): VFXSequence;
+  };
   minTargets: number;
   targets: [CardBlueprintTarget, ...CardBlueprintTarget[]];
   getAoe: (game: Game, card: UnitCard, points: Point3D[]) => AOEShape;
@@ -62,6 +60,10 @@ export type GeneralCardBlueprint = CardBlueprintBase & {
   speed: number;
   reward: number;
   jobs: Job[];
+  vfx: {
+    play(game: Game, card: GeneralCard): VFXSequence;
+    destroy(game: Game, card: GeneralCard): VFXSequence;
+  };
   getAoe: (game: Game, card: UnitCard, points: Point3D[]) => AOEShape;
   onPlay(game: Game, card: GeneralCard): void;
   getAttackPattern: (game: Game, unit: Unit) => TargetingStrategy;
@@ -73,6 +75,9 @@ export type SpellCardBlueprint = CardBlueprintBase & {
     ap: number;
     runes: Rune[];
     job: Job[];
+  };
+  vfx: {
+    play(game: Game, card: SpellCard): VFXSequence;
   };
   minTargets: number;
   targets: [CardBlueprintTarget, ...CardBlueprintTarget[]];

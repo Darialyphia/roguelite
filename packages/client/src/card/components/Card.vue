@@ -2,7 +2,7 @@
 import type { CardViewModel } from '../card.model';
 import { config } from '@/utils/config';
 import StatCircle from './StatCircle.vue';
-import { CARD_KINDS } from '@game/engine/src/card/card-blueprint';
+import { CARD_KINDS } from '@game/engine/src/card/card-enums';
 import { match } from 'ts-pattern';
 import { RUNES, type Rune } from '@game/engine/src/utils/rune';
 

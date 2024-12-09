@@ -51,7 +51,7 @@ const renderLights = (g: PixiGraphics, color: string, size: number) => {
     const texture = radialGradient(size, size, [
       [0, color],
       [0.1, color],
-      [1, 'rgba(0,0,0,0)']
+      [0.8, 'rgba(0,0,0,0)']
     ]);
 
     g.beginTextureFill({
@@ -62,6 +62,8 @@ const renderLights = (g: PixiGraphics, color: string, size: number) => {
     g.endFill();
   });
 };
+
+BLEND_MODES.NORMAL;
 </script>
 
 <template>
@@ -87,7 +89,7 @@ const renderLights = (g: PixiGraphics, color: string, size: number) => {
     <graphics
       :filters="
         lightBlendModeFirstPass > BLEND_MODES.SCREEN
-          ? [getBlendFilter(BLEND_MODES.OVERLAY)]
+          ? [getBlendFilter(lightBlendModeFirstPass)]
           : []
       "
       :blend-mode="
@@ -103,7 +105,7 @@ const renderLights = (g: PixiGraphics, color: string, size: number) => {
     <graphics
       :filters="
         lightBlendModeSecondPass > BLEND_MODES.SCREEN
-          ? [getBlendFilter(BLEND_MODES.OVERLAY)]
+          ? [getBlendFilter(lightBlendModeSecondPass)]
           : []
       "
       :blend-mode="
@@ -117,7 +119,7 @@ const renderLights = (g: PixiGraphics, color: string, size: number) => {
       @render="g => renderLights(g, lightColorSecondPass, lightSizeSecondPass)"
     />
     <External>
-      <div class="fixed top-0 right-14 Z-10">
+      <div class="fixed top-0 right-5 Z-10">
         <fieldset>
           <legend>Light</legend>
           <fieldset>
@@ -184,6 +186,43 @@ const renderLights = (g: PixiGraphics, color: string, size: number) => {
                   :value="BLEND_MODES.HARD_LIGHT"
                 />
                 Hard Light
+              </label>
+
+              <label>
+                <input
+                  type="radio"
+                  name="blend-mode-1"
+                  v-model="lightBlendModeFirstPass"
+                  :value="BLEND_MODES.LIGHTEN"
+                />
+                Lighten
+              </label>
+              <label>
+                <input
+                  type="radio"
+                  name="blend-mode-1"
+                  v-model="lightBlendModeFirstPass"
+                  :value="BLEND_MODES.DARKEN"
+                />
+                Darken
+              </label>
+              <label>
+                <input
+                  type="radio"
+                  name="blend-mode-1"
+                  v-model="lightBlendModeFirstPass"
+                  :value="BLEND_MODES.COLOR_DODGE"
+                />
+                Color Dodge
+              </label>
+              <label>
+                <input
+                  type="radio"
+                  name="blend-mode-1"
+                  v-model="lightBlendModeFirstPass"
+                  :value="BLEND_MODES.COLOR_BURN"
+                />
+                Color Burn
               </label>
             </fieldset>
 
@@ -264,6 +303,43 @@ const renderLights = (g: PixiGraphics, color: string, size: number) => {
                 />
                 Hard Light
               </label>
+
+              <label>
+                <input
+                  type="radio"
+                  name="blend-mode-2"
+                  v-model="lightBlendModeSecondPass"
+                  :value="BLEND_MODES.LIGHTEN"
+                />
+                Lighten
+              </label>
+              <label>
+                <input
+                  type="radio"
+                  name="blend-mode-2"
+                  v-model="lightBlendModeSecondPass"
+                  :value="BLEND_MODES.DARKEN"
+                />
+                Darken
+              </label>
+              <label>
+                <input
+                  type="radio"
+                  name="blend-mode-2"
+                  v-model="lightBlendModeSecondPass"
+                  :value="BLEND_MODES.COLOR_DODGE"
+                />
+                Color Dodge
+              </label>
+              <label>
+                <input
+                  type="radio"
+                  name="blend-mode-2"
+                  v-model="lightBlendModeSecondPass"
+                  :value="BLEND_MODES.COLOR_BURN"
+                />
+                Color Burn
+              </label>
             </fieldset>
 
             <label>
@@ -305,10 +381,11 @@ fieldset {
   border: solid 1px white;
   color: white;
   padding: 0.5rem;
+  font-size: var(--font-size-00);
 }
 
 legend {
-  font-size: var(--font-size-3);
+  font-size: var(--font-size-1);
   font-weight: var(--font-weight-5);
 }
 </style>

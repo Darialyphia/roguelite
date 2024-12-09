@@ -11,7 +11,7 @@ import { TypedEventEmitter } from '../utils/typed-emitter';
 import { RuneManager } from './components/rune-manager';
 import { match } from 'ts-pattern';
 import { RUNES } from '../utils/rune';
-import { CARD_KINDS } from '../card/card-blueprint';
+import { CARD_KINDS } from '../card/card-enums';
 import { GeneralCard } from '../card/general-card.entity';
 
 export type PlayerOptions = {
