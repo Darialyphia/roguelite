@@ -57,3 +57,36 @@ export function radialGradient(
 
   return Texture.from(c);
 }
+
+export function rectangleWithHoles({
+  width,
+  height,
+  color,
+  circles
+}: {
+  width: number;
+  height: number;
+  color: string;
+  circles: Array<{
+    x: number;
+    y: number;
+    radius: number;
+  }>;
+}) {
+  const c = document.createElement('canvas');
+  c.width = width;
+  c.height = height;
+  const ctx = c.getContext('2d')!;
+  ctx.fillStyle = color;
+  ctx.fillRect(0, 0, width, height);
+  ctx.globalCompositeOperation = 'destination-out';
+  ctx.fillStyle = 'white';
+  circles.forEach(circle => {
+    ctx.beginPath();
+    ctx.arc(circle.x, circle.y, circle.radius, 0, Math.PI * 2);
+    ctx.closePath();
+    ctx.fill();
+  });
+  console.log(c.toDataURL());
+  return Texture.from(c);
+}

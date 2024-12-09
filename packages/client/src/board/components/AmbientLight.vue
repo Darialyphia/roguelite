@@ -18,17 +18,19 @@ const isoWorld = useIsoWorld();
 const ui = useBattleUiStore();
 const state = useGameClientState();
 const lightTint = ref('#FFDD00');
-const lightAlpha = ref(40);
+const lightAlpha = ref(127);
 const lightColor = computed(
-  () => `${lightTint.value}${lightAlpha.value.toString(16)}`
+  () => `${lightTint.value}${lightAlpha.value.toString(16).padStart(2, '0')}`
 );
 const shadowTint = ref(config.AMBIENT_LIGHT_COLOR);
-const shadowAlpha = ref(30);
+const shadowAlpha = ref(127);
 const shadowColor = computed(
   () => `${shadowTint.value}${shadowAlpha.value.toString(16)}`
 );
+const useOverlay = ref(false);
 
 const renderLights = (g: PixiGraphics) => {
+  g.clear();
   state.value.units.forEach(unit => {
     const pos = isoWorld.toIso(unit.position);
     const coords = {
@@ -66,7 +68,7 @@ const renderLights = (g: PixiGraphics) => {
     :z-index="9999"
   >
     <graphics
-      :filters="[getBlendFilter(BLEND_MODES.SOFT_LIGHT)]"
+      :blend-mode="BLEND_MODES.MULTIPLY"
       event-mode="none"
       :x="-camera.offset.value.x"
       :y="-camera.offset.value.y"
@@ -76,19 +78,23 @@ const renderLights = (g: PixiGraphics) => {
           g.beginFill(shadowColor);
           g.drawRect(0, 0, worldSize.width, worldSize.height);
           g.endFill();
-
-          renderLights(g);
         }
       "
     />
-    <!-- <graphics
-      :alpha="alpha"
-      :filters="[getBlendFilter(BLEND_MODES.OVERLAY)]"
+    <graphics
+      :filters="useOverlay ? [getBlendFilter(BLEND_MODES.OVERLAY)] : []"
       event-mode="none"
       :x="-camera.offset.value.x"
       :y="-camera.offset.value.y"
       @render="renderLights"
-    /> -->
+    />
+    <graphics
+      :blend-mode="BLEND_MODES.ADD"
+      event-mode="none"
+      :x="-camera.offset.value.x"
+      :y="-camera.offset.value.y"
+      @render="renderLights"
+    />
     <External>
       <div class="c-yellow-3 fixed top-0 right-14 Z-10">
         <div>
@@ -113,6 +119,10 @@ const renderLights = (g: PixiGraphics) => {
             step="1"
           />
         </div>
+        <label>
+          <input type="checkbox" v-model="useOverlay" />
+          Lights overlay blend
+        </label>
       </div>
     </External>
   </container>
