@@ -54,7 +54,6 @@ export function radialGradient(
 
   ctx.fillStyle = grd;
   ctx.fillRect(0, 0, width, height);
-
   return Texture.from(c);
 }
 

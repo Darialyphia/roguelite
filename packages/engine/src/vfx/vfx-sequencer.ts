@@ -13,6 +13,7 @@ const VFX_TYPES = {
   TINT_UNIT: 'TINT_UNIT',
   TINT_SCREEN: 'TINT_SCREEN',
   ADD_LIGHT_AT: 'ADD_LIGHT_ON_UNIT',
+  UPDATE_UNIT_LIGHT: 'UPDATE_UNIT_LIGHT',
   BLOOM_SCREEN: 'BLOOM_SCREEN',
   BLOOM_UNIT: 'BLOOM_SCREEN',
   SHOCKWAVE: 'SHOCKWAVE',
@@ -93,6 +94,22 @@ export type VFXConfig =
       type: typeof VFX_TYPES.ADD_LIGHT_AT;
       params: {
         position: Point3D;
+        blendMode: LightBlendMode;
+        fadeInDuration: number;
+        fadeOutDuration: number;
+        steps: Array<{
+          colorStops: Array<[number, string]>;
+          radius: number;
+          offset: Point;
+          duration: number;
+        }>;
+      };
+    }
+  | {
+      type: typeof VFX_TYPES.UPDATE_UNIT_LIGHT;
+      params: {
+        unit: Unit;
+        pass: 0 | 1;
         blendMode: LightBlendMode;
         fadeInDuration: number;
         fadeOutDuration: number;

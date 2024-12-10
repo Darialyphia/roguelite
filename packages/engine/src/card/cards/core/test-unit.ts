@@ -43,7 +43,6 @@ export const testUnit: UnitCardBlueprint = {
   },
   vfx: {
     play(game, card) {
-      console.log(card.unit);
       return {
         tracks: [
           {

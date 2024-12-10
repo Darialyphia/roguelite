@@ -8,6 +8,7 @@ import { useKeyboardControl } from '@/shared/composables/useKeyboardControl';
 import { useSettingsStore } from '@/shared/composables/useSettings';
 import { UI_MODES, useBattleUiStore } from './battle-ui.store';
 import type { Layer } from '@pixi/layers';
+import { providePointLights } from '@/vfx/usePointLight';
 
 definePage({
   name: 'Battle'
@@ -17,6 +18,7 @@ const battleStore = useBattleStore();
 const settingsStore = useSettingsStore();
 const uiStore = useBattleUiStore();
 const isoWorld = useTemplateRef('isoWorld');
+providePointLights();
 
 useKeyboardControl(
   'keydown',

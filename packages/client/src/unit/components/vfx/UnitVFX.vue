@@ -8,6 +8,6 @@ const { unit } = defineProps<{ unit: UnitViewModel }>();
 <template>
   <container>
     <DamageIndicator :unit="unit" />
-    <LightVFX />
+    <LightVFX :unit="unit" />
   </container>
 </template>
