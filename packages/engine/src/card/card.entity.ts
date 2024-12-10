@@ -12,8 +12,8 @@ export type CardOptions = {
 };
 
 export const CARD_EVENTS = {
-  BEFORE_PLAY: 'BEFORE_PLAY',
-  AFTER_PLAY: 'AFTER_PLAY'
+  BEFORE_PLAY: 'before_play',
+  AFTER_PLAY: 'after_play'
 } as const;
 
 export type CardEvent = Values<typeof CARD_EVENTS>;
@@ -40,6 +40,18 @@ export abstract class Card<
     this.player = player;
     // @ts-expect-error
     this.blueprint = options.blueprint;
+  }
+
+  get on() {
+    return this.emitter.on.bind(this.emitter);
+  }
+
+  get once() {
+    return this.emitter.once.bind(this.emitter);
+  }
+
+  get off() {
+    return this.emitter.off.bind(this.emitter);
   }
 
   get blueprintId() {

@@ -8,7 +8,11 @@ import {
 } from '@/player/player.model';
 import { type UnitViewModel, makeUnitViewModel } from '@/unit/unit.model';
 import type { ClientSession } from '@game/engine';
-import type { Game, GameEventMap } from '@game/engine/src/game/game';
+import {
+  GAME_EVENTS,
+  type Game,
+  type GameEventMap
+} from '@game/engine/src/game/game';
 import {
   GAME_PHASES,
   type GamePhase
@@ -20,6 +24,12 @@ import type {
 import { assert, isDefined, type Override, type PartialBy } from '@game/shared';
 import { defineStore } from 'pinia';
 import { AI } from '@game/engine/src/ai/ai';
+import {
+  VFXPlayer,
+  type VFXEventMap
+} from '@game/engine/src/vfx/vfx-sequencer';
+import { TypedEventEmitter } from '@game/engine/src/utils/typed-emitter';
+import { CARD_KINDS } from '@game/engine/src/card/card-enums';
 
 const useInternalBattleStore = defineStore('battle-internal', () => {
   const session = shallowRef<ClientSession>();
@@ -65,17 +75,29 @@ export const useBattleStore = defineStore('battle', () => {
     );
   };
 
-  const fxListeners: Partial<{
-    [EventName in keyof GameEventMap]: Set<
-      (...eventArg: GameEventMap[EventName]) => Promise<void>
-    >;
-  }> = {};
+  const fxEmitter = new TypedEventEmitter<GameEventMap>(true);
 
   const isPlayingFx = ref(false);
   const isReady = ref(false);
 
   let dispatch: InputDispatcher = () => {};
 
+  const vfxPlayer = new VFXPlayer();
+  fxEmitter.on('card.before_play', async e => {
+    if (e.card.kind === CARD_KINDS.SPELL) {
+      await vfxPlayer.playSequence(e.vfx);
+    }
+  });
+  fxEmitter.on('card.after_play', async e => {
+    if (e.card.kind === CARD_KINDS.UNIT || e.card.kind === CARD_KINDS.GENERAL) {
+      await vfxPlayer.playSequence(e.vfx);
+    }
+  });
+
+  fxEmitter.on('unit.created', async e => {
+    const game = internal.session!.game;
+    units.value.push(makeUnitViewModel(game, e.unit));
+  });
   return {
     init(session: ClientSession, dispatcher: InputDispatcher) {
       internal.session = session;
@@ -86,14 +108,7 @@ export const useBattleStore = defineStore('battle', () => {
         isPlayingFx.value = true;
 
         for (const event of events) {
-          const listeners = fxListeners[event.eventName];
-          if (!listeners) continue;
-          await Promise.all(
-            [...listeners.values()].map(listener =>
-              // @ts-expect-error :shrughai:
-              listener(event.event)
-            )
-          );
+          await fxEmitter.emitAsync(event.eventName, event.event as any);
         }
         syncState();
         isPlayingFx.value = false;
@@ -130,22 +145,32 @@ export const useBattleStore = defineStore('battle', () => {
       turnOrderUnits
     },
 
+    onVFX<T extends keyof VFXEventMap>(
+      eventName: T,
+      handler: (...eventArg: VFXEventMap[T]) => Promise<void>
+    ) {
+      return vfxPlayer.on(eventName, handler);
+    },
+
+    offVFX<T extends keyof VFXEventMap>(
+      eventName: T,
+      handler: (...eventArg: VFXEventMap[T]) => Promise<void>
+    ) {
+      return vfxPlayer.on(eventName, handler);
+    },
+
     on<T extends keyof GameEventMap>(
       eventName: T,
       handler: (...eventArg: GameEventMap[T]) => Promise<void>
     ) {
-      // @ts-expect-error :shrughai:
-      fxListeners[eventName] ??= new Set();
-      fxListeners[eventName].add(handler);
-      return () => this.off(eventName, handler);
+      return fxEmitter.on(eventName, handler);
     },
 
     off<T extends keyof GameEventMap>(
       eventName: T,
       handler: (...eventArg: GameEventMap[T]) => Promise<void>
     ) {
-      if (!fxListeners[eventName]) return;
-      fxListeners[eventName].delete(handler);
+      return fxEmitter.off(eventName, handler);
     }
   };
 });
@@ -157,6 +182,19 @@ export const useBattleEvent = <T extends keyof GameEventMap>(
   const store = useBattleStore();
 
   const unsub = store.on(name, handler);
+
+  onUnmounted(unsub);
+
+  return unsub;
+};
+
+export const useVFXEvent = <T extends keyof VFXEventMap>(
+  name: T,
+  handler: (...eventArg: VFXEventMap[T]) => Promise<void>
+) => {
+  const store = useBattleStore();
+
+  const unsub = store.onVFX(name, handler);
 
   onUnmounted(unsub);
 

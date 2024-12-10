@@ -30,13 +30,11 @@ export type UnitOptions = {
 };
 
 export type UnitEventMap = {
-  [UNIT_EVENTS.CREATED]: [];
+  [UNIT_EVENTS.CREATED]: [{ id: EntityId }];
   [UNIT_EVENTS.START_TURN]: [{ id: EntityId }];
   [UNIT_EVENTS.END_TURN]: [{ id: EntityId }];
   [UNIT_EVENTS.BEFORE_MOVE]: [{ position: Vec3; destination: Vec3; cost: number }];
   [UNIT_EVENTS.AFTER_MOVE]: [{ position: Vec3; previousPosition: Vec3; cost: number }];
-  [UNIT_EVENTS.BEFORE_DRAW]: [];
-  [UNIT_EVENTS.AFTER_DRAW]: [{ cards: Card[] }];
   [UNIT_EVENTS.BEFORE_ATTACK]: [{ target: Point3D; cost: number }];
   [UNIT_EVENTS.AFTER_ATTACK]: [{ target: Point3D; cost: number }];
   [UNIT_EVENTS.BEFORE_DEAL_DAMAGE]: [{ targets: Unit[]; damage: Damage }];
@@ -249,7 +247,7 @@ export class Unit extends Entity {
   }
 
   onAddedToBoard() {
-    this.emitter.emit(UNIT_EVENTS.CREATED);
+    this.emitter.emit(UNIT_EVENTS.CREATED, { id: this.id });
   }
 
   shutdown() {

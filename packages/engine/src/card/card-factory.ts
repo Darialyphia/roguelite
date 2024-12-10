@@ -1,5 +1,5 @@
 import { match } from 'ts-pattern';
-import type { CardOptions } from './card.entity';
+import { CARD_EVENTS, type CardOptions } from './card.entity';
 import { CARD_KINDS } from './card-enums';
 import { UnitCard } from './unit-card.entity';
 import type { Game } from '../game/game';
@@ -14,5 +14,12 @@ export const createCard = (game: Game, player: Player, options: CardOptions) => 
     .with(CARD_KINDS.SPELL, () => new SpellCard(game, player, options))
     .exhaustive();
 
+  card.on(CARD_EVENTS.BEFORE_PLAY, e => {
+    game.emit('card.before_play', { ...e, card });
+  });
+
+  card.on(CARD_EVENTS.AFTER_PLAY, e => {
+    game.emit('card.after_play', { ...e, card });
+  });
   return card;
 };

@@ -75,9 +75,9 @@ type GameEventsBase = {
 export type GameEventMap = Prettify<
   GameEventsBase &
     GlobalUnitEvents &
+    GlobalCardEvents &
     GlobalTurnEvents &
-    GlobalPlayerEvents &
-    GlobalCardEvents
+    GlobalPlayerEvents
 >;
 export type GameEventName = keyof GameEventMap;
 export type GameEvent = Values<GameEventMap>;
@@ -148,7 +148,7 @@ export class Game {
   private setupStarEvents() {
     Object.values(GAME_EVENTS).forEach(eventName => {
       this.on(eventName as any, event => {
-        // this.makeLogger(eventName, 'black')(event);
+        this.makeLogger(eventName, 'black')(event);
 
         this.emit('*', { eventName, event } as any);
       });

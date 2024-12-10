@@ -41,14 +41,31 @@ export const testUnit: UnitCardBlueprint = {
     return new PointAOEShape(game, points[0]);
   },
   vfx: {
-    play(game, card) {
-      return { tracks: [] };
+    play() {
+      return {
+        tracks: [
+          {
+            steps: [
+              {
+                type: 'TINT_SCREEN',
+                params: {
+                  blendMode: 2,
+                  steps: [
+                    { color: '#ff0000aa', transitionDuration: 500, duration: 1000 }
+                  ],
+                  endTransitionDuration: 500
+                }
+              }
+            ]
+          }
+        ]
+      };
     },
-    destroy(game, card) {
+    destroy() {
       return { tracks: [] };
     }
   },
   onPlay() {
-    console.log('playing test unit');
+    return;
   }
 };

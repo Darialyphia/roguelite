@@ -6,8 +6,6 @@ export const UNIT_EVENTS = {
   END_TURN: 'end_turn',
   BEFORE_MOVE: 'before_move',
   AFTER_MOVE: 'after_move',
-  BEFORE_DRAW: 'before_draw',
-  AFTER_DRAW: 'after_draw',
   BEFORE_ATTACK: 'before_attack',
   AFTER_ATTACK: 'after_attack',
   BEFORE_DEAL_DAMAGE: 'before_deal_damage',

@@ -1,4 +1,4 @@
-import type { Point, Values } from '@game/shared';
+import type { Point, Point3D, Values } from '@game/shared';
 import type { EntityId } from '../entity';
 import { TypedEventEmitter } from '../utils/typed-emitter';
 
@@ -8,11 +8,11 @@ type SpriteBlendMode = 0 | 1 | 2 | 3;
 const VFX_TYPES = {
   SHAKE_UNIT: 'SHAKE_UNIT',
   SHAKE_SCREEN: 'SHAKE_SCREEN',
-  ADD_SPRITE_ON_UNIT: 'SHAKE_UNIT',
-  ADD_SPRITE_ON_SCREEN_CENTER: 'SHAKE_UNIT',
+  ADD_SPRITE_AT: 'ADD_SPRITE_AT',
+  ADD_SPRITE_ON_SCREEN_CENTER: 'ADD_SPRITE_ON_SCREEN_CENTER',
   TINT_UNIT: 'TINT_UNIT',
   TINT_SCREEN: 'TINT_SCREEN',
-  ADD_LIGHT_ON_UNIT: 'ADD_LIGHT_ON_UNIT',
+  ADD_LIGHT_AT: 'ADD_LIGHT_ON_UNIT',
   BLOOM_SCREEN: 'BLOOM_SCREEN',
   BLOOM_UNIT: 'BLOOM_SCREEN',
   SHOCKWAVE: 'SHOCKWAVE',
@@ -40,12 +40,11 @@ export type VFXConfig =
       };
     }
   | {
-      type: typeof VFX_TYPES.ADD_SPRITE_ON_UNIT;
+      type: typeof VFX_TYPES.ADD_SPRITE_AT;
       params: {
-        unit: EntityId;
+        position: Point3D;
         spritesheetName: string;
         animationName: string;
-        offset: Point;
         duration: number;
         blendMode: SpriteBlendMode;
       };
@@ -60,32 +59,49 @@ export type VFXConfig =
       };
     }
   | {
+      type: typeof VFX_TYPES.ADD_SPRITE_AT;
+      params: {
+        spritesheetName: string;
+        animationName: string;
+        offset: Point;
+        duration: number;
+      };
+    }
+  | {
       type: typeof VFX_TYPES.TINT_UNIT;
       params: {
         unit: EntityId;
         color: string;
         alpha: number;
         duration: number;
+        transitionDuration: number;
       };
     }
   | {
       type: typeof VFX_TYPES.TINT_SCREEN;
       params: {
-        color: string;
-        alpha: number;
-        duration: number;
+        blendMode: LightBlendMode;
+        steps: Array<{
+          color: string;
+          transitionDuration: number;
+          duration: number;
+        }>;
+        endTransitionDuration: number;
       };
     }
   | {
-      type: typeof VFX_TYPES.ADD_LIGHT_ON_UNIT;
+      type: typeof VFX_TYPES.ADD_LIGHT_AT;
       params: {
-        unit: EntityId;
-        colorStops: Array<[number, string]>;
-        offset: Point;
-        alpha: number;
-        radius: number;
-        duration: number;
+        position: Point3D;
         blendMode: LightBlendMode;
+        fadeInDuration: number;
+        fadeOutDuration: number;
+        steps: Array<{
+          colorStops: Array<[number, string]>;
+          radius: number;
+          offset: Point;
+          duration: number;
+        }>;
       };
     }
   | {
@@ -120,18 +136,26 @@ export type VFXConfig =
     };
 
 export type VFXSequenceTrack = {
-  steps: VFXConfig[][];
+  steps: VFXConfig[];
 };
 export type VFXSequence = {
   tracks: VFXSequenceTrack[];
 };
 
-type FxEventMap = {
-  [Key in VFXType]: [VFXConfig & { type: Key }];
+export type VFXEventMap = {
+  [Key in VFXType]: [(VFXConfig & { type: Key })['params']];
 };
 
 export class VFXPlayer {
-  private emitter = new TypedEventEmitter<FxEventMap>(true);
+  private emitter = new TypedEventEmitter<VFXEventMap>(true);
+
+  get on() {
+    return this.emitter.on.bind(this.emitter);
+  }
+
+  get off() {
+    return this.emitter.off.bind(this.emitter);
+  }
 
   async playSequence(sequence: VFXSequence) {
     await Promise.all(sequence.tracks.map(track => this.playTrack(track)));
@@ -139,9 +163,7 @@ export class VFXPlayer {
 
   private async playTrack(track: VFXSequenceTrack) {
     for (const step of track.steps) {
-      await Promise.all(
-        step.map(config => this.emitter.emitAsync(config.type, config as any))
-      );
+      await this.emitter.emitAsync(step.type, step.params as any);
     }
   }
 }
