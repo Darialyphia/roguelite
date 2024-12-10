@@ -1,6 +1,6 @@
 import type { Point, Point3D, Values } from '@game/shared';
-import type { EntityId } from '../entity';
 import { TypedEventEmitter } from '../utils/typed-emitter';
+import type { Unit } from '../unit/unit.entity';
 
 type LightBlendMode = 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10;
 type SpriteBlendMode = 0 | 1 | 2 | 3;
@@ -25,7 +25,7 @@ export type VFXConfig =
   | {
       type: typeof VFX_TYPES.SHAKE_UNIT;
       params: {
-        unit: EntityId;
+        unit: Unit;
         isBidirectional: boolean;
         amplitude: number;
         duration: number;
@@ -70,7 +70,7 @@ export type VFXConfig =
   | {
       type: typeof VFX_TYPES.TINT_UNIT;
       params: {
-        unit: EntityId;
+        unit: Unit;
         color: string;
         alpha: number;
         duration: number;
@@ -114,7 +114,7 @@ export type VFXConfig =
   | {
       type: typeof VFX_TYPES.BLOOM_UNIT;
       params: {
-        units: EntityId[];
+        unit: Unit;
         strength: number;
         duration: number;
       };
@@ -122,7 +122,7 @@ export type VFXConfig =
   | {
       type: typeof VFX_TYPES.SHOCKWAVE;
       params: {
-        unit: EntityId;
+        unit: Unit;
         radius: number;
         duration: number;
         wavelength: number;

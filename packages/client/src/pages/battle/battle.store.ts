@@ -21,7 +21,13 @@ import type {
   InputDispatcher,
   SerializedInput
 } from '@game/engine/src/input/input-system';
-import { assert, isDefined, type Override, type PartialBy } from '@game/shared';
+import {
+  assert,
+  isDefined,
+  waitFor,
+  type Override,
+  type PartialBy
+} from '@game/shared';
 import { defineStore } from 'pinia';
 import { AI } from '@game/engine/src/ai/ai';
 import {
@@ -83,6 +89,11 @@ export const useBattleStore = defineStore('battle', () => {
   let dispatch: InputDispatcher = () => {};
 
   const vfxPlayer = new VFXPlayer();
+
+  vfxPlayer.on('WAIT', async e => {
+    await waitFor(e.duration);
+  });
+
   fxEmitter.on('card.before_play', async e => {
     if (e.card.kind === CARD_KINDS.SPELL) {
       await vfxPlayer.playSequence(e.vfx);
@@ -98,6 +109,7 @@ export const useBattleStore = defineStore('battle', () => {
     const game = internal.session!.game;
     units.value.push(makeUnitViewModel(game, e.unit));
   });
+
   return {
     init(session: ClientSession, dispatcher: InputDispatcher) {
       internal.session = session;

@@ -48,15 +48,15 @@ export class UnitCard extends Card<UnitCardBlueprint> {
   play(targets: Point3D[]) {
     if (!this.canPlayAt(targets)) return;
 
+    const [summonPosition] = targets;
+    this.unit = this.game.unitSystem.addUnit(this, summonPosition);
+
     this.emitter.emit(CARD_EVENTS.BEFORE_PLAY, {
       targets,
       vfx: this.blueprint.vfx.play(this.game, this)
     });
 
     this.player.spendGold(this.blueprint.cost.gold);
-
-    const [summonPosition] = targets;
-    this.unit = this.game.unitSystem.addUnit(this, summonPosition);
 
     const aoeShape = this.blueprint.getAoe(this.game, this, targets);
     this.blueprint.onPlay(this.game, this, aoeShape.getCells(), aoeShape.getUnits());

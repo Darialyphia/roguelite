@@ -4,6 +4,7 @@ import { TARGETING_TYPE } from '../../../targeting/targeting-strategy';
 import { UnitSummonTargetingtrategy } from '../../../targeting/unit-summon-targeting.strategy';
 import { JOBS } from '../../../utils/job';
 import { RUNES } from '../../../utils/rune';
+import type { VFXSequenceTrack } from '../../../vfx/vfx-sequencer';
 import { type UnitCardBlueprint } from '../../card-blueprint';
 import { CARD_KINDS } from '../../card-enums';
 
@@ -41,7 +42,8 @@ export const testUnit: UnitCardBlueprint = {
     return new PointAOEShape(game, points[0]);
   },
   vfx: {
-    play() {
+    play(game, card) {
+      console.log(card.unit);
       return {
         tracks: [
           {
@@ -57,7 +59,28 @@ export const testUnit: UnitCardBlueprint = {
                 }
               }
             ]
-          }
+          },
+          ...game.unitSystem.units
+            .filter(u => !u.equals(card.unit))
+            .map<VFXSequenceTrack>(unit => ({
+              steps: [
+                {
+                  type: 'WAIT',
+                  params: {
+                    duration: 500
+                  }
+                },
+                {
+                  type: 'SHAKE_UNIT',
+                  params: {
+                    isBidirectional: true,
+                    amplitude: 15,
+                    duration: 800,
+                    unit
+                  }
+                }
+              ]
+            }))
         ]
       };
     },

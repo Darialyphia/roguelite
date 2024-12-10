@@ -1,5 +1,9 @@
 <script setup lang="ts">
-import { useBattleEvent, useBattleStore } from '@/pages/battle/battle.store';
+import {
+  useBattleEvent,
+  useBattleStore,
+  useVFXEvent
+} from '@/pages/battle/battle.store';
 import { useIsoCamera } from '@/iso/composables/useIsoCamera';
 import type { UnitViewModel } from '../unit.model';
 import { useShaker } from '@/shared/composables/vfx/useShaker';
@@ -39,6 +43,17 @@ useBattleEvent('unit.before_receive_damage', async e => {
   });
 
   await waitFor(duration);
+});
+
+useVFXEvent('SHAKE_UNIT', async params => {
+  if (!params.unit.equals(unit.getUnit())) return;
+
+  shaker.trigger({
+    isBidirectional: params.isBidirectional,
+    shakeAmount: params.amplitude,
+    shakeDelay: 35,
+    shakeCountMax: Math.round(params.duration / 35)
+  });
 });
 
 useBattleEvent('unit.before_destroy', async e => {
