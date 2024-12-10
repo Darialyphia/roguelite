@@ -52,13 +52,11 @@ useBattleEvent('unit.before_play_card', async event => {
   );
 });
 
-useBattleEvent('unit.after_draw', async event => {
-  if (!activeUnit.value) return;
-  if (!activeUnit.value?.getUnit().equals(event.unit)) {
-    return;
-  }
+const userPlayer = useUserPlayer();
+useBattleEvent('player.after_draw', async event => {
+  if (!event.player.equals(userPlayer.value.getPlayer())) return;
   for (const card of event.cards) {
-    activeUnit.value.hand.push(makeCardViewModel(game.value, card));
+    userPlayer.value.hand.push(makeCardViewModel(game.value, card));
     await waitFor(300);
   }
 });

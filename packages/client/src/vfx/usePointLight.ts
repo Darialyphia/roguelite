@@ -23,8 +23,8 @@ const POINT_LIGHTS_INJECTION_KEY = Symbol(
 export const providePointLights = () => {
   const lights: PointLighInstance[] = [];
 
-  const PROXIMITY_THRESHOLD = 500; // Example threshold distance
-  const MIN_ALPHA = 0.3;
+  const PROXIMITY_THRESHOLD = 300; // Example threshold distance
+  const MIN_ALPHA = 0.5;
   onTick(() => {
     lights.forEach(light => {
       light.root.alpha = 1;
@@ -44,7 +44,6 @@ export const providePointLights = () => {
           lightB.root.getGlobalPosition()
         );
 
-        console.log(distance, distance < PROXIMITY_THRESHOLD);
         if (distance < PROXIMITY_THRESHOLD) {
           // Adjust the alpha based on proximity
           const dimmingFactor = Math.max(

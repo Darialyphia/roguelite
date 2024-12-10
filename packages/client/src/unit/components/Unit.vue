@@ -9,12 +9,11 @@ import UnitVFX from './vfx/UnitVFX.vue';
 import { whenever } from '@vueuse/core';
 import { useIsoCamera } from '@/iso/composables/useIsoCamera';
 import { useIsoPoint } from '@/iso/composables/useIsoPoint';
-import { useActiveUnit, useBattleEvent } from '@/pages/battle/battle.store';
+import { useBattleEvent } from '@/pages/battle/battle.store';
 import { PTransition } from 'vue3-pixi';
-import UiAnimatedSprite from '@/ui/components/UiAnimatedSprite.vue';
 import type { Container } from 'pixi.js';
-import { useBattleUiStore } from '@/pages/battle/battle-ui.store';
 import AlphaTransition from '@/ui/components/AlphaTransition.vue';
+import ActiveUnitIndicator from './ActiveUnitIndicator.vue';
 
 const { unit } = defineProps<{ unit: UnitViewModel }>();
 
@@ -71,10 +70,6 @@ const spawnAnimation = (container: Container) => {
     }
   });
 };
-
-const activeUnit = useActiveUnit();
-const isActive = computed(() => activeUnit.value?.equals(unit));
-const ui = useBattleUiStore();
 </script>
 
 <template>
@@ -91,18 +86,9 @@ const ui = useBattleUiStore();
     </PTransition>
     <UnitVFX :unit="unit" />
     <template v-if="isSpawnAnimationDone">
-      <UiAnimatedSprite
-        :ref="
-          (obj: any) => {
-            ui.assignLayer(obj, 'ui');
-          }
-        "
-        assetId="active-unit-indicator"
-        v-if="isActive && isSpawnAnimationDone"
-        :y="-40"
-      />
+      <ActiveUnitIndicator :unit="unit" />
       <AlphaTransition :duration="{ enter: 200, leave: 200 }">
-        <UnitStatBars :unit="unit" v-if="isSpawnAnimationDone" />
+        <UnitStatBars :unit="unit" />
       </AlphaTransition>
     </template>
   </UnitPositioner>

@@ -47,39 +47,74 @@ export const testUnit: UnitCardBlueprint = {
         tracks: [
           {
             steps: [
+              { type: 'WAIT', params: { duration: 500 } },
               {
-                type: 'TINT_SCREEN',
+                type: 'UPDATE_UNIT_LIGHT',
                 params: {
-                  blendMode: 2,
+                  unit: card.unit,
+                  pass: 1,
+                  blendMode: 1,
                   steps: [
-                    { color: '#ff0000aa', transitionDuration: 500, duration: 1000 }
-                  ],
-                  endTransitionDuration: 500
+                    {
+                      animated: false,
+                      duration: 500,
+                      offset: { x: 0, y: 0 },
+                      radius: 250,
+                      colorStops: [
+                        [0, '#FFFF0000'],
+                        [0.5, '#FF0000FF'],
+                        [1, '#00000000']
+                      ]
+                    },
+                    {
+                      animated: true,
+                      duration: 500,
+                      offset: { x: 0, y: 0 },
+                      radius: 200,
+                      colorStops: [
+                        [0, '#FFFF0000'],
+                        [0.5, '#FF0000FF'],
+                        [1, '#00000000']
+                      ]
+                    },
+                    {
+                      animated: true,
+                      duration: 500,
+                      offset: { x: 0, y: 0 },
+                      radius: 150,
+                      colorStops: [
+                        [0, '#FFFF0000'],
+                        [0.5, '#FF0000FF'],
+                        [1, '#00000000']
+                      ]
+                    },
+                    {
+                      animated: true,
+                      duration: 500,
+                      offset: { x: 0, y: 0 },
+                      radius: 100,
+                      colorStops: [
+                        [0, '#FFFF0000'],
+                        [0.5, '#FF0000FF'],
+                        [1, '#00000000']
+                      ]
+                    },
+                    {
+                      animated: true,
+                      duration: 500,
+                      offset: { x: 0, y: 0 },
+                      radius: 50,
+                      colorStops: [
+                        [0, '#FFFF0000'],
+                        [0.5, '#FF0000FF'],
+                        [1, '#00000000']
+                      ]
+                    }
+                  ]
                 }
               }
             ]
-          },
-          ...game.unitSystem.units
-            .filter(u => !u.equals(card.unit))
-            .map<VFXSequenceTrack>(unit => ({
-              steps: [
-                {
-                  type: 'WAIT',
-                  params: {
-                    duration: 500
-                  }
-                },
-                {
-                  type: 'SHAKE_UNIT',
-                  params: {
-                    isBidirectional: true,
-                    amplitude: 15,
-                    duration: 800,
-                    unit
-                  }
-                }
-              ]
-            }))
+          }
         ]
       };
     },

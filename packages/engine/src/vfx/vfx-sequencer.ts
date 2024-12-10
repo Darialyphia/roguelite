@@ -12,7 +12,7 @@ const VFX_TYPES = {
   ADD_SPRITE_ON_SCREEN_CENTER: 'ADD_SPRITE_ON_SCREEN_CENTER',
   TINT_UNIT: 'TINT_UNIT',
   TINT_SCREEN: 'TINT_SCREEN',
-  ADD_LIGHT_AT: 'ADD_LIGHT_ON_UNIT',
+  ADD_LIGHT_AT: 'ADD_LIGHT_AT',
   UPDATE_UNIT_LIGHT: 'UPDATE_UNIT_LIGHT',
   BLOOM_SCREEN: 'BLOOM_SCREEN',
   BLOOM_UNIT: 'BLOOM_SCREEN',
@@ -52,15 +52,6 @@ export type VFXConfig =
     }
   | {
       type: typeof VFX_TYPES.ADD_SPRITE_ON_SCREEN_CENTER;
-      params: {
-        spritesheetName: string;
-        animationName: string;
-        offset: Point;
-        duration: number;
-      };
-    }
-  | {
-      type: typeof VFX_TYPES.ADD_SPRITE_AT;
       params: {
         spritesheetName: string;
         animationName: string;
@@ -111,9 +102,8 @@ export type VFXConfig =
         unit: Unit;
         pass: 0 | 1;
         blendMode: LightBlendMode;
-        fadeInDuration: number;
-        fadeOutDuration: number;
         steps: Array<{
+          animated: boolean;
           colorStops: Array<[number, string]>;
           radius: number;
           offset: Point;

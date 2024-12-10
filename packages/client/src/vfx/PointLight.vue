@@ -14,11 +14,9 @@ import { until } from '@vueuse/core';
 
 const { light } = defineProps<{ light: PointLightConfig }>();
 
-const ui = useBattleUiStore();
 const camera = useIsoCamera();
-
+const ui = useBattleUiStore();
 const { registerLight } = usePointLights();
-
 const renderLight = (g: PixiGraphics) => {
   g.clear();
 
@@ -49,7 +47,7 @@ let unsub: () => void;
 until(containerRef)
   .toBeTruthy()
   .then(container => {
-    unsub = registerLight({ ...light, root: container });
+    unsub = registerLight(Object.assign(light, { root: container }));
   });
 </script>
 
