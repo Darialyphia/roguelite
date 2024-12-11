@@ -48,7 +48,6 @@ const secondPass = ref<PointLightConfig>({
 });
 
 useVFXEvent('UPDATE_UNIT_LIGHT', async params => {
-  console.log(params.unit.id, unit.id);
   if (!params.unit.equals(unit.getUnit())) return;
 
   isVFxPlaying.value = true;

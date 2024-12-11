@@ -43,12 +43,15 @@ const renderLight = (g: PixiGraphics) => {
 };
 
 const containerRef = ref<PixiContainer>();
-let unsub: () => void;
+let unsub: () => void = () => {};
 until(containerRef)
   .toBeTruthy()
   .then(container => {
     unsub = registerLight(Object.assign(light, { root: container }));
   });
+onBeforeUnmount(() => {
+  unsub();
+});
 </script>
 
 <template>

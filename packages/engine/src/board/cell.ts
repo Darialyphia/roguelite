@@ -3,6 +3,7 @@ import { createEntityId, Entity } from '../entity';
 import type { Game } from '../game/game';
 import { Position } from '../utils/position';
 import type { Terrain } from './board-utils';
+import type { CellLight } from './map';
 
 export type SerializedCoords = `${string}:${string}:${string}`;
 
@@ -10,12 +11,15 @@ export type CellOptions = {
   id: string;
   position: Point3D;
   terrain: Terrain;
+  light?: CellLight;
 };
 
 export class Cell extends Entity {
   readonly position: Position;
 
   readonly terrain: Terrain;
+
+  readonly light?: CellLight;
 
   constructor(
     private game: Game,
@@ -24,6 +28,7 @@ export class Cell extends Entity {
     super(createEntityId(options.id));
     this.terrain = options.terrain;
     this.position = Position.fromPoint3D(options.position);
+    this.light = options.light;
   }
 
   get cellAbove(): Cell | null {

@@ -62,7 +62,7 @@ export const providePointLights = () => {
       lights.push(light);
 
       return () => {
-        lights.splice(lights.indexOf(light));
+        lights.splice(lights.indexOf(light), 1);
       };
     }
   });

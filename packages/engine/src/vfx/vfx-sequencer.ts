@@ -2,8 +2,8 @@ import type { Point, Point3D, Values } from '@game/shared';
 import { TypedEventEmitter } from '../utils/typed-emitter';
 import type { Unit } from '../unit/unit.entity';
 
-type LightBlendMode = 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10;
-type SpriteBlendMode = 0 | 1 | 2 | 3;
+export type LightBlendMode = 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10;
+export type SpriteBlendMode = 0 | 1 | 2 | 3;
 
 const VFX_TYPES = {
   SHAKE_UNIT: 'SHAKE_UNIT',

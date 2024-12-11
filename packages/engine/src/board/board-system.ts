@@ -26,7 +26,8 @@ export class BoardSystem extends System<BoardSystemOptions> {
           const instance = new Cell(this.game, {
             id: pointToCellId({ x, y, z }),
             position: { x, y, z },
-            terrain: cell.terrain
+            terrain: cell.terrain,
+            light: cell.light
           });
           this.cellsMap.set(instance.id, instance);
         });

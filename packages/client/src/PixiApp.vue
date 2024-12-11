@@ -29,6 +29,9 @@ onMounted(async () => {
     antialias: false
   });
 
+  //@ts-expect-error
+  globalThis.__PIXI_APP__ = pixiApp.value;
+
   pixiApp.value.resizeTo = window;
 
   pixiApp.value.stage = new Stage();

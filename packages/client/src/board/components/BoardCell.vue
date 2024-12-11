@@ -8,9 +8,9 @@ import type { CellViewModel } from '../models/cell.model';
 import { useBattleStore, useGame } from '@/pages/battle/battle.store';
 import { useIsoCamera } from '@/iso/composables/useIsoCamera';
 import { match } from 'ts-pattern';
-
 import { PTransition } from 'vue3-pixi';
 import type { Container } from 'pixi.js';
+import BoardCellLightVFX from './BoardCellLightVFX.vue';
 
 const { cell } = defineProps<{ cell: CellViewModel }>();
 const emit = defineEmits<{ ready: [] }>();
@@ -123,6 +123,7 @@ const spawnAnimation = (container: Container) => {
         >
           <UiAnimatedSprite assetId="hovered-cell" v-if="isHovered" />
         </container>
+        <BoardCellLightVFX :cell="cell" />
       </container>
     </PTransition>
   </AnimatedIsoPoint>

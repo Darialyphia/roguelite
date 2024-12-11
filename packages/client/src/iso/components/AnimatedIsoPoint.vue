@@ -44,5 +44,3 @@ watch(
     <slot :isoPosition="isoPosition" :z-order="zIndex" />
   </container>
 </template>
-
-<style scoped lang="postcss"></style>
