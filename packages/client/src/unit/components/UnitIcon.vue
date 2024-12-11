@@ -12,10 +12,15 @@ const bg = computed(() => `url(/assets/icons/${unit.iconId}.png)`);
 
 <style scoped lang="postcss">
 .unit-icon {
-  width: var(--unit-icon-size, 96px);
+  width: var(--unit-icon-size, calc(1.5 * 78px));
   aspect-ratio: 1;
-  background: url('/assets/ui/unit-icon-frame.png'), v-bind(bg),
-    var(--unit-icon-bg, #32021b);
-  background-size: cover;
+  background: url('/assets/ui/card-icon-border.png'), v-bind(bg),
+    url('/assets/ui/card-image-background.png');
+  background-size:
+    cover,
+    cover,
+    105px 105px;
+  background-repeat: no-repeat;
+  background-position: center center;
 }
 </style>

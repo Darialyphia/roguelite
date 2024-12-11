@@ -114,15 +114,7 @@ const spawnAnimation = (container: Container) => {
       <container :ref="(container: any) => ui.assignLayer(container, 'scene')">
         <BoardCellSprite :cell="cell" />
         <BoardCellHighlights :cell="cell" />
-        <container
-          :ref="
-            (obj: any) => {
-              ui.assignLayer(obj, 'ui');
-            }
-          "
-        >
-          <UiAnimatedSprite assetId="hovered-cell" v-if="isHovered" />
-        </container>
+        <UiAnimatedSprite assetId="hovered-cell" v-if="isHovered" />
         <BoardCellLightVFX :cell="cell" />
       </container>
     </PTransition>

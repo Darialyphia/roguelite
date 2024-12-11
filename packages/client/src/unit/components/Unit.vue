@@ -14,6 +14,7 @@ import { PTransition } from 'vue3-pixi';
 import type { Container } from 'pixi.js';
 import AlphaTransition from '@/ui/components/AlphaTransition.vue';
 import ActiveUnitIndicator from './ActiveUnitIndicator.vue';
+import { waitFor } from '@game/shared';
 
 const { unit } = defineProps<{ unit: UnitViewModel }>();
 
@@ -23,34 +24,45 @@ const { isoPosition } = useIsoPoint({
 });
 
 const centerCamera = () => {
+  const viewport = camera.viewport.value;
+  if (!viewport) return;
+
+  const position = {
+    x: isoPosition.value.x + camera.offset.value.x,
+    y: isoPosition.value.y + camera.offset.value.y
+  };
+
+  const isWithinViewport =
+    position.x > viewport.left * 1.15 &&
+    position.x < viewport.right * 0.85 &&
+    position.y > viewport.top * 1.15 &&
+    position.y < viewport.bottom * 0.85;
+
+  if (isWithinViewport) return;
+
   camera.viewport.value?.animate({
-    position: {
-      x: isoPosition.value.x + camera.offset.value.x,
-      y: isoPosition.value.y + camera.offset.value.y
-    },
+    position,
     time: 250,
     ease: 'easeOutSine'
   });
+  return waitFor(250);
 };
 whenever(() => unit.isActive(), centerCamera);
 
-useBattleEvent('unit.before_attack', e => {
+useBattleEvent('unit.before_attack', async e => {
   if (e.unit.equals(unit.getUnit())) {
-    centerCamera();
+    await centerCamera();
   }
-  return Promise.resolve();
 });
-useBattleEvent('unit.before_receive_damage', e => {
+useBattleEvent('unit.before_receive_damage', async e => {
   if (e.unit.equals(unit.getUnit())) {
-    centerCamera();
+    await centerCamera();
   }
-  return Promise.resolve();
 });
-useBattleEvent('unit.before_play_card', e => {
+useBattleEvent('unit.before_play_card', async e => {
   if (e.unit.equals(unit.getUnit())) {
-    centerCamera();
+    await centerCamera();
   }
-  return Promise.resolve();
 });
 
 const isSpawnAnimationDone = ref(false);

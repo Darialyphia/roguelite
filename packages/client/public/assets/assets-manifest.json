@@ -502,6 +502,20 @@
         },
         {
           "alias": [
+            "card-icon-bg.png"
+          ],
+          "src": [
+            "/assets/ui/card-icon-bg.png"
+          ],
+          "foo": "bar",
+          "data": {
+            "tags": {
+              "m": true
+            }
+          }
+        },
+        {
+          "alias": [
             "card-icon-border.png"
           ],
           "src": [

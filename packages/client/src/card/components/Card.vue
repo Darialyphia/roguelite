@@ -136,7 +136,7 @@ const runeCosts = computed(() => {
   background-repeat: no-repeat, no-repeat, no-repeat;
   background-position:
     top left,
-    center -60px,
+    center 30px,
     center 27px;
   color: #311929;
   font-family: 'Silkscreen';

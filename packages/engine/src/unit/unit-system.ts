@@ -77,7 +77,6 @@ export class UnitSystem extends System<UnitSystemOptions> {
 
   forwardListeners(unit: Unit) {
     Object.values(UNIT_EVENTS).forEach(eventName => {
-      //@ts-expect-error
       unit.on(eventName, event => {
         this.game.emit(`unit.${eventName}`, { ...event, unit } as any);
       });
@@ -92,7 +91,7 @@ export class UnitSystem extends System<UnitSystemOptions> {
     unit.onAddedToBoard();
 
     if (this.game.phase === GAME_PHASES.BATTLE) {
-      this.game.turnSystem.insertInCurrentQueue(unit);
+      // this.game.turnSystem.insertInCurrentQueue(unit);
     }
     return unit;
   }

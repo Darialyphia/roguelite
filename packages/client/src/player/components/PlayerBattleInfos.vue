@@ -60,18 +60,22 @@ const state = useGameClientState();
 
     <div class="stats">
       <div class="large" style="--bg: url('/assets/ui/vp-large.png')">
-        {{ player.victoryPoints }}/{{
-          engineConfig.VICTORY_POINTS_WIN_THRESHOLD
-        }}
+        <span :data-text="player.victoryPoints">
+          {{ player.victoryPoints }}
+        </span>
       </div>
       <div style="--bg: url('/assets/ui/gold.png')">
-        {{ player.gold }}/{{ engineConfig.VICTORY_POINTS_WIN_THRESHOLD }}
+        <span :data-text="player.gold">
+          {{ player.gold }}
+        </span>
       </div>
       <div style="--bg: url('/assets/ui/hand.png')">
-        {{ player.hand.length / engineConfig.MAX_HAND_SIZE }}
+        <span :data-text="player.hand.length">{{ player.hand.length }}</span>
       </div>
       <div style="--bg: url('/assets/ui/deck.png')">
-        {{ player.remainingCardsInDeck }}/{{ player.deckSize }}
+        <span :data-text="player.remainingCardsInDeck">
+          {{ player.remainingCardsInDeck }}
+        </span>
       </div>
     </div>
   </div>
@@ -231,18 +235,44 @@ const state = useGameClientState();
     background-position: center left;
     background-repeat: no-repeat;
     height: var(--size);
-    padding-left: calc(var(--size) + var(--size-3));
+    padding-left: calc(var(--size) + var(--size-1));
     font-size: var(--size-4);
-    text-align: right;
+    display: flex;
+    align-items: center;
+    position: relative;
+    z-index: 0;
     .is-inverted & {
       background-position: center right;
       padding-left: 0;
-      padding-right: calc(var(--size) + var(--size-3));
-      text-align: left;
+      padding-right: calc(var(--size) + var(--size-1));
+      display: flex;
+      justify-content: flex-end;
     }
     &.large {
       --size: 60px;
-      font-size: var(--size-6);
+      font-size: var(--size-7);
+    }
+    > span {
+      line-height: 1;
+      text-align: center;
+      position: relative;
+      place-self: center;
+      background: linear-gradient(
+        #fffe00,
+        #fffe00 calc(50% + 3px),
+        #feb900 calc(50% + 3px)
+      );
+      background-clip: text;
+      color: transparent;
+      position: relative;
+      &:after {
+        background: none;
+        content: attr(data-text);
+        position: absolute;
+        text-shadow: 0 3px #5d1529;
+        inset: 0;
+        z-index: -1;
+      }
     }
   }
 }

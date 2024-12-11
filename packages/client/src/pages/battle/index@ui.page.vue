@@ -23,6 +23,7 @@ import { useBattleUiStore } from './battle-ui.store';
 import MulliganOverlay from '@/card/components/MulliganOverlay.vue';
 import PlayerBattleInfos from '@/player/components/PlayerBattleInfos.vue';
 import { makePlayerViewModel } from '@/player/player.model';
+import TurnOrder from '@/unit/components/TurnOrder.vue';
 
 definePage({
   name: 'Battle'
@@ -141,11 +142,14 @@ start();
       </ul>
     </nav>
 
-    <PlayerBattleInfos
-      :player="opponent"
-      class="opponent-battle-infos"
-      inverted
-    />
+    <header class="flex gap-8 items-start justify-between mt-3 px-6">
+      <TurnOrder />
+      <PlayerBattleInfos
+        :player="opponent"
+        class="opponent-battle-infos"
+        inverted
+      />
+    </header>
 
     <BattleLog class="pointer-events-auto" />
     <Transition>
@@ -224,7 +228,5 @@ start();
 .opponent-battle-infos {
   grid-row: 1;
   justify-self: end;
-  margin-block-start: var(--size-3);
-  margin-inline-end: var(--size-6);
 }
 </style>

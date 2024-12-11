@@ -2,7 +2,7 @@ import { type Point3D } from '@game/shared';
 import { createEntityId, Entity } from '../entity';
 import type { Game } from '../game/game';
 import { Position } from '../utils/position';
-import type { Terrain } from './board-utils';
+import { TERRAINS, type Terrain } from './board-utils';
 import type { CellLight } from './map';
 
 export type SerializedCoords = `${string}:${string}:${string}`;
@@ -62,12 +62,13 @@ export class Cell extends Entity {
   }
 
   get isWalkable() {
-    // const above = this.game.boardSystem.getCellAt({
-    //   ...this.position,
-    //   z: this.position.z + 1
-    // });
-    // if (above) return false;
-    // if (this.terrain !== TERRAINS.GROUND) return false;
+    const above = this.game.boardSystem.getCellAt({
+      ...this.position,
+      z: this.position.z + 1
+    });
+    if (above) return false;
+    if (this.terrain !== TERRAINS.GROUND) return false;
+
     return true;
   }
 

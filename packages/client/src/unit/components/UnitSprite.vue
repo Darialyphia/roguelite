@@ -10,6 +10,11 @@ import { ColorOverlayFilter } from '@pixi/filter-color-overlay';
 import { isDefined } from '@game/shared';
 import UnitModifierSprite from './UnitModifierSprite.vue';
 import { useIsoCamera } from '@/iso/composables/useIsoCamera';
+import { AdjustmentFilter } from '@pixi/filter-adjustment';
+import {
+  useBattleStore,
+  useGameClientState
+} from '@/pages/battle/battle.store';
 
 const { unit } = defineProps<{ unit: UnitViewModel }>();
 
@@ -23,7 +28,7 @@ const textures = useMultiLayerTexture({
 });
 
 const ui = useBattleUiStore();
-
+const state = useGameClientState();
 const camera = useIsoCamera();
 const selectedFilter = new OutlineFilter(
   camera.viewport.value!.scale.x,
@@ -33,6 +38,14 @@ camera.viewport.value?.on('zoomed-end', () => {
   selectedFilter.thickness = Math.round(camera.viewport.value!.scale.x);
 });
 const inAoeFilter = new ColorOverlayFilter(0xff0000, 0.3);
+const inactiveFilter = new AdjustmentFilter({
+  saturation: 0.1,
+  brightness: 0.75
+});
+
+const isOnTurnOrder = computed(() => {
+  return state.value.turnOrderUnits.some(u => u.equals(unit));
+});
 
 const isInCardAoe = computed(() => {
   if (!ui.selectedCard) return false;
@@ -52,6 +65,10 @@ const filters = computed(() => {
   if (isInCardAoe.value) {
     result.push(inAoeFilter);
   }
+  if (!isOnTurnOrder.value) {
+    result.push(inactiveFilter);
+  }
+
   return result;
 });
 

@@ -34,7 +34,6 @@ const userPlayer = useUserPlayer();
   display: flex;
   gap: var(--size-2);
   align-items: flex-end;
-  margin: var(--size-3);
 
   > p {
     align-self: center;
@@ -43,23 +42,50 @@ const userPlayer = useUserPlayer();
     margin-inline-end: var(--size-2);
   }
 
-  & > :not(:first-of-type) {
-    --unit-icon-size: calc(96px * 0.75);
-  }
-
   & :is(.highlighted, .ally, .enemy) {
     outline: solid 1px var(--highlight-color);
-    box-shadow: 0 0 8px 2px hsl(0 0 100% / 0.4);
   }
   .highlighted {
     --highlight-color: white;
     filter: brightness(125%) contrast(110%);
   }
   .ally {
-    --highlight-color: #00d8f7;
+    position: relative;
+    &::after {
+      content: '';
+      position: absolute;
+      top: 100%;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 10px;
+      aspect-ratio: 1;
+      background: radial-gradient(
+        circle at center,
+        white,
+        hsl(200, 80%, 60%) 50%
+      );
+      box-shadow: 0 0 1.5em 3px hsl(200, 80%, 60%);
+      border-radius: var(--radius-round);
+    }
   }
   .enemy {
-    --highlight-color: #ff134b;
+    position: relative;
+    &::after {
+      content: '';
+      position: absolute;
+      top: 100%;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 10px;
+      aspect-ratio: 1;
+      background: radial-gradient(
+        circle at center,
+        white,
+        hsl(0, 80%, 60%) 50%
+      );
+      box-shadow: 0 0 1.5em 3px hsl(0, 80%, 60%);
+      border-radius: var(--radius-round);
+    }
   }
 }
 </style>
