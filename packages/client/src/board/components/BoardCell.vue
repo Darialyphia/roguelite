@@ -8,9 +8,19 @@ import type { CellViewModel } from '../models/cell.model';
 import { useBattleStore, useGame } from '@/pages/battle/battle.store';
 import { useIsoCamera } from '@/iso/composables/useIsoCamera';
 import { match } from 'ts-pattern';
-import { PTransition } from 'vue3-pixi';
+import { PTransition, External } from 'vue3-pixi';
 import type { Container } from 'pixi.js';
 import BoardCellLightVFX from './BoardCellLightVFX.vue';
+import Card from '@/card/components/Card.vue';
+import { useTimeoutFn } from '@vueuse/core';
+import { config } from '@/utils/config';
+import { useIsoPoint } from '@/iso/composables/useIsoPoint';
+import {
+  autoPlacement,
+  autoUpdate,
+  shift,
+  useFloating
+} from '@floating-ui/vue';
 
 const { cell } = defineProps<{ cell: CellViewModel }>();
 const emit = defineEmits<{ ready: [] }>();
@@ -37,6 +47,77 @@ const spawnAnimation = (container: Container) => {
     }
   });
 };
+
+const isCardDisplayed = ref(false);
+const { isoPosition } = useIsoPoint({
+  position: computed(() => cell)
+});
+const virtualEl = ref({
+  getBoundingClientRect() {
+    return {
+      x: 0,
+      y: 0,
+      top: 0,
+      left: 0,
+      bottom: 20,
+      right: 20,
+      width: 20,
+      height: 20
+    };
+  }
+});
+const floating = useTemplateRef('floating');
+const { x, y, strategy } = useFloating(virtualEl, floating, {
+  strategy: 'fixed',
+  whileElementsMounted: autoUpdate,
+  middleware: [shift(), autoPlacement()]
+});
+const floatingCardStyle = computed(() => ({
+  left: `${x.value ?? 0}px`,
+  top: `${y.value ?? 0}px`,
+  position: strategy.value
+}));
+const showCardTimeout = useTimeoutFn(
+  () => {
+    isCardDisplayed.value = true;
+    const viewport = camera.viewport.value;
+    if (!viewport) return;
+
+    const position = viewport.toScreen({
+      x: isoPosition.value.x + camera.offset.value.x,
+      y: isoPosition.value.y + camera.offset.value.y
+    });
+    const width = config.TILE_SIZE.x;
+    const height = config.TILE_SIZE.y + config.TILE_SIZE.z;
+
+    virtualEl.value = {
+      getBoundingClientRect() {
+        return {
+          x: position.x,
+          y: position.y,
+          top: position.y,
+          left: position.x,
+          bottom: position.y + height,
+          right: position.x + width,
+          width,
+          height
+        };
+      }
+    };
+  },
+  500,
+  {
+    immediate: false
+  }
+);
+watch(isHovered, hovered => {
+  if (!hovered) {
+    isCardDisplayed.value = false;
+    showCardTimeout.stop();
+  } else if (cell.unit) {
+    showCardTimeout.start();
+  }
+});
 </script>
 
 <template>
@@ -119,4 +200,33 @@ const spawnAnimation = (container: Container) => {
       </container>
     </PTransition>
   </AnimatedIsoPoint>
+  <External>
+    <Teleport to="body">
+      <Transition>
+        <div
+          ref="floating"
+          class="card-wrapper"
+          :style="floatingCardStyle"
+          v-if="cell.unit && isCardDisplayed"
+        >
+          <Card :card="cell.unit.card" />
+        </div>
+      </Transition>
+    </Teleport>
+  </External>
 </template>
+
+<style lang="postcss" scoped>
+.card-wrapper {
+  z-index: 999;
+  pointer-events: none;
+
+  &.v-enter-active {
+    transition: opacity 0.2s var(--ease-2);
+  }
+
+  &.v-enter-from {
+    opacity: 0;
+  }
+}
+</style>

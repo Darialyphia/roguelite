@@ -13,6 +13,7 @@
     "format": "prettier --write src/"
   },
   "dependencies": {
+    "@floating-ui/vue": "^1.1.5",
     "@formkit/auto-animate": "^0.8.2",
     "@game/engine": "^1.0.0",
     "@game/shared": "^1.0.0",

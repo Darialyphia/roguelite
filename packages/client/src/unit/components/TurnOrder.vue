@@ -2,6 +2,13 @@
 import { useBattleUiStore } from '@/pages/battle/battle-ui.store';
 import { useBattleStore, useUserPlayer } from '@/pages/battle/battle.store';
 import UnitIcon from './UnitIcon.vue';
+import Card from '@/card/components/Card.vue';
+import {
+  HoverCardContent,
+  HoverCardPortal,
+  HoverCardRoot,
+  HoverCardTrigger
+} from 'radix-vue';
 
 const battleStore = useBattleStore();
 const ui = useBattleUiStore();
@@ -11,20 +18,35 @@ const userPlayer = useUserPlayer();
 <template>
   <section class="turn-order">
     <p>Turn Order</p>
-    <UnitIcon
+    <HoverCardRoot
       v-for="unit in battleStore.state.turnOrderUnits"
       :key="unit.id"
-      :unit="unit"
-      class="pointer-events-auto"
-      :class="{
-        highlighted: ui.highlightedUnit?.equals(unit),
-        ally: unit.getUnit().player.isAlly(userPlayer.getPlayer()),
-        enemy: unit.getUnit().player.isEnemy(userPlayer.getPlayer())
-      }"
-      @click="ui.selectUnit(unit)"
-      @mouseenter="ui.highlightUnit(unit)"
-      @mouseleave="ui.unhighlightUnit()"
-    />
+      :open-delay="400"
+      :close-delay="0"
+    >
+      <HoverCardTrigger>
+        <UnitIcon
+          :unit="unit"
+          class="pointer-events-auto"
+          :class="{
+            highlighted: ui.highlightedUnit?.equals(unit),
+            ally: unit.getUnit().player.isAlly(userPlayer.getPlayer()),
+            enemy: unit.getUnit().player.isEnemy(userPlayer.getPlayer())
+          }"
+          @click="ui.selectUnit(unit)"
+          @mouseenter="ui.highlightUnit(unit)"
+          @mouseleave="ui.unhighlightUnit()"
+        />
+      </HoverCardTrigger>
+
+      <HoverCardPortal>
+        <Transition>
+          <HoverCardContent side="bottom">
+            <Card :card="unit.card" />
+          </HoverCardContent>
+        </Transition>
+      </HoverCardPortal>
+    </HoverCardRoot>
   </section>
 </template>
 
@@ -87,5 +109,13 @@ const userPlayer = useUserPlayer();
       border-radius: var(--radius-round);
     }
   }
+}
+
+.v-enter-active {
+  transition: opacity 0.3s var(--ease-2);
+}
+
+.v-enter-from {
+  opacity: 0;
 }
 </style>

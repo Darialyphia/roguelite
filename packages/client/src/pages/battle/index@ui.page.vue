@@ -152,13 +152,7 @@ start();
     </header>
 
     <BattleLog class="pointer-events-auto" />
-    <Transition>
-      <UnitStats
-        :unit="uiStore.selectedUnit"
-        class="selected-unit-stats pointer-events-auto"
-        v-if="uiStore.selectedUnit"
-      />
-    </Transition>
+
     <div class="bottom-row">
       <PlayerBattleInfos :player="userPlayer" class="player-battle-infos" />
       <Hand class="hand" />

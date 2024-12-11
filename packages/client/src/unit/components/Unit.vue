@@ -10,10 +10,9 @@ import { whenever } from '@vueuse/core';
 import { useIsoCamera } from '@/iso/composables/useIsoCamera';
 import { useIsoPoint } from '@/iso/composables/useIsoPoint';
 import { useBattleEvent } from '@/pages/battle/battle.store';
-import { PTransition } from 'vue3-pixi';
+import { External, PTransition } from 'vue3-pixi';
 import type { Container } from 'pixi.js';
 import AlphaTransition from '@/ui/components/AlphaTransition.vue';
-import ActiveUnitIndicator from './ActiveUnitIndicator.vue';
 import { waitFor } from '@game/shared';
 
 const { unit } = defineProps<{ unit: UnitViewModel }>();
