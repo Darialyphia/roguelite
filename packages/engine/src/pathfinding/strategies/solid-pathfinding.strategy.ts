@@ -37,8 +37,7 @@ export class SolidBodyPathfindingStrategy implements PathfindingStrategy {
   getEdge(posOrKey: Point3D | string, direction: Direction): Cell | null {
     let from: Point3D;
     if (isString(posOrKey)) {
-      assertSerializedcoords(posOrKey);
-      from = Vec3.fromPoint3D(cellIdToPoint(posOrKey));
+      from = Vec3.fromPoint3D(cellIdToPoint(posOrKey as SerializedCoords));
     } else {
       from = Vec3.fromPoint3D(posOrKey);
     }

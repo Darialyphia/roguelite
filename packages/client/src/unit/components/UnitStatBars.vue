@@ -99,7 +99,7 @@ const ui = useBattleUiStore();
     event-mode="none"
     playing
     loop
-    :y="-55"
+    :y="-45"
   >
     <pixi-graphics
       :x="-sheet.meta.size.w / 2"

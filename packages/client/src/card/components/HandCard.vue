@@ -94,7 +94,7 @@ li {
     filter 0.2s var(--ease-out-2),
     transform 0.15s var(--ease-in-4),
     z-index 0.15s var(--ease-in-4);
-  transform: translateY(243px);
+  transform: translateY(272px);
   filter: var(--disabled-filter) drop-shadow(15px 0 2px hsl(0 0 0 /0.5));
 }
 

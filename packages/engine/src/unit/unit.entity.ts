@@ -344,7 +344,7 @@ export class Unit extends Entity {
     const targets = new PointAOEShape(this.game, target).getUnits();
 
     const damage = new Damage({
-      baseAmount: config.ATTACK_BASE_DAMAGE,
+      baseAmount: 0,
       source: this.card,
       scalings: [new CombatScalingStrategy()],
       mitigation: new NoMitigationStrategy()

@@ -460,6 +460,20 @@
         },
         {
           "alias": [
+            "avatar-frame.png"
+          ],
+          "src": [
+            "/assets/ui/avatar-frame.png"
+          ],
+          "foo": "bar",
+          "data": {
+            "tags": {
+              "m": true
+            }
+          }
+        },
+        {
+          "alias": [
             "card-back.png"
           ],
           "src": [
@@ -1028,6 +1042,20 @@
           ],
           "src": [
             "/assets/ui/vp-empty.png"
+          ],
+          "foo": "bar",
+          "data": {
+            "tags": {
+              "m": true
+            }
+          }
+        },
+        {
+          "alias": [
+            "vp-large.png"
+          ],
+          "src": [
+            "/assets/ui/vp-large.png"
           ],
           "foo": "bar",
           "data": {

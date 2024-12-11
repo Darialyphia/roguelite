@@ -21,10 +21,14 @@ const isWithinCardRange = computed(() => {
   return ui.selectedCard.isWithinRange(cell, ui.cardTargets.length);
 });
 
+const isActive = computed(() => {
+  if (!cell.unit) return false;
+  return activeUnit.value?.equals(cell.unit);
+});
+
 const canTarget = computed(() => {
   if (!ui.selectedCard) return;
-
-  return ui.isTargetValid(cell);
+  if (ui.hoveredCell?.equals(cell.getCell())) return ui.isTargetValid(cell);
 });
 
 const canMove = computed(() => {
@@ -34,6 +38,7 @@ const canMove = computed(() => {
 });
 
 const canAttack = computed(() => {
+  if (ui.mode === UI_MODES.PLAY_CARD) return false;
   return (
     ui.mode === UI_MODES.BASIC &&
     isDefined(cell.getCell().unit) &&
@@ -70,14 +75,17 @@ const tag = computed(() => {
     return null;
   }
 
-  if (canAttack.value || isInCardAoe.value) {
-    return 'danger';
+  if (isActive.value) {
+    return 'active';
   }
   if (canTarget.value) {
-    return 'targeting-valid';
+    return 'targeting';
   }
   if (isWithinCardRange.value) {
-    return 'targeting';
+    return 'targeting-valid';
+  }
+  if (canAttack.value || isInCardAoe.value) {
+    return 'danger';
   }
   if (isOnPath.value) {
     return 'movement-path';

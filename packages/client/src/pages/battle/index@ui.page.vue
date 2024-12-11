@@ -9,11 +9,11 @@ import {
 } from './battle.store';
 import { ClientSession, ServerSession } from '@game/engine';
 import type { GameOptions } from '@game/engine/src/game/game';
-import ActionWheel from '@/player/ActionWheel.vue';
+import ActionWheel from '@/player/components/ActionWheel.vue';
 import Hand from '@/card/components/Hand.vue';
 import UnitStats from '@/unit/components/UnitStats.vue';
 import PlayedCard from '@/card/components/PlayedCard.vue';
-import BattleLog from '@/player/BattleLog.vue';
+import BattleLog from '@/player/components/BattleLog.vue';
 import { AI } from '@game/engine/src/ai/ai';
 import type { EntityId } from '@game/engine/src/entity';
 import { waitFor } from '@game/shared';
@@ -21,7 +21,7 @@ import type { SerializedInput } from '@game/engine/src/input/input-system';
 import { until } from '@vueuse/core';
 import { useBattleUiStore } from './battle-ui.store';
 import MulliganOverlay from '@/card/components/MulliganOverlay.vue';
-import PlayerBattleInfos from '@/player/PlayerBattleInfos.vue';
+import PlayerBattleInfos from '@/player/components/PlayerBattleInfos.vue';
 import { makePlayerViewModel } from '@/player/player.model';
 
 definePage({
@@ -141,7 +141,11 @@ start();
       </ul>
     </nav>
 
-    <PlayerBattleInfos :player="opponent" class="opponent-battle-infos" />
+    <PlayerBattleInfos
+      :player="opponent"
+      class="opponent-battle-infos"
+      inverted
+    />
 
     <BattleLog class="pointer-events-auto" />
     <Transition>
@@ -214,13 +218,13 @@ start();
   align-self: end;
   justify-self: start;
   margin-block-end: var(--size-6);
-  margin-inline-start: var(--size-9);
+  margin-inline-start: var(--size-6);
 }
 
 .opponent-battle-infos {
   grid-row: 1;
   justify-self: end;
-  margin-block-start: var(--size-8);
+  margin-block-start: var(--size-3);
   margin-inline-end: var(--size-6);
 }
 </style>

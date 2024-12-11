@@ -86,7 +86,6 @@ const spawnAnimation = (container: Container) => {
     </PTransition>
     <UnitVFX :unit="unit" />
     <template v-if="isSpawnAnimationDone">
-      <ActiveUnitIndicator :unit="unit" />
       <AlphaTransition :duration="{ enter: 200, leave: 200 }">
         <UnitStatBars :unit="unit" />
       </AlphaTransition>

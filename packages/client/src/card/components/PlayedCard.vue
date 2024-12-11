@@ -47,6 +47,7 @@ useBattleEvent('unit.before_play_card', async event => {
   transform-style: preserve-3d;
   perspective: 500px;
   perspective-origin: center;
+  padding-bottom: 10rem;
 
   > * {
     grid-row: 1;
