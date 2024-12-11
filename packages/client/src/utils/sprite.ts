@@ -1,3 +1,4 @@
+import { deg2Rad } from '@game/shared';
 import { type FrameObject, type Spritesheet, Texture } from 'pixi.js';
 
 export const hasAnimation = (spritesheet: Spritesheet, name: string) => {
@@ -54,6 +55,7 @@ export function radialGradient(
 
   ctx.fillStyle = grd;
   ctx.fillRect(0, 0, width, height);
+
   return Texture.from(c);
 }
 

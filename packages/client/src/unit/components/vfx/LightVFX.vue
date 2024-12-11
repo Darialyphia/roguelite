@@ -22,7 +22,7 @@ const firstPass = ref<PointLightConfig>({
   position: { x: 0, y: 0 },
   radius: 120,
   colorStops: [
-    [0, 'hsla(60, 100%, 60%, 50%)'],
+    [0, 'hsla(60, 100%, 60%, 0%)'],
     [1, 'rgba(0,0,0,0)']
   ]
 });
@@ -41,8 +41,8 @@ const secondPass = ref<PointLightConfig>({
   position: { x: 0, y: 0 },
   radius: 100,
   colorStops: [
-    [0, 'hsla(250, 65%, 75%, 50%)'],
-    [0.25, 'hsla(60, 65%, 75%, 50%)'],
+    [0, 'hsla(250, 65%, 75%, 30%)'],
+    [0.25, 'hsla(60, 65%, 75%, 30%)'],
     [1, 'rgba(0,0,0,0)']
   ]
 });

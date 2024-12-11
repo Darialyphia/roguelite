@@ -16,7 +16,7 @@ export const testMap1v1: GameMap = {
             offset: { x: 0, y: 0 },
             radius: 200,
             colorStops: [
-              [0, '#FF000088'],
+              [0, '#FF000066'],
               [1, '#00000000']
             ]
           }
@@ -35,7 +35,7 @@ export const testMap1v1: GameMap = {
             offset: { x: 0, y: 0 },
             radius: 200,
             colorStops: [
-              [0, '#FFFF0088'],
+              [0, '#FFFF0066'],
               [1, '#00000000']
             ]
           }
@@ -82,7 +82,7 @@ export const testMap1v1: GameMap = {
             offset: { x: 0, y: 0 },
             radius: 200,
             colorStops: [
-              [0, '#FF00FF88'],
+              [0, '#FF00FF66'],
               [1, '#00000000']
             ]
           }
@@ -101,7 +101,7 @@ export const testMap1v1: GameMap = {
             offset: { x: 0, y: 0 },
             radius: 200,
             colorStops: [
-              [0, '#00FFFF88'],
+              [0, '#00FFFF66'],
               [1, '#00000000']
             ]
           }
