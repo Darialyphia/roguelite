@@ -11,6 +11,6 @@ export class CombatScalingStrategy implements DamageScalingStrategy {
       source instanceof UnitCard || source instanceof GeneralCard,
       'CombatScalingStrategy can only be used with unit cards'
     );
-    return baseAmount + source.unit.getDealtDamage(baseAmount, target);
+    return source.unit.getDealtDamage(baseAmount, target);
   }
 }

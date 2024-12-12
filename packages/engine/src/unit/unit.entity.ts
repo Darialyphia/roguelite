@@ -9,19 +9,18 @@ import { TypedEventEmitter } from '../utils/typed-emitter';
 import { HealthComponent } from './components/health.component';
 import { MOVE_EVENTS, MovementComponent } from './components/movement.component';
 import type { Player } from '../player/player.entity';
-import { PointAOEShape } from '../targeting/aoe-shapes';
+import { PointAOEShape, type AOEShape } from '../targeting/aoe-shapes';
 import { Damage } from '../combat/damage/damage';
 import { config } from '../config';
 import { UnitModifierManager } from './components/modifier-manager.component';
 import type { UnitModifier } from './unit-modifier.entity';
 import type { TargetingStrategy } from '../targeting/targeting-strategy';
 import type { UnitCard } from '../card/unit-card.entity';
-import { NoMitigationStrategy } from '../combat/damage/mitigation/no-mitigation.strategy';
-import { CombatScalingStrategy } from '../combat/damage/scaling/combat-scaling.strategy';
 import type { CardManagerComponent } from '../card/card-manager.component';
 import { CARD_KINDS } from '../card/card-enums';
 import type { GeneralCard } from '../card/general-card.entity';
 import { UNIT_EVENTS } from './unit-enums';
+import { COMBAT_EVENTS, CombatComponent } from '../combat/combat.component';
 
 export type UnitOptions = {
   id: string;
@@ -67,7 +66,7 @@ export class Unit extends Entity {
 
   readonly movement: MovementComponent;
 
-  private attacksPerformedThisTurn = 0;
+  private readonly combat: CombatComponent;
 
   private interceptors = {
     canMove: new Interceptable<boolean>(),
@@ -78,7 +77,8 @@ export class Unit extends Entity {
 
     speed: new Interceptable<number>(),
     attack: new Interceptable<number>(),
-    attackPattern: new Interceptable<TargetingStrategy>(),
+    attackTargetingPattern: new Interceptable<TargetingStrategy>(),
+    attackAOEShape: new Interceptable<AOEShape>(),
 
     damageDealt: new Interceptable<number, { attacker: Unit; defender: Unit }>(),
     damageReceived: new Interceptable<number, { attacker: Unit; defender: Unit }>()
@@ -98,7 +98,7 @@ export class Unit extends Entity {
       position: options.position,
       pathfindingStrategy: new SolidBodyPathfindingStrategy(this.game)
     });
-
+    this.combat = new CombatComponent(this.game, this);
     this.game.on('turn.turn_start', this.onGameTurnStart.bind(this));
     this.forwardEvents();
   }
@@ -175,16 +175,14 @@ export class Unit extends Entity {
     return this.card.reward;
   }
 
-  get nextAttackApCost() {
-    return (
-      config.AP_COST_PER_ATTACK +
-      config.AP_INCREASE_PER_ATTACK * this.attacksPerformedThisTurn
-    );
+  get attackTargettingPattern() {
+    return this.interceptors.attackTargetingPattern.getValue(this.card.attackPattern, {});
   }
 
-  get attackPattern() {
-    return this.interceptors.attackPattern.getValue(this.card.attackPattern, {});
+  get attackAOEShape(): AOEShape {
+    return this.interceptors.attackAOEShape.getValue(new PointAOEShape(this.game), {});
   }
+
   get canMove(): boolean {
     return this.interceptors.canMove.getValue(
       this.ap.current >= config.AP_COST_PER_MOVEMENT,
@@ -194,7 +192,7 @@ export class Unit extends Entity {
 
   get canAttack(): boolean {
     return this.interceptors.canAttack.getValue(
-      this.ap.current >= this.nextAttackApCost,
+      this.ap.current >= this.combat.nextAttackApCost,
       {}
     );
   }
@@ -245,6 +243,24 @@ export class Unit extends Entity {
         cost: this.game.config.AP_COST_PER_MOVEMENT
       });
     });
+    this.combat.on(COMBAT_EVENTS.BEFORE_ATTACK, e =>
+      this.emitter.emit(UNIT_EVENTS.BEFORE_ATTACK, e)
+    );
+    this.combat.on(COMBAT_EVENTS.AFTER_ATTACK, e =>
+      this.emitter.emit(UNIT_EVENTS.AFTER_ATTACK, e)
+    );
+    this.combat.on(COMBAT_EVENTS.BEFORE_DEAL_DAMAGE, e =>
+      this.emitter.emit(UNIT_EVENTS.BEFORE_DEAL_DAMAGE, e)
+    );
+    this.combat.on(COMBAT_EVENTS.AFTER_DEAL_DAMAGE, e =>
+      this.emitter.emit(UNIT_EVENTS.AFTER_DEAL_DAMAGE, e)
+    );
+    this.combat.on(COMBAT_EVENTS.BEFORE_RECEIVE_DAMAGE, e =>
+      this.emitter.emit(UNIT_EVENTS.BEFORE_RECEIVE_DAMAGE, e)
+    );
+    this.combat.on(COMBAT_EVENTS.AFTER_RECEIVE_DAMAGE, e =>
+      this.emitter.emit(UNIT_EVENTS.AFTER_RECEIVE_DAMAGE, e)
+    );
   }
 
   onAddedToBoard() {
@@ -302,28 +318,16 @@ export class Unit extends Entity {
     });
   }
 
-  dealDamage(targets: Unit[], damage: Damage) {
-    this.emitter.emit(UNIT_EVENTS.BEFORE_DEAL_DAMAGE, { targets, damage });
-    targets.forEach(target => {
-      target.takeDamage(this.card, damage);
-    });
-    this.emitter.emit(UNIT_EVENTS.AFTER_DEAL_DAMAGE, { targets, damage });
+  get dealDamage() {
+    return this.combat.dealDamage.bind(this.combat);
   }
 
-  takeDamage(from: Card, damage: Damage) {
-    this.emitter.emit(UNIT_EVENTS.BEFORE_RECEIVE_DAMAGE, {
-      from,
-      damage
-    });
-    this.hp.remove(damage.getMitigatedAmount(this));
-    this.emitter.emit(UNIT_EVENTS.AFTER_RECEIVE_DAMAGE, {
-      from,
-      damage
-    });
+  get takeDamage() {
+    return this.combat.takeDamage.bind(this.combat);
+  }
 
-    if (this.hp.isDead) {
-      this.destroy(from);
-    }
+  get attack() {
+    return this.combat.attack.bind(this.combat);
   }
 
   canAttackAt(point: Point3D) {
@@ -333,30 +337,7 @@ export class Unit extends Entity {
     const target = this.game.unitSystem.getUnitAt(point);
     if (target && !target.canBeAttacked) return false;
 
-    return this.attackPattern.canTargetAt(point);
-  }
-
-  attack(target: Point3D) {
-    this.emitter.emit(UNIT_EVENTS.BEFORE_ATTACK, {
-      target,
-      cost: this.game.config.AP_COST_PER_ATTACK
-    });
-    this.ap.remove(this.nextAttackApCost);
-    const targets = new PointAOEShape(this.game, target).getUnits();
-
-    const damage = new Damage({
-      baseAmount: 0,
-      source: this.card,
-      scalings: [new CombatScalingStrategy()],
-      mitigation: new NoMitigationStrategy()
-    });
-
-    this.dealDamage(targets, damage);
-    this.attacksPerformedThisTurn++;
-    this.emitter.emit(UNIT_EVENTS.AFTER_ATTACK, {
-      target,
-      cost: this.game.config.AP_COST_PER_ATTACK
-    });
+    return this.attackTargettingPattern.canTargetAt(point);
   }
 
   destroy(source: Card) {
@@ -373,7 +354,7 @@ export class Unit extends Entity {
 
   onGameTurnStart() {
     this.ap.refill();
-    this.attacksPerformedThisTurn = 0;
+    this.combat.resetAttackCount();
   }
 
   startTurn() {

@@ -1,8 +1,9 @@
 import { Damage } from '../../../combat/damage/damage';
 import { NoMitigationStrategy } from '../../../combat/damage/mitigation/no-mitigation.strategy';
 import { NoScalingStrategy } from '../../../combat/damage/scaling/no-scaling.strategy';
-import { PointAOEShape } from '../../../targeting/aoe-shapes';
+import { PointAOEShape, RingAOEShape } from '../../../targeting/aoe-shapes';
 import { SelfTargetingStrategy } from '../../../targeting/self-targeting.strategy';
+import { TARGETING_TYPE } from '../../../targeting/targeting-strategy';
 import { JOBS } from '../../../utils/job';
 import { RUNES } from '../../../utils/rune';
 import { type SpellCardBlueprint } from '../../card-blueprint';
@@ -17,7 +18,7 @@ export const testSpell: SpellCardBlueprint = {
   aiHints: {},
   cost: {
     ap: 1,
-    runes: [RUNES.COLORLESS, RUNES.COLORLESS],
+    runes: [RUNES.RED, RUNES.COLORLESS],
     job: [JOBS.FIGHTER]
   },
   minTargets: 1,
@@ -29,7 +30,10 @@ export const testSpell: SpellCardBlueprint = {
     }
   ],
   getAoe(game, card, points) {
-    return new PointAOEShape(game, points[0]);
+    return new RingAOEShape(game, game.turnSystem.activeUnit, points[0], {
+      allow3D: true,
+      targetingType: TARGETING_TYPE.ENEMY
+    });
   },
   vfx: {
     play(game, card) {
@@ -37,6 +41,7 @@ export const testSpell: SpellCardBlueprint = {
     }
   },
   onPlay(game, card, cellTargets, unitTargets) {
+    console.log(unitTargets);
     unitTargets.forEach(target => {
       target.takeDamage(
         card,
@@ -44,7 +49,7 @@ export const testSpell: SpellCardBlueprint = {
           baseAmount: 2,
           source: card,
           scalings: [new NoScalingStrategy()],
-          mitigation: new NoMitigationStrategy()
+          mitigations: [new NoMitigationStrategy()]
         })
       );
     });

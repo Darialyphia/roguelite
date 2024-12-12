@@ -59,7 +59,12 @@ export class UnitCard extends Card<UnitCardBlueprint> {
     this.player.spendGold(this.blueprint.cost.gold);
 
     const aoeShape = this.blueprint.getAoe(this.game, this, targets);
-    this.blueprint.onPlay(this.game, this, aoeShape.getCells(), aoeShape.getUnits());
+    this.blueprint.onPlay(
+      this.game,
+      this,
+      aoeShape.getCells(targets),
+      aoeShape.getUnits(targets)
+    );
 
     this.emitter.emit(CARD_EVENTS.AFTER_PLAY, {
       targets,

@@ -50,9 +50,10 @@ const isOnTurnOrder = computed(() => {
 const isInCardAoe = computed(() => {
   if (!ui.selectedCard) return false;
   if (!ui.hoveredCell) return false;
-  const aoe = ui.selectedCard.getAoe([...ui.cardTargets, ui.hoveredCell]);
+  const targets = [...ui.cardTargets, ui.hoveredCell];
+  const aoe = ui.selectedCard.getAoe(targets);
   if (!aoe) return false;
-  return aoe?.getUnits().some(u => u.equals(unit.getUnit()));
+  return aoe?.getUnits(targets).some(u => u.equals(unit.getUnit()));
 });
 
 const filters = computed(() => {

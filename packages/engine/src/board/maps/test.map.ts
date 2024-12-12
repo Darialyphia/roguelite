@@ -115,7 +115,7 @@ export const testMap1v1: GameMap = {
       new Vec3(0,2,0)
     ], 
     [
-      new Vec3(8,2,0)
+      new Vec3(1,2,0)
     ]
   ]
 };

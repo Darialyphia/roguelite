@@ -7,7 +7,7 @@ export type DamageOptions = {
   source: Card;
   baseAmount: number;
   scalings: DamageScalingStrategy[];
-  mitigation: DamageMitigationStrategy;
+  mitigations: DamageMitigationStrategy[];
 };
 
 export class Damage {
@@ -17,31 +17,26 @@ export class Damage {
 
   private scalings: DamageScalingStrategy[];
 
-  private mitigation: DamageMitigationStrategy;
+  private mitigations: DamageMitigationStrategy[];
 
   constructor(options: DamageOptions) {
     this.source = options.source;
     this.baseAmount = options.baseAmount;
     this.scalings = options.scalings;
-    this.mitigation = options.mitigation;
+    this.mitigations = options.mitigations;
   }
 
   getScaledAmount(target: Unit) {
-    return (
-      this.baseAmount +
-      this.scalings.reduce(
-        (acc, scaling) =>
-          acc + scaling.getDealtDamage(this.baseAmount, this.source, target),
-        0
-      )
+    return this.scalings.reduce(
+      (acc, scaling) => scaling.getDealtDamage(acc, this.source, target),
+      this.baseAmount
     );
   }
 
   getMitigatedAmount(target: Unit) {
-    return this.mitigation.getMitigatedDamage(
-      this.getScaledAmount(target),
-      target,
-      this.source
+    return this.mitigations.reduce(
+      (acc, scaling) => scaling.getMitigatedDamage(acc, target, this.source),
+      this.getScaledAmount(target)
     );
   }
 }

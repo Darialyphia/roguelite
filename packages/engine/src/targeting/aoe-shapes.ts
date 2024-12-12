@@ -6,8 +6,8 @@ import { match } from 'ts-pattern';
 import type { Unit } from '../unit/unit.entity';
 
 export type AOEShape = {
-  getCells(): Cell[];
-  getUnits(): Unit[];
+  getCells(points: Point3D[]): Cell[];
+  getUnits(points: Point3D[]): Unit[];
 };
 
 export class NoAOEShape implements AOEShape {
@@ -21,17 +21,14 @@ export class NoAOEShape implements AOEShape {
 }
 
 export class PointAOEShape implements AOEShape {
-  constructor(
-    private game: Game,
-    private point: Point3D
-  ) {}
+  constructor(private game: Game) {}
 
-  getCells() {
-    return [this.game.boardSystem.getCellAt(this.point)].filter(isDefined);
+  getCells(points: Point3D[]) {
+    return [this.game.boardSystem.getCellAt(points[0])].filter(isDefined);
   }
 
-  getUnits(): Unit[] {
-    return this.getCells()
+  getUnits(points: Point3D[]): Unit[] {
+    return this.getCells(points)
       .map(cell => cell.unit)
       .filter(isDefined);
   }
@@ -45,18 +42,17 @@ export class RingAOEShape implements AOEShape {
   constructor(
     private game: Game,
     private unit: Unit,
-    private point: Point3D,
     private options: RingAOEShapeOptions
   ) {}
 
-  getCells() {
+  getCells(points: Point3D[]) {
     return this.options.allow3D
-      ? this.game.boardSystem.getNeighbors3D(this.point)
-      : this.game.boardSystem.getNeighbors(this.point);
+      ? this.game.boardSystem.getNeighbors3D(points[0])
+      : this.game.boardSystem.getNeighbors(points[0]);
   }
 
-  getUnits() {
-    return this.getCells()
+  getUnits(points: Point3D[]) {
+    return this.getCells(points)
       .map(cell => cell.unit)
       .filter((unit): unit is Unit => {
         if (!isDefined(unit)) return false;

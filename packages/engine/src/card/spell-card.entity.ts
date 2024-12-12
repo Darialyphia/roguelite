@@ -24,7 +24,12 @@ export class SpellCard extends Card<SpellCardBlueprint> {
     });
     this.game.turnSystem.activeUnit.ap.remove(this.blueprint.cost.ap);
     const aoeShape = this.blueprint.getAoe(this.game, this, targets);
-    this.blueprint.onPlay(this.game, this, aoeShape.getCells(), aoeShape.getUnits());
+    this.blueprint.onPlay(
+      this.game,
+      this,
+      aoeShape.getCells(targets),
+      aoeShape.getUnits(targets)
+    );
     this.emitter.emit(CARD_EVENTS.AFTER_PLAY, {
       targets,
       vfx: this.blueprint.vfx.play(this.game, this)
