@@ -1,6 +1,10 @@
 <script setup lang="ts">
 import { useBattleUiStore } from '@/pages/battle/battle-ui.store';
-import { useBattleStore, useUserPlayer } from '@/pages/battle/battle.store';
+import {
+  useBattleStore,
+  useGameClientState,
+  useUserPlayer
+} from '@/pages/battle/battle.store';
 import UnitIcon from './UnitIcon.vue';
 import Card from '@/card/components/Card.vue';
 import {
@@ -13,11 +17,15 @@ import {
 const battleStore = useBattleStore();
 const ui = useBattleUiStore();
 const userPlayer = useUserPlayer();
+const state = useGameClientState();
 </script>
 
 <template>
   <section class="turn-order">
-    <p>Turn Order</p>
+    <div class="title">
+      <div>Turn</div>
+      <div class="turn" :data-text="state.turn">{{ state.turn }}</div>
+    </div>
     <HoverCardRoot
       v-for="unit in battleStore.state.turnOrderUnits"
       :key="unit.id"
@@ -56,13 +64,8 @@ const userPlayer = useUserPlayer();
   display: flex;
   gap: var(--size-2);
   align-items: flex-end;
-
-  > p {
-    align-self: center;
-    color: #ffdaad;
-    font-family: 'Silkscreen';
-    margin-inline-end: var(--size-2);
-  }
+  position: relative;
+  z-index: 0;
 
   & :is(.highlighted, .ally, .enemy) {
     outline: solid 1px var(--highlight-color);
@@ -90,6 +93,7 @@ const userPlayer = useUserPlayer();
       border-radius: var(--radius-round);
     }
   }
+
   .enemy {
     position: relative;
     &::after {
@@ -108,6 +112,37 @@ const userPlayer = useUserPlayer();
       box-shadow: 0 0 1.5em 3px hsl(0, 80%, 60%);
       border-radius: var(--radius-round);
     }
+  }
+}
+
+.title {
+  align-self: center;
+  color: #ffdaad;
+  font-family: 'Silkscreen';
+  margin-inline-end: var(--size-2);
+}
+
+.turn {
+  font-size: var(--font-size-6);
+  line-height: 1;
+  text-align: center;
+  position: relative;
+  place-self: center;
+  background: linear-gradient(
+    #fffe00,
+    #fffe00 calc(50% + 3px),
+    #feb900 calc(50% + 3px)
+  );
+  background-clip: text;
+  color: transparent;
+  position: relative;
+  &:after {
+    background: none;
+    content: attr(data-text);
+    position: absolute;
+    text-shadow: 0 3px #5d1529;
+    inset: 0;
+    z-index: -1;
   }
 }
 

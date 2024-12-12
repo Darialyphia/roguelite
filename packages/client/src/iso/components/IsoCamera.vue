@@ -51,7 +51,7 @@ until(camera.viewport)
       //   allowButtons: true
       // })
       .pinch({ noDrag: true })
-      .moveCenter(worldSize.value.width / 2, worldSize.value.height / 2);
+      .moveCenter(worldSize.value.width / 2, worldSize.value.height);
   });
 
 useEventListener('resize', () => {

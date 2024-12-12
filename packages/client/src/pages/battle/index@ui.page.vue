@@ -120,13 +120,13 @@ start();
 </script>
 
 <template>
-  <Fps />
+  <!-- <Fps /> -->
   <div class="layout">
     <MulliganOverlay />
     <PlayedCard />
 
     <nav class="ml-11 mt-4 absolute top-0 left-12">
-      <ul class="flex gap-2 pointer-events-auto">
+      <ul class="hidden gap-2 pointer-events-auto">
         <li>
           <button @click="() => console.log(serverSession)">
             Debug server session

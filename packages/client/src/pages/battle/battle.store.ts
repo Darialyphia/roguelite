@@ -56,13 +56,14 @@ export const useBattleStore = defineStore('battle', () => {
   const units = ref<UnitViewModel[]>([]);
   const turnOrderUnits = ref<UnitViewModel[]>([]);
   const activeUnit = ref<UnitViewModel>();
+  const turn = ref(0);
 
   const phase = ref<GamePhase>('mulligan');
 
   const syncState = () => {
     assert(isDefined(internal.session));
     const game = internal.session.game;
-
+    turn.value = game.turnSystem.turnCount;
     phase.value = game.phase;
     cells.value = game.boardSystem.cells.map(cell =>
       makeCellViewModel(game, cell)
@@ -154,7 +155,8 @@ export const useBattleStore = defineStore('battle', () => {
       units,
       userPlayer: computed(() => players.value.find(p => p.id === PLAYER_ID)!),
       activeUnit,
-      turnOrderUnits
+      turnOrderUnits,
+      turn
     },
 
     onVFX<T extends keyof VFXEventMap>(

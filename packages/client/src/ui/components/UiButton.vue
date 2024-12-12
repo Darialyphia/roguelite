@@ -109,8 +109,6 @@ const tag = computed(() => {
     );
     --_ui-button-disabled-bg: var(--ui-button-disabled-bg, var(--disabled));
 
-    cursor: pointer;
-
     display: flex;
     gap: var(--size-2);
     align-items: center;
