@@ -139,6 +139,7 @@ label:has(input:checked) {
   margin-block-start: var(--size-4);
   text-align: center;
   font-size: var(--font-size-4);
+  font-family: 'SilkScreen';
   text-shadow: black 0px 4px 1px;
 }
 </style>

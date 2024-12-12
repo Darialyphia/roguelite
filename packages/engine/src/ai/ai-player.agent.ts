@@ -1,4 +1,4 @@
-import type { Point3D } from '@game/shared';
+import { isDefined, type Point3D } from '@game/shared';
 import type { Game } from '../game/game';
 import type { Player } from '../player/player.entity';
 import { getHighestScoredAction, type AIAgent, type ScoredInput } from './agent';
@@ -9,6 +9,10 @@ import type { Card } from '../card/card.entity';
 import type { Cell } from '../board/cell';
 import type { AiHeuristics } from './ai-heuristics';
 import { GAME_PHASES } from '../game/game-phase.system';
+import { UnitCard } from '../card/unit-card.entity';
+import { SpellCard } from '../card/spell-card.entity';
+import { RUNES } from '../utils/rune';
+import { Unit } from '../unit/unit.entity';
 
 export class AIPlayerAgent implements AIAgent {
   private nextSimulationId = 0;
@@ -30,10 +34,16 @@ export class AIPlayerAgent implements AIAgent {
     const moveScores = this.computeMoveScores();
     const combatScores = this.computeCombatScores();
     const cardScores = this.computeCardScores();
+    const resourceScores = this.computeResourceActionScores();
 
     // console.log({ moveScores, combatScores, cardScores });
     return (
-      getHighestScoredAction([...moveScores, ...combatScores, ...cardScores])?.input ?? {
+      getHighestScoredAction([
+        ...moveScores,
+        ...combatScores,
+        ...cardScores,
+        ...resourceScores
+      ])?.input ?? {
         type: 'endTurn',
         payload: { playerId: this.player.id }
       }
@@ -59,6 +69,72 @@ export class AIPlayerAgent implements AIAgent {
       console.log(`[Simulation ${id}]: error`, err);
       return { input, score: Number.NEGATIVE_INFINITY };
     }
+  }
+
+  private computeResourceActionScores(): ScoredInput[] {
+    if (!this.player.canPerformResourceAction) {
+      return [];
+    }
+    const runeWeights = this.player.hand
+      .filter(card => card instanceof UnitCard || card instanceof SpellCard)
+      .filter(card => !this.player.hasUnlockedRunes(card.cost.runes))
+      .reduce(
+        (total, card) => {
+          const missing = this.player.getMissingRunes(card.cost.runes);
+          const missingCount = this.player.runes.length - card.cost.runes.length;
+
+          Object.entries(missing).forEach(([runeName, count]) => {
+            if (runeName === RUNES.COLORLESS.id) return total;
+            if (!isDefined(total[runeName])) {
+              total[runeName] = 0;
+            }
+            total[runeName] += count * (missingCount === 1 ? 4 : 1); // give more weight to cards that are 1 rune away from being playable
+          });
+
+          return total;
+        },
+        {} as Record<string, number>
+      );
+    let bestRune: string | undefined = undefined;
+    Object.entries(runeWeights).forEach(([key, weight]) => {
+      if (!bestRune) {
+        bestRune = key;
+      } else if (runeWeights[bestRune] < weight) {
+        bestRune = key;
+      }
+    });
+    if (bestRune) {
+      return [
+        {
+          input: {
+            type: 'runeResourceAction',
+            payload: { playerId: this.player.id, rune: bestRune }
+          },
+          score: Infinity
+        }
+      ];
+    }
+
+    const needGold = this.player.hand
+      .filter(card => card instanceof UnitCard)
+      .every(card => {
+        card.cost.gold > this.player.gold;
+      });
+    if (needGold) {
+      return [
+        {
+          input: { type: 'goldResourceAction', payload: { playerId: this.player.id } },
+          score: Infinity
+        }
+      ];
+    }
+
+    return [
+      {
+        input: { type: 'drawResourceAction', payload: { playerId: this.player.id } },
+        score: Infinity
+      }
+    ];
   }
 
   private computeMoveScores() {

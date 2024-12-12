@@ -138,6 +138,10 @@ export class Player extends Entity {
     return this.runeManager.hasUnlocked.bind(this.runeManager);
   }
 
+  get getMissingRunes() {
+    return this.runeManager.getMissing.bind(this.runeManager);
+  }
+
   get hand() {
     return [...this.cardManager.hand];
   }

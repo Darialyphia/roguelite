@@ -119,6 +119,7 @@ const tag = computed(() => {
     width: fit-content;
     padding: var(--size-2-em) var(--size-3-em);
 
+    font-family: 'SilkScreen';
     font-size: var(--_ui-button-size);
     font-weight: var(--_ui-button-weight);
     color: var(--_ui-button-color);

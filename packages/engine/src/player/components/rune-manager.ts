@@ -17,6 +17,21 @@ export class RuneManager {
     this._runes.splice(index, 1);
   }
 
+  getMissing(runes: Rune[]) {
+    const groups = this.countRunesById(runes);
+    const ownGroups = this.countRunesById(this._runes);
+
+    return Object.fromEntries(
+      Object.entries(groups).map(([key, count]) => {
+        if (key === RUNES.COLORLESS.id) {
+          return [key, 0];
+        } else {
+          return [key, Math.max(0, (ownGroups[key] || 0) - count)];
+        }
+      })
+    );
+  }
+
   hasUnlocked(runes: Rune[]) {
     const groups = this.countRunesById(runes);
     const ownGroups = this.countRunesById(this._runes);
@@ -25,7 +40,7 @@ export class RuneManager {
       runes.length <= this._runes.length &&
       Object.entries(groups).every(([key, count]) => {
         if (key === RUNES.COLORLESS.id) return true;
-        return count <= ownGroups[key];
+        return count <= ownGroups[key] || 0;
       })
     );
   }
