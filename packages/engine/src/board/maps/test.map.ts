@@ -4,8 +4,8 @@ import type { GameMap } from '../map';
 
 export const testMap1v1: GameMap = {
   id: 'testMap1v1',
-  width: 9,
-  height: 5,
+  width: 13,
+  height: 7,
   cells: [
     [
       [
@@ -14,18 +14,22 @@ export const testMap1v1: GameMap = {
           light: {
             blendMode: 1,
             offset: { x: 0, y: 0 },
-            radius: 200,
+            radius: 500,
             colorStops: [
-              [0, '#FF000066'],
+              [0, '#00FF0044'],
               [1, '#00000000']
             ]
           }
         },
         { terrain: TERRAINS.GROUND },
         { terrain: TERRAINS.GROUND },
+        { terrain: TERRAINS.GROUND },
+        { terrain: TERRAINS.GROUND },
         { terrain: TERRAINS.WATER },
         { terrain: TERRAINS.WATER },
         { terrain: TERRAINS.WATER },
+        { terrain: TERRAINS.GROUND },
+        { terrain: TERRAINS.GROUND },
         { terrain: TERRAINS.GROUND },
         { terrain: TERRAINS.GROUND },
         {
@@ -33,9 +37,9 @@ export const testMap1v1: GameMap = {
           light: {
             blendMode: 1,
             offset: { x: 0, y: 0 },
-            radius: 200,
+            radius: 500,
             colorStops: [
-              [0, '#FFFF0066'],
+              [0, '#FFFF0044'],
               [1, '#00000000']
             ]
           }
@@ -45,9 +49,13 @@ export const testMap1v1: GameMap = {
         { terrain: TERRAINS.GROUND },
         { terrain: TERRAINS.GROUND },
         { terrain: TERRAINS.GROUND },
+        { terrain: TERRAINS.GROUND },
+        { terrain: TERRAINS.GROUND },
         { terrain: TERRAINS.WATER },
         { terrain: TERRAINS.WATER },
         { terrain: TERRAINS.WATER },
+        { terrain: TERRAINS.GROUND },
+        { terrain: TERRAINS.GROUND },
         { terrain: TERRAINS.GROUND },
         { terrain: TERRAINS.GROUND },
         { terrain: TERRAINS.GROUND }
@@ -61,15 +69,53 @@ export const testMap1v1: GameMap = {
         { terrain: TERRAINS.GROUND },
         { terrain: TERRAINS.GROUND },
         { terrain: TERRAINS.GROUND },
+        { terrain: TERRAINS.GROUND },
+        { terrain: TERRAINS.GROUND },
+        { terrain: TERRAINS.GROUND },
+        { terrain: TERRAINS.GROUND },
         { terrain: TERRAINS.GROUND }
       ],
       [
         { terrain: TERRAINS.GROUND },
         { terrain: TERRAINS.GROUND },
         { terrain: TERRAINS.GROUND },
+        { terrain: TERRAINS.GROUND },
+        { terrain: TERRAINS.GROUND },
+        { terrain: TERRAINS.GROUND },
+        { terrain: TERRAINS.GROUND },
+        { terrain: TERRAINS.GROUND },
+        { terrain: TERRAINS.GROUND },
+        { terrain: TERRAINS.GROUND },
+        { terrain: TERRAINS.GROUND },
+        { terrain: TERRAINS.GROUND },
+        { terrain: TERRAINS.GROUND }
+      ],
+      [
+        { terrain: TERRAINS.GROUND },
+        { terrain: TERRAINS.GROUND },
+        { terrain: TERRAINS.GROUND },
+        { terrain: TERRAINS.GROUND },
+        { terrain: TERRAINS.GROUND },
+        { terrain: TERRAINS.GROUND },
+        { terrain: TERRAINS.GROUND },
+        { terrain: TERRAINS.GROUND },
+        { terrain: TERRAINS.GROUND },
+        { terrain: TERRAINS.GROUND },
+        { terrain: TERRAINS.GROUND },
+        { terrain: TERRAINS.GROUND },
+        { terrain: TERRAINS.GROUND }
+      ],
+      [
+        { terrain: TERRAINS.GROUND },
+        { terrain: TERRAINS.GROUND },
+        { terrain: TERRAINS.GROUND },
+        { terrain: TERRAINS.GROUND },
+        { terrain: TERRAINS.GROUND },
         { terrain: TERRAINS.WATER },
         { terrain: TERRAINS.WATER },
         { terrain: TERRAINS.WATER },
+        { terrain: TERRAINS.GROUND },
+        { terrain: TERRAINS.GROUND },
         { terrain: TERRAINS.GROUND },
         { terrain: TERRAINS.GROUND },
         { terrain: TERRAINS.GROUND }
@@ -80,18 +126,22 @@ export const testMap1v1: GameMap = {
           light: {
             blendMode: 1,
             offset: { x: 0, y: 0 },
-            radius: 200,
+            radius: 500,
             colorStops: [
-              [0, '#FF00FF66'],
+              [0, '#FF00FF44'],
               [1, '#00000000']
             ]
           }
         },
         { terrain: TERRAINS.GROUND },
         { terrain: TERRAINS.GROUND },
+        { terrain: TERRAINS.GROUND },
+        { terrain: TERRAINS.GROUND },
         { terrain: TERRAINS.WATER },
         { terrain: TERRAINS.WATER },
         { terrain: TERRAINS.WATER },
+        { terrain: TERRAINS.GROUND },
+        { terrain: TERRAINS.GROUND },
         { terrain: TERRAINS.GROUND },
         { terrain: TERRAINS.GROUND },
         {
@@ -99,9 +149,9 @@ export const testMap1v1: GameMap = {
           light: {
             blendMode: 1,
             offset: { x: 0, y: 0 },
-            radius: 200,
+            radius: 500,
             colorStops: [
-              [0, '#00FFFF66'],
+              [0, '#00FFFF44'],
               [1, '#00000000']
             ]
           }
@@ -112,10 +162,10 @@ export const testMap1v1: GameMap = {
   //prettier-ignore
   startPositions: [
     [
-      new Vec3(0,2,0)
+      new Vec3(0,3,0)
     ], 
     [
-      new Vec3(1,2,0)
+      new Vec3(12,3,0)
     ]
   ]
 };

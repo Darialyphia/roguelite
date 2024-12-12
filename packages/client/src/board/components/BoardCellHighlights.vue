@@ -1,6 +1,10 @@
 <script setup lang="ts">
 import { PTransition } from 'vue3-pixi';
-import { useActiveUnit, useBattleStore } from '@/pages/battle/battle.store';
+import {
+  useActiveUnit,
+  useBattleStore,
+  useUserPlayer
+} from '@/pages/battle/battle.store';
 import UiAnimatedSprite from '@/ui/components/UiAnimatedSprite.vue';
 import { GAME_PHASES } from '@game/engine/src/game/game-phase.system';
 import type { CellViewModel } from '../models/cell.model';
@@ -61,17 +65,22 @@ const isOnPath = computed(() => {
 const isInCardAoe = computed(() => {
   if (!ui.selectedCard) return false;
   if (!ui.hoveredCell) return false;
-  const aoe = ui.selectedCard.getAoe([...ui.cardTargets, ui.hoveredCell]);
+  const targets = [...ui.cardTargets, ui.hoveredCell];
+  const aoe = ui.selectedCard.getAoe(targets);
   if (!aoe) return false;
 
-  return aoe?.getCells().some(c => c.equals(cell.getCell()));
+  return aoe?.getCells(targets).some(c => c.equals(cell.getCell()));
 });
+const userPlayer = useUserPlayer();
 
 const tag = computed(() => {
   if (
     battleStore.state.phase !== GAME_PHASES.BATTLE ||
     battleStore.isPlayingFx
   ) {
+    return null;
+  }
+  if (!activeUnit.value?.player.equals(userPlayer.value)) {
     return null;
   }
 

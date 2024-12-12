@@ -18,7 +18,6 @@ const battleStore = useBattleStore();
 const settingsStore = useSettingsStore();
 const uiStore = useBattleUiStore();
 const isoWorld = useTemplateRef('isoWorld');
-providePointLights();
 
 useKeyboardControl(
   'keydown',

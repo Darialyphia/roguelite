@@ -5,6 +5,8 @@ import { useBattleStore } from '@/pages/battle/battle.store';
 import { until } from '@vueuse/core';
 import { useBattleUiStore } from '@/pages/battle/battle-ui.store';
 import AmbientLight from '@/board/components/AmbientLight.vue';
+import { useIsoCamera } from '@/iso/composables/useIsoCamera';
+import { providePointLights } from '@/vfx/usePointLight';
 
 const { worldSize } = defineProps<{
   worldSize: { width: number; height: number };
@@ -12,6 +14,8 @@ const { worldSize } = defineProps<{
 const battleStore = useBattleStore();
 const ui = useBattleUiStore();
 const readyCells = ref(0);
+const camera = useIsoCamera();
+providePointLights(camera);
 
 until(computed(() => readyCells.value === battleStore.state.cells.length))
   .toBeTruthy()

@@ -1,5 +1,7 @@
+import type { IsoCameraContext } from '@/iso/composables/useIsoCamera';
 import { useSafeInject } from '@/shared/composables/useSafeInject';
-import { dist, type Point } from '@game/shared';
+import { config } from '@/utils/config';
+import { dist, mapRange, type Point } from '@game/shared';
 import type { BLEND_MODES, DisplayObject } from 'pixi.js';
 import type { InjectionKey } from 'vue';
 import { onTick } from 'vue3-pixi';
@@ -20,14 +22,23 @@ type PointLightContext = {
 const POINT_LIGHTS_INJECTION_KEY = Symbol(
   'pointLights'
 ) as InjectionKey<PointLightContext>;
-export const providePointLights = () => {
+export const providePointLights = (camera: IsoCameraContext) => {
   const lights: PointLighInstance[] = [];
 
   const PROXIMITY_THRESHOLD = 300; // Example threshold distance
   const MIN_ALPHA = 0.5;
+  const MIN_ZOOM_LEVEL_FOR_ATTENUATION = 2;
+
+  // Dims the lights depending on zoom level and proximity of other lights
   onTick(() => {
+    const zoom = camera.viewport.value!.scaled;
+    const zoomDimmingFactor =
+      zoom < MIN_ZOOM_LEVEL_FOR_ATTENUATION
+        ? 0
+        : mapRange(1 - (config.MAX_ZOOM - zoom), [0, 1], [0, 0.15]);
+
     lights.forEach(light => {
-      light.root.alpha = 1;
+      light.root.alpha = 1 - zoomDimmingFactor;
     });
     for (let i = 0; i < lights.length; i++) {
       for (let j = 0; j < lights.length; j++) {
@@ -44,16 +55,24 @@ export const providePointLights = () => {
           lightB.root.getGlobalPosition()
         );
 
-        if (distance < PROXIMITY_THRESHOLD) {
-          // Adjust the alpha based on proximity
-          const dimmingFactor = Math.max(
-            MIN_ALPHA,
-            1 - (PROXIMITY_THRESHOLD - distance) / PROXIMITY_THRESHOLD
-          );
+        const dimmingFactor =
+          distance < PROXIMITY_THRESHOLD
+            ? (PROXIMITY_THRESHOLD - distance) / PROXIMITY_THRESHOLD
+            : 0;
+        console.log(dimmingFactor, lightA.root.alpha - dimmingFactor);
 
-          lightA.root.alpha = Math.min(lightA.root.alpha, dimmingFactor);
-          lightB.root.alpha = Math.min(lightB.root.alpha, dimmingFactor);
-        }
+        lightA.root.alpha = Math.max(
+          MIN_ALPHA,
+          lightA.root.alpha - dimmingFactor
+        );
+        lightB.root.alpha = Math.max(
+          MIN_ALPHA,
+          lightB.root.alpha - dimmingFactor
+        );
+        // lightA.root.alpha = Math.min(
+        //   MIN_ALPHA,
+        //   lightA.root.alpha - zoomDimmingFactor
+        // );
       }
     }
   });
