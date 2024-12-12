@@ -30,7 +30,7 @@ export const testUnit: UnitCardBlueprint = {
   targets: [
     {
       getTargeting(game, card) {
-        return new UnitSummonTargetingtrategy(card);
+        return new UnitSummonTargetingtrategy(game, card);
       }
     }
   ],
