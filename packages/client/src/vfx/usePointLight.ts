@@ -59,7 +59,6 @@ export const providePointLights = (camera: IsoCameraContext) => {
           distance < PROXIMITY_THRESHOLD
             ? (PROXIMITY_THRESHOLD - distance) / PROXIMITY_THRESHOLD
             : 0;
-        console.log(dimmingFactor, lightA.root.alpha - dimmingFactor);
 
         lightA.root.alpha = Math.max(
           MIN_ALPHA,

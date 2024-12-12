@@ -39,8 +39,8 @@ camera.viewport.value?.on('zoomed-end', () => {
 });
 const inAoeFilter = new ColorOverlayFilter(0xff0000, 0.3);
 const inactiveFilter = new AdjustmentFilter({
-  saturation: 0.1,
-  brightness: 0.75
+  saturation: 0.5,
+  brightness: 0.85
 });
 
 const isOnTurnOrder = computed(() => {

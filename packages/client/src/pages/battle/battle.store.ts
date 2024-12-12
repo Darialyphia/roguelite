@@ -26,7 +26,8 @@ import {
   isDefined,
   waitFor,
   type Override,
-  type PartialBy
+  type PartialBy,
+  type Point3D
 } from '@game/shared';
 import { defineStore } from 'pinia';
 import { AI } from '@game/engine/src/ai/ai';
@@ -36,6 +37,8 @@ import {
 } from '@game/engine/src/vfx/vfx-sequencer';
 import { TypedEventEmitter } from '@game/engine/src/utils/typed-emitter';
 import { CARD_KINDS } from '@game/engine/src/card/card-enums';
+import type { Unit } from '@game/engine/src/unit/unit.entity';
+import { UI_MODES, useBattleUiStore } from './battle-ui.store';
 
 const useInternalBattleStore = defineStore('battle-internal', () => {
   const session = shallowRef<ClientSession>();
@@ -237,4 +240,35 @@ export const useGameClientState = () => {
   const store = useBattleStore();
 
   return computed(() => store.state);
+};
+
+export const usePathHelpers = () => {
+  const ui = useBattleUiStore();
+  const game = useGame();
+  const state = useGameClientState();
+
+  return {
+    canMoveTo(unit: UnitViewModel, point: Point3D) {
+      return ui.mode === UI_MODES.BASIC && unit.getUnit().canMoveTo(point);
+    },
+
+    canAttackAt(unit: UnitViewModel, point: Point3D) {
+      if (ui.mode !== UI_MODES.BASIC) return false;
+      return state.value.cells.some(cell => {
+        if (!unit.getUnit().canAttackFromSimulatedPosition(point, cell)) {
+          return false;
+        }
+
+        const path = unit.getUnit().getPathTo(cell);
+        if (!path) {
+          return false;
+        }
+        const totalCost =
+          path.distance * unit.getUnit().apCostPerMovement +
+          unit.getUnit().apCostPerAttack;
+
+        return totalCost <= unit.currentAp;
+      });
+    }
+  };
 };

@@ -1,4 +1,5 @@
 import { makeCardViewModel, type CardViewModel } from '@/card/card.model';
+import type { UnitViewModel } from '@/unit/unit.model';
 import type { Game } from '@game/engine';
 import type { EntityId } from '@game/engine/src/entity';
 import type { Player } from '@game/engine/src/player/player.entity';
@@ -15,14 +16,16 @@ export type PlayerViewModel = {
   deckSize: number;
   gold: number;
   remainingCardsInDeck: number;
-  equals(unit: PlayerViewModel): boolean;
+  equals(player: PlayerViewModel): boolean;
+  isEnemy(unit: UnitViewModel): boolean;
+  isAlly(unit: UnitViewModel): boolean;
 };
 
 export const makePlayerViewModel = (
   game: Game,
   player: Player
 ): PlayerViewModel => {
-  return {
+  const vm: PlayerViewModel = {
     id: player.id,
     hand: player.hand.map(card => makeCardViewModel(game, card)),
     canPerformResourceAction: player.canPerformResourceAction,
@@ -37,6 +40,14 @@ export const makePlayerViewModel = (
     },
     equals(playerVm: PlayerViewModel) {
       return playerVm.getPlayer().equals(player);
+    },
+    isAlly(unit) {
+      return unit.player.equals(vm);
+    },
+    isEnemy(unit) {
+      return !unit.player.equals(vm);
     }
   };
+
+  return vm;
 };

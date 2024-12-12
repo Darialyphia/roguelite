@@ -32,7 +32,7 @@ export const testGeneral: GeneralCardBlueprint = {
     });
   },
   getAoe(game, card, points) {
-    return new PointAOEShape(game, points[0]);
+    return new PointAOEShape(game);
   },
   // eslint-disable-next-line @typescript-eslint/no-empty-function
   onPlay() {}

@@ -207,16 +207,16 @@ const isAction = (event: Pick<Token, 'kind'>[]) =>
 <style scoped lang="postcss">
 .combat-log {
   position: fixed;
-  top: 25%;
+  top: 20%;
 
   font-family: 'Press Start 2P';
-  color: #ffdaad;
+  color: #efef9f;
   user-select: none;
-  background-color: #311929;
+  background-color: #32021b;
   padding: var(--size-5);
-  border: solid 6px #ffdaad;
-  border-right-color: #b59a79;
-  border-bottom-color: #b59a79;
+  border: solid 6px #efef9f;
+  border-right-color: #d7ad42;
+  border-bottom-color: #d7ad42;
   text-shadow: 0 4px 0px #4e3327;
   box-shadow: 3px 3px 0 black;
 
@@ -285,12 +285,12 @@ li {
   place-content: center;
 
   font-family: 'Press Start 2P';
-  color: #ffdaad;
+  color: #efef9f;
   user-select: none;
-  background-color: #311929;
-  border: solid 6px #ffdaad;
-  border-right-color: #b59a79;
-  border-bottom-color: #b59a79;
+  background-color: #32021b;
+  border: solid 6px #efef9f;
+  border-right-color: #d7ad42;
+  border-bottom-color: #d7ad42;
   text-shadow: 0 4px 0px #4e3327;
   box-shadow: 3px 3px 0 black;
 

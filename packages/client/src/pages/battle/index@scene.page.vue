@@ -9,6 +9,8 @@ import { useSettingsStore } from '@/shared/composables/useSettings';
 import { UI_MODES, useBattleUiStore } from './battle-ui.store';
 import type { Layer } from '@pixi/layers';
 import { providePointLights } from '@/vfx/usePointLight';
+import { until } from '@vueuse/core';
+import { GAME_PHASES } from '@game/engine/src/game/game-phase.system';
 
 definePage({
   name: 'Battle'
@@ -59,6 +61,14 @@ useKeyboardControl(
     })
 );
 const ui = useBattleUiStore();
+watchEffect(() => {
+  // if (battleStore.state.phase === GAME_PHASES.BATTLE) {
+  //   isoWorld.value?.camera.viewport.value?.animate({
+  //     scale: config.MAX_ZOOM,
+  //     time: 1500
+  //   });
+  // }
+});
 </script>
 
 <template>

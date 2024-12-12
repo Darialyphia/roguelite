@@ -61,6 +61,14 @@ export class Cell extends Entity {
     return this.position.z;
   }
 
+  get neighbors(): Cell[] {
+    return this.game.boardSystem.getNeighbors(this);
+  }
+
+  get neighbors3D(): Cell[] {
+    return this.game.boardSystem.getNeighbors3D(this);
+  }
+
   get isWalkable() {
     const above = this.game.boardSystem.getCellAt({
       ...this.position,

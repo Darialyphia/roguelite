@@ -7,6 +7,7 @@ import { useBattleUiStore } from '@/pages/battle/battle-ui.store';
 import AmbientLight from '@/board/components/AmbientLight.vue';
 import { useIsoCamera } from '@/iso/composables/useIsoCamera';
 import { providePointLights } from '@/vfx/usePointLight';
+import DangerArrows from '@/unit/components/DangerArrows.vue';
 
 const { worldSize } = defineProps<{
   worldSize: { width: number; height: number };
@@ -36,5 +37,6 @@ until(computed(() => readyCells.value === battleStore.state.cells.length))
 
   <Unit v-for="unit in battleStore.state.units" :key="unit.id" :unit="unit" />
 
+  <DangerArrows />
   <AmbientLight :world-size="worldSize" />
 </template>

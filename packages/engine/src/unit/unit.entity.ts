@@ -375,6 +375,16 @@ export class Unit extends Entity {
     return this.attackTargettingPattern.canTargetAt(point);
   }
 
+  canAttackFromSimulatedPosition(point: Point3D, position: Point3D) {
+    const copy = this.position.clone();
+    this.movement.position.x = position.x;
+    this.movement.position.y = position.y;
+    this.movement.position.z = position.z;
+    const canAttack = this.attackTargettingPattern.isWithinRange(point);
+    this.movement.position = copy;
+    return canAttack;
+  }
+
   canCounterAttackAt(point: Point3D) {
     return this.combat.canCounterAttackAt(point);
   }

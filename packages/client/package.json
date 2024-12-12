@@ -19,6 +19,7 @@
     "@game/shared": "^1.0.0",
     "@pixi/filter-adjustment": "^5.1.1",
     "@pixi/filter-color-overlay": "^5.1.1",
+    "@pixi/filter-drop-shadow": "^5.2.0",
     "@pixi/filter-outline": "^5.2.0",
     "@pixi/layers": "^2.1.0",
     "@pixi/lights": "^4.1.0",

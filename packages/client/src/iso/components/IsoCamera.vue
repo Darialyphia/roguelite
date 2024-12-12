@@ -5,7 +5,10 @@ import { Container, Matrix } from 'pixi.js';
 import { until, useEventListener } from '@vueuse/core';
 import { useIsoCamera } from '../composables/useIsoCamera';
 import { config } from '@/utils/config';
-import { useGameClientState } from '@/pages/battle/battle.store';
+import {
+  useBattleStore,
+  useGameClientState
+} from '@/pages/battle/battle.store';
 import { useIsoWorld } from '../composables/useIsoWorld';
 
 const { width, height } = defineProps<{
@@ -51,7 +54,7 @@ until(camera.viewport)
       //   allowButtons: true
       // })
       .pinch({ noDrag: true })
-      .moveCenter(worldSize.value.width / 2, worldSize.value.height);
+      .moveCenter(worldSize.value.width / 2, worldSize.value.height - 500);
   });
 
 useEventListener('resize', () => {

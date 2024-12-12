@@ -40,7 +40,7 @@ export const testUnit: UnitCardBlueprint = {
     });
   },
   getAoe(game, card, points) {
-    return new PointAOEShape(game, points[0]);
+    return new PointAOEShape(game);
   },
   vfx: {
     play(game, card) {

@@ -23,14 +23,14 @@ export type MoveEventMap = {
 };
 
 export class MovementComponent {
-  private _position: Position;
+  position: Position;
 
   private pathfinding: PathfinderComponent;
 
   private emitter = new TypedEventEmitter<MoveEventMap>();
 
   constructor(options: MovementComponentOptions) {
-    this._position = Position.fromPoint3D(options.position);
+    this.position = Position.fromPoint3D(options.position);
     this.pathfinding = options.pathfinding;
   }
 
@@ -46,24 +46,20 @@ export class MovementComponent {
     return this.emitter.off.bind(this.emitter);
   }
 
-  get position() {
-    return this._position.clone();
-  }
-
   get x() {
-    return this._position.x;
+    return this.position.x;
   }
 
   get y() {
-    return this._position.y;
+    return this.position.y;
   }
 
   get z() {
-    return this._position.z;
+    return this.position.z;
   }
 
   isAt(point: Point3D) {
-    return this._position.equals(point);
+    return this.position.equals(point);
   }
 
   canMoveTo(point: Point3D, maxDistance: number) {
@@ -82,14 +78,14 @@ export class MovementComponent {
     if (!path) return;
 
     for (const point of path.path) {
-      const currentPosition = this._position;
+      const currentPosition = this.position;
       this.emitter.emit(MOVE_EVENTS.BEFORE_MOVE, {
-        position: this._position,
+        position: this.position,
         destination: Vec3.fromPoint3D(point)
       });
-      this._position = Position.fromPoint3D(point);
+      this.position = Position.fromPoint3D(point);
       this.emitter.emit(MOVE_EVENTS.AFTER_MOVE, {
-        position: this._position,
+        position: this.position,
         previousPosition: currentPosition
       });
     }

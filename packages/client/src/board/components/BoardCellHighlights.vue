@@ -3,6 +3,8 @@ import { PTransition } from 'vue3-pixi';
 import {
   useActiveUnit,
   useBattleStore,
+  useGameClientState,
+  usePathHelpers,
   useUserPlayer
 } from '@/pages/battle/battle.store';
 import UiAnimatedSprite from '@/ui/components/UiAnimatedSprite.vue';
@@ -18,6 +20,7 @@ const battleStore = useBattleStore();
 const activeUnit = useActiveUnit();
 const camera = useIsoCamera();
 const ui = useBattleUiStore();
+const state = useGameClientState();
 
 const isWithinCardRange = computed(() => {
   if (!ui.selectedCard) return;
@@ -73,6 +76,13 @@ const isInCardAoe = computed(() => {
 });
 const userPlayer = useUserPlayer();
 
+const pathHelpers = usePathHelpers();
+const isDangerZone = computed(() => {
+  if (!canMove.value) return false;
+  return state.value.units
+    .filter(u => userPlayer.value.isEnemy(u))
+    .some(enemy => pathHelpers.canAttackAt(enemy, cell));
+});
 const tag = computed(() => {
   if (
     battleStore.state.phase !== GAME_PHASES.BATTLE ||
@@ -101,7 +111,7 @@ const tag = computed(() => {
   }
 
   if (canMove.value) {
-    return 'movement';
+    return isDangerZone.value ? 'danger' : 'movement';
   }
 
   return null;

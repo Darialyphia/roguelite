@@ -97,11 +97,11 @@ const modifiers = computed(() => unit.modifierInfos.filter(isDefined));
   font-family: 'Press Start 2P';
   color: #ffdaad;
   user-select: none;
-  background-color: #311929aa;
+  background-color: #32021baa;
   padding: var(--size-5);
   border: solid 6px #ffdaad;
-  border-right-color: #b59a79;
-  border-bottom-color: #b59a79;
+  border-right-color: #d7ad42;
+  border-bottom-color: #d7ad42;
   text-shadow: 0 4px 0px #4e3327;
   box-shadow: 3px 3px 0 black;
 }

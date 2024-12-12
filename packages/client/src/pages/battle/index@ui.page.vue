@@ -120,7 +120,7 @@ start();
 </script>
 
 <template>
-  <!-- <Fps /> -->
+  <Fps />
   <div class="layout">
     <MulliganOverlay />
     <PlayedCard />
