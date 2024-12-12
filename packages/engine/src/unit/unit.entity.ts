@@ -21,6 +21,7 @@ import { CARD_KINDS } from '../card/card-enums';
 import type { GeneralCard } from '../card/general-card.entity';
 import { UNIT_EVENTS } from './unit-enums';
 import { COMBAT_EVENTS, CombatComponent } from '../combat/combat.component';
+import { PathfinderComponent } from '../pathfinding/pathfinder.component';
 
 export type UnitOptions = {
   id: string;
@@ -37,6 +38,8 @@ export type UnitEventMap = {
   [UNIT_EVENTS.AFTER_MOVE]: [{ position: Vec3; previousPosition: Vec3; cost: number }];
   [UNIT_EVENTS.BEFORE_ATTACK]: [{ target: Point3D; cost: number }];
   [UNIT_EVENTS.AFTER_ATTACK]: [{ target: Point3D; cost: number }];
+  [UNIT_EVENTS.BEFORE_COUNTERATTACK]: [{ target: Point3D; cost: number }];
+  [UNIT_EVENTS.AFTER_COUNTERATTACK]: [{ target: Point3D; cost: number }];
   [UNIT_EVENTS.BEFORE_DEAL_DAMAGE]: [{ targets: Unit[]; damage: Damage }];
   [UNIT_EVENTS.AFTER_DEAL_DAMAGE]: [{ targets: Unit[]; damage: Damage }];
   [UNIT_EVENTS.BEFORE_RECEIVE_DAMAGE]: [{ from: Card; damage: Damage }];
@@ -80,6 +83,10 @@ export class Unit extends Entity {
     attackTargetingPattern: new Interceptable<TargetingStrategy>(),
     attackAOEShape: new Interceptable<AOEShape>(),
 
+    apCostPerAttack: new Interceptable<number>(),
+    apCostPerMovement: new Interceptable<number>(),
+    maxCounterattacksPerTurn: new Interceptable<number>(),
+
     damageDealt: new Interceptable<number, { attacker: Unit; defender: Unit }>(),
     damageReceived: new Interceptable<number, { attacker: Unit; defender: Unit }>()
   };
@@ -94,9 +101,12 @@ export class Unit extends Entity {
     this.modifierManager = new UnitModifierManager(this);
     this.ap = new ActionPointComponent({ maxAp: config.UNIT_BASE_AP });
     this.hp = new HealthComponent({ maxHp: this.card.maxHp });
-    this.movement = new MovementComponent(this.game, {
+    this.movement = new MovementComponent({
       position: options.position,
-      pathfindingStrategy: new SolidBodyPathfindingStrategy(this.game)
+      pathfinding: new PathfinderComponent(
+        this.game,
+        new SolidBodyPathfindingStrategy(this.game)
+      )
     });
     this.combat = new CombatComponent(this.game, this);
     this.game.on('turn.turn_start', this.onGameTurnStart.bind(this));
@@ -175,6 +185,27 @@ export class Unit extends Entity {
     return this.card.reward;
   }
 
+  get apCostPerMovement() {
+    return this.interceptors.apCostPerMovement.getValue(
+      this.game.config.AP_COST_PER_MOVEMENT,
+      {}
+    );
+  }
+
+  get apCostPerAttack() {
+    return this.interceptors.apCostPerAttack.getValue(
+      this.game.config.AP_COST_PER_ATTACK,
+      {}
+    );
+  }
+
+  get maxCounterattacksPerTurn() {
+    return this.interceptors.maxCounterattacksPerTurn.getValue(
+      this.game.config.MAX_COUNTERATTACKS_PER_TURN,
+      {}
+    );
+  }
+
   get attackTargettingPattern() {
     return this.interceptors.attackTargetingPattern.getValue(this.card.attackPattern, {});
   }
@@ -185,7 +216,7 @@ export class Unit extends Entity {
 
   get canMove(): boolean {
     return this.interceptors.canMove.getValue(
-      this.ap.current >= config.AP_COST_PER_MOVEMENT,
+      this.ap.current >= this.apCostPerMovement,
       {}
     );
   }
@@ -234,19 +265,25 @@ export class Unit extends Entity {
     this.movement.on(MOVE_EVENTS.BEFORE_MOVE, e => {
       this.emitter.emit(UNIT_EVENTS.BEFORE_MOVE, {
         ...e,
-        cost: this.game.config.AP_COST_PER_MOVEMENT
+        cost: this.apCostPerMovement
       });
     });
     this.movement.on(MOVE_EVENTS.AFTER_MOVE, e => {
       this.emitter.emit(UNIT_EVENTS.AFTER_MOVE, {
         ...e,
-        cost: this.game.config.AP_COST_PER_MOVEMENT
+        cost: this.apCostPerMovement
       });
     });
     this.combat.on(COMBAT_EVENTS.BEFORE_ATTACK, e =>
       this.emitter.emit(UNIT_EVENTS.BEFORE_ATTACK, e)
     );
     this.combat.on(COMBAT_EVENTS.AFTER_ATTACK, e =>
+      this.emitter.emit(UNIT_EVENTS.AFTER_ATTACK, e)
+    );
+    this.combat.on(COMBAT_EVENTS.BEFORE_COUNTERATTACK, e =>
+      this.emitter.emit(UNIT_EVENTS.BEFORE_ATTACK, e)
+    );
+    this.combat.on(COMBAT_EVENTS.AFTER_COUNTERATTACK, e =>
       this.emitter.emit(UNIT_EVENTS.AFTER_ATTACK, e)
     );
     this.combat.on(COMBAT_EVENTS.BEFORE_DEAL_DAMAGE, e =>
@@ -283,10 +320,7 @@ export class Unit extends Entity {
   canMoveTo(point: Point3D) {
     if (!this.canMove) return false;
 
-    return this.movement.canMoveTo(
-      point,
-      this.ap.current / this.game.config.AP_COST_PER_MOVEMENT
-    );
+    return this.movement.canMoveTo(point, this.ap.current / this.apCostPerMovement);
   }
 
   canSpendAp(amount: number) {
@@ -297,7 +331,7 @@ export class Unit extends Entity {
     const path = this.movement.move(to);
     if (!path) return;
 
-    this.ap.remove(path.distance * this.game.config.AP_COST_PER_MOVEMENT);
+    this.ap.remove(path.distance * this.apCostPerMovement);
   }
 
   getPathTo(to: Point3D) {
@@ -326,8 +360,9 @@ export class Unit extends Entity {
     return this.combat.takeDamage.bind(this.combat);
   }
 
-  get attack() {
-    return this.combat.attack.bind(this.combat);
+  attack(point: Point3D) {
+    this.combat.attack(point);
+    this.ap.remove(this.combat.nextAttackApCost);
   }
 
   canAttackAt(point: Point3D) {
@@ -338,6 +373,10 @@ export class Unit extends Entity {
     if (target && !target.canBeAttacked) return false;
 
     return this.attackTargettingPattern.canTargetAt(point);
+  }
+
+  canCounterAttackAt(point: Point3D) {
+    return this.combat.canCounterAttackAt(point);
   }
 
   destroy(source: Card) {

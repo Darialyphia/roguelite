@@ -83,7 +83,6 @@ const serverSession = new ServerSession({
 const clientSession = new ClientSession(options);
 
 const battleStore = useBattleStore();
-const uiStore = useBattleUiStore();
 
 const userPlayer = useUserPlayer();
 const game = useGame();
@@ -103,9 +102,9 @@ const start = () => {
     await until(() => battleStore.isPlayingFx).not.toBeTruthy();
 
     if (aiAction.type === 'move') {
-      await waitFor(500);
+      await waitFor(100);
     } else {
-      await waitFor(500);
+      await waitFor(300);
     }
     serverSession.dispatch(aiAction);
   };

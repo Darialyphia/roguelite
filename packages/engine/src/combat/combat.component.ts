@@ -7,10 +7,13 @@ import { CombatScalingStrategy } from './damage/scaling/combat-scaling.strategy'
 import type { Card } from '../card/card.entity';
 import { TypedEventEmitter } from '../utils/typed-emitter';
 import { CombatMitigationStrategy } from './damage/mitigation/combat-mitigation-strategy';
+import { PointAOEShape } from '../targeting/aoe-shapes';
 
 export const COMBAT_EVENTS = {
   BEFORE_ATTACK: 'before_attack',
   AFTER_ATTACK: 'after_attack',
+  BEFORE_COUNTERATTACK: 'before_counterattack',
+  AFTER_COUNTERATTACK: 'after_counterattack',
   BEFORE_DEAL_DAMAGE: 'before_deal_damage',
   AFTER_DEAL_DAMAGE: 'after_deal_damage',
   BEFORE_RECEIVE_DAMAGE: 'before_receive_damage',
@@ -22,6 +25,8 @@ export type CombatEvent = Values<typeof COMBAT_EVENTS>;
 export type CombatEventMap = {
   [COMBAT_EVENTS.BEFORE_ATTACK]: [{ target: Point3D; cost: number }];
   [COMBAT_EVENTS.AFTER_ATTACK]: [{ target: Point3D; cost: number }];
+  [COMBAT_EVENTS.BEFORE_COUNTERATTACK]: [{ target: Point3D; cost: number }];
+  [COMBAT_EVENTS.AFTER_COUNTERATTACK]: [{ target: Point3D; cost: number }];
   [COMBAT_EVENTS.BEFORE_DEAL_DAMAGE]: [{ targets: Unit[]; damage: Damage }];
   [COMBAT_EVENTS.AFTER_DEAL_DAMAGE]: [{ targets: Unit[]; damage: Damage }];
   [COMBAT_EVENTS.BEFORE_RECEIVE_DAMAGE]: [{ from: Card; damage: Damage }];
@@ -30,6 +35,7 @@ export type CombatEventMap = {
 
 export class CombatComponent {
   private attacksCount = 0;
+  private counterAttacksCount = 0;
   private emitter = new TypedEventEmitter<CombatEventMap>();
 
   constructor(
@@ -38,7 +44,7 @@ export class CombatComponent {
   ) {}
 
   get nextAttackApCost() {
-    return config.AP_COST_PER_ATTACK + config.AP_INCREASE_PER_ATTACK * this.attacksCount;
+    return this.unit.apCostPerAttack + config.AP_INCREASE_PER_ATTACK * this.attacksCount;
   }
 
   get on() {
@@ -53,16 +59,47 @@ export class CombatComponent {
     return this.emitter.off.bind(this.emitter);
   }
 
+  canCounterAttackAt(position: Point3D) {
+    if (this.counterAttacksCount >= this.unit.maxCounterattacksPerTurn) return false;
+    return this.unit.attackTargettingPattern.canTargetAt(position);
+  }
+
   resetAttackCount() {
     this.attacksCount = 0;
+  }
+
+  resetCounterAttackCount() {
+    this.counterAttacksCount = 0;
+  }
+
+  counterAttack(attacker: Unit) {
+    this.emitter.emit(COMBAT_EVENTS.BEFORE_COUNTERATTACK, {
+      target: attacker,
+      cost: this.unit.apCostPerAttack
+    });
+    const targets = new PointAOEShape(this.game).getUnits([attacker]);
+
+    const damage = new Damage({
+      baseAmount: 0,
+      source: this.unit.card,
+      scalings: [new CombatScalingStrategy()],
+      mitigations: [new CombatMitigationStrategy()]
+    });
+
+    this.dealDamage(targets, damage);
+    this.counterAttacksCount++;
+
+    this.emitter.emit(COMBAT_EVENTS.AFTER_COUNTERATTACK, {
+      target: attacker,
+      cost: this.unit.apCostPerAttack
+    });
   }
 
   attack(target: Point3D) {
     this.emitter.emit(COMBAT_EVENTS.BEFORE_ATTACK, {
       target,
-      cost: this.game.config.AP_COST_PER_ATTACK
+      cost: this.unit.apCostPerAttack
     });
-    this.unit.ap.remove(this.nextAttackApCost);
     const targets = this.unit.attackAOEShape.getUnits([target]);
 
     const damage = new Damage({
@@ -77,8 +114,13 @@ export class CombatComponent {
 
     this.emitter.emit(COMBAT_EVENTS.AFTER_ATTACK, {
       target,
-      cost: this.game.config.AP_COST_PER_ATTACK
+      cost: this.unit.apCostPerAttack
     });
+
+    const unit = this.game.unitSystem.getUnitAt(target)!;
+    if (unit.canCounterAttackAt(this.unit.position)) {
+      this.counterAttack(this.unit);
+    }
   }
 
   dealDamage(targets: Unit[], damage: Damage) {

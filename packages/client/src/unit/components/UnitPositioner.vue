@@ -3,8 +3,9 @@ import { config } from '@/utils/config';
 import AnimatedIsoPoint from '@/iso/components/AnimatedIsoPoint.vue';
 import type { UnitViewModel } from '../unit.model';
 import { useBattleEvent } from '@/pages/battle/battle.store';
-import { waitFor } from '@game/shared';
+import { waitFor, type Point3D } from '@game/shared';
 import { useBattleUiStore } from '@/pages/battle/battle-ui.store';
+import type { Unit } from '@game/engine/src/unit/unit.entity';
 
 const { unit, bounce } = defineProps<{
   unit: UnitViewModel;
@@ -36,8 +37,8 @@ useBattleEvent('unit.after_move', e => {
   });
 });
 
-useBattleEvent('unit.before_attack', async e => {
-  if (!e.unit.equals(unit.getUnit())) return Promise.resolve();
+const attackAnimation = async (e: { unit: Unit; target: Point3D }) => {
+  if (!e.unit.equals(unit.getUnit())) return;
 
   const start = e.unit.position;
   const end = e.target;
@@ -68,7 +69,9 @@ useBattleEvent('unit.before_attack', async e => {
       duration: 0.1
     });
   await tl.play();
-});
+};
+useBattleEvent('unit.before_attack', attackAnimation);
+useBattleEvent('unit.before_counterattack', attackAnimation);
 
 const ui = useBattleUiStore();
 </script>

@@ -7,7 +7,7 @@ import { TypedEventEmitter } from '../../utils/typed-emitter';
 
 export type MovementComponentOptions = {
   position: Point3D;
-  pathfindingStrategy: PathfindingStrategy;
+  pathfinding: PathfinderComponent;
 };
 
 export const MOVE_EVENTS = {
@@ -23,18 +23,15 @@ export type MoveEventMap = {
 };
 
 export class MovementComponent {
-  private game: Game;
-
   private _position: Position;
 
   private pathfinding: PathfinderComponent;
 
   private emitter = new TypedEventEmitter<MoveEventMap>();
 
-  constructor(game: Game, options: MovementComponentOptions) {
-    this.game = game;
+  constructor(options: MovementComponentOptions) {
     this._position = Position.fromPoint3D(options.position);
-    this.pathfinding = new PathfinderComponent(this.game, options.pathfindingStrategy);
+    this.pathfinding = options.pathfinding;
   }
 
   get on() {

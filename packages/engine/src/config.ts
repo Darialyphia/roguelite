@@ -22,7 +22,9 @@ export const config = {
   // how many victory points are needed to win the game
   VICTORY_POINTS_WIN_THRESHOLD: 12,
   // the max amount of turn a game can last
-  MAX_TURN_COUNT: 10
+  MAX_TURN_COUNT: 10,
+  // The default amount of time a unit can counter attack eveyr turn
+  MAX_COUNTERATTACKS_PER_TURN: 1
 } as const;
 
 export type Config = typeof config;
