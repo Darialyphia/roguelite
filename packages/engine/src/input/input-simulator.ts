@@ -34,4 +34,8 @@ export class InputSimulator {
 
     return this.game;
   }
+
+  shutdown() {
+    this.game.shutdown();
+  }
 }

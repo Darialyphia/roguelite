@@ -19,7 +19,6 @@ import type { EntityId } from '@game/engine/src/entity';
 import { waitFor } from '@game/shared';
 import type { SerializedInput } from '@game/engine/src/input/input-system';
 import { until } from '@vueuse/core';
-import { useBattleUiStore } from './battle-ui.store';
 import MulliganOverlay from '@/card/components/MulliganOverlay.vue';
 import PlayerBattleInfos from '@/player/components/PlayerBattleInfos.vue';
 import { makePlayerViewModel } from '@/player/player.model';

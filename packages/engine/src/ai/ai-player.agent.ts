@@ -12,7 +12,6 @@ import { GAME_PHASES } from '../game/game-phase.system';
 import { UnitCard } from '../card/unit-card.entity';
 import { SpellCard } from '../card/spell-card.entity';
 import { RUNES } from '../utils/rune';
-import { Unit } from '../unit/unit.entity';
 
 export class AIPlayerAgent implements AIAgent {
   private nextSimulationId = 0;
@@ -60,7 +59,7 @@ export class AIPlayerAgent implements AIAgent {
       const simulator = new InputSimulator(this.game, [input], id);
       const scorer = new AIScorer(this.player.id, this.heuristics, simulator);
       const score = scorer.getScore();
-
+      simulator.shutdown();
       return {
         input,
         score
