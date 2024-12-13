@@ -2,6 +2,7 @@
 import { useIsoCamera } from '@/iso/composables/useIsoCamera';
 import { useBattleEvent } from '@/pages/battle/battle.store';
 import type { UnitViewModel } from '@/unit/unit.model';
+import { GAME_EVENTS } from '@game/engine/src/game/game';
 import { randomInt } from '@game/shared';
 import { Container } from 'pixi.js';
 import { PTransition } from 'vue3-pixi';
@@ -12,7 +13,7 @@ const damageAmount = ref(0);
 let direction = 1;
 
 const camera = useIsoCamera();
-useBattleEvent('unit.before_receive_damage', e => {
+useBattleEvent(GAME_EVENTS.UNIT_BEFORE_RECEIVE_DAMAGE, e => {
   if (!e.unit.equals(unit.getUnit())) return Promise.resolve();
   damageAmount.value = e.damage.getMitigatedAmount(unit.getUnit());
 

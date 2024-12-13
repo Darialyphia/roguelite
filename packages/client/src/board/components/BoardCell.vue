@@ -5,11 +5,7 @@ import BoardCellSprite from './BoardCellSprite.vue';
 import UiAnimatedSprite from '@/ui/components/UiAnimatedSprite.vue';
 import BoardCellHighlights from './BoardCellHighlights.vue';
 import type { CellViewModel } from '../models/cell.model';
-import {
-  useBattleStore,
-  useGame,
-  usePathHelpers
-} from '@/pages/battle/battle.store';
+import { useBattleStore, usePathHelpers } from '@/pages/battle/battle.store';
 import { useIsoCamera } from '@/iso/composables/useIsoCamera';
 import { match } from 'ts-pattern';
 import { PTransition, External } from 'vue3-pixi';
@@ -25,6 +21,7 @@ import {
   shift,
   useFloating
 } from '@floating-ui/vue';
+import Obstacle from './Obstacle.vue';
 
 const { cell } = defineProps<{ cell: CellViewModel }>();
 const emit = defineEmits<{ ready: [] }>();
@@ -201,6 +198,7 @@ watch(isHovered, hovered => {
         <BoardCellSprite :cell="cell" />
         <BoardCellHighlights :cell="cell" />
         <UiAnimatedSprite assetId="hovered-cell" v-if="isHovered" />
+        <Obstacle v-if="cell.obstacle" :obstacle="cell.obstacle" />
         <BoardCellLightVFX :cell="cell" />
       </container>
     </PTransition>

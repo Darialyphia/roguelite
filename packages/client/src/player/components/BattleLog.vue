@@ -15,6 +15,7 @@ import { Icon } from '@iconify/vue';
 import type { EntityId } from '@game/engine/src/entity';
 import type { Player } from '@game/engine/src/player/player.entity';
 import { GAME_PHASES } from '@game/engine/src/game/game-phase.system';
+import { GAME_EVENTS } from '@game/engine/src/game/game';
 
 const state = useGameClientState();
 const game = useGame();
@@ -39,7 +40,7 @@ type Token =
 
 const events = ref<Token[][]>([[]]);
 
-useBattleEvent('game.input-start', async event => {
+useBattleEvent(GAME_EVENTS.INPUT_START, async event => {
   events.value.push([
     {
       kind: 'input',
@@ -63,7 +64,7 @@ useBattleEvent('game.input-start', async event => {
   ]);
 });
 
-useBattleEvent('unit.before_play_card', async event => {
+useBattleEvent(GAME_EVENTS.UNIT_BEFORE_PLAY_CARD, async event => {
   events.value.push([
     { kind: 'unit', unit: event.unit },
     { kind: 'text', text: 'played' },
@@ -71,7 +72,7 @@ useBattleEvent('unit.before_play_card', async event => {
   ]);
 });
 
-useBattleEvent('unit.before_attack', async event => {
+useBattleEvent(GAME_EVENTS.UNIT_BEFORE_ATTACK, async event => {
   const tokens: Token[] = [
     { kind: 'unit', unit: event.unit },
     { kind: 'text', text: 'attacked' }
@@ -83,7 +84,7 @@ useBattleEvent('unit.before_attack', async event => {
   events.value.push(tokens);
 });
 
-useBattleEvent('unit.after_receive_damage', async event => {
+useBattleEvent(GAME_EVENTS.UNIT_BEFORE_RECEIVE_DAMAGE, async event => {
   events.value.push([
     { kind: 'unit', unit: event.unit },
     {
@@ -94,7 +95,7 @@ useBattleEvent('unit.after_receive_damage', async event => {
   ]);
 });
 
-useBattleEvent('unit.after_receive_heal', async event => {
+useBattleEvent(GAME_EVENTS.UNIT_AFTER_RECEIVE_HEAL, async event => {
   events.value.push([
     { kind: 'unit', unit: event.unit },
     { kind: 'text', text: `got healed for ${event.amount} by` },
@@ -102,7 +103,7 @@ useBattleEvent('unit.after_receive_heal', async event => {
   ]);
 });
 
-useBattleEvent(`unit.after_move`, async event => {
+useBattleEvent(GAME_EVENTS.UNIT_AFTER_MOVE, async event => {
   events.value.push([
     { kind: 'unit', unit: event.unit },
     { kind: 'text', text: `moved from` },
@@ -112,11 +113,11 @@ useBattleEvent(`unit.after_move`, async event => {
   ]);
 });
 
-useBattleEvent('unit.start_turn', async event => {
+useBattleEvent(GAME_EVENTS.UNIT_START_TURN, async event => {
   events.value.push([{ kind: 'turn_start', unit: event.unit }]);
 });
 
-useBattleEvent('unit.after_destroy', async event => {
+useBattleEvent(GAME_EVENTS.UNIT_AFTER_DESTROY, async event => {
   events.value.push([
     { kind: 'unit', unit: event.unit },
     { kind: 'text', text: `got destroyed.` }

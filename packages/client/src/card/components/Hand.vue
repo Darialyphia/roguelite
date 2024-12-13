@@ -12,6 +12,7 @@ import { makeCardViewModel } from '../card.model';
 import DraggedCard from './DraggedCard.vue';
 import HandCard from './HandCard.vue';
 import { GAME_PHASES } from '@game/engine/src/game/game-phase.system';
+import { GAME_EVENTS } from '@game/engine/src/game/game';
 
 const root = useTemplateRef('root');
 const cardSpacing = ref(0);
@@ -42,7 +43,7 @@ const offset = ref({ x: 0, y: 0 });
 const game = useGame();
 const state = useGameClientState();
 
-useBattleEvent('unit.before_play_card', async event => {
+useBattleEvent(GAME_EVENTS.UNIT_BEFORE_PLAY_CARD, async event => {
   if (!activeUnit.value) return;
   if (!activeUnit.value?.getUnit().equals(event.unit)) {
     return;
@@ -53,7 +54,7 @@ useBattleEvent('unit.before_play_card', async event => {
 });
 
 const userPlayer = useUserPlayer();
-useBattleEvent('player.after_draw', async event => {
+useBattleEvent(GAME_EVENTS.PLAYER_AFTER_DRAW, async event => {
   if (!event.player.equals(userPlayer.value.getPlayer())) return;
   for (const card of event.cards) {
     userPlayer.value.hand.push(makeCardViewModel(game.value, card));

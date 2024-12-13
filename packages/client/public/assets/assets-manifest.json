@@ -9,8 +9,7 @@
           ],
           "src": [
             "/assets/logo.svg"
-          ],
-          "foo": "bar"
+          ]
         }
       ]
     },
@@ -25,7 +24,6 @@
             "/assets/fx/frozen.json"
           ],
           "loadParser": "aseprite_loader",
-          "foo": "bar",
           "data": {
             "tags": {
               "m": true
@@ -39,7 +37,6 @@
           "src": [
             "/assets/fx/frozen.png"
           ],
-          "foo": "bar",
           "data": {
             "tags": {
               "m": true
@@ -54,7 +51,6 @@
             "/assets/fx/light-mask.json"
           ],
           "loadParser": "aseprite_loader",
-          "foo": "bar",
           "data": {
             "tags": {
               "m": true
@@ -68,7 +64,6 @@
           "src": [
             "/assets/fx/light-mask.png"
           ],
-          "foo": "bar",
           "data": {
             "tags": {
               "m": true
@@ -82,7 +77,6 @@
           "src": [
             "/assets/fx/shadow.png"
           ],
-          "foo": "bar",
           "data": {
             "tags": {
               "m": true
@@ -97,7 +91,6 @@
             "/assets/fx/stasis.json"
           ],
           "loadParser": "aseprite_loader",
-          "foo": "bar",
           "data": {
             "tags": {
               "m": true
@@ -111,7 +104,6 @@
           "src": [
             "/assets/fx/stasis.png"
           ],
-          "foo": "bar",
           "data": {
             "tags": {
               "m": true
@@ -130,7 +122,6 @@
           "src": [
             "/assets/icons/arcane-intellect.png"
           ],
-          "foo": "bar",
           "data": {
             "tags": {
               "m": true
@@ -144,7 +135,6 @@
           "src": [
             "/assets/icons/arcane-servant.png"
           ],
-          "foo": "bar",
           "data": {
             "tags": {
               "m": true
@@ -158,7 +148,6 @@
           "src": [
             "/assets/icons/card-image-placeholder.png"
           ],
-          "foo": "bar",
           "data": {
             "tags": {
               "m": true
@@ -172,7 +161,6 @@
           "src": [
             "/assets/icons/frost-nova.png"
           ],
-          "foo": "bar",
           "data": {
             "tags": {
               "m": true
@@ -186,7 +174,6 @@
           "src": [
             "/assets/icons/magic-missile.png"
           ],
-          "foo": "bar",
           "data": {
             "tags": {
               "m": true
@@ -200,7 +187,6 @@
           "src": [
             "/assets/icons/modifier-frozen.png"
           ],
-          "foo": "bar",
           "data": {
             "tags": {
               "m": true
@@ -214,7 +200,6 @@
           "src": [
             "/assets/icons/modifier-stasis.png"
           ],
-          "foo": "bar",
           "data": {
             "tags": {
               "m": true
@@ -228,7 +213,6 @@
           "src": [
             "/assets/icons/spell-arcane-intellect.png"
           ],
-          "foo": "bar",
           "data": {
             "tags": {
               "m": true
@@ -242,7 +226,6 @@
           "src": [
             "/assets/icons/spell-spark.png"
           ],
-          "foo": "bar",
           "data": {
             "tags": {
               "m": true
@@ -256,7 +239,6 @@
           "src": [
             "/assets/icons/stasis.png"
           ],
-          "foo": "bar",
           "data": {
             "tags": {
               "m": true
@@ -270,7 +252,6 @@
           "src": [
             "/assets/icons/unit-arcane-servant.png"
           ],
-          "foo": "bar",
           "data": {
             "tags": {
               "m": true
@@ -284,7 +265,6 @@
           "src": [
             "/assets/icons/unit-flame-lord.png"
           ],
-          "foo": "bar",
           "data": {
             "tags": {
               "m": true
@@ -298,7 +278,6 @@
           "src": [
             "/assets/icons/unit-lancer.png"
           ],
-          "foo": "bar",
           "data": {
             "tags": {
               "m": true
@@ -312,7 +291,6 @@
           "src": [
             "/assets/icons/unit-wizard.png"
           ],
-          "foo": "bar",
           "data": {
             "tags": {
               "m": true
@@ -322,8 +300,36 @@
       ]
     },
     {
-      "name": "props",
-      "assets": []
+      "name": "obstacles",
+      "assets": [
+        {
+          "alias": [
+            "shrine"
+          ],
+          "src": [
+            "/assets/obstacles/shrine.json"
+          ],
+          "loadParser": "aseprite_loader",
+          "data": {
+            "tags": {
+              "m": true
+            }
+          }
+        },
+        {
+          "alias": [
+            "shrine.png"
+          ],
+          "src": [
+            "/assets/obstacles/shrine.png"
+          ],
+          "data": {
+            "tags": {
+              "m": true
+            }
+          }
+        }
+      ]
     },
     {
       "name": "tiles",
@@ -336,7 +342,6 @@
             "/assets/tiles/grass.json"
           ],
           "loadParser": "aseprite_loader",
-          "foo": "bar",
           "data": {
             "tags": {
               "m": true
@@ -350,7 +355,6 @@
           "src": [
             "/assets/tiles/grass.png"
           ],
-          "foo": "bar",
           "data": {
             "tags": {
               "m": true
@@ -365,7 +369,6 @@
             "/assets/tiles/water.json"
           ],
           "loadParser": "aseprite_loader",
-          "foo": "bar",
           "data": {
             "tags": {
               "m": true
@@ -379,7 +382,6 @@
           "src": [
             "/assets/tiles/water.png"
           ],
-          "foo": "bar",
           "data": {
             "tags": {
               "m": true
@@ -398,7 +400,6 @@
           "src": [
             "/assets/ui/action-wheel.png"
           ],
-          "foo": "bar",
           "data": {
             "tags": {
               "m": true
@@ -413,7 +414,6 @@
             "/assets/ui/active-unit-indicator.json"
           ],
           "loadParser": "aseprite_loader",
-          "foo": "bar",
           "data": {
             "tags": {
               "m": true
@@ -427,7 +427,6 @@
           "src": [
             "/assets/ui/active-unit-indicator.png"
           ],
-          "foo": "bar",
           "data": {
             "tags": {
               "m": true
@@ -441,7 +440,6 @@
           "src": [
             "/assets/ui/ap.png"
           ],
-          "foo": "bar",
           "data": {
             "tags": {
               "m": true
@@ -455,7 +453,6 @@
           "src": [
             "/assets/ui/atk.png"
           ],
-          "foo": "bar",
           "data": {
             "tags": {
               "m": true
@@ -469,7 +466,6 @@
           "src": [
             "/assets/ui/avatar-frame.png"
           ],
-          "foo": "bar",
           "data": {
             "tags": {
               "m": true
@@ -483,7 +479,6 @@
           "src": [
             "/assets/ui/card-back.png"
           ],
-          "foo": "bar",
           "data": {
             "tags": {
               "m": true
@@ -497,7 +492,6 @@
           "src": [
             "/assets/ui/card-front.png"
           ],
-          "foo": "bar",
           "data": {
             "tags": {
               "m": true
@@ -511,7 +505,6 @@
           "src": [
             "/assets/ui/card-icon-bg.png"
           ],
-          "foo": "bar",
           "data": {
             "tags": {
               "m": true
@@ -525,7 +518,6 @@
           "src": [
             "/assets/ui/card-icon-border.png"
           ],
-          "foo": "bar",
           "data": {
             "tags": {
               "m": true
@@ -539,7 +531,6 @@
           "src": [
             "/assets/ui/card-image-background.png"
           ],
-          "foo": "bar",
           "data": {
             "tags": {
               "m": true
@@ -553,7 +544,6 @@
           "src": [
             "/assets/ui/card.png"
           ],
-          "foo": "bar",
           "data": {
             "tags": {
               "m": true
@@ -567,7 +557,6 @@
           "src": [
             "/assets/ui/cursor-disabled.png"
           ],
-          "foo": "bar",
           "data": {
             "tags": {
               "m": true
@@ -581,7 +570,6 @@
           "src": [
             "/assets/ui/cursor-hover.png"
           ],
-          "foo": "bar",
           "data": {
             "tags": {
               "m": true
@@ -595,7 +583,6 @@
           "src": [
             "/assets/ui/cursor.png"
           ],
-          "foo": "bar",
           "data": {
             "tags": {
               "m": true
@@ -609,7 +596,6 @@
           "src": [
             "/assets/ui/deck.png"
           ],
-          "foo": "bar",
           "data": {
             "tags": {
               "m": true
@@ -623,7 +609,6 @@
           "src": [
             "/assets/ui/draw-action.png"
           ],
-          "foo": "bar",
           "data": {
             "tags": {
               "m": true
@@ -637,7 +622,6 @@
           "src": [
             "/assets/ui/end-turn-action.png"
           ],
-          "foo": "bar",
           "data": {
             "tags": {
               "m": true
@@ -651,7 +635,6 @@
           "src": [
             "/assets/ui/gold-action.png"
           ],
-          "foo": "bar",
           "data": {
             "tags": {
               "m": true
@@ -665,7 +648,6 @@
           "src": [
             "/assets/ui/gold.png"
           ],
-          "foo": "bar",
           "data": {
             "tags": {
               "m": true
@@ -679,7 +661,6 @@
           "src": [
             "/assets/ui/hand.png"
           ],
-          "foo": "bar",
           "data": {
             "tags": {
               "m": true
@@ -694,7 +675,6 @@
             "/assets/ui/hovered-cell.json"
           ],
           "loadParser": "aseprite_loader",
-          "foo": "bar",
           "data": {
             "tags": {
               "m": true
@@ -708,7 +688,6 @@
           "src": [
             "/assets/ui/hovered-cell.png"
           ],
-          "foo": "bar",
           "data": {
             "tags": {
               "m": true
@@ -722,7 +701,6 @@
           "src": [
             "/assets/ui/hp.png"
           ],
-          "foo": "bar",
           "data": {
             "tags": {
               "m": true
@@ -736,7 +714,6 @@
           "src": [
             "/assets/ui/mulligan-selected.png"
           ],
-          "foo": "bar",
           "data": {
             "tags": {
               "m": true
@@ -750,7 +727,6 @@
           "src": [
             "/assets/ui/player-battle-info.png"
           ],
-          "foo": "bar",
           "data": {
             "tags": {
               "m": true
@@ -764,7 +740,6 @@
           "src": [
             "/assets/ui/rune-blue-small.png"
           ],
-          "foo": "bar",
           "data": {
             "tags": {
               "m": true
@@ -778,7 +753,6 @@
           "src": [
             "/assets/ui/rune-blue.png"
           ],
-          "foo": "bar",
           "data": {
             "tags": {
               "m": true
@@ -792,7 +766,6 @@
           "src": [
             "/assets/ui/rune-colorless-small.png"
           ],
-          "foo": "bar",
           "data": {
             "tags": {
               "m": true
@@ -806,7 +779,6 @@
           "src": [
             "/assets/ui/rune-colorless.png"
           ],
-          "foo": "bar",
           "data": {
             "tags": {
               "m": true
@@ -820,7 +792,6 @@
           "src": [
             "/assets/ui/rune-green-small.png"
           ],
-          "foo": "bar",
           "data": {
             "tags": {
               "m": true
@@ -834,7 +805,6 @@
           "src": [
             "/assets/ui/rune-green.png"
           ],
-          "foo": "bar",
           "data": {
             "tags": {
               "m": true
@@ -848,7 +818,6 @@
           "src": [
             "/assets/ui/rune-purple-small.png"
           ],
-          "foo": "bar",
           "data": {
             "tags": {
               "m": true
@@ -862,7 +831,6 @@
           "src": [
             "/assets/ui/rune-purple.png"
           ],
-          "foo": "bar",
           "data": {
             "tags": {
               "m": true
@@ -876,7 +844,6 @@
           "src": [
             "/assets/ui/rune-red-small.png"
           ],
-          "foo": "bar",
           "data": {
             "tags": {
               "m": true
@@ -890,7 +857,6 @@
           "src": [
             "/assets/ui/rune-red.png"
           ],
-          "foo": "bar",
           "data": {
             "tags": {
               "m": true
@@ -904,7 +870,6 @@
           "src": [
             "/assets/ui/rune-yellow-small.png"
           ],
-          "foo": "bar",
           "data": {
             "tags": {
               "m": true
@@ -918,7 +883,6 @@
           "src": [
             "/assets/ui/rune-yellow.png"
           ],
-          "foo": "bar",
           "data": {
             "tags": {
               "m": true
@@ -932,7 +896,6 @@
           "src": [
             "/assets/ui/speed.png"
           ],
-          "foo": "bar",
           "data": {
             "tags": {
               "m": true
@@ -946,7 +909,6 @@
           "src": [
             "/assets/ui/stat-circle-small.png"
           ],
-          "foo": "bar",
           "data": {
             "tags": {
               "m": true
@@ -960,7 +922,6 @@
           "src": [
             "/assets/ui/stat-circle.png"
           ],
-          "foo": "bar",
           "data": {
             "tags": {
               "m": true
@@ -975,7 +936,6 @@
             "/assets/ui/tile-highlights.json"
           ],
           "loadParser": "aseprite_loader",
-          "foo": "bar",
           "data": {
             "tags": {
               "m": true
@@ -989,7 +949,6 @@
           "src": [
             "/assets/ui/tile-highlights.png"
           ],
-          "foo": "bar",
           "data": {
             "tags": {
               "m": true
@@ -1004,7 +963,6 @@
             "/assets/ui/unit-icon-frame.json"
           ],
           "loadParser": "aseprite_loader",
-          "foo": "bar",
           "data": {
             "tags": {
               "m": true
@@ -1018,7 +976,6 @@
           "src": [
             "/assets/ui/unit-icon-frame.png"
           ],
-          "foo": "bar",
           "data": {
             "tags": {
               "m": true
@@ -1033,7 +990,6 @@
             "/assets/ui/unit-stat-bars.json"
           ],
           "loadParser": "aseprite_loader",
-          "foo": "bar",
           "data": {
             "tags": {
               "m": true
@@ -1047,7 +1003,6 @@
           "src": [
             "/assets/ui/unit-stat-bars.png"
           ],
-          "foo": "bar",
           "data": {
             "tags": {
               "m": true
@@ -1062,7 +1017,6 @@
             "/assets/ui/unit-stats.json"
           ],
           "loadParser": "aseprite_loader",
-          "foo": "bar",
           "data": {
             "tags": {
               "m": true
@@ -1076,7 +1030,6 @@
           "src": [
             "/assets/ui/unit-stats.png"
           ],
-          "foo": "bar",
           "data": {
             "tags": {
               "m": true
@@ -1090,7 +1043,6 @@
           "src": [
             "/assets/ui/vp-empty.png"
           ],
-          "foo": "bar",
           "data": {
             "tags": {
               "m": true
@@ -1104,7 +1056,6 @@
           "src": [
             "/assets/ui/vp-large.png"
           ],
-          "foo": "bar",
           "data": {
             "tags": {
               "m": true
@@ -1118,7 +1069,6 @@
           "src": [
             "/assets/ui/vp.png"
           ],
-          "foo": "bar",
           "data": {
             "tags": {
               "m": true
@@ -1138,7 +1088,6 @@
             "/assets/units/arcane-servant.json"
           ],
           "loadParser": "aseprite_loader",
-          "foo": "bar",
           "data": {
             "tags": {
               "m": true
@@ -1152,7 +1101,6 @@
           "src": [
             "/assets/units/arcane-servant.png"
           ],
-          "foo": "bar",
           "data": {
             "tags": {
               "m": true
@@ -1167,7 +1115,6 @@
             "/assets/units/flame-lord.json"
           ],
           "loadParser": "aseprite_loader",
-          "foo": "bar",
           "data": {
             "tags": {
               "m": true
@@ -1181,7 +1128,6 @@
           "src": [
             "/assets/units/flame-lord.png"
           ],
-          "foo": "bar",
           "data": {
             "tags": {
               "m": true
@@ -1196,7 +1142,6 @@
             "/assets/units/lancer.json"
           ],
           "loadParser": "aseprite_loader",
-          "foo": "bar",
           "data": {
             "tags": {
               "m": true
@@ -1210,7 +1155,6 @@
           "src": [
             "/assets/units/lancer.png"
           ],
-          "foo": "bar",
           "data": {
             "tags": {
               "m": true
@@ -1225,7 +1169,6 @@
             "/assets/units/wizard.json"
           ],
           "loadParser": "aseprite_loader",
-          "foo": "bar",
           "data": {
             "tags": {
               "m": true
@@ -1239,7 +1182,6 @@
           "src": [
             "/assets/units/wizard.png"
           ],
-          "foo": "bar",
           "data": {
             "tags": {
               "m": true

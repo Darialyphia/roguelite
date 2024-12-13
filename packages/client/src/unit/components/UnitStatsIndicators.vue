@@ -7,6 +7,7 @@ import { useBattleEvent } from '@/pages/battle/battle.store';
 import { TextStyle, type AnimatedSprite } from 'pixi.js';
 import { SpellCard } from '@game/engine/src/card/spell-card.entity';
 import { useBattleUiStore } from '@/pages/battle/battle-ui.store';
+import { GAME_EVENTS } from '@game/engine/src/game/game';
 
 const { unit } = defineProps<{ unit: UnitViewModel }>();
 
@@ -17,7 +18,7 @@ const textures = computed(() => {
   return createSpritesheetFrameObject('idle', sheet.value.sheets.base.base);
 });
 
-useBattleEvent('unit.after_move', e => {
+useBattleEvent(GAME_EVENTS.UNIT_AFTER_MOVE, e => {
   return new Promise(resolve => {
     if (!e.unit.equals(unit.getUnit())) return resolve();
     // eslint-disable-next-line vue/no-mutating-props
@@ -25,7 +26,7 @@ useBattleEvent('unit.after_move', e => {
     resolve();
   });
 });
-useBattleEvent('unit.after_attack', e => {
+useBattleEvent(GAME_EVENTS.UNIT_AFTER_ATTACK, e => {
   return new Promise(resolve => {
     if (!e.unit.equals(unit.getUnit())) return resolve();
     // eslint-disable-next-line vue/no-mutating-props
@@ -33,7 +34,7 @@ useBattleEvent('unit.after_attack', e => {
     resolve();
   });
 });
-useBattleEvent('unit.after_play_card', e => {
+useBattleEvent(GAME_EVENTS.UNIT_AFTER_PLAY_CARD, e => {
   return new Promise(resolve => {
     if (!e.unit.equals(unit.getUnit())) return resolve();
     if (e.card instanceof SpellCard) {

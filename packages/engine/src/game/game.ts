@@ -13,7 +13,7 @@ import { config } from '../config';
 import { PlayerSystem } from '../player/player-system';
 import { InputSystem, type SerializedInput } from '../input/input-system';
 import type { RngSystem } from '../rng/rng-system';
-import { mapValues } from 'lodash-es';
+import { mapValues, mapKeys } from 'lodash-es';
 import { GamePhaseSystem } from './game-phase.system';
 import {
   PLAYER_EVENTS,
@@ -89,10 +89,30 @@ export type StarEvent<
   event: GameEventMap[T];
 };
 export const GAME_EVENTS = {
-  ...mapValues(UNIT_EVENTS, evt => `unit.${evt}` as `unit.${typeof evt}`),
-  ...mapValues(CARD_EVENTS, evt => `card.${evt}` as `card.${typeof evt}`),
-  ...mapValues(PLAYER_EVENTS, evt => `player.${evt}` as `player.${typeof evt}`),
-  ...mapValues(TURN_EVENTS, evt => `turn.${evt}` as `turn.${typeof evt}`),
+  ...(mapKeys(
+    mapValues(UNIT_EVENTS, evt => `unit.${evt}`),
+    (value, key) => `UNIT_${key}`
+  ) as {
+    [Key in keyof typeof UNIT_EVENTS as `UNIT_${Key}`]: `unit.${(typeof UNIT_EVENTS)[Key]}`;
+  }),
+  ...(mapKeys(
+    mapValues(CARD_EVENTS, evt => `card.${evt}`),
+    (value, key) => `CARD_${key}`
+  ) as {
+    [Key in keyof typeof CARD_EVENTS as `CARD_${Key}`]: `card.${(typeof CARD_EVENTS)[Key]}`;
+  }),
+  ...(mapKeys(
+    mapValues(PLAYER_EVENTS, evt => `player.${evt}`),
+    (value, key) => `PLAYER_${key}`
+  ) as {
+    [Key in keyof typeof PLAYER_EVENTS as `PLAYER_${Key}`]: `player.${(typeof PLAYER_EVENTS)[Key]}`;
+  }),
+  ...(mapKeys(
+    mapValues(TURN_EVENTS, evt => `turn.${evt}`),
+    (value, key) => `${key}`
+  ) as {
+    [Key in keyof typeof TURN_EVENTS as `${Key}`]: `turn.${(typeof TURN_EVENTS)[Key]}`;
+  }),
   ERROR: 'game.error',
   READY: 'game.ready',
   FLUSHED: 'game.input-queue-flushed',

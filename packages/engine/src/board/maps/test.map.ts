@@ -61,7 +61,7 @@ export const testMap1v1: GameMap = {
         { terrain: TERRAINS.GROUND },
         { terrain: TERRAINS.GROUND },
         { terrain: TERRAINS.GROUND },
-        { terrain: TERRAINS.GROUND },
+        { terrain: TERRAINS.GROUND, obstacle: 'shrine' },
         {
           terrain: TERRAINS.WATER,
           light: {
@@ -191,7 +191,7 @@ export const testMap1v1: GameMap = {
             ]
           }
         },
-        { terrain: TERRAINS.GROUND },
+        { terrain: TERRAINS.GROUND, obstacle: 'shrine' },
         { terrain: TERRAINS.GROUND },
         { terrain: TERRAINS.GROUND },
         { terrain: TERRAINS.GROUND },

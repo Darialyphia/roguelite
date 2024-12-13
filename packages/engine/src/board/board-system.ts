@@ -27,7 +27,8 @@ export class BoardSystem extends System<BoardSystemOptions> {
             id: pointToCellId({ x, y, z }),
             position: { x, y, z },
             terrain: cell.terrain,
-            light: cell.light
+            light: cell.light,
+            obstacle: cell.obstacle
           });
           this.cellsMap.set(instance.id, instance);
         });

@@ -6,6 +6,7 @@ import { useBattleEvent } from '@/pages/battle/battle.store';
 import { waitFor, type Point3D } from '@game/shared';
 import { useBattleUiStore } from '@/pages/battle/battle-ui.store';
 import type { Unit } from '@game/engine/src/unit/unit.entity';
+import { GAME_EVENTS } from '@game/engine/src/game/game';
 
 const { unit, bounce } = defineProps<{
   unit: UnitViewModel;
@@ -17,7 +18,7 @@ const offset = {
   y: -24
 };
 
-useBattleEvent('unit.after_move', e => {
+useBattleEvent(GAME_EVENTS.UNIT_AFTER_MOVE, e => {
   return new Promise(resolve => {
     if (!e.unit.equals(unit.getUnit())) return resolve();
 
@@ -70,8 +71,8 @@ const attackAnimation = async (e: { unit: Unit; target: Point3D }) => {
     });
   await tl.play();
 };
-useBattleEvent('unit.before_attack', attackAnimation);
-useBattleEvent('unit.before_counterattack', attackAnimation);
+useBattleEvent(GAME_EVENTS.UNIT_BEFORE_ATTACK, attackAnimation);
+useBattleEvent(GAME_EVENTS.UNIT_BEFORE_COUNTERATTACK, attackAnimation);
 
 const ui = useBattleUiStore();
 </script>

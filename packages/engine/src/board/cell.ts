@@ -1,9 +1,12 @@
 import { type Point3D } from '@game/shared';
-import { createEntityId, Entity } from '../entity';
+import { createEntityId, Entity, type EntityId } from '../entity';
 import type { Game } from '../game/game';
 import { Position } from '../utils/position';
 import { TERRAINS, type Terrain } from './board-utils';
 import type { CellLight } from './map';
+import { Obstacle } from '../obstacle/obstacle.entity';
+import { OBSTACLES } from '../obstacle/obstacles/_index';
+import { nanoid } from 'nanoid';
 
 export type SerializedCoords = `${string}:${string}:${string}`;
 
@@ -12,6 +15,7 @@ export type CellOptions = {
   position: Point3D;
   terrain: Terrain;
   light?: CellLight;
+  obstacle?: string;
 };
 
 export class Cell extends Entity {
@@ -21,6 +25,8 @@ export class Cell extends Entity {
 
   readonly light?: CellLight;
 
+  obstacle: Obstacle | null;
+
   constructor(
     private game: Game,
     public options: CellOptions
@@ -29,6 +35,14 @@ export class Cell extends Entity {
     this.terrain = options.terrain;
     this.position = Position.fromPoint3D(options.position);
     this.light = options.light;
+
+    this.obstacle = options.obstacle
+      ? new Obstacle(this.game, {
+          blueprintId: options.obstacle,
+          id: `obstacle_${this.position.x}.${this.position.y}.${this.position.z}_${nanoid}` as EntityId,
+          position: this.position
+        })
+      : null;
   }
 
   get cellAbove(): Cell | null {
@@ -76,6 +90,10 @@ export class Cell extends Entity {
     });
     if (above) return false;
     if (this.terrain !== TERRAINS.GROUND) return false;
+
+    if (this.obstacle) {
+      return this.obstacle.isWalkable;
+    }
 
     return true;
   }

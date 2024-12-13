@@ -81,7 +81,7 @@ export const useAssetsProvider = (app: App) => {
     // splitBundle(manifest, 'icons');
     // splitBundle(manifest, 'normals');
     splitBundle(manifest, 'fx');
-    // splitBundle(manifest, 'obstacles');
+    splitBundle(manifest, 'obstacles');
     Assets.init({ manifest });
   };
 

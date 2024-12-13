@@ -10,6 +10,7 @@ import {
   useUserPlayer
 } from '@/pages/battle/battle.store';
 import { waitFor } from '@game/shared';
+import { GAME_EVENTS } from '@game/engine/src/game/game';
 
 const { player, inverted } = defineProps<{
   player: PlayerViewModel;
@@ -23,7 +24,7 @@ const state = useGameClientState();
 const userPlayer = useUserPlayer();
 
 const latestRune = ref<string | null>(null);
-useBattleEvent('player.after_gain_rune', async e => {
+useBattleEvent(GAME_EVENTS.PLAYER_AFTER_GAIN_RUNE, async e => {
   if (!player.getPlayer().equals(e.player)) return;
   latestRune.value = e.rune.id;
 

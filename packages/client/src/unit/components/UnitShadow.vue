@@ -6,6 +6,7 @@ import { config } from '@/utils/config';
 import { useMultiLayerTexture } from '@/shared/composables/useMultiLayerTexture';
 import { useIsoWorld } from '@/iso/composables/useIsoWorld';
 import type { UnitViewModel } from '../unit.model';
+import { GAME_EVENTS } from '@game/engine/src/game/game';
 
 const { unit } = defineProps<{ unit: UnitViewModel }>();
 
@@ -59,7 +60,7 @@ const y = computed(() => {
   return config.UNIT_SPRITE_SIZE.height * 0.3;
 });
 
-useBattleEvent('unit.after_move', e => {
+useBattleEvent(GAME_EVENTS.UNIT_AFTER_MOVE, e => {
   return new Promise(resolve => {
     if (!e.unit.equals(unit.getUnit())) return resolve();
 

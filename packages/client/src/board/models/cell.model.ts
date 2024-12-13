@@ -1,3 +1,7 @@
+import {
+  makePlayerViewModel,
+  type PlayerViewModel
+} from '@/player/player.model';
 import { makeUnitViewModel, type UnitViewModel } from '@/unit/unit.model';
 import type { Game } from '@game/engine';
 import type { Terrain } from '@game/engine/src/board/board-utils';
@@ -14,6 +18,12 @@ export type CellViewModel = {
   z: number;
   unit: Nullable<UnitViewModel>;
   light?: CellLight;
+  obstacle: {
+    name: string;
+    id: string;
+    spriteId: string;
+    player: PlayerViewModel | null;
+  } | null;
   getCell(): Cell;
 };
 
@@ -26,6 +36,16 @@ export const makeCellViewModel = (game: Game, cell: Cell): CellViewModel => {
     z: cell.z,
     light: cell.light,
     unit: cell.unit ? makeUnitViewModel(game, cell.unit) : null,
+    obstacle: cell.obstacle
+      ? {
+          id: cell.obstacle.id,
+          name: cell.obstacle.name,
+          spriteId: cell.obstacle.spriteId,
+          player: cell.obstacle.player
+            ? makePlayerViewModel(game, cell.obstacle.player)
+            : null
+        }
+      : null,
     getCell() {
       return cell;
     }

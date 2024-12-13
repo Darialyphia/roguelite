@@ -15,6 +15,7 @@ export type GameMap = {
   cells: {
     terrain: Terrain;
     light?: CellLight;
+    obstacle?: string;
   }[][][];
   startPositions: Point3D[][];
 };

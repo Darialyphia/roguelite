@@ -3,11 +3,12 @@ import { waitFor, type Nullable } from '@game/shared';
 import { makeCardViewModel, type CardViewModel } from '../card.model';
 import { useBattleEvent, useGame } from '@/pages/battle/battle.store';
 import Card from './Card.vue';
+import { GAME_EVENTS } from '@game/engine/src/game/game';
 
 const card = ref<Nullable<CardViewModel>>();
 
 const game = useGame();
-useBattleEvent('unit.before_play_card', async event => {
+useBattleEvent(GAME_EVENTS.UNIT_BEFORE_PLAY_CARD, async event => {
   card.value = makeCardViewModel(game.value, event.card);
   await waitFor(2000);
   card.value = null;

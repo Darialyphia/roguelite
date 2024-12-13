@@ -281,7 +281,7 @@ export const usePathHelpers = () => {
     return canMoveToCache.get(key)!;
   };
 
-  useBattleEvent('game.input-queue-flushed', async () => {
+  useBattleEvent(GAME_EVENTS.FLUSHED, async () => {
     pathCache.clear();
     canMoveToCache.clear();
   });

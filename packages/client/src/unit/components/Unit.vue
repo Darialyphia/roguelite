@@ -14,6 +14,7 @@ import { External, PTransition } from 'vue3-pixi';
 import type { Container } from 'pixi.js';
 import AlphaTransition from '@/ui/components/AlphaTransition.vue';
 import { waitFor } from '@game/shared';
+import { GAME_EVENTS } from '@game/engine/src/game/game';
 
 const { unit } = defineProps<{ unit: UnitViewModel }>();
 
@@ -48,17 +49,17 @@ const centerCamera = () => {
 };
 whenever(() => unit.isActive(), centerCamera);
 
-useBattleEvent('unit.before_attack', async e => {
+useBattleEvent(GAME_EVENTS.UNIT_BEFORE_ATTACK, async e => {
   if (e.unit.equals(unit.getUnit())) {
     await centerCamera();
   }
 });
-useBattleEvent('unit.before_receive_damage', async e => {
+useBattleEvent(GAME_EVENTS.UNIT_BEFORE_RECEIVE_DAMAGE, async e => {
   if (e.unit.equals(unit.getUnit())) {
     await centerCamera();
   }
 });
-useBattleEvent('unit.before_play_card', async e => {
+useBattleEvent(GAME_EVENTS.UNIT_BEFORE_PLAY_CARD, async e => {
   if (e.unit.equals(unit.getUnit())) {
     await centerCamera();
   }

@@ -9,6 +9,7 @@ import type { UnitViewModel } from '../unit.model';
 import { useShaker } from '@/shared/composables/vfx/useShaker';
 import type { Container } from 'pixi.js';
 import { waitFor } from '@game/shared';
+import { GAME_EVENTS } from '@game/engine/src/game/game';
 
 const { unit } = defineProps<{ unit: UnitViewModel }>();
 
@@ -31,7 +32,7 @@ const scaleX = computed(() => {
 const container = ref<Container>();
 const shaker = useShaker(container);
 
-useBattleEvent('unit.before_receive_damage', async e => {
+useBattleEvent(GAME_EVENTS.UNIT_BEFORE_RECEIVE_DAMAGE, async e => {
   if (!e.unit.equals(unit.getUnit())) return;
   const duration = 200;
 
@@ -56,7 +57,7 @@ useVFXEvent('SHAKE_UNIT', async params => {
   });
 });
 
-useBattleEvent('unit.before_destroy', async e => {
+useBattleEvent(GAME_EVENTS.UNIT_BEFORE_DESTROY, async e => {
   if (!e.unit.equals(unit.getUnit())) return Promise.resolve();
   await gsap.to(container.value!, {
     pixi: {

@@ -24,7 +24,9 @@ export const config = {
   // the max amount of turn a game can last
   MAX_TURN_COUNT: 10,
   // The default amount of time a unit can counter attack eveyr turn
-  MAX_COUNTERATTACKS_PER_TURN: 1
+  MAX_COUNTERATTACKS_PER_TURN: 1,
+  // The victory point gained at the end of the turn when a shrine is controlled by a player
+  SHRINE_VP_REWARD: 1
 } as const;
 
 export type Config = typeof config;
