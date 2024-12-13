@@ -5,7 +5,7 @@ import type { GameMap } from '../map';
 export const testMap1v1: GameMap = {
   id: 'testMap1v1',
   width: 13,
-  height: 7,
+  height: 9,
   cells: [
     [
       [
@@ -21,7 +21,7 @@ export const testMap1v1: GameMap = {
             offset: { x: 0, y: 0 },
             radius: 200,
             colorStops: [
-              [0, '#00dddd44'],
+              [0, '#00dddd26'],
               [1, '#00000000']
             ]
           }
@@ -33,7 +33,7 @@ export const testMap1v1: GameMap = {
             offset: { x: 0, y: 0 },
             radius: 200,
             colorStops: [
-              [0, '#00dddd44'],
+              [0, '#00dddd26'],
               [1, '#00000000']
             ]
           }
@@ -45,7 +45,7 @@ export const testMap1v1: GameMap = {
             offset: { x: 0, y: 0 },
             radius: 200,
             colorStops: [
-              [0, '#00dddd44'],
+              [0, '#00dddd26'],
               [1, '#00000000']
             ]
           }
@@ -57,6 +57,55 @@ export const testMap1v1: GameMap = {
         { terrain: TERRAINS.GROUND }
       ],
       [
+        { terrain: TERRAINS.GROUND },
+        { terrain: TERRAINS.GROUND },
+        { terrain: TERRAINS.GROUND },
+        { terrain: TERRAINS.GROUND },
+        { terrain: TERRAINS.GROUND },
+        {
+          terrain: TERRAINS.WATER,
+          light: {
+            blendMode: 1,
+            offset: { x: 0, y: 0 },
+            radius: 200,
+            colorStops: [
+              [0, '#00dddd26'],
+              [1, '#00000000']
+            ]
+          }
+        },
+        {
+          terrain: TERRAINS.WATER,
+          light: {
+            blendMode: 1,
+            offset: { x: 0, y: 0 },
+            radius: 200,
+            colorStops: [
+              [0, '#00dddd26'],
+              [1, '#00000000']
+            ]
+          }
+        },
+        {
+          terrain: TERRAINS.WATER,
+          light: {
+            blendMode: 1,
+            offset: { x: 0, y: 0 },
+            radius: 200,
+            colorStops: [
+              [0, '#00dddd26'],
+              [1, '#00000000']
+            ]
+          }
+        },
+        { terrain: TERRAINS.GROUND },
+        { terrain: TERRAINS.GROUND },
+        { terrain: TERRAINS.GROUND },
+        { terrain: TERRAINS.GROUND },
+        { terrain: TERRAINS.GROUND }
+      ],
+      [
+        { terrain: TERRAINS.GROUND },
         { terrain: TERRAINS.GROUND },
         { terrain: TERRAINS.GROUND },
         { terrain: TERRAINS.GROUND },
@@ -69,7 +118,7 @@ export const testMap1v1: GameMap = {
             offset: { x: 0, y: 0 },
             radius: 200,
             colorStops: [
-              [0, '#00dddd44'],
+              [0, '#00dddd26'],
               [1, '#00000000']
             ]
           }
@@ -81,19 +130,7 @@ export const testMap1v1: GameMap = {
             offset: { x: 0, y: 0 },
             radius: 200,
             colorStops: [
-              [0, '#00dddd44'],
-              [1, '#00000000']
-            ]
-          }
-        },
-        {
-          terrain: TERRAINS.WATER,
-          light: {
-            blendMode: 1,
-            offset: { x: 0, y: 0 },
-            radius: 200,
-            colorStops: [
-              [0, '#00dddd44'],
+              [0, '#00dddd26'],
               [1, '#00000000']
             ]
           }
@@ -162,7 +199,7 @@ export const testMap1v1: GameMap = {
             offset: { x: 0, y: 0 },
             radius: 200,
             colorStops: [
-              [0, '#00dddd44'],
+              [0, '#00dddd26'],
               [1, '#00000000']
             ]
           }
@@ -174,19 +211,7 @@ export const testMap1v1: GameMap = {
             offset: { x: 0, y: 0 },
             radius: 200,
             colorStops: [
-              [0, '#00dddd44'],
-              [1, '#00000000']
-            ]
-          }
-        },
-        {
-          terrain: TERRAINS.WATER,
-          light: {
-            blendMode: 1,
-            offset: { x: 0, y: 0 },
-            radius: 200,
-            colorStops: [
-              [0, '#00dddd44'],
+              [0, '#00dddd26'],
               [1, '#00000000']
             ]
           }
@@ -195,6 +220,7 @@ export const testMap1v1: GameMap = {
         { terrain: TERRAINS.GROUND },
         { terrain: TERRAINS.GROUND },
         { terrain: TERRAINS.GROUND },
+        { terrain: TERRAINS.GROUND },
         { terrain: TERRAINS.GROUND }
       ],
       [
@@ -210,7 +236,7 @@ export const testMap1v1: GameMap = {
             offset: { x: 0, y: 0 },
             radius: 200,
             colorStops: [
-              [0, '#00dddd44'],
+              [0, '#00dddd26'],
               [1, '#00000000']
             ]
           }
@@ -222,7 +248,7 @@ export const testMap1v1: GameMap = {
             offset: { x: 0, y: 0 },
             radius: 200,
             colorStops: [
-              [0, '#00dddd44'],
+              [0, '#00dddd26'],
               [1, '#00000000']
             ]
           }
@@ -234,7 +260,55 @@ export const testMap1v1: GameMap = {
             offset: { x: 0, y: 0 },
             radius: 200,
             colorStops: [
-              [0, '#00dddd44'],
+              [0, '#00dddd26'],
+              [1, '#00000000']
+            ]
+          }
+        },
+        { terrain: TERRAINS.GROUND },
+        { terrain: TERRAINS.GROUND },
+        { terrain: TERRAINS.GROUND },
+        { terrain: TERRAINS.GROUND },
+        { terrain: TERRAINS.GROUND }
+      ],
+      [
+        { terrain: TERRAINS.GROUND },
+        { terrain: TERRAINS.GROUND },
+        { terrain: TERRAINS.GROUND },
+        { terrain: TERRAINS.GROUND },
+        { terrain: TERRAINS.GROUND },
+        {
+          terrain: TERRAINS.WATER,
+          light: {
+            blendMode: 1,
+            offset: { x: 0, y: 0 },
+            radius: 200,
+            colorStops: [
+              [0, '#00dddd26'],
+              [1, '#00000000']
+            ]
+          }
+        },
+        {
+          terrain: TERRAINS.WATER,
+          light: {
+            blendMode: 1,
+            offset: { x: 0, y: 0 },
+            radius: 200,
+            colorStops: [
+              [0, '#00dddd26'],
+              [1, '#00000000']
+            ]
+          }
+        },
+        {
+          terrain: TERRAINS.WATER,
+          light: {
+            blendMode: 1,
+            offset: { x: 0, y: 0 },
+            radius: 200,
+            colorStops: [
+              [0, '#00dddd26'],
               [1, '#00000000']
             ]
           }
@@ -250,10 +324,10 @@ export const testMap1v1: GameMap = {
   //prettier-ignore
   startPositions: [
     [
-      new Vec3(0,3,0)
+      new Vec3(0,4,0)
     ], 
     [
-      new Vec3(12,3,0)
+      new Vec3(12,4,0)
     ]
   ]
 };

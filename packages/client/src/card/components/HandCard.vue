@@ -108,7 +108,7 @@ li {
 }
 
 .disabled {
-  --disabled-filter: grayscale(60%) brightness(0.7);
+  --disabled-filter: grayscale(25%) brightness(0.8);
 }
 
 .card {
