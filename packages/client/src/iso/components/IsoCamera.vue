@@ -47,7 +47,7 @@ until(camera.viewport)
         direction: 'all'
       })
       .clampZoom({ minScale: config.MIN_ZOOM, maxScale: config.MAX_ZOOM })
-      .setZoom(config.INITIAL_ZOOM, false)
+      .setZoom(1, false)
       // .mouseEdges({
       //   distance: 10,
       //   speed: 15,

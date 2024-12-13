@@ -80,7 +80,7 @@ const filters = [
         :key="pos.id"
         :z-index="9999"
         :z-order="9999"
-        :y="-config.TILE_SPRITE_SIZE.height * 0.5"
+        :y="-config.TILE_SPRITE_SIZE.height * 0.75"
         :alpha="0.75"
         :filters="filters"
         @render="
@@ -88,7 +88,7 @@ const filters = [
             if (!hoveredCellIsoPosition) return;
             g.clear();
             g.moveTo(pos.x, pos.y);
-            g.lineStyle(3, '#e93100');
+            g.lineStyle(2, '#ffdaad');
             const midPoint = {
               x: (pos.cartesianPos.x + ui.hoveredCell!.x) / 2,
               y: (pos.cartesianPos.y + ui.hoveredCell!.y) / 2,

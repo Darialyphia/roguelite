@@ -10,7 +10,7 @@ import type { Point3D, Values } from '@game/shared';
 import { TypedEventEmitter } from '../utils/typed-emitter';
 import { RuneManager } from './components/rune-manager';
 import { match } from 'ts-pattern';
-import { RUNES } from '../utils/rune';
+import { Rune, RUNES } from '../utils/rune';
 import { CARD_KINDS } from '../card/card-enums';
 import { GeneralCard } from '../card/general-card.entity';
 
@@ -23,13 +23,21 @@ export type PlayerOptions = {
 
 export const PLAYER_EVENTS = {
   BEFORE_DRAW: 'before_draw',
-  AFTER_DRAW: 'after_draw'
+  AFTER_DRAW: 'after_draw',
+  BEFORE_GAIN_RUNE: 'before_gain_rune',
+  AFTER_GAIN_RUNE: 'after_gain_rune',
+  BEFORE_GAIN_GOLD: 'before_gain_gold',
+  AFTER_GAIN_GOLD: 'after_gain_gold'
 } as const;
 
 export type PlayerEvent = Values<typeof PLAYER_EVENTS>;
 export type PlayerEventMap = {
   [PLAYER_EVENTS.BEFORE_DRAW]: [{ amount: number }];
   [PLAYER_EVENTS.AFTER_DRAW]: [{ cards: Card[] }];
+  [PLAYER_EVENTS.BEFORE_GAIN_RUNE]: [{ rune: Rune }];
+  [PLAYER_EVENTS.AFTER_GAIN_RUNE]: [{ rune: Rune }];
+  [PLAYER_EVENTS.BEFORE_GAIN_GOLD]: [{ amount: number }];
+  [PLAYER_EVENTS.AFTER_GAIN_GOLD]: [{ amount: number }];
 };
 
 type ResourceAction =
@@ -106,8 +114,10 @@ export class Player extends Entity {
     return this.goldManager.amount;
   }
 
-  get addGold() {
-    return this.goldManager.deposit.bind(this.goldManager);
+  addGold(amount: number) {
+    this.emitter.emit(PLAYER_EVENTS.BEFORE_GAIN_GOLD, { amount });
+    this.goldManager.deposit(amount);
+    this.emitter.emit(PLAYER_EVENTS.AFTER_GAIN_GOLD, { amount });
   }
 
   get spendGold() {
@@ -118,8 +128,10 @@ export class Player extends Entity {
     return this.runeManager.runes;
   }
 
-  get addRune() {
-    return this.runeManager.add.bind(this.runeManager);
+  addRune(rune: Rune) {
+    this.emitter.emit(PLAYER_EVENTS.BEFORE_GAIN_RUNE, { rune });
+    this.runeManager.add(rune);
+    this.emitter.emit(PLAYER_EVENTS.AFTER_GAIN_RUNE, { rune });
   }
 
   get removeRune() {

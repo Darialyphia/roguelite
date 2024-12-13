@@ -13,6 +13,7 @@ import {
   HoverCardRoot,
   HoverCardTrigger
 } from 'radix-vue';
+import { GAME_PHASES } from '@game/engine/src/game/game-phase.system';
 
 const battleStore = useBattleStore();
 const ui = useBattleUiStore();
@@ -21,7 +22,7 @@ const state = useGameClientState();
 </script>
 
 <template>
-  <section class="turn-order">
+  <section class="turn-order" v-if="state.phase === GAME_PHASES.BATTLE">
     <div class="title">
       <div>Turn</div>
       <div class="turn" :data-text="state.turn">{{ state.turn }}</div>

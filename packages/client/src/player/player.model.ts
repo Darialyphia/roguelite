@@ -4,6 +4,7 @@ import type { Game } from '@game/engine';
 import type { EntityId } from '@game/engine/src/entity';
 import type { Player } from '@game/engine/src/player/player.entity';
 import type { Rune } from '@game/engine/src/utils/rune';
+import type { Point3D } from '@game/shared';
 
 export type PlayerViewModel = {
   id: EntityId;
@@ -16,6 +17,7 @@ export type PlayerViewModel = {
   deckSize: number;
   gold: number;
   remainingCardsInDeck: number;
+  startPosition: Point3D;
   equals(player: PlayerViewModel): boolean;
   isEnemy(unit: UnitViewModel): boolean;
   isAlly(unit: UnitViewModel): boolean;
@@ -35,6 +37,7 @@ export const makePlayerViewModel = (
     deckSize: player.deckSize,
     remainingCardsInDeck: player.remainingCardsInDeck,
     gold: player.gold,
+    startPosition: player.startPosition,
     getPlayer() {
       return player;
     },

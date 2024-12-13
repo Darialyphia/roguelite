@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { useBattleStore } from './battle.store';
+import { useBattleStore, useUserPlayer } from './battle.store';
 import Board from '@/board/components/Board.vue';
 import { config } from '@/utils/config';
 import IsoWorld from '@/iso/components/IsoWorld.vue';
@@ -20,6 +20,7 @@ const battleStore = useBattleStore();
 const settingsStore = useSettingsStore();
 const uiStore = useBattleUiStore();
 const isoWorld = useTemplateRef('isoWorld');
+const userPlayer = useUserPlayer();
 
 useKeyboardControl(
   'keydown',
@@ -61,14 +62,28 @@ useKeyboardControl(
     })
 );
 const ui = useBattleUiStore();
-watchEffect(() => {
-  // if (battleStore.state.phase === GAME_PHASES.BATTLE) {
-  //   isoWorld.value?.camera.viewport.value?.animate({
-  //     scale: config.MAX_ZOOM,
-  //     time: 1500
-  //   });
-  // }
-});
+until(() => battleStore.state.phase === GAME_PHASES.BATTLE)
+  .toBeTruthy()
+  .then(() => {
+    if (battleStore.state.phase === GAME_PHASES.BATTLE) {
+      const isoPos = isoWorld.value!.grid.toIso(userPlayer.value.startPosition);
+      isoWorld.value?.camera.viewport.value?.animate({
+        scale: config.INITIAL_ZOOM,
+        position: {
+          x: isoPos.x + isoWorld.value.camera.offset.value.x,
+          y: isoPos.y + isoWorld.value.camera.offset.value.y
+        },
+        time: 1500,
+        ease(t: number, b: number, c: number, d: number) {
+          if ((t /= d / 2) < 1) {
+            return (c / 2) * t * t + b;
+          } else {
+            return (-c / 2) * (--t * (t - 2) - 1) + b;
+          }
+        }
+      });
+    }
+  });
 </script>
 
 <template>

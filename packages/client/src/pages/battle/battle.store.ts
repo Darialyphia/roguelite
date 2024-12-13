@@ -24,6 +24,7 @@ import type {
 import {
   assert,
   isDefined,
+  Vec3,
   waitFor,
   type Override,
   type PartialBy,
@@ -247,9 +248,51 @@ export const usePathHelpers = () => {
   const game = useGame();
   const state = useGameClientState();
 
+  const pathCache = new Map<
+    string,
+    {
+      distance: number;
+      path: Vec3[];
+    } | null
+  >();
+
+  const canMoveToCache = new Map<string, boolean>();
+
+  const toCacheKey = (unit: UnitViewModel, point: Point3D) =>
+    `${unit.id}_${point.x}_${point.y}_${point.z}`;
+
+  const getPath = (unit: UnitViewModel, point: Point3D) => {
+    const key = toCacheKey(unit, point);
+
+    if (!pathCache.has(key)) {
+      pathCache.set(key, unit.getUnit().getPathTo(point));
+    }
+
+    return pathCache.get(key);
+  };
+
+  const getCanMoveTo = (unit: UnitViewModel, point: Point3D) => {
+    const key = toCacheKey(unit, point);
+
+    if (!canMoveToCache.has(key)) {
+      canMoveToCache.set(key, unit.getUnit().canMoveTo(point));
+    }
+
+    return canMoveToCache.get(key)!;
+  };
+
+  useBattleEvent('game.input-queue-flushed', async () => {
+    pathCache.clear();
+    canMoveToCache.clear();
+  });
+
   return {
     canMoveTo(unit: UnitViewModel, point: Point3D) {
-      return ui.mode === UI_MODES.BASIC && unit.getUnit().canMoveTo(point);
+      return ui.mode === UI_MODES.BASIC && getCanMoveTo(unit, point);
+    },
+
+    getPathTo(unit: UnitViewModel, point: Point3D) {
+      return getPath(unit, point);
     },
 
     canAttackAt(unit: UnitViewModel, point: Point3D) {
@@ -259,7 +302,7 @@ export const usePathHelpers = () => {
           return false;
         }
 
-        const path = unit.getUnit().getPathTo(cell);
+        const path = getPath(unit, cell);
         if (!path) {
           return false;
         }

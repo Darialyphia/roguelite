@@ -10,7 +10,7 @@ export class Rune extends Entity {
 }
 
 export const RUNES = {
-  RED: new Rune('RED', 'Destructio'),
+  RED: new Rune('RED', 'Destruction'),
   YELLOW: new Rune('YELLOW', 'Order'),
   GREEN: new Rune('GREEN', 'Creation'),
   PURPLE: new Rune('PURPLE', '  Chaos'),

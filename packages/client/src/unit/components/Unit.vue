@@ -2,7 +2,7 @@
 import UnitOrientation from './UnitOrientation.vue';
 import UnitSprite from './UnitSprite.vue';
 import UnitShadow from './UnitShadow.vue';
-import UnitStatBars from './UnitStatBars.vue';
+import UnitStatsIndicators from './UnitStatsIndicators.vue';
 import UnitPositioner from './UnitPositioner.vue';
 import type { UnitViewModel } from '../unit.model';
 import UnitVFX from './vfx/UnitVFX.vue';
@@ -41,7 +41,7 @@ const centerCamera = () => {
 
   camera.viewport.value?.animate({
     position,
-    time: 250,
+    time: 500,
     ease: 'easeOutSine'
   });
   return waitFor(250);
@@ -98,7 +98,7 @@ const spawnAnimation = (container: Container) => {
     <UnitVFX :unit="unit" />
     <template v-if="isSpawnAnimationDone">
       <AlphaTransition :duration="{ enter: 200, leave: 200 }">
-        <UnitStatBars :unit="unit" />
+        <UnitStatsIndicators :unit="unit" />
       </AlphaTransition>
     </template>
   </UnitPositioner>

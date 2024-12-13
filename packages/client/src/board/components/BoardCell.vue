@@ -5,7 +5,11 @@ import BoardCellSprite from './BoardCellSprite.vue';
 import UiAnimatedSprite from '@/ui/components/UiAnimatedSprite.vue';
 import BoardCellHighlights from './BoardCellHighlights.vue';
 import type { CellViewModel } from '../models/cell.model';
-import { useBattleStore, useGame } from '@/pages/battle/battle.store';
+import {
+  useBattleStore,
+  useGame,
+  usePathHelpers
+} from '@/pages/battle/battle.store';
 import { useIsoCamera } from '@/iso/composables/useIsoCamera';
 import { match } from 'ts-pattern';
 import { PTransition, External } from 'vue3-pixi';
@@ -30,6 +34,7 @@ const battle = useBattleStore();
 const isHovered = computed(() => ui.hoveredCell?.equals(cell.getCell()));
 
 const camera = useIsoCamera();
+const pathHelpers = usePathHelpers();
 
 const spawnAnimation = (container: Container) => {
   container.y = -400;

@@ -21,6 +21,7 @@ const activeUnit = useActiveUnit();
 const camera = useIsoCamera();
 const ui = useBattleUiStore();
 const state = useGameClientState();
+const pathHelpers = usePathHelpers();
 
 const isWithinCardRange = computed(() => {
   if (!ui.selectedCard) return;
@@ -39,9 +40,7 @@ const canTarget = computed(() => {
 });
 
 const canMove = computed(() => {
-  return (
-    ui.mode === UI_MODES.BASIC && activeUnit.value?.getUnit().canMoveTo(cell)
-  );
+  return !!activeUnit.value && pathHelpers.canMoveTo(activeUnit.value, cell);
 });
 
 const canAttack = computed(() => {
@@ -54,13 +53,12 @@ const canAttack = computed(() => {
 });
 
 const isOnPath = computed(() => {
-  if (ui.mode !== UI_MODES.BASIC) return false;
   if (camera.isDragging.value) return false;
   if (!activeUnit.value) return false;
   if (!ui.hoveredCell) return false;
-  if (!activeUnit.value.getUnit().canMoveTo(ui.hoveredCell)) return false;
+  if (!canMove.value) return false;
 
-  const path = activeUnit.value.getUnit().getPathTo(ui.hoveredCell);
+  const path = pathHelpers.getPathTo(activeUnit.value, ui.hoveredCell);
 
   return path?.path.some(point => point.equals(cell));
 });
@@ -76,7 +74,6 @@ const isInCardAoe = computed(() => {
 });
 const userPlayer = useUserPlayer();
 
-const pathHelpers = usePathHelpers();
 const isDangerZone = computed(() => {
   if (!canMove.value) return false;
   return state.value.units

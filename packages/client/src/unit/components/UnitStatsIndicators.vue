@@ -4,43 +4,18 @@ import { useSpritesheet } from '@/shared/composables/useSpritesheet';
 import { createSpritesheetFrameObject } from '@/utils/sprite';
 import type { UnitViewModel } from '../unit.model';
 import { useBattleEvent } from '@/pages/battle/battle.store';
-import type { AnimatedSprite } from 'pixi.js';
+import { TextStyle, type AnimatedSprite } from 'pixi.js';
 import { SpellCard } from '@game/engine/src/card/spell-card.entity';
 import { useBattleUiStore } from '@/pages/battle/battle-ui.store';
 
 const { unit } = defineProps<{ unit: UnitViewModel }>();
 
-const tweenedAp = ref(unit.currentAp);
-const tweenedHp = ref(unit.currentHp);
-const roundedTweenedAp = computed(() => Math.floor(tweenedAp.value));
-
-const sheet = useSpritesheet<'', 'base'>('unit-stat-bars');
+const sheet = useSpritesheet<'', 'base'>('unit-stats');
 const textures = computed(() => {
   if (!sheet.value) return null;
 
-  return createSpritesheetFrameObject(
-    `${roundedTweenedAp.value}`,
-    sheet.value.sheets.base.base
-  );
+  return createSpritesheetFrameObject('idle', sheet.value.sheets.base.base);
 });
-
-const animateAp = (newVal: number) => {
-  gsap.killTweensOf(tweenedAp);
-  gsap.to(tweenedAp, {
-    value: newVal,
-    duration: 0.4
-  });
-};
-const animateHp = (newVal: number) => {
-  gsap.killTweensOf(tweenedHp);
-  gsap.to(tweenedHp, {
-    value: newVal,
-    duration: 0.4
-  });
-};
-
-watch(() => unit.currentAp, animateAp);
-watch(() => unit.currentHp, animateHp);
 
 useBattleEvent('unit.after_move', e => {
   return new Promise(resolve => {
@@ -82,6 +57,15 @@ useBattleEvent('unit.before_destroy', async e => {
 });
 
 const ui = useBattleUiStore();
+
+const getTextStyle = (color: number) => {
+  return new TextStyle({
+    fontSize: 20,
+    fill: color,
+    fontFamily: 'SilkScreen',
+    align: 'center'
+  });
+};
 </script>
 
 <template>
@@ -99,47 +83,33 @@ const ui = useBattleUiStore();
     event-mode="none"
     playing
     loop
-    :y="-45"
+    :y="-35"
   >
-    <pixi-graphics
-      :x="-sheet.meta.size.w / 2"
-      :y="-12"
-      v-if="sheet"
-      @render="
-        g => {
-          const slices = [
-            [
-              sheet!.meta.slices?.find(slice => slice.name === 'ap'),
-              tweenedAp,
-              unit.maxAp
-            ] as const,
-            [
-              sheet!.meta.slices?.find(slice => slice.name === 'hp'),
-              tweenedHp,
-              unit.maxHp
-            ] as const
-          ];
-          g.clear();
-          g.beginFill(0x665555);
-          slices.forEach(([slice, stat, max]) => {
-            if (!slice) return;
-            const { bounds } = slice.keys[0];
-            const xOffset = clamp(
-              Math.round(bounds.w * (stat / max)),
-              0,
-              bounds.w
-            );
-            g.drawRect(
-              bounds.x + xOffset,
-              bounds.y,
-              bounds.w - xOffset,
-              bounds.h
-            );
-          });
-
-          g.endFill();
-        }
-      "
-    />
+    <pixi-text
+      :style="getTextStyle(0xff0000)"
+      :x="-22"
+      :y="-2"
+      :scale="0.5"
+      :anchor="0.5"
+    >
+      {{ unit.atk }}
+    </pixi-text>
+    <pixi-text
+      :style="getTextStyle(0x84f200)"
+      :y="-2"
+      :scale="0.5"
+      :anchor="0.5"
+    >
+      {{ unit.currentHp }}
+    </pixi-text>
+    <pixi-text
+      :style="getTextStyle(0x00bcff)"
+      :x="22"
+      :y="-2"
+      :scale="0.5"
+      :anchor="0.5"
+    >
+      {{ unit.currentAp }}
+    </pixi-text>
   </animated-sprite>
 </template>

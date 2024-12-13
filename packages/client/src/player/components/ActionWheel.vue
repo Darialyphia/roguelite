@@ -194,6 +194,7 @@ const isUserPlayerTurn = computed(() =>
   height: calc(1px * v-bind('config.ACTION_WHEEL_HEIGHT'));
   padding-left: 9px;
   padding-top: 9px;
+  filter: drop-shadow(0 10px 0 #32021b);
 }
 
 button {

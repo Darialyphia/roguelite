@@ -4,7 +4,12 @@ import { config } from '@/utils/config';
 import { config as engineConfig } from '@game/engine/src/config';
 import { type Rune, RUNES } from '@game/engine/src/utils/rune';
 import { GAME_PHASES } from '@game/engine/src/game/game-phase.system';
-import { useGameClientState } from '@/pages/battle/battle.store';
+import {
+  useBattleEvent,
+  useGameClientState,
+  useUserPlayer
+} from '@/pages/battle/battle.store';
+import { waitFor } from '@game/shared';
 
 const { player, inverted } = defineProps<{
   player: PlayerViewModel;
@@ -14,6 +19,24 @@ const { player, inverted } = defineProps<{
 const getRuneCountByType = (rune: Rune) =>
   player.runes.filter(r => r.equals(rune)).length;
 const state = useGameClientState();
+
+const userPlayer = useUserPlayer();
+
+const latestRune = ref<string | null>(null);
+useBattleEvent('player.after_gain_rune', async e => {
+  if (!player.getPlayer().equals(e.player)) return;
+  latestRune.value = e.rune.id;
+
+  // only wait asynchronously if it's the opponent who added a rune
+  if (userPlayer.value.equals(player)) {
+    setTimeout(() => {
+      latestRune.value = null;
+    }, 1000);
+  } else {
+    await waitFor(1000);
+    latestRune.value = null;
+  }
+});
 </script>
 
 <template>
@@ -27,31 +50,56 @@ const state = useGameClientState();
       <div class="avatar runes circle-layout">
         <div
           class="rune circle-layout-item"
-          style="--bg: url('/assets/ui/rune-blue-small.png')"
+          :class="{ glowing: latestRune === RUNES.BLUE.id }"
+          :style="{
+            '--bg': 'url(\'/assets/ui/rune-blue-small.png\')',
+            '--rune-glow-radius': latestRune === RUNES.BLUE.id ? '20px' : 0,
+            '--glow-color': '#32a4e0'
+          }"
         >
           {{ getRuneCountByType(RUNES.BLUE) }}
         </div>
         <div
           class="rune circle-layout-item"
-          style="--bg: url('/assets/ui/rune-red-small.png')"
+          :class="{ glowing: latestRune === RUNES.RED.id }"
+          :style="{
+            '--bg': 'url(\'/assets/ui/rune-red-small.png\')',
+            '--rune-glow-radius': latestRune === RUNES.RED.id ? '20px' : 0,
+            '--glow-color': '#ff4f00'
+          }"
         >
           {{ getRuneCountByType(RUNES.RED) }}
         </div>
         <div
           class="rune circle-layout-item"
-          style="--bg: url('/assets/ui/rune-green-small.png')"
+          :class="{ glowing: latestRune === RUNES.GREEN.id }"
+          :style="{
+            '--bg': 'url(\'/assets/ui/rune-green-small.png\')',
+            '--rune-glow-radius': latestRune === RUNES.GREEN.id ? '20px' : 0,
+            '--glow-color': '#4ac510'
+          }"
         >
           {{ getRuneCountByType(RUNES.GREEN) }}
         </div>
         <div
           class="rune circle-layout-item"
-          style="--bg: url('/assets/ui/rune-yellow-small.png')"
+          :class="{ glowing: latestRune === RUNES.YELLOW.id }"
+          :style="{
+            '--bg': 'url(\'/assets/ui/rune-yellow-small.png\')',
+            '--rune-glow-radius': latestRune === RUNES.YELLOW.id ? '20px' : 0,
+            '--glow-color': '#efcb3a'
+          }"
         >
           {{ getRuneCountByType(RUNES.YELLOW) }}
         </div>
         <div
           class="rune circle-layout-item"
-          style="--bg: url('/assets/ui/rune-purple-small.png')"
+          :class="{ glowing: latestRune === RUNES.PURPLE.id }"
+          :style="{
+            '--bg': 'url(\'/assets/ui/rune-purple-small.png\')',
+            '--rune-glow-radius': latestRune === RUNES.PURPLE.id ? '20px' : 0,
+            '--glow-color': '#b63dbb'
+          }"
         >
           {{ getRuneCountByType(RUNES.PURPLE) }}
         </div>
@@ -100,6 +148,7 @@ const state = useGameClientState();
 .avatar {
   aspect-ratio: 1;
   background: url('/assets/ui/avatar-frame.png');
+  filter: drop-shadow(0 10px 0 #32021b);
 }
 
 .circle-layout {
@@ -136,6 +185,11 @@ const state = useGameClientState();
   }
 }
 
+@property --rune-glow-radius {
+  syntax: '<length>';
+  inherits: false;
+  initial-value: 0;
+}
 .runes {
   --radius: calc(36 * 3px);
   --total-items: 12;
@@ -148,6 +202,7 @@ const state = useGameClientState();
   z-index: 0;
 
   > .rune {
+    --rune-glow-radius: 0;
     background: var(--bg);
     width: calc(1px * v-bind('config.RUNE_SMALL_SIZE'));
     aspect-ratio: 1;
@@ -157,6 +212,14 @@ const state = useGameClientState();
     font-size: var(--font-size-4);
     padding-bottom: 3px;
     text-shadow: 0 2px #fffe00;
+    transition:
+      --rune-glow-radius 0.5s var(--ease-2),
+      filter 0.3s;
+    --glow: drop-shadow(0 0 var(--rune-glow-radius) var(--glow-color));
+    filter: var(--glow) brightness(100%);
+    &.glowing {
+      filter: var(--glow) brightness(150%);
+    }
   }
 
   .gold {
@@ -228,6 +291,7 @@ const state = useGameClientState();
   display: flex;
   flex-direction: column;
   gap: var(--size-2);
+  filter: drop-shadow(0 6px 0 #32021b);
 
   > div {
     --size: 30px;
@@ -235,16 +299,18 @@ const state = useGameClientState();
     background-position: center left;
     background-repeat: no-repeat;
     height: var(--size);
-    padding-left: calc(var(--size) + var(--size-1));
+    padding-left: calc(var(--size) + var(--size-2));
     font-size: var(--size-4);
     display: flex;
     align-items: center;
     position: relative;
     z-index: 0;
+    font-family: 'Press Start 2P';
+
     .is-inverted & {
       background-position: center right;
       padding-left: 0;
-      padding-right: calc(var(--size) + var(--size-1));
+      padding-right: calc(var(--size) + var(--size-2));
       display: flex;
       justify-content: flex-end;
     }

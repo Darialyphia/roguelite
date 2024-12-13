@@ -9,14 +9,43 @@ export const testMap1v1: GameMap = {
   cells: [
     [
       [
+        { terrain: TERRAINS.GROUND },
+        { terrain: TERRAINS.GROUND },
+        { terrain: TERRAINS.GROUND },
+        { terrain: TERRAINS.GROUND },
+        { terrain: TERRAINS.GROUND },
         {
-          terrain: TERRAINS.GROUND,
+          terrain: TERRAINS.WATER,
           light: {
             blendMode: 1,
             offset: { x: 0, y: 0 },
-            radius: 500,
+            radius: 200,
             colorStops: [
-              [0, '#00FF0044'],
+              [0, '#00dddd44'],
+              [1, '#00000000']
+            ]
+          }
+        },
+        {
+          terrain: TERRAINS.WATER,
+          light: {
+            blendMode: 1,
+            offset: { x: 0, y: 0 },
+            radius: 200,
+            colorStops: [
+              [0, '#00dddd44'],
+              [1, '#00000000']
+            ]
+          }
+        },
+        {
+          terrain: TERRAINS.WATER,
+          light: {
+            blendMode: 1,
+            offset: { x: 0, y: 0 },
+            radius: 200,
+            colorStops: [
+              [0, '#00dddd44'],
               [1, '#00000000']
             ]
           }
@@ -25,110 +54,46 @@ export const testMap1v1: GameMap = {
         { terrain: TERRAINS.GROUND },
         { terrain: TERRAINS.GROUND },
         { terrain: TERRAINS.GROUND },
-        { terrain: TERRAINS.WATER },
-        { terrain: TERRAINS.WATER },
-        { terrain: TERRAINS.WATER },
+        { terrain: TERRAINS.GROUND }
+      ],
+      [
+        { terrain: TERRAINS.GROUND },
         { terrain: TERRAINS.GROUND },
         { terrain: TERRAINS.GROUND },
         { terrain: TERRAINS.GROUND },
         { terrain: TERRAINS.GROUND },
         {
-          terrain: TERRAINS.GROUND,
+          terrain: TERRAINS.WATER,
           light: {
             blendMode: 1,
             offset: { x: 0, y: 0 },
-            radius: 500,
+            radius: 200,
             colorStops: [
-              [0, '#FFFF0044'],
+              [0, '#00dddd44'],
               [1, '#00000000']
             ]
           }
-        }
-      ],
-      [
-        { terrain: TERRAINS.GROUND },
-        { terrain: TERRAINS.GROUND },
-        { terrain: TERRAINS.GROUND },
-        { terrain: TERRAINS.GROUND },
-        { terrain: TERRAINS.GROUND },
-        { terrain: TERRAINS.WATER },
-        { terrain: TERRAINS.WATER },
-        { terrain: TERRAINS.WATER },
-        { terrain: TERRAINS.GROUND },
-        { terrain: TERRAINS.GROUND },
-        { terrain: TERRAINS.GROUND },
-        { terrain: TERRAINS.GROUND },
-        { terrain: TERRAINS.GROUND }
-      ],
-      [
-        { terrain: TERRAINS.GROUND },
-        { terrain: TERRAINS.GROUND },
-        { terrain: TERRAINS.GROUND },
-        { terrain: TERRAINS.GROUND },
-        { terrain: TERRAINS.GROUND },
-        { terrain: TERRAINS.GROUND },
-        { terrain: TERRAINS.GROUND },
-        { terrain: TERRAINS.GROUND },
-        { terrain: TERRAINS.GROUND },
-        { terrain: TERRAINS.GROUND },
-        { terrain: TERRAINS.GROUND },
-        { terrain: TERRAINS.GROUND },
-        { terrain: TERRAINS.GROUND }
-      ],
-      [
-        { terrain: TERRAINS.GROUND },
-        { terrain: TERRAINS.GROUND },
-        { terrain: TERRAINS.GROUND },
-        { terrain: TERRAINS.GROUND },
-        { terrain: TERRAINS.GROUND },
-        { terrain: TERRAINS.GROUND },
-        { terrain: TERRAINS.GROUND },
-        { terrain: TERRAINS.GROUND },
-        { terrain: TERRAINS.GROUND },
-        { terrain: TERRAINS.GROUND },
-        { terrain: TERRAINS.GROUND },
-        { terrain: TERRAINS.GROUND },
-        { terrain: TERRAINS.GROUND }
-      ],
-      [
-        { terrain: TERRAINS.GROUND },
-        { terrain: TERRAINS.GROUND },
-        { terrain: TERRAINS.GROUND },
-        { terrain: TERRAINS.GROUND },
-        { terrain: TERRAINS.GROUND },
-        { terrain: TERRAINS.GROUND },
-        { terrain: TERRAINS.GROUND },
-        { terrain: TERRAINS.GROUND },
-        { terrain: TERRAINS.GROUND },
-        { terrain: TERRAINS.GROUND },
-        { terrain: TERRAINS.GROUND },
-        { terrain: TERRAINS.GROUND },
-        { terrain: TERRAINS.GROUND }
-      ],
-      [
-        { terrain: TERRAINS.GROUND },
-        { terrain: TERRAINS.GROUND },
-        { terrain: TERRAINS.GROUND },
-        { terrain: TERRAINS.GROUND },
-        { terrain: TERRAINS.GROUND },
-        { terrain: TERRAINS.WATER },
-        { terrain: TERRAINS.WATER },
-        { terrain: TERRAINS.WATER },
-        { terrain: TERRAINS.GROUND },
-        { terrain: TERRAINS.GROUND },
-        { terrain: TERRAINS.GROUND },
-        { terrain: TERRAINS.GROUND },
-        { terrain: TERRAINS.GROUND }
-      ],
-      [
+        },
         {
-          terrain: TERRAINS.GROUND,
+          terrain: TERRAINS.WATER,
           light: {
             blendMode: 1,
             offset: { x: 0, y: 0 },
-            radius: 500,
+            radius: 200,
             colorStops: [
-              [0, '#FF00FF44'],
+              [0, '#00dddd44'],
+              [1, '#00000000']
+            ]
+          }
+        },
+        {
+          terrain: TERRAINS.WATER,
+          light: {
+            blendMode: 1,
+            offset: { x: 0, y: 0 },
+            radius: 200,
+            colorStops: [
+              [0, '#00dddd44'],
               [1, '#00000000']
             ]
           }
@@ -137,25 +102,148 @@ export const testMap1v1: GameMap = {
         { terrain: TERRAINS.GROUND },
         { terrain: TERRAINS.GROUND },
         { terrain: TERRAINS.GROUND },
-        { terrain: TERRAINS.WATER },
-        { terrain: TERRAINS.WATER },
-        { terrain: TERRAINS.WATER },
+        { terrain: TERRAINS.GROUND }
+      ],
+      [
+        { terrain: TERRAINS.GROUND },
+        { terrain: TERRAINS.GROUND },
+        { terrain: TERRAINS.GROUND },
+        { terrain: TERRAINS.GROUND },
+        { terrain: TERRAINS.GROUND },
+        { terrain: TERRAINS.GROUND },
+        { terrain: TERRAINS.GROUND },
+        { terrain: TERRAINS.GROUND },
+        { terrain: TERRAINS.GROUND },
+        { terrain: TERRAINS.GROUND },
+        { terrain: TERRAINS.GROUND },
+        { terrain: TERRAINS.GROUND },
+        { terrain: TERRAINS.GROUND }
+      ],
+      [
+        { terrain: TERRAINS.GROUND },
+        { terrain: TERRAINS.GROUND },
+        { terrain: TERRAINS.GROUND },
+        { terrain: TERRAINS.GROUND },
+        { terrain: TERRAINS.GROUND },
+        { terrain: TERRAINS.GROUND },
+        { terrain: TERRAINS.GROUND },
+        { terrain: TERRAINS.GROUND },
+        { terrain: TERRAINS.GROUND },
+        { terrain: TERRAINS.GROUND },
+        { terrain: TERRAINS.GROUND },
+        { terrain: TERRAINS.GROUND },
+        { terrain: TERRAINS.GROUND }
+      ],
+      [
+        { terrain: TERRAINS.GROUND },
+        { terrain: TERRAINS.GROUND },
+        { terrain: TERRAINS.GROUND },
+        { terrain: TERRAINS.GROUND },
+        { terrain: TERRAINS.GROUND },
+        { terrain: TERRAINS.GROUND },
+        { terrain: TERRAINS.GROUND },
+        { terrain: TERRAINS.GROUND },
+        { terrain: TERRAINS.GROUND },
+        { terrain: TERRAINS.GROUND },
+        { terrain: TERRAINS.GROUND },
+        { terrain: TERRAINS.GROUND },
+        { terrain: TERRAINS.GROUND }
+      ],
+      [
+        { terrain: TERRAINS.GROUND },
         { terrain: TERRAINS.GROUND },
         { terrain: TERRAINS.GROUND },
         { terrain: TERRAINS.GROUND },
         { terrain: TERRAINS.GROUND },
         {
-          terrain: TERRAINS.GROUND,
+          terrain: TERRAINS.WATER,
           light: {
             blendMode: 1,
             offset: { x: 0, y: 0 },
-            radius: 500,
+            radius: 200,
             colorStops: [
-              [0, '#00FFFF44'],
+              [0, '#00dddd44'],
               [1, '#00000000']
             ]
           }
-        }
+        },
+        {
+          terrain: TERRAINS.WATER,
+          light: {
+            blendMode: 1,
+            offset: { x: 0, y: 0 },
+            radius: 200,
+            colorStops: [
+              [0, '#00dddd44'],
+              [1, '#00000000']
+            ]
+          }
+        },
+        {
+          terrain: TERRAINS.WATER,
+          light: {
+            blendMode: 1,
+            offset: { x: 0, y: 0 },
+            radius: 200,
+            colorStops: [
+              [0, '#00dddd44'],
+              [1, '#00000000']
+            ]
+          }
+        },
+        { terrain: TERRAINS.GROUND },
+        { terrain: TERRAINS.GROUND },
+        { terrain: TERRAINS.GROUND },
+        { terrain: TERRAINS.GROUND },
+        { terrain: TERRAINS.GROUND }
+      ],
+      [
+        { terrain: TERRAINS.GROUND },
+        { terrain: TERRAINS.GROUND },
+        { terrain: TERRAINS.GROUND },
+        { terrain: TERRAINS.GROUND },
+        { terrain: TERRAINS.GROUND },
+        {
+          terrain: TERRAINS.WATER,
+          light: {
+            blendMode: 1,
+            offset: { x: 0, y: 0 },
+            radius: 200,
+            colorStops: [
+              [0, '#00dddd44'],
+              [1, '#00000000']
+            ]
+          }
+        },
+        {
+          terrain: TERRAINS.WATER,
+          light: {
+            blendMode: 1,
+            offset: { x: 0, y: 0 },
+            radius: 200,
+            colorStops: [
+              [0, '#00dddd44'],
+              [1, '#00000000']
+            ]
+          }
+        },
+        {
+          terrain: TERRAINS.WATER,
+          light: {
+            blendMode: 1,
+            offset: { x: 0, y: 0 },
+            radius: 200,
+            colorStops: [
+              [0, '#00dddd44'],
+              [1, '#00000000']
+            ]
+          }
+        },
+        { terrain: TERRAINS.GROUND },
+        { terrain: TERRAINS.GROUND },
+        { terrain: TERRAINS.GROUND },
+        { terrain: TERRAINS.GROUND },
+        { terrain: TERRAINS.GROUND }
       ]
     ]
   ],

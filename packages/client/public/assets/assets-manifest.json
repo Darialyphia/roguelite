@@ -322,6 +322,10 @@
       ]
     },
     {
+      "name": "props",
+      "assets": []
+    },
+    {
       "name": "tiles",
       "assets": [
         {
@@ -1042,6 +1046,35 @@
           ],
           "src": [
             "/assets/ui/unit-stat-bars.png"
+          ],
+          "foo": "bar",
+          "data": {
+            "tags": {
+              "m": true
+            }
+          }
+        },
+        {
+          "alias": [
+            "unit-stats"
+          ],
+          "src": [
+            "/assets/ui/unit-stats.json"
+          ],
+          "loadParser": "aseprite_loader",
+          "foo": "bar",
+          "data": {
+            "tags": {
+              "m": true
+            }
+          }
+        },
+        {
+          "alias": [
+            "unit-stats.png"
+          ],
+          "src": [
+            "/assets/ui/unit-stats.png"
           ],
           "foo": "bar",
           "data": {

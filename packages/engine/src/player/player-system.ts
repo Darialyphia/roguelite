@@ -16,6 +16,7 @@ export class PlayerSystem extends System<PlayerSystemOptions> {
       this.teamMap.set(team.id, team);
       team.players.forEach(player => {
         this.playerMap.set(player.id, player);
+        this.forwardListeners(player);
       });
     });
   }

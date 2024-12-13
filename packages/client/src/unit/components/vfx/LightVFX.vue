@@ -99,6 +99,6 @@ useVFXEvent('UPDATE_UNIT_LIGHT', async params => {
 </script>
 
 <template>
-  <!-- <PointLight :light="firstPass" />
-  <PointLight :light="secondPass" /> -->
+  <PointLight :light="firstPass" />
+  <PointLight :light="secondPass" />
 </template>

@@ -29,8 +29,8 @@ export const testSpell: SpellCardBlueprint = {
       }
     }
   ],
-  getAoe(game, card, points) {
-    return new RingAOEShape(game, game.turnSystem.activeUnit, points[0], {
+  getAoe(game) {
+    return new RingAOEShape(game, game.turnSystem.activeUnit, {
       allow3D: true,
       targetingType: TARGETING_TYPE.ENEMY
     });
