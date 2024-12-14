@@ -25,7 +25,7 @@ export const useIsoPoint = ({ position, zIndexOffset }: UseIsoTileOptions) => {
     const { z } = toValue(position);
     const raw =
       isoPosition.value.y +
-      config.TILE_SIZE.z * (z + 1) +
+      config.TILE_SIZE.z * 2 * (z + 1) +
       (toValue(zIndexOffset) ?? 0);
 
     return Math.round(raw * 10) / 10;

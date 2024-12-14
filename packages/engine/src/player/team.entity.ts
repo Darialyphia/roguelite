@@ -31,10 +31,17 @@ export class Team extends Entity {
         startPosition: player.startPosition,
         id: player.id,
         name: player.name,
-        deck: player.deck.cards.map(card => ({
-          id: `${player.id}_card_${card.blueprintId}_${nanoid(4)}`,
-          blueprint: CARDS_DICTIONARY[card.blueprintId as keyof typeof CARDS_DICTIONARY]
-        }))
+        deck: player.deck.cards.map(card => {
+          const blueprint =
+            CARDS_DICTIONARY[card.blueprintId as keyof typeof CARDS_DICTIONARY];
+          if (!blueprint) {
+            throw new Error(`blueprint not found: ${card.blueprintId}`);
+          }
+          return {
+            id: `${player.id}_card_${card.blueprintId}_${nanoid(4)}`,
+            blueprint
+          };
+        })
       });
       this.playerMap.set(entity.id, entity);
     });

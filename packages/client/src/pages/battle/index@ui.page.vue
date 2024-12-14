@@ -38,13 +38,18 @@ const options: Pick<GameOptions, 'mapId' | 'teams'> = {
         deck: {
           cards: [
             { blueprintId: 'testGeneral' },
-            { blueprintId: 'testUnit' },
-            { blueprintId: 'testUnit' },
-            { blueprintId: 'testUnit' },
-            { blueprintId: 'testUnit' },
-            { blueprintId: 'testUnit' },
-            { blueprintId: 'testSpell' },
-            { blueprintId: 'testSpell' },
+            { blueprintId: 'lancer' },
+            { blueprintId: 'lancer' },
+            { blueprintId: 'lancer' },
+            { blueprintId: 'emperor' },
+            { blueprintId: 'emperor' },
+            { blueprintId: 'emperor' },
+            { blueprintId: 'shaman' },
+            { blueprintId: 'shaman' },
+            { blueprintId: 'shaman' },
+            { blueprintId: 'dancer' },
+            { blueprintId: 'dancer' },
+            { blueprintId: 'dancer' },
             { blueprintId: 'testSpell' },
             { blueprintId: 'testSpell' },
             { blueprintId: 'testSpell' }
@@ -59,13 +64,18 @@ const options: Pick<GameOptions, 'mapId' | 'teams'> = {
         deck: {
           cards: [
             { blueprintId: 'testGeneral' },
-            { blueprintId: 'testUnit' },
-            { blueprintId: 'testUnit' },
-            { blueprintId: 'testUnit' },
-            { blueprintId: 'testUnit' },
-            { blueprintId: 'testUnit' },
-            { blueprintId: 'testSpell' },
-            { blueprintId: 'testSpell' },
+            { blueprintId: 'lancer' },
+            { blueprintId: 'lancer' },
+            { blueprintId: 'lancer' },
+            { blueprintId: 'emperor' },
+            { blueprintId: 'emperor' },
+            { blueprintId: 'emperor' },
+            { blueprintId: 'shaman' },
+            { blueprintId: 'shaman' },
+            { blueprintId: 'shaman' },
+            { blueprintId: 'dancer' },
+            { blueprintId: 'dancer' },
+            { blueprintId: 'dancer' },
             { blueprintId: 'testSpell' },
             { blueprintId: 'testSpell' },
             { blueprintId: 'testSpell' }
@@ -76,7 +86,7 @@ const options: Pick<GameOptions, 'mapId' | 'teams'> = {
   ]
 };
 const serverSession = new ServerSession({
-  rngSeed: '123',
+  rngSeed: 'omegalul',
   ...options
 });
 const clientSession = new ClientSession(options);
@@ -125,20 +135,18 @@ start();
     <MulliganOverlay />
     <PlayedCard />
 
-    <nav class="ml-11 mt-4 absolute top-0 left-12">
-      <ul class="hidden gap-2 pointer-events-auto">
-        <li>
-          <button @click="() => console.log(serverSession)">
-            Debug server session
-          </button>
-        </li>
-        <li>
-          <button @click="() => console.log(clientSession)">
-            Debug client session
-          </button>
-        </li>
-      </ul>
-    </nav>
+    <ul class="fixed flex gap-2 pointer-events-auto top-0 left-15">
+      <li>
+        <button @click="() => console.log(serverSession)">
+          Debug server session
+        </button>
+      </li>
+      <li>
+        <button @click="() => console.log(clientSession)">
+          Debug client session
+        </button>
+      </li>
+    </ul>
 
     <header class="flex gap-8 items-start justify-between mt-3 px-6">
       <TurnOrder />

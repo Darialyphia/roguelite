@@ -26,6 +26,7 @@ export class PlayCardInput extends Input<typeof schema> {
     }
 
     const card = this.player.getCardAt(this.payload.index);
+    console.log(this.player.hand, this.payload.index);
     if (!card.canPlayAt(this.payload.targets)) {
       throw new Error(`Cannot play card at index ${this.payload.index}`);
     }

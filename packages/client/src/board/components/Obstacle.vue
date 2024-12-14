@@ -20,11 +20,13 @@ const tag = computed(() => {
 </script>
 
 <template>
-  <UiAnimatedSprite
-    :assetId="obstacle.spriteId"
-    :y="-config.TILE_SIZE.y / 2"
-    :tag="tag"
-  />
+  <container>
+    <UiAnimatedSprite
+      :assetId="obstacle.spriteId"
+      :y="-config.TILE_SIZE.y / 2"
+      :tag="tag"
+    />
+  </container>
 </template>
 
 <style scoped lang="postcss"></style>

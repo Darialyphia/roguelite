@@ -139,12 +139,12 @@ export class AIPlayerAgent implements AIAgent {
   private computeMoveScores() {
     const results: ScoredInput[] = [];
 
-    const cells = this.game.boardSystem
-      .getNeighbors3D(this.activeUnit.position)
-      .filter(
-        cell =>
-          this.activeUnit.canMoveTo(cell) && this.activeUnit.position.isAxisAligned(cell)
+    const neighbors = this.game.boardSystem.getNeighbors3D(this.activeUnit.position);
+    const cells = neighbors.filter(cell => {
+      return (
+        this.activeUnit.canMoveTo(cell) && this.activeUnit.position.isAxisAligned(cell)
       );
+    });
 
     for (const cell of cells) {
       results.push(

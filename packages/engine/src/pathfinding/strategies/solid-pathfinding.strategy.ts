@@ -46,8 +46,8 @@ export class SolidBodyPathfindingStrategy implements PathfindingStrategy {
 
     const currentCell = this.game.boardSystem.getCellAt(from);
     const cell = this.game.boardSystem.getCellAt(target);
-    const cellBelow = cell?.cellAbove;
-    const cellAbove = cell?.cellBelow;
+    const cellBelow = this.game.boardSystem.getCellAt({ ...target, z: target.z - 1 });
+    const cellAbove = this.game.boardSystem.getCellAt({ ...target, z: target.z + 1 });
 
     if (!currentCell) return null;
 
@@ -74,7 +74,6 @@ export class SolidBodyPathfindingStrategy implements PathfindingStrategy {
       this.getEdge(node, 'west'),
       this.getEdge(node, 'east')
     ];
-
     this.cache.set(
       node,
       edges

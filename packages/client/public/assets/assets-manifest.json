@@ -273,10 +273,62 @@
         },
         {
           "alias": [
+            "icon-unit-apprentice"
+          ],
+          "src": [
+            "/assets/icons/unit-apprentice.png"
+          ],
+          "data": {
+            "tags": {
+              "m": true
+            }
+          }
+        },
+        {
+          "alias": [
             "icon-unit-arcane-servant"
           ],
           "src": [
             "/assets/icons/unit-arcane-servant.png"
+          ],
+          "data": {
+            "tags": {
+              "m": true
+            }
+          }
+        },
+        {
+          "alias": [
+            "icon-unit-berserker"
+          ],
+          "src": [
+            "/assets/icons/unit-berserker.png"
+          ],
+          "data": {
+            "tags": {
+              "m": true
+            }
+          }
+        },
+        {
+          "alias": [
+            "icon-unit-dancer"
+          ],
+          "src": [
+            "/assets/icons/unit-dancer.png"
+          ],
+          "data": {
+            "tags": {
+              "m": true
+            }
+          }
+        },
+        {
+          "alias": [
+            "icon-unit-emperor"
+          ],
+          "src": [
+            "/assets/icons/unit-emperor.png"
           ],
           "data": {
             "tags": {
@@ -299,10 +351,75 @@
         },
         {
           "alias": [
+            "icon-unit-gladiator"
+          ],
+          "src": [
+            "/assets/icons/unit-gladiator.png"
+          ],
+          "data": {
+            "tags": {
+              "m": true
+            }
+          }
+        },
+        {
+          "alias": [
+            "icon-unit-kings-guard"
+          ],
+          "src": [
+            "/assets/icons/unit-kings-guard.png"
+          ],
+          "data": {
+            "tags": {
+              "m": true
+            }
+          }
+        },
+        {
+          "alias": [
             "icon-unit-lancer"
           ],
           "src": [
             "/assets/icons/unit-lancer.png"
+          ],
+          "data": {
+            "tags": {
+              "m": true
+            }
+          }
+        },
+        {
+          "alias": [
+            "icon-unit-monk"
+          ],
+          "src": [
+            "/assets/icons/unit-monk.png"
+          ],
+          "data": {
+            "tags": {
+              "m": true
+            }
+          }
+        },
+        {
+          "alias": [
+            "icon-unit-shaman"
+          ],
+          "src": [
+            "/assets/icons/unit-shaman.png"
+          ],
+          "data": {
+            "tags": {
+              "m": true
+            }
+          }
+        },
+        {
+          "alias": [
+            "icon-unit-snake-lady"
+          ],
+          "src": [
+            "/assets/icons/unit-snake-lady.png"
           ],
           "data": {
             "tags": {
@@ -330,6 +447,33 @@
       "assets": [
         {
           "alias": [
+            "rock"
+          ],
+          "src": [
+            "/assets/obstacles/rock.json"
+          ],
+          "loadParser": "aseprite_loader",
+          "data": {
+            "tags": {
+              "m": true
+            }
+          }
+        },
+        {
+          "alias": [
+            "rock.png"
+          ],
+          "src": [
+            "/assets/obstacles/rock.png"
+          ],
+          "data": {
+            "tags": {
+              "m": true
+            }
+          }
+        },
+        {
+          "alias": [
             "shrine"
           ],
           "src": [
@@ -348,6 +492,33 @@
           ],
           "src": [
             "/assets/obstacles/shrine.png"
+          ],
+          "data": {
+            "tags": {
+              "m": true
+            }
+          }
+        },
+        {
+          "alias": [
+            "tree"
+          ],
+          "src": [
+            "/assets/obstacles/tree.json"
+          ],
+          "loadParser": "aseprite_loader",
+          "data": {
+            "tags": {
+              "m": true
+            }
+          }
+        },
+        {
+          "alias": [
+            "tree.png"
+          ],
+          "src": [
+            "/assets/obstacles/tree.png"
           ],
           "data": {
             "tags": {
@@ -434,6 +605,114 @@
           ],
           "src": [
             "/assets/tiles/grass.png"
+          ],
+          "data": {
+            "tags": {
+              "m": true
+            }
+          }
+        },
+        {
+          "alias": [
+            "grass2"
+          ],
+          "src": [
+            "/assets/tiles/grass2.json"
+          ],
+          "loadParser": "aseprite_loader",
+          "data": {
+            "tags": {
+              "m": true
+            }
+          }
+        },
+        {
+          "alias": [
+            "grass2.png"
+          ],
+          "src": [
+            "/assets/tiles/grass2.png"
+          ],
+          "data": {
+            "tags": {
+              "m": true
+            }
+          }
+        },
+        {
+          "alias": [
+            "grass3"
+          ],
+          "src": [
+            "/assets/tiles/grass3.json"
+          ],
+          "loadParser": "aseprite_loader",
+          "data": {
+            "tags": {
+              "m": true
+            }
+          }
+        },
+        {
+          "alias": [
+            "grass3.png"
+          ],
+          "src": [
+            "/assets/tiles/grass3.png"
+          ],
+          "data": {
+            "tags": {
+              "m": true
+            }
+          }
+        },
+        {
+          "alias": [
+            "grass4"
+          ],
+          "src": [
+            "/assets/tiles/grass4.json"
+          ],
+          "loadParser": "aseprite_loader",
+          "data": {
+            "tags": {
+              "m": true
+            }
+          }
+        },
+        {
+          "alias": [
+            "grass4.png"
+          ],
+          "src": [
+            "/assets/tiles/grass4.png"
+          ],
+          "data": {
+            "tags": {
+              "m": true
+            }
+          }
+        },
+        {
+          "alias": [
+            "grass5"
+          ],
+          "src": [
+            "/assets/tiles/grass5.json"
+          ],
+          "loadParser": "aseprite_loader",
+          "data": {
+            "tags": {
+              "m": true
+            }
+          }
+        },
+        {
+          "alias": [
+            "grass5.png"
+          ],
+          "src": [
+            "/assets/tiles/grass5.png"
           ],
           "data": {
             "tags": {

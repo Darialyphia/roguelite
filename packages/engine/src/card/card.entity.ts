@@ -133,7 +133,6 @@ export abstract class Card<
     if (targets.length < this.minTargets) {
       return false;
     }
-
     return this.canPlay && this.areTargetsValid(targets);
   }
 }
