@@ -27,7 +27,6 @@ export type UnitOptions = {
   id: string;
   position: Point3D;
   player: Player;
-  card: UnitCard;
 };
 
 export type UnitEventMap = {

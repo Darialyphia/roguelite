@@ -1,5 +1,5 @@
 { "frames": {
-   "water__tile_0_0": {
+   "dirt__tile_0_0": {
     "frame": { "x": 0, "y": 0, "w": 96, "h": 80 },
     "rotated": false,
     "trimmed": false,
@@ -7,7 +7,7 @@
     "sourceSize": { "w": 96, "h": 80 },
     "duration": 100
    },
-   "water__tile_90_0": {
+   "dirt__tile_90_0": {
     "frame": { "x": 96, "y": 0, "w": 96, "h": 80 },
     "rotated": false,
     "trimmed": false,
@@ -15,7 +15,7 @@
     "sourceSize": { "w": 96, "h": 80 },
     "duration": 100
    },
-   "water__tile_180_0": {
+   "dirt__tile_180_0": {
     "frame": { "x": 192, "y": 0, "w": 96, "h": 80 },
     "rotated": false,
     "trimmed": false,
@@ -23,7 +23,7 @@
     "sourceSize": { "w": 96, "h": 80 },
     "duration": 100
    },
-   "water__tile_270_0": {
+   "dirt__tile_270_0": {
     "frame": { "x": 288, "y": 0, "w": 96, "h": 80 },
     "rotated": false,
     "trimmed": false,
@@ -35,7 +35,7 @@
  "meta": {
   "app": "https://www.aseprite.org/",
   "version": "1.3.10.1-x64",
-  "image": "water.png",
+  "image": "dirt.png",
   "format": "RGBA8888",
   "size": { "w": 384, "h": 80 },
   "scale": "1",

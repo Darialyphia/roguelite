@@ -1,4 +1,4 @@
-import type { Point3D, Values } from '@game/shared';
+import type { Nullable, Point3D, Values } from '@game/shared';
 import type { LightBlendMode } from '../vfx/vfx-sequencer';
 
 export type CellLight = {
@@ -12,11 +12,12 @@ export type GameMap = {
   id: string;
   height: number;
   width: number;
-  cells: {
+  cells: Nullable<{
     terrain: Terrain;
+    spriteId: string;
     light?: CellLight;
     obstacle?: string;
-  }[][][];
+  }>[][][];
   startPositions: Point3D[][];
 };
 

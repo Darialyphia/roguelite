@@ -362,6 +362,60 @@
       "assets": [
         {
           "alias": [
+            "bridge"
+          ],
+          "src": [
+            "/assets/tiles/bridge.json"
+          ],
+          "loadParser": "aseprite_loader",
+          "data": {
+            "tags": {
+              "m": true
+            }
+          }
+        },
+        {
+          "alias": [
+            "bridge.png"
+          ],
+          "src": [
+            "/assets/tiles/bridge.png"
+          ],
+          "data": {
+            "tags": {
+              "m": true
+            }
+          }
+        },
+        {
+          "alias": [
+            "dirt"
+          ],
+          "src": [
+            "/assets/tiles/dirt.json"
+          ],
+          "loadParser": "aseprite_loader",
+          "data": {
+            "tags": {
+              "m": true
+            }
+          }
+        },
+        {
+          "alias": [
+            "dirt.png"
+          ],
+          "src": [
+            "/assets/tiles/dirt.png"
+          ],
+          "data": {
+            "tags": {
+              "m": true
+            }
+          }
+        },
+        {
+          "alias": [
             "grass"
           ],
           "src": [

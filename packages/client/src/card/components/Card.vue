@@ -12,9 +12,6 @@ const { card, violations } = defineProps<{
   violations?: { job?: boolean; ap?: boolean; gold?: boolean; runes?: boolean };
 }>();
 
-watchEffect(() => {
-  console.log(violations);
-});
 const nameFontSize = useDynamicFontSize(card.name, {
   minFontSize: 10,
   maxFontSize: 21,

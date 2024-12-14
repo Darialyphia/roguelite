@@ -5,7 +5,6 @@ import { Position } from '../utils/position';
 import { TERRAINS, type Terrain } from './board-utils';
 import type { CellLight } from './map';
 import { Obstacle } from '../obstacle/obstacle.entity';
-import { OBSTACLES } from '../obstacle/obstacles/_index';
 import { nanoid } from 'nanoid';
 
 export type SerializedCoords = `${string}:${string}:${string}`;
@@ -16,10 +15,13 @@ export type CellOptions = {
   terrain: Terrain;
   light?: CellLight;
   obstacle?: string;
+  spriteId: string;
 };
 
 export class Cell extends Entity {
   readonly position: Position;
+
+  readonly spriteId: string;
 
   readonly terrain: Terrain;
 
@@ -35,6 +37,7 @@ export class Cell extends Entity {
     this.terrain = options.terrain;
     this.position = Position.fromPoint3D(options.position);
     this.light = options.light;
+    this.spriteId = options.spriteId;
 
     this.obstacle = options.obstacle
       ? new Obstacle(this.game, {

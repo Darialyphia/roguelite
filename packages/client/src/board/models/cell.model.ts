@@ -13,6 +13,7 @@ import type { Nullable } from '@game/shared';
 export type CellViewModel = {
   id: EntityId;
   terrain: Terrain;
+  spriteId: string;
   x: number;
   y: number;
   z: number;
@@ -31,6 +32,7 @@ export const makeCellViewModel = (game: Game, cell: Cell): CellViewModel => {
   return {
     id: cell.id,
     terrain: cell.terrain,
+    spriteId: cell.spriteId,
     x: cell.x,
     y: cell.y,
     z: cell.z,

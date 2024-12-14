@@ -23,12 +23,11 @@ export class BoardSystem extends System<BoardSystemOptions> {
     this.map.cells.forEach((plane, z) => {
       plane.forEach((row, y) => {
         row.forEach((cell, x) => {
+          if (!cell) return;
           const instance = new Cell(this.game, {
             id: pointToCellId({ x, y, z }),
             position: { x, y, z },
-            terrain: cell.terrain,
-            light: cell.light,
-            obstacle: cell.obstacle
+            ...cell
           });
           this.cellsMap.set(instance.id, instance);
         });

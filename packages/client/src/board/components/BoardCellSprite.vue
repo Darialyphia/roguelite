@@ -8,13 +8,7 @@ import { config } from '@/utils/config';
 
 const { cell } = defineProps<{ cell: CellViewModel }>();
 
-const sheetsDict: Record<Terrain, string> = {
-  [TERRAINS.GROUND]: 'grass',
-  [TERRAINS.WATER]: 'water',
-  [TERRAINS.EMPTY]: ''
-};
-
-const sheet = useSpritesheet<'', 'tile'>(() => sheetsDict[cell.terrain]);
+const sheet = useSpritesheet<'', 'tile'>(() => cell.spriteId);
 
 const camera = useIsoCamera();
 

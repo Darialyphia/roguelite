@@ -1,333 +1,169 @@
 import { Vec3 } from '@game/shared';
 import { TERRAINS } from '../board-utils';
 import type { GameMap } from '../map';
+import { plainTileset } from '../tilesets/plains';
 
 export const testMap1v1: GameMap = {
   id: 'testMap1v1',
   width: 13,
   height: 9,
   cells: [
+    // level 0
     [
       [
-        { terrain: TERRAINS.GROUND },
-        { terrain: TERRAINS.GROUND },
-        { terrain: TERRAINS.GROUND },
-        { terrain: TERRAINS.GROUND },
-        { terrain: TERRAINS.GROUND },
-        {
-          terrain: TERRAINS.WATER,
-          light: {
-            blendMode: 1,
-            offset: { x: 0, y: 0 },
-            radius: 200,
-            colorStops: [
-              [0, '#00dddd26'],
-              [1, '#00000000']
-            ]
-          }
-        },
-        {
-          terrain: TERRAINS.WATER,
-          light: {
-            blendMode: 1,
-            offset: { x: 0, y: 0 },
-            radius: 200,
-            colorStops: [
-              [0, '#00dddd26'],
-              [1, '#00000000']
-            ]
-          }
-        },
-        {
-          terrain: TERRAINS.WATER,
-          light: {
-            blendMode: 1,
-            offset: { x: 0, y: 0 },
-            radius: 200,
-            colorStops: [
-              [0, '#00dddd26'],
-              [1, '#00000000']
-            ]
-          }
-        },
-        { terrain: TERRAINS.GROUND },
-        { terrain: TERRAINS.GROUND },
-        { terrain: TERRAINS.GROUND },
-        { terrain: TERRAINS.GROUND },
-        { terrain: TERRAINS.GROUND }
+        plainTileset.GRASS,
+        plainTileset.GRASS,
+        plainTileset.GRASS,
+        plainTileset.GRASS,
+        plainTileset.GRASS,
+        plainTileset.WATER,
+        plainTileset.WATER,
+        plainTileset.WATER,
+        plainTileset.GRASS,
+        plainTileset.GRASS,
+        plainTileset.GRASS,
+        plainTileset.GRASS,
+        plainTileset.GRASS
       ],
       [
-        { terrain: TERRAINS.GROUND },
-        { terrain: TERRAINS.GROUND },
-        { terrain: TERRAINS.GROUND },
-        { terrain: TERRAINS.GROUND },
-        { terrain: TERRAINS.GROUND },
-        {
-          terrain: TERRAINS.WATER,
-          light: {
-            blendMode: 1,
-            offset: { x: 0, y: 0 },
-            radius: 200,
-            colorStops: [
-              [0, '#00dddd26'],
-              [1, '#00000000']
-            ]
-          }
-        },
-        {
-          terrain: TERRAINS.WATER,
-          light: {
-            blendMode: 1,
-            offset: { x: 0, y: 0 },
-            radius: 200,
-            colorStops: [
-              [0, '#00dddd26'],
-              [1, '#00000000']
-            ]
-          }
-        },
-        {
-          terrain: TERRAINS.WATER,
-          light: {
-            blendMode: 1,
-            offset: { x: 0, y: 0 },
-            radius: 200,
-            colorStops: [
-              [0, '#00dddd26'],
-              [1, '#00000000']
-            ]
-          }
-        },
-        { terrain: TERRAINS.GROUND },
-        { terrain: TERRAINS.GROUND },
-        { terrain: TERRAINS.GROUND },
-        { terrain: TERRAINS.GROUND },
-        { terrain: TERRAINS.GROUND }
+        plainTileset.GRASS,
+        plainTileset.GRASS,
+        plainTileset.GRASS,
+        plainTileset.GRASS,
+        plainTileset.GRASS,
+        plainTileset.WATER,
+        plainTileset.WATER,
+        plainTileset.WATER,
+        plainTileset.GRASS,
+        plainTileset.GRASS,
+        plainTileset.GRASS,
+        plainTileset.GRASS,
+        plainTileset.GRASS
       ],
       [
-        { terrain: TERRAINS.GROUND },
-        { terrain: TERRAINS.GROUND },
-        { terrain: TERRAINS.GROUND },
-        { terrain: TERRAINS.GROUND },
-        { terrain: TERRAINS.GROUND },
-        { terrain: TERRAINS.GROUND, obstacle: 'shrine' },
-        {
-          terrain: TERRAINS.WATER,
-          light: {
-            blendMode: 1,
-            offset: { x: 0, y: 0 },
-            radius: 200,
-            colorStops: [
-              [0, '#00dddd26'],
-              [1, '#00000000']
-            ]
-          }
-        },
-        {
-          terrain: TERRAINS.WATER,
-          light: {
-            blendMode: 1,
-            offset: { x: 0, y: 0 },
-            radius: 200,
-            colorStops: [
-              [0, '#00dddd26'],
-              [1, '#00000000']
-            ]
-          }
-        },
-        { terrain: TERRAINS.GROUND },
-        { terrain: TERRAINS.GROUND },
-        { terrain: TERRAINS.GROUND },
-        { terrain: TERRAINS.GROUND },
-        { terrain: TERRAINS.GROUND }
+        plainTileset.GRASS,
+        plainTileset.GRASS,
+        plainTileset.GRASS,
+        plainTileset.GRASS,
+        plainTileset.GRASS,
+        { ...plainTileset.DIRT, obstacle: 'shrine' },
+        plainTileset.WATER,
+        plainTileset.WATER,
+        plainTileset.GRASS,
+        plainTileset.GRASS,
+        plainTileset.GRASS,
+        plainTileset.GRASS,
+        plainTileset.GRASS
       ],
       [
-        { terrain: TERRAINS.GROUND },
-        { terrain: TERRAINS.GROUND },
-        { terrain: TERRAINS.GROUND },
-        { terrain: TERRAINS.GROUND },
-        { terrain: TERRAINS.GROUND },
-        { terrain: TERRAINS.GROUND },
-        { terrain: TERRAINS.GROUND },
-        { terrain: TERRAINS.GROUND },
-        { terrain: TERRAINS.GROUND },
-        { terrain: TERRAINS.GROUND },
-        { terrain: TERRAINS.GROUND },
-        { terrain: TERRAINS.GROUND },
-        { terrain: TERRAINS.GROUND }
+        plainTileset.GRASS,
+        plainTileset.GRASS,
+        plainTileset.GRASS,
+        plainTileset.GRASS,
+        plainTileset.GRASS,
+        plainTileset.BRIDGE,
+        plainTileset.BRIDGE,
+        plainTileset.BRIDGE,
+        plainTileset.GRASS,
+        plainTileset.GRASS,
+        plainTileset.GRASS,
+        plainTileset.GRASS,
+        plainTileset.GRASS
       ],
       [
-        { terrain: TERRAINS.GROUND },
-        { terrain: TERRAINS.GROUND },
-        { terrain: TERRAINS.GROUND },
-        { terrain: TERRAINS.GROUND },
-        { terrain: TERRAINS.GROUND },
-        { terrain: TERRAINS.GROUND },
-        { terrain: TERRAINS.GROUND },
-        { terrain: TERRAINS.GROUND },
-        { terrain: TERRAINS.GROUND },
-        { terrain: TERRAINS.GROUND },
-        { terrain: TERRAINS.GROUND },
-        { terrain: TERRAINS.GROUND },
-        { terrain: TERRAINS.GROUND }
+        plainTileset.GRASS,
+        plainTileset.GRASS,
+        plainTileset.GRASS,
+        plainTileset.GRASS,
+        plainTileset.GRASS,
+        plainTileset.WATER,
+        plainTileset.WATER,
+        plainTileset.WATER,
+        plainTileset.GRASS,
+        plainTileset.GRASS,
+        plainTileset.GRASS,
+        plainTileset.GRASS,
+        plainTileset.GRASS
       ],
       [
-        { terrain: TERRAINS.GROUND },
-        { terrain: TERRAINS.GROUND },
-        { terrain: TERRAINS.GROUND },
-        { terrain: TERRAINS.GROUND },
-        { terrain: TERRAINS.GROUND },
-        { terrain: TERRAINS.GROUND },
-        { terrain: TERRAINS.GROUND },
-        { terrain: TERRAINS.GROUND },
-        { terrain: TERRAINS.GROUND },
-        { terrain: TERRAINS.GROUND },
-        { terrain: TERRAINS.GROUND },
-        { terrain: TERRAINS.GROUND },
-        { terrain: TERRAINS.GROUND }
+        plainTileset.GRASS,
+        plainTileset.GRASS,
+        plainTileset.GRASS,
+        plainTileset.GRASS,
+        plainTileset.GRASS,
+        plainTileset.BRIDGE,
+        plainTileset.BRIDGE,
+        plainTileset.BRIDGE,
+        plainTileset.GRASS,
+        plainTileset.GRASS,
+        plainTileset.GRASS,
+        plainTileset.GRASS,
+        plainTileset.GRASS
       ],
       [
-        { terrain: TERRAINS.GROUND },
-        { terrain: TERRAINS.GROUND },
-        { terrain: TERRAINS.GROUND },
-        { terrain: TERRAINS.GROUND },
-        { terrain: TERRAINS.GROUND },
-        {
-          terrain: TERRAINS.WATER,
-          light: {
-            blendMode: 1,
-            offset: { x: 0, y: 0 },
-            radius: 200,
-            colorStops: [
-              [0, '#00dddd26'],
-              [1, '#00000000']
-            ]
-          }
-        },
-        {
-          terrain: TERRAINS.WATER,
-          light: {
-            blendMode: 1,
-            offset: { x: 0, y: 0 },
-            radius: 200,
-            colorStops: [
-              [0, '#00dddd26'],
-              [1, '#00000000']
-            ]
-          }
-        },
-        { terrain: TERRAINS.GROUND, obstacle: 'shrine' },
-        { terrain: TERRAINS.GROUND },
-        { terrain: TERRAINS.GROUND },
-        { terrain: TERRAINS.GROUND },
-        { terrain: TERRAINS.GROUND },
-        { terrain: TERRAINS.GROUND }
+        plainTileset.GRASS,
+        plainTileset.GRASS,
+        plainTileset.GRASS,
+        plainTileset.GRASS,
+        plainTileset.GRASS,
+        plainTileset.WATER,
+        plainTileset.WATER,
+        { ...plainTileset.DIRT, obstacle: 'shrine' },
+        plainTileset.GRASS,
+        plainTileset.GRASS,
+        plainTileset.GRASS,
+        plainTileset.GRASS,
+        plainTileset.GRASS
       ],
       [
-        { terrain: TERRAINS.GROUND },
-        { terrain: TERRAINS.GROUND },
-        { terrain: TERRAINS.GROUND },
-        { terrain: TERRAINS.GROUND },
-        { terrain: TERRAINS.GROUND },
-        {
-          terrain: TERRAINS.WATER,
-          light: {
-            blendMode: 1,
-            offset: { x: 0, y: 0 },
-            radius: 200,
-            colorStops: [
-              [0, '#00dddd26'],
-              [1, '#00000000']
-            ]
-          }
-        },
-        {
-          terrain: TERRAINS.WATER,
-          light: {
-            blendMode: 1,
-            offset: { x: 0, y: 0 },
-            radius: 200,
-            colorStops: [
-              [0, '#00dddd26'],
-              [1, '#00000000']
-            ]
-          }
-        },
-        {
-          terrain: TERRAINS.WATER,
-          light: {
-            blendMode: 1,
-            offset: { x: 0, y: 0 },
-            radius: 200,
-            colorStops: [
-              [0, '#00dddd26'],
-              [1, '#00000000']
-            ]
-          }
-        },
-        { terrain: TERRAINS.GROUND },
-        { terrain: TERRAINS.GROUND },
-        { terrain: TERRAINS.GROUND },
-        { terrain: TERRAINS.GROUND },
-        { terrain: TERRAINS.GROUND }
+        plainTileset.GRASS,
+        plainTileset.GRASS,
+        plainTileset.GRASS,
+        plainTileset.GRASS,
+        plainTileset.GRASS,
+        plainTileset.WATER,
+        plainTileset.WATER,
+        plainTileset.WATER,
+        plainTileset.GRASS,
+        plainTileset.GRASS,
+        plainTileset.GRASS,
+        plainTileset.GRASS,
+        plainTileset.GRASS
       ],
       [
-        { terrain: TERRAINS.GROUND },
-        { terrain: TERRAINS.GROUND },
-        { terrain: TERRAINS.GROUND },
-        { terrain: TERRAINS.GROUND },
-        { terrain: TERRAINS.GROUND },
-        {
-          terrain: TERRAINS.WATER,
-          light: {
-            blendMode: 1,
-            offset: { x: 0, y: 0 },
-            radius: 200,
-            colorStops: [
-              [0, '#00dddd26'],
-              [1, '#00000000']
-            ]
-          }
-        },
-        {
-          terrain: TERRAINS.WATER,
-          light: {
-            blendMode: 1,
-            offset: { x: 0, y: 0 },
-            radius: 200,
-            colorStops: [
-              [0, '#00dddd26'],
-              [1, '#00000000']
-            ]
-          }
-        },
-        {
-          terrain: TERRAINS.WATER,
-          light: {
-            blendMode: 1,
-            offset: { x: 0, y: 0 },
-            radius: 200,
-            colorStops: [
-              [0, '#00dddd26'],
-              [1, '#00000000']
-            ]
-          }
-        },
-        { terrain: TERRAINS.GROUND },
-        { terrain: TERRAINS.GROUND },
-        { terrain: TERRAINS.GROUND },
-        { terrain: TERRAINS.GROUND },
-        { terrain: TERRAINS.GROUND }
+        plainTileset.GRASS,
+        plainTileset.GRASS,
+        plainTileset.GRASS,
+        plainTileset.GRASS,
+        plainTileset.GRASS,
+        plainTileset.WATER,
+        plainTileset.WATER,
+        plainTileset.WATER,
+        plainTileset.GRASS,
+        plainTileset.GRASS,
+        plainTileset.GRASS,
+        plainTileset.GRASS,
+        plainTileset.GRASS
+      ]
+      // Level 1
+    ],
+    [
+      [
+        plainTileset.GRASS,
+        plainTileset.GRASS,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        plainTileset.GRASS,
+        plainTileset.GRASS
       ]
     ]
   ],
-  //prettier-ignore
-  startPositions: [
-    [
-      new Vec3(0,4,0)
-    ], 
-    [
-      new Vec3(12,4,0)
-    ]
-  ]
+  startPositions: [[new Vec3(0, 4, 0)], [new Vec3(12, 4, 0)]]
 };
