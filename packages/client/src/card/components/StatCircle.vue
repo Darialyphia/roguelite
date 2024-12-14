@@ -4,13 +4,14 @@ import { config } from '@/utils/config';
 const { value, icon } = defineProps<{
   value: number;
   icon: string;
+  invalid?: boolean;
 }>();
 
 const iconPath = computed(() => `url(/assets/ui/${icon}.png)`);
 </script>
 
 <template>
-  <div class="stat-circle">
+  <div class="stat-circle" :class="invalid && 'invalid'">
     <div :data-text="value">{{ value }}</div>
   </div>
 </template>
@@ -21,11 +22,10 @@ const iconPath = computed(() => `url(/assets/ui/${icon}.png)`);
   aspect-ratio: 1;
   background: url('/assets/ui/stat-circle.png');
   display: grid;
-  font-family: 'Silkscreen';
+  font-family: 'Press Start 2P';
   font-weight: bold;
-  font-size: var(--font-size-5);
+  font-size: var(--font-size-4);
   position: relative;
-  padding-bottom: 6px;
   z-index: 0;
 
   > div {
@@ -38,6 +38,14 @@ const iconPath = computed(() => `url(/assets/ui/${icon}.png)`);
     background-clip: text;
     color: transparent;
     position: relative;
+    .invalid & {
+      background: linear-gradient(
+        #ff0000,
+        #ff0000 calc(50% + 3px),
+        #aa0000 calc(50% + 3px)
+      );
+      background-clip: text;
+    }
     &:after {
       background: none;
       content: attr(data-text);

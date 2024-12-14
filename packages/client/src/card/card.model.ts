@@ -22,7 +22,6 @@ type CardViewModelBase = {
   name: string;
   description: string;
   cost?: CardBlueprintWithCost['cost'];
-  getCard(): Card;
   equals(card: CardViewModel): boolean;
   canPlayAt(points: Point3D[]): boolean;
   areTargetsValid(points: Point3D[]): boolean;
@@ -38,6 +37,7 @@ type UnitCardViewModel = CardViewModelBase & {
   reward: number;
   speed: number;
   jobs: Job[];
+  getCard(): UnitCard;
 };
 
 type GeneralCardViewModel = CardViewModelBase & {
@@ -47,11 +47,13 @@ type GeneralCardViewModel = CardViewModelBase & {
   reward: number;
   speed: number;
   jobs: Job[];
+  getCard(): GeneralCard;
 };
 
 type SpellCardViewModel = CardViewModelBase & {
   kind: (typeof CARD_KINDS)['SPELL'];
-  cost: { ap: number; runes: Rune[] };
+  cost: { ap: number; runes: Rune[]; job: Job[] };
+  getCard(): SpellCard;
 };
 
 export type CardViewModel =
@@ -77,9 +79,6 @@ const makeCardViewModelBase = (game: Game, card: Card): CardViewModelBase => {
     iconId: card.iconId,
     name: card.name,
     description: card.description,
-    getCard() {
-      return card;
-    },
     equals(otherCard) {
       return otherCard.getCard().equals(card);
     },
@@ -105,6 +104,9 @@ const makeUnitCardViewModel = (
   return {
     ...makeCardViewModelBase(game, card),
     kind: card.kind as any,
+    getCard() {
+      return card;
+    },
     atk: card.atk,
     maxHp: card.maxHp,
     speed: card.speed,
@@ -121,6 +123,9 @@ const makeGeneralCardViewModel = (
   return {
     ...makeCardViewModelBase(game, card),
     kind: card.kind as any,
+    getCard() {
+      return card;
+    },
     atk: card.atk,
     maxHp: card.maxHp,
     speed: card.speed,
@@ -136,6 +141,9 @@ const makeSpellCardViewModel = (
   return {
     ...makeCardViewModelBase(game, card),
     kind: card.kind as any,
+    getCard() {
+      return card;
+    },
     cost: card.cost
   };
 };

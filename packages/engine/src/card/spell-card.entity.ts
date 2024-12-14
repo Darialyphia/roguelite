@@ -7,11 +7,26 @@ export class SpellCard extends Card<SpellCardBlueprint> {
     return this.blueprint.cost;
   }
 
+  get isJobValid() {
+    return this.blueprint.cost.job.some(job =>
+      this.game.turnSystem.activeUnit.card.jobs.includes(job)
+    );
+  }
+
+  get isApValid() {
+    return this.game.turnSystem.activeUnit.canSpendAp(this.cost.ap);
+  }
+
+  get isRunesValid() {
+    return this.player.hasUnlockedRunes(this.cost.runes);
+  }
+
   get canPlay() {
     return (
       this.game.turnSystem.activeUnit.player.equals(this.player) &&
-      this.game.turnSystem.activeUnit.canSpendAp(this.cost.ap) &&
-      this.player.hasUnlockedRunes(this.cost.runes)
+      this.isApValid &&
+      this.isJobValid &&
+      this.isRunesValid
     );
   }
 

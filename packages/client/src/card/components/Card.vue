@@ -5,48 +5,29 @@ import StatCircle from './StatCircle.vue';
 import { CARD_KINDS } from '@game/engine/src/card/card-enums';
 import { match } from 'ts-pattern';
 import { RUNES, type Rune } from '@game/engine/src/utils/rune';
+import { useDynamicFontSize } from '@/shared/composables/useDynamicFontSize';
 
-const { card } = defineProps<{ card: CardViewModel }>();
+const { card, violations } = defineProps<{
+  card: CardViewModel;
+  violations?: { job?: boolean; ap?: boolean; gold?: boolean; runes?: boolean };
+}>();
 
-const nameFontSize = computed(() => {
-  const minFontSize = 10;
-  const maxFontSize = 21;
-  const maxLineLength = 30;
-  const minViewportWidth = 1;
-  const maxViewportWidth = 1900;
-  const textLength = card.name.length;
-
-  const relativeMaxFontSize =
-    textLength > maxLineLength
-      ? minFontSize
-      : maxFontSize -
-        ((maxFontSize - minFontSize) * textLength) / maxLineLength;
-
-  const relativeMaxViewportWidth =
-    maxViewportWidth * (minFontSize / relativeMaxFontSize);
-
-  const relativeMinViewportWidth =
-    minViewportWidth * (maxFontSize / relativeMaxFontSize);
-
-  const viewportWidth =
-    (100 * (maxFontSize - minFontSize)) /
-    (relativeMaxViewportWidth - relativeMinViewportWidth);
-
-  const relativeFontSize =
-    (relativeMinViewportWidth * maxFontSize -
-      relativeMaxViewportWidth * minFontSize) /
-    (relativeMinViewportWidth - relativeMaxViewportWidth);
-
-  return `clamp(${minFontSize / 16}rem, ${viewportWidth}vw + ${
-    relativeFontSize / 16
-  }rem, ${relativeMaxFontSize / 16}rem)`;
+watchEffect(() => {
+  console.log(violations);
+});
+const nameFontSize = useDynamicFontSize(card.name, {
+  minFontSize: 10,
+  maxFontSize: 21,
+  maxLineLength: 30
 });
 
 const imagePath = computed(() => `url(/assets/icons/${card.iconId}.png)`);
 
 const metaString = computed(() =>
   match(card)
-    .with({ kind: CARD_KINDS.SPELL }, card => card.kind)
+    .with({ kind: CARD_KINDS.SPELL }, card => {
+      return [card.kind, ...card.cost.job.map(j => j.name)].join(' - ');
+    })
     .with({ kind: CARD_KINDS.GENERAL }, card =>
       [card.kind, ...card.jobs.map(j => j.name)].join(' - ')
     )
@@ -55,6 +36,12 @@ const metaString = computed(() =>
     )
     .exhaustive()
 );
+const metaFontSize = useDynamicFontSize(metaString, {
+  minFontSize: 10,
+  maxFontSize: 21,
+  maxLineLength: 22
+});
+
 const getCostByRune = (rune: Rune) => {
   if (card.kind === CARD_KINDS.GENERAL) return 0;
   return card.cost.runes.filter(r => r.equals(rune)).length;
@@ -80,11 +67,13 @@ const runeCosts = computed(() => {
           v-if="card.kind === CARD_KINDS.UNIT"
           :value="card.cost.gold"
           icon="gold"
+          :invalid="violations?.gold"
         />
         <StatCircle
           v-if="card.kind === CARD_KINDS.SPELL"
           :value="card.cost.ap"
           icon="ap"
+          :invalid="violations?.ap"
         />
 
         <ul
@@ -95,6 +84,7 @@ const runeCosts = computed(() => {
             :key="rune.rune.id"
             v-show="rune.count > 0"
             class="rune"
+            :class="violations?.runes && 'invalid'"
             :style="{
               '--bg': `url('/assets/ui/rune-${rune.rune.id.toLowerCase()}-small.png')`
             }"
@@ -114,7 +104,7 @@ const runeCosts = computed(() => {
     </header>
     <div class="name">{{ card.name }}</div>
     <div class="description">{{ card.description }}</div>
-    <div class="meta">
+    <div class="meta" :class="violations?.job && 'invalid'">
       {{ metaString }}
     </div>
 
@@ -184,7 +174,7 @@ const runeCosts = computed(() => {
 
 .meta {
   font-family: 'Silkscreen';
-  font-size: 14px;
+  font-size: v-bind(metaFontSize);
   color: #d7ad42;
   text-transform: uppercase;
   position: absolute;
@@ -194,10 +184,18 @@ const runeCosts = computed(() => {
   width: 156px;
   line-height: 1;
   text-align: center;
+  white-space: nowrap;
+  &.invalid {
+    color: red;
+  }
+}
+
+ul:has(.rune) {
+  padding-left: 9px;
 }
 
 .rune {
-  width: 30px;
+  width: 42px;
   aspect-ratio: 1;
   background: var(--bg);
   display: grid;
@@ -207,6 +205,12 @@ const runeCosts = computed(() => {
   text-align: center;
   font-size: var(--font-size-4);
   text-shadow: 0 3px #d7ad42;
-  padding-left: 9px;
+  text-align: center;
+  &.invalid {
+    box-shadow: 0 0 3px 2px red;
+    border: solid 1px red;
+    border-radius: var(--radius-round);
+    aspect-ratio: 1;
+  }
 }
 </style>

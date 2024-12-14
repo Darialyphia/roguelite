@@ -34,10 +34,19 @@ export class UnitCard extends Card<UnitCardBlueprint> {
     return this.blueprint.spriteId;
   }
 
+  get isGoldValid() {
+    return this.player.canSpendGold(this.cost.gold);
+  }
+
+  get isRunesValid() {
+    return this.player.hasUnlockedRunes(this.cost.runes);
+  }
+
   get canPlay() {
     return (
-      this.player.canSpendGold(this.cost.gold) &&
-      this.player.hasUnlockedRunes(this.cost.runes)
+      this.game.turnSystem.activeUnit.player.equals(this.player) &&
+      this.isGoldValid &&
+      this.isRunesValid
     );
   }
 

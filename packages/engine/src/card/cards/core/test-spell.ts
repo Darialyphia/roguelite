@@ -11,7 +11,7 @@ import { CARD_KINDS } from '../../card-enums';
 
 export const testSpell: SpellCardBlueprint = {
   id: 'testSpell',
-  iconId: 'spell-arcane-intellect',
+  iconId: 'spell-fireball',
   name: 'Test Spell With Long Name',
   description: 'Deal 2 damage to nearby enemies.',
   kind: CARD_KINDS.SPELL,
@@ -19,7 +19,7 @@ export const testSpell: SpellCardBlueprint = {
   cost: {
     ap: 1,
     runes: [RUNES.RED, RUNES.COLORLESS],
-    job: [JOBS.FIGHTER]
+    job: [JOBS.MAGE]
   },
   minTargets: 1,
   targets: [

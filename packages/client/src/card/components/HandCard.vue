@@ -8,6 +8,8 @@ import { UI_MODES, useBattleUiStore } from '@/pages/battle/battle-ui.store';
 import { config } from '@/utils/config';
 import { useApplication } from 'vue3-pixi';
 import { type CardViewModel } from '../card.model';
+import { match } from 'ts-pattern';
+import { CARD_KINDS } from '@game/engine/src/card/card-enums';
 
 const { card } = defineProps<{ card: CardViewModel }>();
 const offset = defineModel<Point>('offset', { required: true });
@@ -25,8 +27,12 @@ const isOutOfScreen = usePageLeave();
 const isDragging = ref(false);
 const canPlay = computed(() => activeUnit.value?.canPlayCardAt(index.value));
 
+const isShaking = ref(false);
 const onMouseDown = (e: MouseEvent) => {
-  if (!canPlay.value) return;
+  if (!canPlay.value) {
+    isShaking.value = true;
+    return;
+  }
 
   ui.selectCardAtIndex(index.value);
   isDragging.value = true;
@@ -63,20 +69,40 @@ const onMouseDown = (e: MouseEvent) => {
     }
   });
 };
+
+const violations = computed(() =>
+  match(card)
+    .with({ kind: CARD_KINDS.GENERAL }, () => ({}))
+    .with({ kind: CARD_KINDS.UNIT }, card => ({
+      gold: !card.getCard().isGoldValid,
+      runes: !card.getCard().isRunesValid
+    }))
+    .with({ kind: CARD_KINDS.SPELL }, card => ({
+      job: !card.getCard().isJobValid,
+      ap: !card.getCard().isApValid,
+      runes: !card.getCard().isRunesValid
+    }))
+    .exhaustive()
+);
 </script>
 
 <template>
   <li
     :class="{
       hoverable: !ui.selectedCard,
-      disabled: !canPlay
+      'is-shaking': isShaking
     }"
     class="pointer-events-auto"
+    @animationend="isShaking = false"
     @mousedown="onMouseDown($event)"
   >
     <component :is="isDragging ? Teleport : 'div'" to="#dragged-card">
       <Transition appear>
-        <Card :card="card" :class="isDragging && 'is-dragging'" />
+        <Card
+          :card="card"
+          :class="isDragging && 'is-dragging'"
+          :violations="violations"
+        />
       </Transition>
     </component>
   </li>
@@ -105,6 +131,10 @@ li {
   filter: var(--disabled-filter);
   transform: none;
   z-index: calc(var(--hand-size) + 1);
+  &.is-shaking {
+    animation: var(--animation-shake-x);
+    animation-duration: 0.3s;
+  }
 }
 
 .disabled {

@@ -221,6 +221,32 @@
         },
         {
           "alias": [
+            "icon-spell-fireball"
+          ],
+          "src": [
+            "/assets/icons/spell-fireball.png"
+          ],
+          "data": {
+            "tags": {
+              "m": true
+            }
+          }
+        },
+        {
+          "alias": [
+            "icon-spell-frost-nova"
+          ],
+          "src": [
+            "/assets/icons/spell-frost-nova.png"
+          ],
+          "data": {
+            "tags": {
+              "m": true
+            }
+          }
+        },
+        {
+          "alias": [
             "icon-spell-spark"
           ],
           "src": [
@@ -1082,6 +1108,33 @@
       "assets": [
         {
           "alias": [
+            "apprentice"
+          ],
+          "src": [
+            "/assets/units/apprentice.json"
+          ],
+          "loadParser": "aseprite_loader",
+          "data": {
+            "tags": {
+              "m": true
+            }
+          }
+        },
+        {
+          "alias": [
+            "apprentice.png"
+          ],
+          "src": [
+            "/assets/units/apprentice.png"
+          ],
+          "data": {
+            "tags": {
+              "m": true
+            }
+          }
+        },
+        {
+          "alias": [
             "arcane-servant"
           ],
           "src": [
@@ -1100,6 +1153,87 @@
           ],
           "src": [
             "/assets/units/arcane-servant.png"
+          ],
+          "data": {
+            "tags": {
+              "m": true
+            }
+          }
+        },
+        {
+          "alias": [
+            "berserker"
+          ],
+          "src": [
+            "/assets/units/berserker.json"
+          ],
+          "loadParser": "aseprite_loader",
+          "data": {
+            "tags": {
+              "m": true
+            }
+          }
+        },
+        {
+          "alias": [
+            "berserker.png"
+          ],
+          "src": [
+            "/assets/units/berserker.png"
+          ],
+          "data": {
+            "tags": {
+              "m": true
+            }
+          }
+        },
+        {
+          "alias": [
+            "dancer"
+          ],
+          "src": [
+            "/assets/units/dancer.json"
+          ],
+          "loadParser": "aseprite_loader",
+          "data": {
+            "tags": {
+              "m": true
+            }
+          }
+        },
+        {
+          "alias": [
+            "dancer.png"
+          ],
+          "src": [
+            "/assets/units/dancer.png"
+          ],
+          "data": {
+            "tags": {
+              "m": true
+            }
+          }
+        },
+        {
+          "alias": [
+            "emperor"
+          ],
+          "src": [
+            "/assets/units/emperor.json"
+          ],
+          "loadParser": "aseprite_loader",
+          "data": {
+            "tags": {
+              "m": true
+            }
+          }
+        },
+        {
+          "alias": [
+            "emperor.png"
+          ],
+          "src": [
+            "/assets/units/emperor.png"
           ],
           "data": {
             "tags": {
@@ -1136,6 +1270,60 @@
         },
         {
           "alias": [
+            "gladiator"
+          ],
+          "src": [
+            "/assets/units/gladiator.json"
+          ],
+          "loadParser": "aseprite_loader",
+          "data": {
+            "tags": {
+              "m": true
+            }
+          }
+        },
+        {
+          "alias": [
+            "gladiator.png"
+          ],
+          "src": [
+            "/assets/units/gladiator.png"
+          ],
+          "data": {
+            "tags": {
+              "m": true
+            }
+          }
+        },
+        {
+          "alias": [
+            "kings-guard"
+          ],
+          "src": [
+            "/assets/units/kings-guard.json"
+          ],
+          "loadParser": "aseprite_loader",
+          "data": {
+            "tags": {
+              "m": true
+            }
+          }
+        },
+        {
+          "alias": [
+            "kings-guard.png"
+          ],
+          "src": [
+            "/assets/units/kings-guard.png"
+          ],
+          "data": {
+            "tags": {
+              "m": true
+            }
+          }
+        },
+        {
+          "alias": [
             "lancer"
           ],
           "src": [
@@ -1154,6 +1342,87 @@
           ],
           "src": [
             "/assets/units/lancer.png"
+          ],
+          "data": {
+            "tags": {
+              "m": true
+            }
+          }
+        },
+        {
+          "alias": [
+            "monk"
+          ],
+          "src": [
+            "/assets/units/monk.json"
+          ],
+          "loadParser": "aseprite_loader",
+          "data": {
+            "tags": {
+              "m": true
+            }
+          }
+        },
+        {
+          "alias": [
+            "monk.png"
+          ],
+          "src": [
+            "/assets/units/monk.png"
+          ],
+          "data": {
+            "tags": {
+              "m": true
+            }
+          }
+        },
+        {
+          "alias": [
+            "shaman"
+          ],
+          "src": [
+            "/assets/units/shaman.json"
+          ],
+          "loadParser": "aseprite_loader",
+          "data": {
+            "tags": {
+              "m": true
+            }
+          }
+        },
+        {
+          "alias": [
+            "shaman.png"
+          ],
+          "src": [
+            "/assets/units/shaman.png"
+          ],
+          "data": {
+            "tags": {
+              "m": true
+            }
+          }
+        },
+        {
+          "alias": [
+            "snake-lady"
+          ],
+          "src": [
+            "/assets/units/snake-lady.json"
+          ],
+          "loadParser": "aseprite_loader",
+          "data": {
+            "tags": {
+              "m": true
+            }
+          }
+        },
+        {
+          "alias": [
+            "snake-lady.png"
+          ],
+          "src": [
+            "/assets/units/snake-lady.png"
           ],
           "data": {
             "tags": {

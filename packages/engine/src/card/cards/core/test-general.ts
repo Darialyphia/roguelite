@@ -13,7 +13,7 @@ export const testGeneral: GeneralCardBlueprint = {
   description: '',
   kind: CARD_KINDS.GENERAL,
   aiHints: {},
-  jobs: [JOBS.FIGHTER],
+  jobs: [JOBS.MAGE],
   atk: 3,
   maxHp: 18,
   speed: 8,

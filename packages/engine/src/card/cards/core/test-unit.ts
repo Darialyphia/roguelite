@@ -18,7 +18,7 @@ export const testUnit: UnitCardBlueprint = {
   kind: CARD_KINDS.UNIT,
   aiHints: {},
   cost: {
-    gold: 3,
+    gold: 4,
     runes: [RUNES.RED]
   },
   jobs: [JOBS.FIGHTER],
