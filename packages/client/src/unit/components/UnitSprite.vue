@@ -15,16 +15,15 @@ import {
   useBattleStore,
   useGameClientState
 } from '@/pages/battle/battle.store';
+import { createSpritesheetFrameObject } from '@/utils/sprite';
 
 const { unit } = defineProps<{ unit: UnitViewModel }>();
 
-const spritesheet = useSpritesheet(() => unit.spriteId);
+const sheet = useSpritesheet<'', 'base'>(() => unit.spriteId);
+const textures = computed(() => {
+  if (!sheet.value) return null;
 
-const textures = useMultiLayerTexture({
-  sheet: spritesheet,
-  parts: {},
-  tag: 'idle',
-  dimensions: config.UNIT_SPRITE_SIZE
+  return createSpritesheetFrameObject('idle', sheet.value.sheets.base.base);
 });
 
 const ui = useBattleUiStore();
@@ -80,7 +79,7 @@ const modifierSpriteIds = computed(() => {
 
 <template>
   <animated-sprite
-    v-if="textures.length"
+    v-if="textures?.length"
     :textures="textures"
     :anchor="0.5"
     event-mode="none"

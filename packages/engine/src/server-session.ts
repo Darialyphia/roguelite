@@ -37,7 +37,7 @@ export class ServerSession {
   }
 
   subscribe(cb: (input: SerializedInput, opts: { rngValues: number[] }) => void) {
-    let lastRngValueIndexSent = this.game.rngSystem.values.length - 1;
+    let lastRngValueIndexSent = this.game.rngSystem.values.length;
     let latestInput: Nullable<Input<any>> = null;
 
     this.game.on('game.input-queue-flushed', () => {

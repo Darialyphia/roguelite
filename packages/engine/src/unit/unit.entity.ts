@@ -364,6 +364,10 @@ export class Unit extends Entity {
     this.ap.remove(this.combat.nextAttackApCost);
   }
 
+  counterAttack(unit: Unit) {
+    this.combat.counterAttack(unit);
+  }
+
   canAttackAt(point: Point3D) {
     if (!this.canAttack) return;
 

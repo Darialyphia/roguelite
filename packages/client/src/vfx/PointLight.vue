@@ -47,10 +47,10 @@ let unsub: () => void = () => {};
 until(containerRef)
   .toBeTruthy()
   .then(container => {
-    unsub = registerLight(Object.assign(light, { root: container }));
+    // unsub = registerLight(Object.assign(light, { root: container }));
   });
 onBeforeUnmount(() => {
-  unsub();
+  // unsub();
 });
 </script>
 
@@ -65,7 +65,7 @@ onBeforeUnmount(() => {
     :sortable-children="true"
     event-mode="none"
   >
-    <graphics
+    <!-- <graphics
       :filters="
         light.blendMode > BLEND_MODES.SCREEN
           ? [getBlendFilter(light.blendMode)]
@@ -80,6 +80,6 @@ onBeforeUnmount(() => {
       :x="-camera.offset.value.x"
       :y="-camera.offset.value.y"
       @render="g => renderLight(g)"
-    />
+    /> -->
   </container>
 </template>
