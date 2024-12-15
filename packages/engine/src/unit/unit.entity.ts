@@ -360,8 +360,8 @@ export class Unit extends Entity {
   }
 
   attack(point: Point3D) {
-    this.combat.attack(point);
     this.ap.remove(this.combat.nextAttackApCost);
+    this.combat.attack(point);
   }
 
   counterAttack(unit: Unit) {

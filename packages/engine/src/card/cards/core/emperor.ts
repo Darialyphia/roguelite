@@ -16,12 +16,12 @@ export const emperor: UnitCardBlueprint = {
   kind: CARD_KINDS.UNIT,
   aiHints: {},
   cost: {
-    gold: 4,
+    gold: 6,
     runes: [RUNES.YELLOW, RUNES.YELLOW, RUNES.RED]
   },
   jobs: [JOBS.FIGHTER],
-  atk: 3,
-  maxHp: 8,
+  atk: 5,
+  maxHp: 10,
   speed: 6,
   reward: 1,
   minTargets: 1,
