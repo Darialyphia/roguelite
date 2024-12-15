@@ -40,8 +40,8 @@ export class AI {
 
   private evaluateNextAction(): SerializedInput {
     const now = Date.now();
-    const agent = new AIPlayerAgent(this.game, this.player, this.heuristics);
-    const input = agent.getNextInput();
+    const agent = new AIPlayerAgent(this.player, this.heuristics);
+    const input = agent.getNextInput(this.game);
     console.log(`AI input computed ${input.type} in ${Date.now() - now}`, input);
 
     return input;

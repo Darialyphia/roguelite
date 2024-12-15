@@ -1,3 +1,4 @@
+import type { Game } from '../game/game';
 import type { SerializedInput } from '../input/input-system';
 
 export type ScoredInput = {
@@ -6,7 +7,7 @@ export type ScoredInput = {
 };
 
 export type AIAgent = {
-  getNextInput(): SerializedInput;
+  getNextInput(game: Game): SerializedInput;
 };
 
 export const getHighestScoredAction = (actions: ScoredInput[]) => {
