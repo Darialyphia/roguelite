@@ -24,11 +24,8 @@ export class AiHeuristics {
 
   shouldAvoidPlayingCard(card: Card) {
     if (!this.cardsPlayedByActiveUnit[card.blueprintId]) return false;
-
-    return (
-      this.cardsPlayedByActiveUnit[card.blueprintId] >=
-      (card.aiHints.maxUsesPerTurn ?? Infinity)
-    );
+    if (!card.aiHints.maxUsesPerTurn) return false;
+    return this.cardsPlayedByActiveUnit[card.blueprintId] >= card.aiHints.maxUsesPerTurn;
   }
 
   getScoreModifier(game: Game, input: SerializedInput): ScoreModifier {

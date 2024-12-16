@@ -22,7 +22,10 @@ export class AIPlayerAgent implements AIAgent {
   ) {}
 
   getNextInput(game: Game): SerializedInput {
-    return this.getInput(game);
+    return {
+      type: 'endTurn',
+      payload: { playerId: this.player.id }
+    };
   }
 
   getInput(game: Game): SerializedInput {
@@ -35,6 +38,13 @@ export class AIPlayerAgent implements AIAgent {
     const resourceScores = this.computeResourceActionScores();
 
     // console.log({ moveScores, combatScores, cardScores });
+    const validMoves = this.getValidMoves(game);
+    if (!validMoves.length) {
+      return {
+        type: 'endTurn',
+        payload: { playerId: this.player.id }
+      };
+    }
     return (
       getHighestScoredAction([
         ...moveScores,
@@ -48,8 +58,30 @@ export class AIPlayerAgent implements AIAgent {
     );
   }
 
+  private getValidMoves(game: Game) {
+    const moveScores = this.computeMoveScores(game);
+    const combatScores = this.computeCombatScores(game);
+    const cardScores = this.computeCardScores(game);
+    const resourceScores = this.computeResourceActionScores();
+
+    // console.log({ moveScores, combatScores, cardScores });
+    return [...moveScores, ...combatScores, ...cardScores, ...resourceScores];
+  }
+
   handleMulligan(): SerializedInput {
     return { type: 'mulligan', payload: { playerId: this.player.id, indices: [] } };
+  }
+
+  private runTurnSimulation(game: Game, initialInput: SerializedInput) {
+    const series: SerializedInput[][] = [];
+
+    const _game = game;
+    const simulationResult = this.runSimulation(_game, initialInput);
+    const validMoves = this.getValidMoves(_game);
+  }
+
+  recurse(game: Game, inputs: SerializedInput[]) {
+    const validMoves = this.getValidMoves(game);
   }
 
   private runSimulation(game: Game, input: SerializedInput) {
@@ -60,6 +92,7 @@ export class AIPlayerAgent implements AIAgent {
       const score = scorer.getScore();
       simulator.shutdown();
       return {
+        game: simulator.game,
         input,
         score
       };
@@ -69,74 +102,92 @@ export class AIPlayerAgent implements AIAgent {
     }
   }
 
-  private computeResourceActionScores(): ScoredInput[] {
+  private computeResourceActionScores(): SerializedInput[] {
     if (!this.player.canPerformResourceAction) {
       return [];
     }
-    const runeWeights = this.player.hand
-      .filter(card => card instanceof UnitCard || card instanceof SpellCard)
-      .filter(card => !this.player.hasUnlockedRunes(card.cost.runes))
-      .reduce(
-        (total, card) => {
-          const missing = this.player.getMissingRunes(card.cost.runes);
-          const missingCount = this.player.runes.length - card.cost.runes.length;
 
-          Object.entries(missing).forEach(([runeName, count]) => {
-            if (runeName === RUNES.COLORLESS.id) return total;
-            if (!isDefined(total[runeName])) {
-              total[runeName] = 0;
-            }
-            total[runeName] += count * (missingCount === 1 ? 4 : 1); // give more weight to cards that are 1 rune away from being playable
-          });
-
-          return total;
-        },
-        {} as Record<string, number>
-      );
-    let bestRune: string | undefined = undefined;
-    Object.entries(runeWeights).forEach(([key, weight]) => {
-      if (!bestRune) {
-        bestRune = key;
-      } else if (runeWeights[bestRune] < weight) {
-        bestRune = key;
-      }
-    });
-    if (bestRune) {
-      return [
-        {
-          input: {
-            type: 'runeResourceAction',
-            payload: { playerId: this.player.id, rune: bestRune }
-          },
-          score: Infinity
-        }
-      ];
-    }
-
-    const needGold = this.player.hand
-      .filter(card => card instanceof UnitCard)
-      .every(card => {
-        card.cost.gold > this.player.gold;
+    const results: SerializedInput[] = [];
+    Object.values(RUNES).forEach(rune => {
+      results.push({
+        type: 'runeResourceAction',
+        payload: { playerId: this.player.id, rune: rune.id as any }
       });
-    if (needGold) {
-      return [
-        {
-          input: { type: 'goldResourceAction', payload: { playerId: this.player.id } },
-          score: Infinity
-        }
-      ];
-    }
+    });
+    results.push({
+      type: 'goldResourceAction',
+      payload: { playerId: this.player.id }
+    });
+    results.push({
+      type: 'drawResourceAction',
+      payload: { playerId: this.player.id }
+    });
+    // const runeWeights = this.player.hand
+    //   .filter(card => card instanceof UnitCard || card instanceof SpellCard)
+    //   .filter(card => !this.player.hasUnlockedRunes(card.cost.runes))
+    //   .reduce(
+    //     (total, card) => {
+    //       const missing = this.player.getMissingRunes(card.cost.runes);
+    //       const missingCount = this.player.runes.length - card.cost.runes.length;
 
-    return [
-      {
-        input: { type: 'drawResourceAction', payload: { playerId: this.player.id } },
-        score: Infinity
-      }
-    ];
+    //       Object.entries(missing).forEach(([runeName, count]) => {
+    //         if (runeName === RUNES.COLORLESS.id) return total;
+    //         if (!isDefined(total[runeName])) {
+    //           total[runeName] = 0;
+    //         }
+    //         total[runeName] += count * (missingCount === 1 ? 4 : 1); // give more weight to cards that are 1 rune away from being playable
+    //       });
+
+    //       return total;
+    //     },
+    //     {} as Record<string, number>
+    //   );
+    // let bestRune: string | undefined = undefined;
+    // Object.entries(runeWeights).forEach(([key, weight]) => {
+    //   if (!bestRune) {
+    //     bestRune = key;
+    //   } else if (runeWeights[bestRune] < weight) {
+    //     bestRune = key;
+    //   }
+    // });
+    // if (bestRune) {
+    //   return [
+    //     {
+    //       input: {
+    //         type: 'runeResourceAction',
+    //         payload: { playerId: this.player.id, rune: bestRune }
+    //       },
+    //       score: Infinity
+    //     }
+    //   ];
+    // }
+
+    // const needGold = this.player.hand
+    //   .filter(card => card instanceof UnitCard)
+    //   .every(card => {
+    //     card.cost.gold > this.player.gold;
+    //   });
+    // if (needGold) {
+    //   return [
+    //     {
+    //       input: { type: 'goldResourceAction', payload: { playerId: this.player.id } },
+    //       score: Infinity
+    //     }
+    //   ];
+    // }
+
+    // return [
+    //   {
+    //     input: { type: 'drawResourceAction', payload: { playerId: this.player.id } },
+    //     score: Infinity
+    //   }
+    // ];
+
+    return results;
   }
 
   private computeMoveScores(game: Game) {
-    const results: ScoredInput[] = [];
+    const results: SerializedInput[] = [];
 
     const neighbors = game.boardSystem.getNeighbors3D(
       game.turnSystem.activeUnit.position
@@ -149,19 +200,17 @@ export class AIPlayerAgent implements AIAgent {
     });
 
     for (const cell of cells) {
-      results.push(
-        this.runSimulation(game, {
-          type: 'move',
-          payload: { playerId: this.player.id, x: cell.x, y: cell.y, z: cell.z }
-        })
-      );
+      results.push({
+        type: 'move',
+        payload: { playerId: this.player.id, x: cell.x, y: cell.y, z: cell.z }
+      });
     }
 
     return results;
   }
 
   private computeCombatScores(game: Game) {
-    const results: ScoredInput[] = [];
+    const results: SerializedInput[] = [];
 
     const targets = game.unitSystem.units.filter(
       u =>
@@ -170,19 +219,17 @@ export class AIPlayerAgent implements AIAgent {
     );
 
     for (const target of targets) {
-      results.push(
-        this.runSimulation(game, {
-          type: 'attack',
-          payload: { playerId: this.player.id, x: target.x, y: target.y, z: target.z }
-        })
-      );
+      results.push({
+        type: 'attack',
+        payload: { playerId: this.player.id, x: target.x, y: target.y, z: target.z }
+      });
     }
 
     return results;
   }
 
   private computeCardScores(game: Game) {
-    const results: ScoredInput[] = [];
+    const results: SerializedInput[] = [];
 
     // cells is a computed getter, let's evaluate it early instead of doing it in every loop iteration
     const cells = game.boardSystem.cells;
@@ -195,12 +242,10 @@ export class AIPlayerAgent implements AIAgent {
 
       const targets = this.getPotentialTargets(game, card, cells);
       for (const permutation of targets) {
-        results.push(
-          this.runSimulation(game, {
-            type: 'playCard',
-            payload: { playerId: this.player.id, index, targets: permutation }
-          })
-        );
+        results.push({
+          type: 'playCard',
+          payload: { playerId: this.player.id, index, targets: permutation }
+        });
       }
     }
 
