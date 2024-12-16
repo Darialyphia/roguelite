@@ -1,8 +1,13 @@
+import { isDefined } from '@game/shared';
+import { SpellCard } from '../card/spell-card.entity';
+import { UnitCard } from '../card/unit-card.entity';
 import type { EntityId } from '../entity';
 import type { Game } from '../game/game';
 import type { InputSimulator } from '../input/input-simulator';
+import type { SerializedInput } from '../input/input-system';
 import type { Player } from '../player/player.entity';
 import type { Unit } from '../unit/unit.entity';
+import { RUNES } from '../utils/rune';
 import type { AiHeuristics } from './ai-heuristics';
 
 const sum = (arr: number[]) => arr.reduce((total, curr) => total + curr, 0);

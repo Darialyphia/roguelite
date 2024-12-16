@@ -1,7 +1,7 @@
-import { isDefined, type Point3D } from '@game/shared';
+import { type Point3D } from '@game/shared';
 import type { Game } from '../game/game';
 import type { Player } from '../player/player.entity';
-import { getHighestScoredAction, type AIAgent, type ScoredInput } from './agent';
+import { type AIAgent } from './agent';
 import { InputSimulator } from '../input/input-simulator';
 import type { SerializedInput } from '../input/input-system';
 import { AIScorer } from './ai-scorer';
@@ -9,9 +9,9 @@ import type { Card } from '../card/card.entity';
 import type { Cell } from '../board/cell';
 import type { AiHeuristics } from './ai-heuristics';
 import { GAME_PHASES } from '../game/game-phase.system';
-import { UnitCard } from '../card/unit-card.entity';
-import { SpellCard } from '../card/spell-card.entity';
 import { RUNES } from '../utils/rune';
+import { Minimax, Node } from 'minimaxer';
+import { NODE_AIM, NODE_TYPE, PRUNING_TYPES, SEARCH_METHODS } from './ai-enums';
 
 export class AIPlayerAgent implements AIAgent {
   private nextSimulationId = 0;
@@ -21,85 +21,70 @@ export class AIPlayerAgent implements AIAgent {
     private heuristics: AiHeuristics
   ) {}
 
-  getNextInput(game: Game): SerializedInput {
-    return {
-      type: 'endTurn',
-      payload: { playerId: this.player.id }
+  makeTree(game: Game) {
+    const root = new Node(
+      NODE_TYPE.ROOT,
+      game.clone(this.nextSimulationId++),
+      { type: 'endTurn', payload: { playerId: '1' } } as SerializedInput,
+      0,
+      NODE_AIM.MAX
+    );
+
+    const tree = new Minimax(root);
+    tree.opts.method = SEARCH_METHODS.TIME;
+    tree.opts.pruning = PRUNING_TYPES.ALPHA_BETA;
+    tree.opts.timeout = 500;
+    tree.GetMoves = parent => {
+      return this.getValidMoves(parent.gamestate);
     };
+    tree.CreateChildNode = (parent, move) => {
+      const simulator = new InputSimulator(
+        parent.gamestate,
+        [move],
+        this.nextSimulationId++
+      );
+
+      const scorer = new AIScorer(this.player.id, this.heuristics, simulator);
+      const score = scorer.getScore();
+      const isLeafNode = move.type === 'endTurn' || move.type === 'mulligan';
+      const node = new Node(
+        isLeafNode ? NODE_TYPE.LEAF : NODE_TYPE.INNER,
+        simulator.game,
+        move,
+        0
+      );
+      node.value = score;
+
+      return node;
+    };
+
+    return tree;
   }
 
-  getInput(game: Game): SerializedInput {
-    if (game.phase === GAME_PHASES.MULLIGAN) {
-      return this.handleMulligan();
-    }
-    const moveScores = this.computeMoveScores(game);
-    const combatScores = this.computeCombatScores(game);
-    const cardScores = this.computeCardScores(game);
-    const resourceScores = this.computeResourceActionScores();
+  getNextInput(game: Game): SerializedInput {
+    const tree = this.makeTree(game);
 
-    // console.log({ moveScores, combatScores, cardScores });
-    const validMoves = this.getValidMoves(game);
-    if (!validMoves.length) {
-      return {
-        type: 'endTurn',
-        payload: { playerId: this.player.id }
-      };
-    }
-    return (
-      getHighestScoredAction([
-        ...moveScores,
-        ...combatScores,
-        ...cardScores,
-        ...resourceScores
-      ])?.input ?? {
-        type: 'endTurn',
-        payload: { playerId: this.player.id }
-      }
-    );
+    const result = tree.evaluate();
+    return result.move;
   }
 
   private getValidMoves(game: Game) {
+    if (game.phase === GAME_PHASES.MULLIGAN) {
+      return [this.handleMulligan()];
+    }
     const moveScores = this.computeMoveScores(game);
     const combatScores = this.computeCombatScores(game);
     const cardScores = this.computeCardScores(game);
     const resourceScores = this.computeResourceActionScores();
 
-    // console.log({ moveScores, combatScores, cardScores });
-    return [...moveScores, ...combatScores, ...cardScores, ...resourceScores];
+    const moves = [...moveScores, ...combatScores, ...cardScores, ...resourceScores];
+    moves.push({ type: 'endTurn', payload: { playerId: this.player.id } });
+
+    return moves;
   }
 
-  handleMulligan(): SerializedInput {
+  private handleMulligan(): SerializedInput {
     return { type: 'mulligan', payload: { playerId: this.player.id, indices: [] } };
-  }
-
-  private runTurnSimulation(game: Game, initialInput: SerializedInput) {
-    const series: SerializedInput[][] = [];
-
-    const _game = game;
-    const simulationResult = this.runSimulation(_game, initialInput);
-    const validMoves = this.getValidMoves(_game);
-  }
-
-  recurse(game: Game, inputs: SerializedInput[]) {
-    const validMoves = this.getValidMoves(game);
-  }
-
-  private runSimulation(game: Game, input: SerializedInput) {
-    const id = this.nextSimulationId++;
-    try {
-      const simulator = new InputSimulator(game, [input], id);
-      const scorer = new AIScorer(this.player.id, this.heuristics, simulator);
-      const score = scorer.getScore();
-      simulator.shutdown();
-      return {
-        game: simulator.game,
-        input,
-        score
-      };
-    } catch (err) {
-      console.log(`[Simulation ${id}]: error`, err);
-      return { input, score: Number.NEGATIVE_INFINITY };
-    }
   }
 
   private computeResourceActionScores(): SerializedInput[] {
@@ -122,66 +107,6 @@ export class AIPlayerAgent implements AIAgent {
       type: 'drawResourceAction',
       payload: { playerId: this.player.id }
     });
-    // const runeWeights = this.player.hand
-    //   .filter(card => card instanceof UnitCard || card instanceof SpellCard)
-    //   .filter(card => !this.player.hasUnlockedRunes(card.cost.runes))
-    //   .reduce(
-    //     (total, card) => {
-    //       const missing = this.player.getMissingRunes(card.cost.runes);
-    //       const missingCount = this.player.runes.length - card.cost.runes.length;
-
-    //       Object.entries(missing).forEach(([runeName, count]) => {
-    //         if (runeName === RUNES.COLORLESS.id) return total;
-    //         if (!isDefined(total[runeName])) {
-    //           total[runeName] = 0;
-    //         }
-    //         total[runeName] += count * (missingCount === 1 ? 4 : 1); // give more weight to cards that are 1 rune away from being playable
-    //       });
-
-    //       return total;
-    //     },
-    //     {} as Record<string, number>
-    //   );
-    // let bestRune: string | undefined = undefined;
-    // Object.entries(runeWeights).forEach(([key, weight]) => {
-    //   if (!bestRune) {
-    //     bestRune = key;
-    //   } else if (runeWeights[bestRune] < weight) {
-    //     bestRune = key;
-    //   }
-    // });
-    // if (bestRune) {
-    //   return [
-    //     {
-    //       input: {
-    //         type: 'runeResourceAction',
-    //         payload: { playerId: this.player.id, rune: bestRune }
-    //       },
-    //       score: Infinity
-    //     }
-    //   ];
-    // }
-
-    // const needGold = this.player.hand
-    //   .filter(card => card instanceof UnitCard)
-    //   .every(card => {
-    //     card.cost.gold > this.player.gold;
-    //   });
-    // if (needGold) {
-    //   return [
-    //     {
-    //       input: { type: 'goldResourceAction', payload: { playerId: this.player.id } },
-    //       score: Infinity
-    //     }
-    //   ];
-    // }
-
-    // return [
-    //   {
-    //     input: { type: 'drawResourceAction', payload: { playerId: this.player.id } },
-    //     score: Infinity
-    //   }
-    // ];
 
     return results;
   }
@@ -189,14 +114,8 @@ export class AIPlayerAgent implements AIAgent {
   private computeMoveScores(game: Game) {
     const results: SerializedInput[] = [];
 
-    const neighbors = game.boardSystem.getNeighbors3D(
-      game.turnSystem.activeUnit.position
-    );
-    const cells = neighbors.filter(cell => {
-      return (
-        game.turnSystem.activeUnit.canMoveTo(cell) &&
-        game.turnSystem.activeUnit.position.isAxisAligned(cell)
-      );
+    const cells = game.boardSystem.cells.filter(cell => {
+      return game.turnSystem.activeUnit.canMoveTo(cell);
     });
 
     for (const cell of cells) {

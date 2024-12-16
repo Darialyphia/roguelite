@@ -224,4 +224,15 @@ export class Game {
   shutdown() {
     this.emitter.removeAllListeners();
   }
+
+  clone(id: number) {
+    const game = new Game({
+      ...this.options,
+      id: `simulation_${id}`,
+      history: this.inputSystem.serialize()
+    });
+    game.initialize();
+
+    return game;
+  }
 }
