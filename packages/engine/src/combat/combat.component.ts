@@ -25,8 +25,8 @@ export type CombatEvent = Values<typeof COMBAT_EVENTS>;
 export type CombatEventMap = {
   [COMBAT_EVENTS.BEFORE_ATTACK]: [{ target: Point3D; cost: number }];
   [COMBAT_EVENTS.AFTER_ATTACK]: [{ target: Point3D; cost: number }];
-  [COMBAT_EVENTS.BEFORE_COUNTERATTACK]: [{ target: Point3D; cost: number }];
-  [COMBAT_EVENTS.AFTER_COUNTERATTACK]: [{ target: Point3D; cost: number }];
+  [COMBAT_EVENTS.BEFORE_COUNTERATTACK]: [{ target: Point3D }];
+  [COMBAT_EVENTS.AFTER_COUNTERATTACK]: [{ target: Point3D }];
   [COMBAT_EVENTS.BEFORE_DEAL_DAMAGE]: [{ targets: Unit[]; damage: Damage }];
   [COMBAT_EVENTS.AFTER_DEAL_DAMAGE]: [{ targets: Unit[]; damage: Damage }];
   [COMBAT_EVENTS.BEFORE_RECEIVE_DAMAGE]: [{ from: Card; damage: Damage }];
@@ -74,8 +74,7 @@ export class CombatComponent {
 
   counterAttack(attacker: Unit) {
     this.emitter.emit(COMBAT_EVENTS.BEFORE_COUNTERATTACK, {
-      target: attacker,
-      cost: this.unit.apCostPerAttack
+      target: attacker
     });
     const targets = new PointAOEShape(this.game).getUnits([attacker]);
 
@@ -90,15 +89,15 @@ export class CombatComponent {
     this.counterAttacksCount++;
 
     this.emitter.emit(COMBAT_EVENTS.AFTER_COUNTERATTACK, {
-      target: attacker,
-      cost: this.unit.apCostPerAttack
+      target: attacker
     });
   }
 
   attack(target: Point3D) {
+    const cost = this.nextAttackApCost;
     this.emitter.emit(COMBAT_EVENTS.BEFORE_ATTACK, {
       target,
-      cost: this.unit.apCostPerAttack
+      cost
     });
     const targets = this.unit.attackAOEShape.getUnits([target]);
 
@@ -114,7 +113,7 @@ export class CombatComponent {
 
     this.emitter.emit(COMBAT_EVENTS.AFTER_ATTACK, {
       target,
-      cost: this.unit.apCostPerAttack
+      cost
     });
 
     const unit = this.game.unitSystem.getUnitAt(target)!;
@@ -137,15 +136,11 @@ export class CombatComponent {
       from,
       damage
     });
-    this.unit.hp.remove(damage.getMitigatedAmount(this.unit));
+    this.unit.hp.remove(damage.getMitigatedAmount(this.unit), from);
     this.emitter.emit(COMBAT_EVENTS.AFTER_RECEIVE_DAMAGE, {
       from,
       damage
     });
-
-    if (this.unit.hp.isDead) {
-      this.unit.destroy(from);
-    }
   }
 
   shutdown() {

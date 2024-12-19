@@ -96,6 +96,7 @@ export class Player extends Entity {
 
   shutdown() {
     this.emitter.removeAllListeners();
+    this.cardManager.shutdown();
   }
 
   get on() {

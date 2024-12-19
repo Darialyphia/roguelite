@@ -135,4 +135,8 @@ export abstract class Card<
     }
     return this.canPlay && this.areTargetsValid(targets);
   }
+
+  shutdown() {
+    this.emitter.removeAllListeners();
+  }
 }

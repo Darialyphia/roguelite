@@ -6,7 +6,7 @@ import { SolidBodyPathfindingStrategy } from '../pathfinding/strategies/solid-pa
 import { Interceptable, type inferInterceptor } from '../utils/interceptable';
 import { ActionPointComponent } from './components/action-point.component';
 import { TypedEventEmitter } from '../utils/typed-emitter';
-import { HealthComponent } from './components/health.component';
+import { HEALTH_EVENTS, HealthComponent } from './components/health.component';
 import { MOVE_EVENTS, MovementComponent } from './components/movement.component';
 import type { Player } from '../player/player.entity';
 import { PointAOEShape, type AOEShape } from '../targeting/aoe-shapes';
@@ -37,8 +37,8 @@ export type UnitEventMap = {
   [UNIT_EVENTS.AFTER_MOVE]: [{ position: Vec3; previousPosition: Vec3; cost: number }];
   [UNIT_EVENTS.BEFORE_ATTACK]: [{ target: Point3D; cost: number }];
   [UNIT_EVENTS.AFTER_ATTACK]: [{ target: Point3D; cost: number }];
-  [UNIT_EVENTS.BEFORE_COUNTERATTACK]: [{ target: Point3D; cost: number }];
-  [UNIT_EVENTS.AFTER_COUNTERATTACK]: [{ target: Point3D; cost: number }];
+  [UNIT_EVENTS.BEFORE_COUNTERATTACK]: [{ target: Point3D }];
+  [UNIT_EVENTS.AFTER_COUNTERATTACK]: [{ target: Point3D }];
   [UNIT_EVENTS.BEFORE_DEAL_DAMAGE]: [{ targets: Unit[]; damage: Damage }];
   [UNIT_EVENTS.AFTER_DEAL_DAMAGE]: [{ targets: Unit[]; damage: Damage }];
   [UNIT_EVENTS.BEFORE_RECEIVE_DAMAGE]: [{ from: Card; damage: Damage }];
@@ -100,6 +100,7 @@ export class Unit extends Entity {
     this.modifierManager = new UnitModifierManager(this);
     this.ap = new ActionPointComponent({ maxAp: config.UNIT_BASE_AP });
     this.hp = new HealthComponent({ maxHp: this.card.maxHp });
+    this.hp.on(HEALTH_EVENTS.CHANGE, this.checkHp.bind(this));
     this.movement = new MovementComponent({
       position: options.position,
       pathfinding: new PathfinderComponent(
@@ -260,6 +261,14 @@ export class Unit extends Entity {
     return this.hp.addInterceptor.bind(this.hp);
   }
 
+  private checkHp({ source }: { source: Card }) {
+    if (this.hp.current <= 0) {
+      this.game.inputSystem.schedule(() => {
+        this.destroy(source);
+      });
+    }
+  }
+
   private forwardEvents() {
     this.movement.on(MOVE_EVENTS.BEFORE_MOVE, e => {
       this.emitter.emit(UNIT_EVENTS.BEFORE_MOVE, {
@@ -280,10 +289,10 @@ export class Unit extends Entity {
       this.emitter.emit(UNIT_EVENTS.AFTER_ATTACK, e)
     );
     this.combat.on(COMBAT_EVENTS.BEFORE_COUNTERATTACK, e =>
-      this.emitter.emit(UNIT_EVENTS.BEFORE_ATTACK, e)
+      this.emitter.emit(UNIT_EVENTS.BEFORE_COUNTERATTACK, e)
     );
     this.combat.on(COMBAT_EVENTS.AFTER_COUNTERATTACK, e =>
-      this.emitter.emit(UNIT_EVENTS.AFTER_ATTACK, e)
+      this.emitter.emit(UNIT_EVENTS.AFTER_COUNTERATTACK, e)
     );
     this.combat.on(COMBAT_EVENTS.BEFORE_DEAL_DAMAGE, e =>
       this.emitter.emit(UNIT_EVENTS.BEFORE_DEAL_DAMAGE, e)

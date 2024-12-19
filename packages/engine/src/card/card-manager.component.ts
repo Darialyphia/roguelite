@@ -73,4 +73,16 @@ export class CardManagerComponent {
     const replacement = this.deck.replace(card);
     this.hand[index] = replacement;
   }
+
+  shutdown() {
+    this.deck.cards.forEach(card => {
+      card.shutdown();
+    });
+    this.hand.forEach(card => {
+      card.shutdown();
+    });
+    this.discardPile.forEach(card => {
+      card.shutdown();
+    });
+  }
 }

@@ -32,39 +32,47 @@ export class AiHeuristics {
     return this.cardsPlayedByActiveUnit[card.blueprintId] >= card.aiHints.maxUsesPerTurn;
   }
 
-  getPreScoreResourceActionScoreModifier(
+  getResourceActionPreScoreModifier(
     game: Game,
     input: SerializedInput & {
       type: 'drawResourceAction' | 'runeResourceAction' | 'goldResourceAction';
     }
   ) {
     const player = game.turnSystem.activeUnit.player;
-    const needRune = player.hand
-      .filter(card => card instanceof UnitCard || card instanceof SpellCard)
-      .some(card => !player.hasUnlockedRunes(card.cost.runes));
+    const hand = player.hand.filter(
+      card => card instanceof UnitCard || card instanceof SpellCard
+    );
+
+    const cardsWithUnlockedRunes = hand.filter(
+      card => !player.hasUnlockedRunes(card.cost.runes)
+    );
+    const needRune = !!cardsWithUnlockedRunes.length;
+    // AI hasnt unlocked al runes for card in hand and chose to draw or gain gold instead, bias against it
+    // it might not always be the best plays but it avoids the AI taking a resource action and still not being able to play any card
     if (needRune && input.type !== 'runeResourceAction') {
       return Number.NEGATIVE_INFINITY;
     }
 
     if (input.type === 'runeResourceAction') {
-      const runeWeights = player.hand
-        .filter(card => card instanceof UnitCard || card instanceof SpellCard)
-        .filter(card => !player.hasUnlockedRunes(card.cost.runes))
-        .reduce(
-          (total, card) => {
-            const missing = player.getMissingRunes(card.cost.runes);
-            const missingCount = player.runes.length - card.cost.runes.length;
-            Object.entries(missing).forEach(([runeName, count]) => {
-              if (runeName === RUNES.COLORLESS.id) return total;
-              if (!isDefined(total[runeName])) {
-                total[runeName] = 0;
-              }
-              total[runeName] += count * (missingCount === 1 ? 4 : 1); // give more weight to cards that are 1 rune away from being playable
-            });
-            return total;
-          },
-          {} as Record<string, number>
-        );
+      // Determine if  the unlocked rune is the best
+      // assign a weight to each rune type depending on the missing runes for each card in hand
+      const runeWeights = cardsWithUnlockedRunes.reduce(
+        (total, card) => {
+          const missingByRune = player.getMissingRunes(card.cost.runes);
+          const missingCount = player.runes.length - card.cost.runes.length;
+
+          Object.entries(missingByRune).forEach(([runeName, count]) => {
+            if (runeName === RUNES.COLORLESS.id) return;
+            if (!isDefined(total[runeName])) {
+              total[runeName] = 0;
+            }
+            const scale = missingCount === 1 ? 4 : 1; // give more weight to cards that are 1 rune away from being playable
+            total[runeName] += count * scale;
+          });
+          return total;
+        },
+        {} as Record<string, number>
+      );
       let bestRune: string | undefined = undefined;
       Object.entries(runeWeights).forEach(([key, weight]) => {
         if (!bestRune) {
@@ -73,6 +81,8 @@ export class AiHeuristics {
           bestRune = key;
         }
       });
+
+      // no best rune to be played over another, the current choie is as good as any
       if (!isDefined(bestRune)) return 0;
 
       return bestRune === input.payload.rune ? 0 : Number.NEGATIVE_INFINITY;
@@ -102,10 +112,11 @@ export class AiHeuristics {
       input.type === 'runeResourceAction'
     ) {
       return {
-        pre: (game: Game) => this.getPreScoreResourceActionScoreModifier(game, input),
+        pre: (game: Game) => this.getResourceActionPreScoreModifier(game, input),
         post: () => 0
       };
     }
+
     if (input.type === 'playCard') {
       const card = game.turnSystem.activeUnit.player.getCardAt(input.payload.index);
       const { preScoreModifier, postScoreModifier } = card.aiHints;

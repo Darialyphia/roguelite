@@ -31,6 +31,10 @@ import {
 } from '../card/card.entity';
 import { UNIT_EVENTS, type UnitEvent } from '../unit/unit-enums';
 
+// augments the paylod of an event with additional data
+// for example: a unit may emit a AFTER_MOVE event without a reference to itself
+// but the global event UNIT_AFTER_MOVE will have a reference to the unit who moved
+// this type represents that in a generic way
 type EnrichEvent<TTuple extends [...any[]], TAdditional extends AnyObject> = {
   [Index in keyof TTuple]: TTuple[Index] extends AnyObject
     ? TTuple[Index] & TAdditional
@@ -126,7 +130,7 @@ export type GameOptions = {
   rngSeed: string;
   rngCtor: Constructor<RngSystem>;
   mapId: string;
-  teams: BetterOmit<TeamOptions['players'][number], 'startPosition'>[][];
+  teams: BetterOmit<TeamOptions['players'][number], 'startPosition'>[][]; // player start positions are originally on the map data
   history?: SerializedInput[];
 };
 
@@ -164,6 +168,7 @@ export class Game {
       console.groupEnd();
     };
   }
+
   // the event emitter doesnt provide the event name if you enable wildcards, so let's implement it ourselves
   private setupStarEvents() {
     Object.values(GAME_EVENTS).forEach(eventName => {
@@ -191,7 +196,6 @@ export class Game {
     });
     this.unitSystem.initialize();
     this.turnSystem.initialize();
-
     this.inputSystem.initialize(this.options.history ?? []);
 
     this.emit(GAME_EVENTS.READY);
@@ -223,6 +227,8 @@ export class Game {
 
   shutdown() {
     this.emitter.removeAllListeners();
+    this.playerSystem.shutdown();
+    this.unitSystem.shutdown();
   }
 
   clone(id: number) {
