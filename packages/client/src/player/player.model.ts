@@ -18,6 +18,7 @@ export type PlayerViewModel = {
   gold: number;
   remainingCardsInDeck: number;
   startPosition: Point3D;
+  isActive: boolean;
   equals(player: PlayerViewModel): boolean;
   isEnemy(unit: UnitViewModel): boolean;
   isAlly(unit: UnitViewModel): boolean;
@@ -38,6 +39,7 @@ export const makePlayerViewModel = (
     remainingCardsInDeck: player.remainingCardsInDeck,
     gold: player.gold,
     startPosition: player.startPosition,
+    isActive: game.turnSystem.activePlayer.equals(player),
     getPlayer() {
       return player;
     },

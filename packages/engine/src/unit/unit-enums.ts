@@ -2,8 +2,6 @@ import type { Values } from '@game/shared';
 
 export const UNIT_EVENTS = {
   CREATED: 'created',
-  START_TURN: 'start_turn',
-  END_TURN: 'end_turn',
   BEFORE_MOVE: 'before_move',
   AFTER_MOVE: 'after_move',
   BEFORE_ATTACK: 'before_attack',
@@ -16,8 +14,6 @@ export const UNIT_EVENTS = {
   AFTER_RECEIVE_DAMAGE: 'after_receive_damage',
   BEFORE_RECEIVE_HEAL: 'before_receive_heal',
   AFTER_RECEIVE_HEAL: 'after_receive_heal',
-  BEFORE_PLAY_CARD: 'before_play_card',
-  AFTER_PLAY_CARD: 'after_play_card',
   BEFORE_DESTROY: 'before_destroy',
   AFTER_DESTROY: 'after_destroy'
 } as const;

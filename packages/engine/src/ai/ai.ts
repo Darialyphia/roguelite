@@ -28,7 +28,7 @@ export class AI {
     const isActive = match(this.game.phase)
       .with(GAME_PHASES.MULLIGAN, () => true)
       .with(GAME_PHASES.BATTLE, () =>
-        this.game.turnSystem.activeUnit.player.equals(this.player)
+        this.game.turnSystem.activePlayer.equals(this.player)
       )
       .with(GAME_PHASES.END, () => false)
       .exhaustive();

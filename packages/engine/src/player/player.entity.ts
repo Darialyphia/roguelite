@@ -1,4 +1,4 @@
-import { createEntityId, Entity } from '../entity';
+import { createEntityId, Entity, type EntityId } from '../entity';
 import type { Team } from './team.entity';
 import { GAME_EVENTS, type Game } from '../game/game';
 import { CardManagerComponent } from '../card/card-manager.component';
@@ -24,20 +24,28 @@ export type PlayerOptions = {
 export const PLAYER_EVENTS = {
   BEFORE_DRAW: 'before_draw',
   AFTER_DRAW: 'after_draw',
+  START_TURN: 'start_turn',
+  END_TURN: 'end_turn',
   BEFORE_GAIN_RUNE: 'before_gain_rune',
   AFTER_GAIN_RUNE: 'after_gain_rune',
   BEFORE_GAIN_GOLD: 'before_gain_gold',
-  AFTER_GAIN_GOLD: 'after_gain_gold'
+  AFTER_GAIN_GOLD: 'after_gain_gold',
+  BEFORE_PLAY_CARD: 'before_play_card',
+  AFTER_PLAY_CARD: 'after_play_card'
 } as const;
 
 export type PlayerEvent = Values<typeof PLAYER_EVENTS>;
 export type PlayerEventMap = {
+  [PLAYER_EVENTS.START_TURN]: [{ id: EntityId }];
+  [PLAYER_EVENTS.END_TURN]: [{ id: EntityId }];
   [PLAYER_EVENTS.BEFORE_DRAW]: [{ amount: number }];
   [PLAYER_EVENTS.AFTER_DRAW]: [{ cards: Card[] }];
   [PLAYER_EVENTS.BEFORE_GAIN_RUNE]: [{ rune: Rune }];
   [PLAYER_EVENTS.AFTER_GAIN_RUNE]: [{ rune: Rune }];
   [PLAYER_EVENTS.BEFORE_GAIN_GOLD]: [{ amount: number }];
   [PLAYER_EVENTS.AFTER_GAIN_GOLD]: [{ amount: number }];
+  [PLAYER_EVENTS.BEFORE_PLAY_CARD]: [{ card: Card; targets: Point3D[] }];
+  [PLAYER_EVENTS.AFTER_PLAY_CARD]: [{ card: Card; targets: Point3D[] }];
 };
 
 type ResourceAction =
@@ -228,7 +236,6 @@ export class Player extends Entity {
   canPlayCardAt(index: number) {
     const card = this.getCardAt(index);
     if (!card) return false;
-    if (!this.game.turnSystem.activeUnit.canPlayCardFromHand) return false;
 
     return card.canPlay;
   }
@@ -236,7 +243,9 @@ export class Player extends Entity {
   playCard(index: number, targets: Point3D[]) {
     const card = this.cardManager.getCardAt(index);
     if (!card) return;
-    this.game.turnSystem.activeUnit.playCard(card, targets, this.cardManager);
+    this.emitter.emit(PLAYER_EVENTS.BEFORE_PLAY_CARD, { card, targets });
+    this.cardManager.play(card, targets);
+    this.emitter.emit(PLAYER_EVENTS.AFTER_PLAY_CARD, { card, targets });
   }
 
   onGameTurnStart() {
@@ -246,5 +255,10 @@ export class Player extends Entity {
 
   onBattleStart() {
     this.generalCard.play();
+  }
+
+  endTurn() {
+    console.log('end turn');
+    this.emitter.emit(PLAYER_EVENTS.END_TURN, { id: this.id });
   }
 }

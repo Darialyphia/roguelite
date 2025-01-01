@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import {
-  useActiveUnit,
   useBattleEvent,
   useGame,
   useGameClientState,
@@ -17,7 +16,6 @@ import { GAME_EVENTS } from '@game/engine/src/game/game';
 const root = useTemplateRef('root');
 const cardSpacing = ref(0);
 const player = useUserPlayer();
-const activeUnit = useActiveUnit();
 
 const computeMargin = () => {
   if (!root.value) return 0;
@@ -39,42 +37,34 @@ watch(
   { immediate: true }
 );
 
-const offset = ref({ x: 0, y: 0 });
 const game = useGame();
 const state = useGameClientState();
 
-useBattleEvent(GAME_EVENTS.UNIT_BEFORE_PLAY_CARD, async event => {
-  if (!activeUnit.value) return;
-  if (!activeUnit.value?.getUnit().equals(event.unit)) {
+useBattleEvent(GAME_EVENTS.PLAYER_BEFORE_PLAY_CARD, async event => {
+  if (!player.value.getPlayer().equals(event.player)) {
     return;
   }
-  activeUnit.value.hand = activeUnit.value.hand.filter(
+  player.value.hand = player.value.hand.filter(
     card => !card.getCard().equals(event.card)
   );
 });
 
-const userPlayer = useUserPlayer();
 useBattleEvent(GAME_EVENTS.PLAYER_AFTER_DRAW, async event => {
-  if (!event.player.equals(userPlayer.value.getPlayer())) return;
+  if (!event.player.equals(player.value.getPlayer())) return;
   for (const card of event.cards) {
-    userPlayer.value.hand.push(makeCardViewModel(game.value, card));
+    player.value.hand.push(makeCardViewModel(game.value, card));
     await waitFor(300);
   }
 });
 </script>
 
 <template>
-  <ul
-    class="hand"
-    v-if="activeUnit && state.phase === GAME_PHASES.BATTLE"
-    ref="root"
-  >
-    <DraggedCard :offset="offset" />
+  <ul class="hand" v-if="state.phase === GAME_PHASES.BATTLE" ref="root">
+    <DraggedCard />
 
     <HandCard
       v-for="(card, index) in player.hand"
       :key="`${card.id}|${index}`"
-      v-model:offset="offset"
       :card="card"
     />
   </ul>

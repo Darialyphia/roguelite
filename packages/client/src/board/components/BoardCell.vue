@@ -5,7 +5,11 @@ import BoardCellSprite from './BoardCellSprite.vue';
 import UiAnimatedSprite from '@/ui/components/UiAnimatedSprite.vue';
 import BoardCellHighlights from './BoardCellHighlights.vue';
 import type { CellViewModel } from '../models/cell.model';
-import { useBattleStore, usePathHelpers } from '@/pages/battle/battle.store';
+import {
+  useBattleStore,
+  usePathHelpers,
+  useUserPlayer
+} from '@/pages/battle/battle.store';
 import { useIsoCamera } from '@/iso/composables/useIsoCamera';
 import { match } from 'ts-pattern';
 import { PTransition, External } from 'vue3-pixi';
@@ -27,7 +31,7 @@ const { cell } = defineProps<{ cell: CellViewModel }>();
 const emit = defineEmits<{ ready: [] }>();
 const ui = useBattleUiStore();
 const battle = useBattleStore();
-
+const player = useUserPlayer();
 const isHovered = computed(() => ui.hoveredCell?.equals(cell.getCell()));
 
 const camera = useIsoCamera();
@@ -132,38 +136,36 @@ watch(isHovered, hovered => {
         if (camera.isDragging.value) return;
         if (!ui.mode) return;
 
-        const activeUnit = battle.state.activeUnit?.getUnit();
-        if (!activeUnit) return;
-
-        if (e.button === 2) {
-          if (cell.unit) {
-            ui.selectUnit(cell.unit);
-          } else {
-            ui.unselectUnit();
-          }
-          return;
-        }
-
         match(ui.mode)
           .with(UI_MODES.BASIC, () => {
-            if (activeUnit.canMoveTo(cell.getCell())) {
+            const canSelect = cell.unit && cell.unit.player.equals(player);
+            if (canSelect) {
+              ui.selectUnit(cell.unit!);
+              return;
+            }
+
+            if (!ui.selectedUnit) return;
+
+            if (pathHelpers.canMoveTo(ui.selectedUnit, cell)) {
               return battle.dispatch({
                 type: 'move',
                 payload: {
                   x: cell.x,
                   y: cell.y,
-                  z: cell.z
+                  z: cell.z,
+                  unitId: ui.selectedUnit.id
                 }
               });
             }
 
-            if (activeUnit.canAttackAt(cell.getCell())) {
-              battle.dispatch({
+            if (pathHelpers.canAttackAt(ui.selectedUnit, cell)) {
+              return battle.dispatch({
                 type: 'attack',
                 payload: {
                   x: cell.x,
                   y: cell.y,
-                  z: cell.z
+                  z: cell.z,
+                  unitId: ui.selectedUnit.id
                 }
               });
             }

@@ -19,17 +19,13 @@ export type UnitViewModel = {
   maxAp: number;
   maxHp: number;
   atk: number;
-  speed: number;
-  hand: CardViewModel[];
-  deckSize: number;
-  remainingCardsInDeck: number;
   modifierInfos: Unit['modifierInfos'];
   player: PlayerViewModel;
   card: CardViewModel;
   getUnit(): Unit;
-  isActive(): boolean;
   equals(unit: UnitViewModel): boolean;
-  canPlayCardAt(index: number): boolean;
+  canMoveTo: Unit['canMoveTo'];
+  canAttackAt: Unit['canAttackAt'];
 };
 
 export const makeUnitViewModel = (game: Game, unit: Unit): UnitViewModel => {
@@ -44,24 +40,16 @@ export const makeUnitViewModel = (game: Game, unit: Unit): UnitViewModel => {
     maxAp: unit.ap.max,
     maxHp: unit.hp.max,
     atk: unit.atk,
-    speed: unit.speed,
-    hand: unit.player.hand.map(card => makeCardViewModel(game, card)),
-    deckSize: unit.player.deckSize,
-    remainingCardsInDeck: unit.player.remainingCardsInDeck,
     modifierInfos: [...unit.modifierInfos],
     player: makePlayerViewModel(game, unit.player),
     card: makeCardViewModel(game, unit.card),
+    canMoveTo: unit.canMoveTo,
+    canAttackAt: unit.canAttackAt,
     getUnit() {
       return unit;
     },
-    isActive() {
-      return game.turnSystem.activeUnit.equals(unit);
-    },
     equals(unitVm: UnitViewModel) {
       return unitVm.getUnit().equals(unit);
-    },
-    canPlayCardAt(index) {
-      return unit.player.canPlayCardAt(index);
     }
   };
 };

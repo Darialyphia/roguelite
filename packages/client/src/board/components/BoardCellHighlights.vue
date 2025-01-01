@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { PTransition } from 'vue3-pixi';
 import {
-  useActiveUnit,
   useBattleStore,
   useGameClientState,
   usePathHelpers,
@@ -17,7 +16,6 @@ import { useIsoCamera } from '@/iso/composables/useIsoCamera';
 const { cell } = defineProps<{ cell: CellViewModel }>();
 
 const battleStore = useBattleStore();
-const activeUnit = useActiveUnit();
 const camera = useIsoCamera();
 const ui = useBattleUiStore();
 const state = useGameClientState();
@@ -31,7 +29,7 @@ const isWithinCardRange = computed(() => {
 
 const isActive = computed(() => {
   if (!cell.unit) return false;
-  return activeUnit.value?.equals(cell.unit);
+  return ui.selectedUnit?.equals(cell.unit);
 });
 
 const canTarget = computed(() => {
@@ -40,7 +38,7 @@ const canTarget = computed(() => {
 });
 
 const canMove = computed(() => {
-  return !!activeUnit.value && pathHelpers.canMoveTo(activeUnit.value, cell);
+  return !!ui.selectedUnit && pathHelpers.canMoveTo(ui.selectedUnit, cell);
 });
 
 const canAttack = computed(() => {
@@ -48,17 +46,17 @@ const canAttack = computed(() => {
   return (
     ui.mode === UI_MODES.BASIC &&
     isDefined(cell.getCell().unit) &&
-    activeUnit.value?.getUnit().canAttackAt(cell)
+    ui.selectedUnit?.getUnit().canAttackAt(cell)
   );
 });
 
 const isOnPath = computed(() => {
   if (camera.isDragging.value) return false;
-  if (!activeUnit.value) return false;
+  if (!ui.selectedUnit) return false;
   if (!ui.hoveredCell) return false;
   if (!canMove.value) return false;
 
-  const path = pathHelpers.getPathTo(activeUnit.value, ui.hoveredCell);
+  const path = pathHelpers.getPathTo(ui.selectedUnit, ui.hoveredCell);
 
   return path?.path.some(point => point.equals(cell));
 });
@@ -87,7 +85,7 @@ const tag = computed(() => {
   ) {
     return null;
   }
-  if (!activeUnit.value?.player.equals(userPlayer.value)) {
+  if (!ui.selectedUnit?.player.equals(userPlayer.value)) {
     return null;
   }
 

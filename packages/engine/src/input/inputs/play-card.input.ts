@@ -21,7 +21,7 @@ export class PlayCardInput extends Input<typeof schema> {
   protected payloadSchema = schema;
 
   impl() {
-    if (!this.game.turnSystem.activeUnit.player.equals(this.player)) {
+    if (!this.game.turnSystem.activePlayer.equals(this.player)) {
       throw new Error('You are not the active player.');
     }
 

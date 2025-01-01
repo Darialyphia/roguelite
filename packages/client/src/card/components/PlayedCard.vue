@@ -8,7 +8,7 @@ import { GAME_EVENTS } from '@game/engine/src/game/game';
 const card = ref<Nullable<CardViewModel>>();
 
 const game = useGame();
-useBattleEvent(GAME_EVENTS.UNIT_BEFORE_PLAY_CARD, async event => {
+useBattleEvent(GAME_EVENTS.PLAYER_BEFORE_PLAY_CARD, async event => {
   card.value = makeCardViewModel(game.value, event.card);
   await waitFor(2000);
   card.value = null;

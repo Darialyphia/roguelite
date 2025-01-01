@@ -12,9 +12,5 @@ export const defaultKeyBindings = {
   endTurn: {
     label: "End the current unit's turn",
     control: { key: 'KeyT', modifier: null }
-  },
-  centerOnActiveUnit: {
-    label: 'Center camera on the active unit.',
-    control: { key: 'Space', modifier: null }
   }
 } as const satisfies Record<string, { label: string; control: Control }>;

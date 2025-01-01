@@ -58,8 +58,6 @@ export const useBattleStore = defineStore('battle', () => {
   const cells = ref<CellViewModel[]>([]);
   const players = ref<PlayerViewModel[]>([]);
   const units = ref<UnitViewModel[]>([]);
-  const turnOrderUnits = ref<UnitViewModel[]>([]);
-  const activeUnit = ref<UnitViewModel>();
   const turn = ref(0);
 
   const phase = ref<GamePhase>('mulligan');
@@ -78,12 +76,6 @@ export const useBattleStore = defineStore('battle', () => {
     units.value = game.unitSystem.units.map(unit => {
       return makeUnitViewModel(game, unit);
     });
-    if (game.phase !== GAME_PHASES.MULLIGAN) {
-      activeUnit.value = makeUnitViewModel(game, game.turnSystem.activeUnit);
-    }
-    turnOrderUnits.value = game.turnSystem.queue.map(unit =>
-      makeUnitViewModel(game, unit)
-    );
   };
 
   const fxEmitter = new TypedEventEmitter<GameEventMap>(true);
@@ -144,7 +136,7 @@ export const useBattleStore = defineStore('battle', () => {
       dispatch({
         type: input.type,
         payload: {
-          playerId: internal.session!.game.turnSystem.activeUnit?.player.id,
+          playerId: internal.session!.game.turnSystem.activePlayer.id,
           ...input.payload
         }
       });
@@ -158,8 +150,6 @@ export const useBattleStore = defineStore('battle', () => {
       players,
       units,
       userPlayer: computed(() => players.value.find(p => p.id === PLAYER_ID)!),
-      activeUnit,
-      turnOrderUnits,
       turn
     },
 
@@ -217,12 +207,6 @@ export const useVFXEvent = <T extends keyof VFXEventMap>(
   onUnmounted(unsub);
 
   return unsub;
-};
-
-export const useActiveUnit = () => {
-  const store = useBattleStore();
-
-  return computed(() => store.state.activeUnit);
 };
 
 export const useUserPlayer = () => {
@@ -285,6 +269,14 @@ export const usePathHelpers = () => {
     pathCache.clear();
     canMoveToCache.clear();
   });
+
+  watch(
+    () => ui.selectedUnit,
+    () => {
+      pathCache.clear();
+      canMoveToCache.clear();
+    }
+  );
 
   return {
     canMoveTo(unit: UnitViewModel, point: Point3D) {

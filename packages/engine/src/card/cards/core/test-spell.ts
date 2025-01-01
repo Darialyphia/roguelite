@@ -13,24 +13,23 @@ export const testSpell: SpellCardBlueprint = {
   id: 'testSpell',
   iconId: 'spell-fireball',
   name: 'Test Spell With Long Name',
-  description: 'Deal 2 damage to nearby enemies.',
+  description: 'Deal 2 damage to enemies nearby your generam.',
   kind: CARD_KINDS.SPELL,
   aiHints: {},
   cost: {
-    ap: 1,
-    runes: [RUNES.RED, RUNES.COLORLESS],
-    job: [JOBS.MAGE]
+    gold: 2,
+    runes: [RUNES.RED, RUNES.COLORLESS]
   },
   minTargets: 1,
   targets: [
     {
       getTargeting(game) {
-        return new SelfTargetingStrategy(game.turnSystem.activeUnit);
+        return new SelfTargetingStrategy(game.turnSystem.activePlayer.general);
       }
     }
   ],
-  getAoe(game) {
-    return new RingAOEShape(game, game.turnSystem.activeUnit, {
+  getAoe(game, card, points) {
+    return new RingAOEShape(game, game.unitSystem.getUnitAt(points[0])!, {
       allow3D: true,
       targetingType: TARGETING_TYPE.ENEMY
     });

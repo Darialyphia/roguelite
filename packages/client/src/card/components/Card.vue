@@ -23,7 +23,7 @@ const imagePath = computed(() => `url(/assets/icons/${card.iconId}.png)`);
 const metaString = computed(() =>
   match(card)
     .with({ kind: CARD_KINDS.SPELL }, card => {
-      return [card.kind, ...card.cost.job.map(j => j.name)].join(' - ');
+      return card.kind;
     })
     .with({ kind: CARD_KINDS.GENERAL }, card =>
       [card.kind, ...card.jobs.map(j => j.name)].join(' - ')
@@ -61,16 +61,10 @@ const runeCosts = computed(() => {
     <header class="grid grid-cols-2">
       <div class="cost">
         <StatCircle
-          v-if="card.kind === CARD_KINDS.UNIT"
+          v-if="card.kind === CARD_KINDS.UNIT || card.kind === CARD_KINDS.SPELL"
           :value="card.cost.gold"
           icon="gold"
           :invalid="violations?.gold"
-        />
-        <StatCircle
-          v-if="card.kind === CARD_KINDS.SPELL"
-          :value="card.cost.ap"
-          icon="ap"
-          :invalid="violations?.ap"
         />
 
         <ul
@@ -81,7 +75,6 @@ const runeCosts = computed(() => {
             :key="rune.rune.id"
             v-show="rune.count > 0"
             class="rune"
-            :class="violations?.runes && 'invalid'"
             :style="{
               '--bg': `url('/assets/ui/rune-${rune.rune.id.toLowerCase()}-small.png')`
             }"
@@ -96,7 +89,6 @@ const runeCosts = computed(() => {
       >
         <StatCircle :value="card.maxHp" icon="hp" />
         <StatCircle :value="card.atk" icon="atk" />
-        <StatCircle :value="card.speed" icon="speed" />
       </div>
     </header>
     <div class="name">{{ card.name }}</div>
@@ -203,11 +195,5 @@ ul:has(.rune) {
   font-size: var(--font-size-4);
   text-shadow: 0 3px #d7ad42;
   text-align: center;
-  &.invalid {
-    box-shadow: 0 0 3px 2px red;
-    border: solid 1px red;
-    border-radius: var(--radius-round);
-    aspect-ratio: 1;
-  }
 }
 </style>

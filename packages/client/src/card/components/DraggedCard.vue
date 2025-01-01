@@ -3,7 +3,6 @@ import { useBattleUiStore } from '@/pages/battle/battle-ui.store';
 import { lerp, type Point } from '@game/shared';
 import { useMouse, useRafFn } from '@vueuse/core';
 
-const { offset } = defineProps<{ offset: Point }>();
 const cardRotation = ref({ x: 0, y: 0 });
 const { x, y } = useMouse();
 let prev = { x: x.value, y: y.value };

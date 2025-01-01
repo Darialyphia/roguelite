@@ -11,7 +11,6 @@ import { ClientSession, ServerSession } from '@game/engine';
 import type { GameOptions } from '@game/engine/src/game/game';
 import ActionWheel from '@/player/components/ActionWheel.vue';
 import Hand from '@/card/components/Hand.vue';
-import UnitStats from '@/unit/components/UnitStats.vue';
 import PlayedCard from '@/card/components/PlayedCard.vue';
 import BattleLog from '@/player/components/BattleLog.vue';
 import { AI } from '@game/engine/src/ai/ai';
@@ -22,7 +21,6 @@ import { until } from '@vueuse/core';
 import MulliganOverlay from '@/card/components/MulliganOverlay.vue';
 import PlayerBattleInfos from '@/player/components/PlayerBattleInfos.vue';
 import { makePlayerViewModel } from '@/player/player.model';
-import TurnOrder from '@/unit/components/TurnOrder.vue';
 
 definePage({
   name: 'Battle'
@@ -172,14 +170,11 @@ start();
       </li>
     </ul>
 
-    <header class="flex gap-8 items-start justify-between mt-3 px-6">
-      <TurnOrder />
-      <PlayerBattleInfos
-        :player="opponent"
-        class="opponent-battle-infos"
-        inverted
-      />
-    </header>
+    <PlayerBattleInfos
+      :player="opponent"
+      class="opponent-battle-infos"
+      inverted
+    />
 
     <BattleLog class="pointer-events-auto" />
 
@@ -250,7 +245,9 @@ start();
 }
 
 .opponent-battle-infos {
-  grid-row: 1;
   justify-self: end;
+  margin-top: var(--size-3);
+  padding-left: var(--size-6);
+  padding-right: var(--size-6);
 }
 </style>

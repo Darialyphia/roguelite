@@ -52,7 +52,7 @@ type GeneralCardViewModel = CardViewModelBase & {
 
 type SpellCardViewModel = CardViewModelBase & {
   kind: (typeof CARD_KINDS)['SPELL'];
-  cost: { ap: number; runes: Rune[]; job: Job[] };
+  cost: { gold: number; runes: Rune[] };
   getCard(): SpellCard;
 };
 

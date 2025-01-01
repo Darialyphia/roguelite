@@ -32,7 +32,7 @@ export class AIPlayerAgent implements AIAgent {
 
     const tree = new Minimax(root);
     tree.opts.method = SEARCH_METHODS.TIME;
-    tree.opts.pruning = PRUNING_TYPES.ALPHA_BETA;
+    tree.opts.pruning = PRUNING_TYPES.NONE;
     tree.opts.timeout = 500;
     tree.GetMoves = parent => {
       return this.getValidMoves(parent.gamestate);
@@ -114,16 +114,24 @@ export class AIPlayerAgent implements AIAgent {
   private computeMoveScores(game: Game) {
     const results: SerializedInput[] = [];
 
-    const cells = game.boardSystem.cells.filter(cell => {
-      return game.turnSystem.activeUnit.canMoveTo(cell);
-    });
-
-    for (const cell of cells) {
-      results.push({
-        type: 'move',
-        payload: { playerId: this.player.id, x: cell.x, y: cell.y, z: cell.z }
+    game.turnSystem.activePlayer.units.forEach(unit => {
+      const cells = game.boardSystem.cells.filter(cell => {
+        return unit.canMoveTo(cell);
       });
-    }
+
+      for (const cell of cells) {
+        results.push({
+          type: 'move',
+          payload: {
+            playerId: this.player.id,
+            x: cell.x,
+            y: cell.y,
+            z: cell.z,
+            unitId: unit.id
+          }
+        });
+      }
+    });
 
     return results;
   }
@@ -131,18 +139,24 @@ export class AIPlayerAgent implements AIAgent {
   private computeCombatScores(game: Game) {
     const results: SerializedInput[] = [];
 
-    const targets = game.unitSystem.units.filter(
-      u =>
-        game.turnSystem.activeUnit.isEnemy(u) &&
-        game.turnSystem.activeUnit.canAttackAt(u.position)
-    );
+    game.turnSystem.activePlayer.units.forEach(unit => {
+      const targets = game.unitSystem.units.filter(
+        u => unit.isEnemy(u) && unit.canAttackAt(u.position)
+      );
 
-    for (const target of targets) {
-      results.push({
-        type: 'attack',
-        payload: { playerId: this.player.id, x: target.x, y: target.y, z: target.z }
-      });
-    }
+      for (const target of targets) {
+        results.push({
+          type: 'attack',
+          payload: {
+            playerId: this.player.id,
+            x: target.x,
+            y: target.y,
+            z: target.z,
+            unitId: unit.id
+          }
+        });
+      }
+    });
 
     return results;
   }
@@ -153,9 +167,9 @@ export class AIPlayerAgent implements AIAgent {
     // cells is a computed getter, let's evaluate it early instead of doing it in every loop iteration
     const cells = game.boardSystem.cells;
 
-    for (const [index, card] of game.turnSystem.activeUnit.player.hand.entries()) {
+    for (const [index, card] of game.turnSystem.activePlayer.hand.entries()) {
       const canPlay =
-        game.turnSystem.activeUnit.player.canPlayCardAt(index) &&
+        game.turnSystem.activePlayer.canPlayCardAt(index) &&
         !this.heuristics.shouldAvoidPlayingCard(card);
       if (!canPlay) continue;
 

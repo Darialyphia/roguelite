@@ -13,7 +13,7 @@ export class GoldResourceActionInput extends Input<typeof schema> {
 
   impl() {
     assert(
-      this.game.turnSystem.activeUnit.player.equals(this.player),
+      this.game.turnSystem.activePlayer.equals(this.player),
       'You are not the active player'
     );
 

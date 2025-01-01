@@ -2,8 +2,6 @@
 import { PTransitionGroup } from 'vue3-pixi';
 import { DropShadowFilter } from '@pixi/filter-drop-shadow';
 import {
-  useActiveUnit,
-  useGame,
   useGameClientState,
   usePathHelpers,
   useUserPlayer
@@ -16,7 +14,6 @@ const state = useGameClientState();
 const userPlayer = useUserPlayer();
 
 const ui = useBattleUiStore();
-const activeUnit = useActiveUnit();
 const pathHelpers = usePathHelpers();
 const isoWorld = useIsoWorld();
 
@@ -25,9 +22,9 @@ const attackerPositions = computed(() => {
     .filter(unit => {
       if (
         ui.hoveredCell &&
+        ui.selectedUnit &&
         userPlayer.value.isEnemy(unit) &&
-        activeUnit.value &&
-        pathHelpers.canMoveTo(activeUnit.value, ui.hoveredCell) &&
+        pathHelpers.canMoveTo(ui.selectedUnit, ui.hoveredCell) &&
         pathHelpers.canAttackAt(unit, ui.hoveredCell)
       ) {
         return true;
@@ -67,7 +64,7 @@ const filters = [
 <template>
   <container
     :ref="(container: any) => ui.assignLayer(container, 'ui')"
-    v-if="activeUnit && userPlayer.isAlly(activeUnit)"
+    v-if="ui.selectedUnit"
   >
     <PTransitionGroup
       :duration="{ enter: 300, leave: 300 }"

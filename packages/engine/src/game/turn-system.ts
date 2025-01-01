@@ -1,8 +1,8 @@
 import type { Values } from '@game/shared';
 import { TypedEventEmitter } from '../utils/typed-emitter';
 import { System } from '../system';
-import type { Unit } from '../unit/unit.entity';
 import { GAME_EVENTS } from './game';
+import type { Player } from '../player/player.entity';
 
 export const TURN_EVENTS = {
   TURN_START: 'turn_start',
@@ -19,17 +19,18 @@ export type TurnEventMap = {
 export class TurnSystem extends System<never> {
   private _turnCount = 0;
 
-  private _processedUnits = new Set<Unit>();
+  private _activePlayer!: Player;
 
-  queue: Unit[] = [];
+  private firstPlayer!: Player;
 
   private emitter = new TypedEventEmitter<TurnEventMap>();
 
   initialize() {
-    this.game.on('unit.end_turn', this.onUnitTurnEnd.bind(this));
-    this.game.on('unit.after_destroy', e => {
-      this.removeFromCurrentQueue(e.unit);
-    });
+    // const idx = this.game.rngSystem.nextInt(this.game.playerSystem.players.length);
+    this._activePlayer = this.game.playerSystem.players[0];
+    this.firstPlayer = this._activePlayer;
+
+    this.game.on(GAME_EVENTS.PLAYER_END_TURN, this.onPlayerTurnEnd.bind(this));
 
     this.on(TURN_EVENTS.TURN_START, e => {
       this.game.emit(GAME_EVENTS.TURN_START, e);
@@ -43,16 +44,12 @@ export class TurnSystem extends System<never> {
     this.emitter.removeAllListeners();
   }
 
+  get activePlayer() {
+    return this._activePlayer;
+  }
+
   get turnCount() {
     return this._turnCount;
-  }
-
-  get activeUnit() {
-    return [...this.queue][0];
-  }
-
-  get processedUnits() {
-    return this._processedUnits;
   }
 
   get on() {
@@ -69,44 +66,21 @@ export class TurnSystem extends System<never> {
 
   startGameTurn() {
     this._turnCount++;
-    this.queue = [];
-    this._processedUnits.clear();
-
-    this.game.unitSystem.units
-      .sort((a, b) => b.speed - a.speed)
-      .forEach(unit => this.queue.push(unit));
     this.emitter.emit(TURN_EVENTS.TURN_START, { turnCount: this.turnCount });
-
-    this.activeUnit.startTurn();
-  }
-
-  removeFromCurrentQueue(unit: Unit) {
-    const idx = this.queue.findIndex(u => u.equals(unit));
-    if (idx === -1) return;
-    this.queue.splice(idx, 1);
-  }
-
-  insertInCurrentQueue(unit: Unit) {
-    let idx = this.queue.findIndex(u => u.speed < unit.speed);
-    if (idx === -1) idx = this.queue.length;
-    this.queue.splice(idx, 0, unit);
   }
 
   endGameTurn() {
     this.emitter.emit(TURN_EVENTS.TURN_END, { turnCount: this.turnCount });
   }
 
-  onUnitTurnEnd() {
-    this._processedUnits.add(
-      this.queue.splice(this.queue.indexOf(this.activeUnit), 1)[0]
-    );
-
-    if (!this.activeUnit) {
+  onPlayerTurnEnd() {
+    const nextPlayer = this._activePlayer.opponents[0];
+    if (nextPlayer.equals(this.firstPlayer)) {
       this.endGameTurn();
+      this._activePlayer = nextPlayer;
       this.startGameTurn();
-      return;
+    } else {
+      this._activePlayer = nextPlayer;
     }
-
-    this.activeUnit.startTurn();
   }
 }

@@ -16,7 +16,6 @@ import { UnitModifierManager } from './components/modifier-manager.component';
 import type { UnitModifier } from './unit-modifier.entity';
 import type { TargetingStrategy } from '../targeting/targeting-strategy';
 import type { UnitCard } from '../card/unit-card.entity';
-import type { CardManagerComponent } from '../card/card-manager.component';
 import { CARD_KINDS } from '../card/card-enums';
 import type { GeneralCard } from '../card/general-card.entity';
 import { UNIT_EVENTS } from './unit-enums';
@@ -31,8 +30,6 @@ export type UnitOptions = {
 
 export type UnitEventMap = {
   [UNIT_EVENTS.CREATED]: [{ id: EntityId }];
-  [UNIT_EVENTS.START_TURN]: [{ id: EntityId }];
-  [UNIT_EVENTS.END_TURN]: [{ id: EntityId }];
   [UNIT_EVENTS.BEFORE_MOVE]: [{ position: Vec3; destination: Vec3; cost: number }];
   [UNIT_EVENTS.AFTER_MOVE]: [{ position: Vec3; previousPosition: Vec3; cost: number }];
   [UNIT_EVENTS.BEFORE_ATTACK]: [{ target: Point3D; cost: number }];
@@ -45,8 +42,6 @@ export type UnitEventMap = {
   [UNIT_EVENTS.AFTER_RECEIVE_DAMAGE]: [{ from: Card; damage: Damage }];
   [UNIT_EVENTS.BEFORE_RECEIVE_HEAL]: [{ from: Unit; amount: number }];
   [UNIT_EVENTS.AFTER_RECEIVE_HEAL]: [{ from: Unit; amount: number }];
-  [UNIT_EVENTS.BEFORE_PLAY_CARD]: [{ card: Card }];
-  [UNIT_EVENTS.AFTER_PLAY_CARD]: [{ card: Card }];
   [UNIT_EVENTS.BEFORE_DESTROY]: [{ source: Card }];
   [UNIT_EVENTS.AFTER_DESTROY]: [{ source: Card }];
 };
@@ -75,7 +70,6 @@ export class Unit extends Entity {
     canAttack: new Interceptable<boolean>(),
     canBeAttackTarget: new Interceptable<boolean>(),
     canBeCardTarget: new Interceptable<boolean>(),
-    canPlayCardFromHand: new Interceptable<boolean>(),
 
     speed: new Interceptable<number>(),
     attack: new Interceptable<number>(),
@@ -226,10 +220,6 @@ export class Unit extends Entity {
       this.ap.current >= this.combat.nextAttackApCost,
       {}
     );
-  }
-
-  get canPlayCardFromHand(): boolean {
-    return this.interceptors.canPlayCardFromHand.getValue(true, {});
   }
 
   get isAt() {
@@ -407,23 +397,9 @@ export class Unit extends Entity {
     this.emitter.emit(UNIT_EVENTS.AFTER_DESTROY, { source });
   }
 
-  playCard(card: Card, targets: Point3D[], manager: CardManagerComponent) {
-    this.emitter.emit(UNIT_EVENTS.BEFORE_PLAY_CARD, { card });
-    manager.play(card, targets);
-    this.emitter.emit(UNIT_EVENTS.AFTER_PLAY_CARD, { card });
-  }
-
   onGameTurnStart() {
     this.ap.refill();
     this.combat.resetAttackCount();
-  }
-
-  startTurn() {
-    this.emitter.emit(UNIT_EVENTS.START_TURN, { id: this.id });
-  }
-
-  endTurn() {
-    this.emitter.emit(UNIT_EVENTS.END_TURN, { id: this.id });
   }
 
   get removeModifier() {

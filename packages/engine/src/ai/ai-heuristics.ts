@@ -2,34 +2,36 @@ import { isDefined } from '@game/shared';
 import type { Card } from '../card/card.entity';
 import { SpellCard } from '../card/spell-card.entity';
 import { UnitCard } from '../card/unit-card.entity';
-import type { Game } from '../game/game';
+import { GAME_EVENTS, type Game } from '../game/game';
 import type { SerializedInput } from '../input/input-system';
 import { RUNES } from '../utils/rune';
 import type { ScoreModifier } from './ai-scorer';
 
 export class AiHeuristics {
   private game: Game;
-  private cardsPlayedByActiveUnit: Record<string, number> = {};
+  private cardsPlayedByActivePlayer: Record<string, number> = {};
 
   constructor(game: Game) {
     this.game = game;
 
-    game.on('unit.after_play_card', e => {
-      if (!this.cardsPlayedByActiveUnit[e.card.blueprintId]) {
-        this.cardsPlayedByActiveUnit[e.card.blueprintId] = 0;
+    game.on(GAME_EVENTS.PLAYER_AFTER_PLAY_CARD, e => {
+      if (!this.cardsPlayedByActivePlayer[e.card.blueprintId]) {
+        this.cardsPlayedByActivePlayer[e.card.blueprintId] = 0;
       }
-      this.cardsPlayedByActiveUnit[e.card.blueprintId]++;
+      this.cardsPlayedByActivePlayer[e.card.blueprintId]++;
     });
 
-    game.on('unit.end_turn', () => {
-      this.cardsPlayedByActiveUnit = {};
+    game.on(GAME_EVENTS.PLAYER_END_TURN, () => {
+      this.cardsPlayedByActivePlayer = {};
     });
   }
 
   shouldAvoidPlayingCard(card: Card) {
-    if (!this.cardsPlayedByActiveUnit[card.blueprintId]) return false;
+    if (!this.cardsPlayedByActivePlayer[card.blueprintId]) return false;
     if (!card.aiHints.maxUsesPerTurn) return false;
-    return this.cardsPlayedByActiveUnit[card.blueprintId] >= card.aiHints.maxUsesPerTurn;
+    return (
+      this.cardsPlayedByActivePlayer[card.blueprintId] >= card.aiHints.maxUsesPerTurn
+    );
   }
 
   getResourceActionPreScoreModifier(
@@ -38,7 +40,7 @@ export class AiHeuristics {
       type: 'drawResourceAction' | 'runeResourceAction' | 'goldResourceAction';
     }
   ) {
-    const player = game.turnSystem.activeUnit.player;
+    const player = game.turnSystem.activePlayer;
     const hand = player.hand.filter(
       card => card instanceof UnitCard || card instanceof SpellCard
     );
@@ -118,7 +120,7 @@ export class AiHeuristics {
     }
 
     if (input.type === 'playCard') {
-      const card = game.turnSystem.activeUnit.player.getCardAt(input.payload.index);
+      const card = game.turnSystem.activePlayer.getCardAt(input.payload.index);
       const { preScoreModifier, postScoreModifier } = card.aiHints;
 
       return {

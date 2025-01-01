@@ -42,10 +42,6 @@ const inactiveFilter = new AdjustmentFilter({
   brightness: 0.85
 });
 
-const isOnTurnOrder = computed(() => {
-  return state.value.turnOrderUnits.some(u => u.equals(unit));
-});
-
 const isInCardAoe = computed(() => {
   if (!ui.selectedCard) return false;
   if (!ui.hoveredCell) return false;
@@ -64,9 +60,6 @@ const filters = computed(() => {
 
   if (isInCardAoe.value) {
     result.push(inAoeFilter);
-  }
-  if (!isOnTurnOrder.value) {
-    result.push(inactiveFilter);
   }
 
   return result;

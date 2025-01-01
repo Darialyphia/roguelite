@@ -44,7 +44,7 @@ export class UnitCard extends Card<UnitCardBlueprint> {
 
   get canPlay() {
     return (
-      this.game.turnSystem.activeUnit.player.equals(this.player) &&
+      this.game.turnSystem.activePlayer.equals(this.player) &&
       this.isGoldValid &&
       this.isRunesValid
     );

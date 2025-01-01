@@ -32,26 +32,7 @@ useKeyboardControl(
   () => settingsStore.settings.bindings.rotateCCW.control,
   () => isoWorld.value?.camera.rotateCCW()
 );
-useKeyboardControl(
-  'keydown',
-  () => settingsStore.settings.bindings.centerOnActiveUnit.control,
-  () => {
-    if (!battleStore.state.activeUnit) return;
-    if (!isoWorld.value) return;
 
-    const { x, y } = isoWorld.value?.grid.toIso(
-      battleStore.state.activeUnit?.position
-    );
-    isoWorld.value.camera.viewport.value?.animate({
-      position: {
-        x: x + isoWorld.value.camera.offset.value.x,
-        y: y + isoWorld.value.camera.offset.value.y
-      },
-      time: 250,
-      ease: 'easeOutSine'
-    });
-  }
-);
 useKeyboardControl(
   'keydown',
   () => settingsStore.settings.bindings.endTurn.control,

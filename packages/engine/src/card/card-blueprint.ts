@@ -72,9 +72,8 @@ export type GeneralCardBlueprint = CardBlueprintBase & {
 export type SpellCardBlueprint = CardBlueprintBase & {
   kind: Extract<CardKind, typeof CARD_KINDS.SPELL>;
   cost: {
-    ap: number;
+    gold: number;
     runes: Rune[];
-    job: Job[];
   };
   vfx: {
     play(game: Game, card: SpellCard): VFXSequence;

@@ -47,7 +47,6 @@ const centerCamera = () => {
   });
   return waitFor(250);
 };
-whenever(() => unit.isActive(), centerCamera);
 
 useBattleEvent(GAME_EVENTS.UNIT_BEFORE_ATTACK, async e => {
   if (e.unit.equals(unit.getUnit())) {
@@ -55,11 +54,6 @@ useBattleEvent(GAME_EVENTS.UNIT_BEFORE_ATTACK, async e => {
   }
 });
 useBattleEvent(GAME_EVENTS.UNIT_BEFORE_RECEIVE_DAMAGE, async e => {
-  if (e.unit.equals(unit.getUnit())) {
-    await centerCamera();
-  }
-});
-useBattleEvent(GAME_EVENTS.UNIT_BEFORE_PLAY_CARD, async e => {
   if (e.unit.equals(unit.getUnit())) {
     await centerCamera();
   }

@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import {
-  useActiveUnit,
   useBattleEvent,
   useGame,
   useGameClientState
@@ -31,11 +30,15 @@ type Token =
       unit: Unit;
     }
   | {
+      kind: 'player';
+      player: Player;
+    }
+  | {
       kind: 'input';
       player: Player;
     }
   | { kind: 'position'; point: Point3D }
-  | { kind: 'turn_start'; unit: Unit }
+  | { kind: 'turn_start'; player: Player }
   | { kind: 'action'; text: string };
 
 const events = ref<Token[][]>([[]]);
@@ -64,9 +67,9 @@ useBattleEvent(GAME_EVENTS.INPUT_START, async event => {
   ]);
 });
 
-useBattleEvent(GAME_EVENTS.UNIT_BEFORE_PLAY_CARD, async event => {
+useBattleEvent(GAME_EVENTS.PLAYER_BEFORE_PLAY_CARD, async event => {
   events.value.push([
-    { kind: 'unit', unit: event.unit },
+    { kind: 'player', player: event.player },
     { kind: 'text', text: 'played' },
     { kind: 'card', card: event.card }
   ]);
@@ -113,8 +116,8 @@ useBattleEvent(GAME_EVENTS.UNIT_AFTER_MOVE, async event => {
   ]);
 });
 
-useBattleEvent(GAME_EVENTS.UNIT_START_TURN, async event => {
-  events.value.push([{ kind: 'turn_start', unit: event.unit }]);
+useBattleEvent(GAME_EVENTS.PLAYER_START_TURN, async event => {
+  events.value.push([{ kind: 'turn_start', player: event.player }]);
 });
 
 useBattleEvent(GAME_EVENTS.UNIT_AFTER_DESTROY, async event => {
@@ -193,8 +196,11 @@ const isAction = (event: Pick<Token, 'kind'>[]) =>
           <template v-else-if="token.kind === 'position'">
             [{{ token.point.x }}, {{ token.point.y }}, {{ token.point.z }}]
           </template>
+          <template v-else-if="token.kind === 'player'">
+            {{ token.player.name }}
+          </template>
           <template v-else-if="token.kind === 'turn_start'">
-            {{ token.unit.name }}
+            {{ token.player.name }}
           </template>
         </span>
       </li>

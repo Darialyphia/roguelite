@@ -34,16 +34,6 @@ useBattleEvent(GAME_EVENTS.UNIT_AFTER_ATTACK, e => {
     resolve();
   });
 });
-useBattleEvent(GAME_EVENTS.UNIT_AFTER_PLAY_CARD, e => {
-  return new Promise(resolve => {
-    if (!e.unit.equals(unit.getUnit())) return resolve();
-    if (e.card instanceof SpellCard) {
-      // eslint-disable-next-line vue/no-mutating-props
-      unit.currentAp -= e.card.cost.ap;
-    }
-    resolve();
-  });
-});
 
 const sprite = ref<AnimatedSprite>();
 useBattleEvent('unit.before_destroy', async e => {
@@ -87,21 +77,21 @@ const getTextStyle = (color: number) => {
     :y="-35"
   >
     <pixi-text
-      :style="getTextStyle(0xff0000)"
+      :style="getTextStyle(0x84f200)"
       :x="-22"
       :y="-2"
       :scale="0.5"
       :anchor="0.5"
     >
-      {{ unit.atk }}
+      {{ unit.currentHp }}
     </pixi-text>
     <pixi-text
-      :style="getTextStyle(0x84f200)"
+      :style="getTextStyle(0xff0000)"
       :y="-2"
       :scale="0.5"
       :anchor="0.5"
     >
-      {{ unit.currentHp }}
+      {{ unit.atk }}
     </pixi-text>
     <pixi-text
       :style="getTextStyle(0x00bcff)"

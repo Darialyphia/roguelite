@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import {
-  useActiveUnit,
   useBattleStore,
   useGameClientState,
   useUserPlayer
@@ -12,14 +11,9 @@ import { RUNES, type Rune } from '@game/engine/src/utils/rune';
 const battle = useBattleStore();
 const state = useGameClientState();
 const userPlayer = useUserPlayer();
-const activeUnit = useActiveUnit();
 
 const getRuneCountByType = (rune: Rune) =>
   userPlayer.value.runes.filter(r => r.equals(rune)).length;
-
-const isUserPlayerTurn = computed(() =>
-  activeUnit.value?.player.equals(userPlayer.value)
-);
 </script>
 
 <template>
@@ -30,7 +24,7 @@ const isUserPlayerTurn = computed(() =>
     <button
       aria-label="add Order rune"
       style="--bg: url('/assets/ui/rune-yellow.png')"
-      :disabled="!userPlayer.canPerformResourceAction || !isUserPlayerTurn"
+      :disabled="!userPlayer.canPerformResourceAction || !userPlayer.isActive"
       @click="
         battle.dispatch({
           type: 'runeResourceAction',
@@ -43,7 +37,7 @@ const isUserPlayerTurn = computed(() =>
     <button
       aria-label="add Chaos rune"
       style="--bg: url('/assets/ui/rune-purple.png')"
-      :disabled="!userPlayer.canPerformResourceAction || !isUserPlayerTurn"
+      :disabled="!userPlayer.canPerformResourceAction || !userPlayer.isActive"
       @click="
         battle.dispatch({
           type: 'runeResourceAction',
@@ -56,7 +50,7 @@ const isUserPlayerTurn = computed(() =>
     <button
       aria-label="add Creation rune"
       style="--bg: url('/assets/ui/rune-green.png')"
-      :disabled="!userPlayer.canPerformResourceAction || !isUserPlayerTurn"
+      :disabled="!userPlayer.canPerformResourceAction || !userPlayer.isActive"
       @click="
         battle.dispatch({
           type: 'runeResourceAction',
@@ -69,7 +63,7 @@ const isUserPlayerTurn = computed(() =>
     <button
       aria-label="add Destruction rune"
       style="--bg: url('/assets/ui/rune-red.png')"
-      :disabled="!userPlayer.canPerformResourceAction || !isUserPlayerTurn"
+      :disabled="!userPlayer.canPerformResourceAction || !userPlayer.isActive"
       @click="
         battle.dispatch({
           type: 'runeResourceAction',
@@ -82,7 +76,7 @@ const isUserPlayerTurn = computed(() =>
     <button
       aria-label="add Aether rune"
       style="--bg: url('/assets/ui/rune-blue.png')"
-      :disabled="!userPlayer.canPerformResourceAction || !isUserPlayerTurn"
+      :disabled="!userPlayer.canPerformResourceAction || !userPlayer.isActive"
       @click="
         battle.dispatch({
           type: 'runeResourceAction',
@@ -95,7 +89,7 @@ const isUserPlayerTurn = computed(() =>
     <button
       aria-label="gain one additional gold"
       style="--bg: url('/assets/ui/gold-action.png')"
-      :disabled="!userPlayer.canPerformResourceAction || !isUserPlayerTurn"
+      :disabled="!userPlayer.canPerformResourceAction || !userPlayer.isActive"
       @click="
         battle.dispatch({
           type: 'goldResourceAction',
@@ -108,7 +102,7 @@ const isUserPlayerTurn = computed(() =>
     <button
       aria-label="draw an additional card"
       style="--bg: url('/assets/ui/draw-action.png')"
-      :disabled="!userPlayer.canPerformResourceAction || !isUserPlayerTurn"
+      :disabled="!userPlayer.canPerformResourceAction || !userPlayer.isActive"
       @click="
         battle.dispatch({
           type: 'drawResourceAction',
@@ -118,7 +112,7 @@ const isUserPlayerTurn = computed(() =>
     />
     <button
       aria-label="end turn"
-      :disabled="!isUserPlayerTurn"
+      :disabled="!userPlayer.isActive"
       style="--bg: url('/assets/ui/end-turn-action.png')"
       @click="
         battle.dispatch({

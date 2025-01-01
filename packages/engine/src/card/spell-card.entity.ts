@@ -7,14 +7,8 @@ export class SpellCard extends Card<SpellCardBlueprint> {
     return this.blueprint.cost;
   }
 
-  get isJobValid() {
-    return this.blueprint.cost.job.some(job =>
-      this.game.turnSystem.activeUnit.card.jobs.includes(job)
-    );
-  }
-
-  get isApValid() {
-    return this.game.turnSystem.activeUnit.canSpendAp(this.cost.ap);
+  get isGoldValid() {
+    return this.player.canSpendGold(this.cost.gold);
   }
 
   get isRunesValid() {
@@ -23,9 +17,8 @@ export class SpellCard extends Card<SpellCardBlueprint> {
 
   get canPlay() {
     return (
-      this.game.turnSystem.activeUnit.player.equals(this.player) &&
-      this.isApValid &&
-      this.isJobValid &&
+      this.game.turnSystem.activePlayer.equals(this.player) &&
+      this.isGoldValid &&
       this.isRunesValid
     );
   }
@@ -37,7 +30,6 @@ export class SpellCard extends Card<SpellCardBlueprint> {
       targets,
       vfx: this.blueprint.vfx.play(this.game, this)
     });
-    this.game.turnSystem.activeUnit.ap.remove(this.blueprint.cost.ap);
     const aoeShape = this.blueprint.getAoe(this.game, this, targets);
     this.blueprint.onPlay(
       this.game,
