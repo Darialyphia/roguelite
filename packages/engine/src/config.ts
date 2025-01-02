@@ -28,7 +28,7 @@ export const config = {
   // The victory point gained at the end of the turn when a shrine is controlled by a player
   SHRINE_VP_REWARD: 1,
   // The victory point awarded for destroying a shrine
-  ALTAR_VP_REWARD: 4,
+  ALTAR_VP_REWARD: 6,
   // the Altars HP
   ALTAR_HP: 12
 } as const;

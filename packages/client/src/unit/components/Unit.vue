@@ -61,16 +61,14 @@ useBattleEvent(GAME_EVENTS.UNIT_BEFORE_RECEIVE_DAMAGE, async e => {
 
 const isSpawnAnimationDone = ref(false);
 const spawnAnimation = (container: Container) => {
-  container.y = -100;
+  container.y = -60;
   container.alpha = 0;
+  gsap.to(container, { alpha: 1, duration: 0.3 });
   gsap.to(container, {
     y: 0,
     duration: 1,
     ease: Bounce.easeOut,
     delay: Math.random() * 0.5,
-    onStart() {
-      container.alpha = 1;
-    },
     onComplete() {
       isSpawnAnimationDone.value = true;
     }

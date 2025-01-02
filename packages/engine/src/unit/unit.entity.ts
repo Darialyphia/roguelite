@@ -70,6 +70,7 @@ export class Unit extends Entity {
     canAttack: new Interceptable<boolean>(),
     canBeAttackTarget: new Interceptable<boolean>(),
     canBeCardTarget: new Interceptable<boolean>(),
+    canSummonUnitsNearby: new Interceptable<boolean>(),
 
     speed: new Interceptable<number>(),
     attack: new Interceptable<number>(),
@@ -157,6 +158,10 @@ export class Unit extends Entity {
 
   get speed(): number {
     return this.interceptors.speed.getValue(this.card.speed, {});
+  }
+
+  get canSummonUnitsNearby(): boolean {
+    return this.interceptors.canSummonUnitsNearby.getValue(false, {});
   }
 
   get canBeAttacked(): boolean {

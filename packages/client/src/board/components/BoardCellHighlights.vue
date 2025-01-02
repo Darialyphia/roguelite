@@ -12,6 +12,7 @@ import type { CellViewModel } from '../models/cell.model';
 import { UI_MODES, useBattleUiStore } from '@/pages/battle/battle-ui.store';
 import { isDefined } from '@game/shared';
 import { useIsoCamera } from '@/iso/composables/useIsoCamera';
+import { match } from 'ts-pattern';
 
 const { cell } = defineProps<{ cell: CellViewModel }>();
 
@@ -23,13 +24,7 @@ const pathHelpers = usePathHelpers();
 
 const isWithinCardRange = computed(() => {
   if (!ui.selectedCard) return;
-
   return ui.selectedCard.isWithinRange(cell, ui.cardTargets.length);
-});
-
-const isActive = computed(() => {
-  if (!cell.unit) return false;
-  return ui.selectedUnit?.equals(cell.unit);
 });
 
 const canTarget = computed(() => {
@@ -85,31 +80,41 @@ const tag = computed(() => {
   ) {
     return null;
   }
-  if (!ui.selectedUnit?.player.equals(userPlayer.value)) {
-    return null;
-  }
 
-  if (isActive.value) {
-    return 'active';
-  }
-  if (canTarget.value) {
-    return 'targeting';
-  }
-  if (isWithinCardRange.value) {
-    return 'targeting-valid';
-  }
-  if (canAttack.value || isInCardAoe.value) {
-    return 'danger';
-  }
-  if (isOnPath.value) {
-    return 'movement-path';
-  }
+  if (!ui.mode) return null;
+  return match(ui.mode)
+    .with(UI_MODES.BASIC, () => {
+      if (!ui.selectedUnit?.player.equals(userPlayer.value)) {
+        return null;
+      }
+      if (canAttack.value) {
+        return 'danger';
+      }
+      if (isOnPath.value) {
+        return 'movement-path';
+      }
 
-  if (canMove.value) {
-    return isDangerZone.value ? 'danger' : 'movement';
-  }
+      if (canMove.value) {
+        return isDangerZone.value ? 'danger' : 'movement';
+      }
 
-  return null;
+      return null;
+    })
+    .with(UI_MODES.PLAY_CARD, () => {
+      if (isInCardAoe.value) {
+        return 'danger';
+      }
+
+      if (canTarget.value) {
+        return 'targeting';
+      }
+      if (isWithinCardRange.value) {
+        return 'targeting-valid';
+      }
+
+      return null;
+    })
+    .exhaustive();
 });
 </script>
 

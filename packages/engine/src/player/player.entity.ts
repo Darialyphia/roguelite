@@ -75,6 +75,8 @@ export class Player extends Entity {
 
   private resourceActionsTaken = 0;
 
+  readonly altar: Obstacle;
+
   constructor(game: Game, team: Team, options: PlayerOptions) {
     super(createEntityId(options.id));
     this.game = game;
@@ -92,15 +94,13 @@ export class Player extends Entity {
     this.game.on(GAME_EVENTS.TURN_START, this.onGameTurnStart.bind(this));
     this.game.on(GAME_EVENTS.START_BATTLE, this.onBattleStart.bind(this));
 
-    this.game.boardSystem.getCellAt(options.altarPosition)!.obstacle = new Obstacle(
-      this.game,
-      {
-        blueprintId: 'altar',
-        id: `Player_${this.id}_altar` as EntityId,
-        position: options.altarPosition,
-        playerId: this.id
-      }
-    );
+    this.altar = new Obstacle(this.game, {
+      blueprintId: 'altar',
+      id: `Player_${this.id}_altar` as EntityId,
+      position: options.altarPosition,
+      playerId: this.id
+    });
+    this.game.boardSystem.getCellAt(options.altarPosition)!.obstacle = this.altar;
   }
 
   shutdown() {

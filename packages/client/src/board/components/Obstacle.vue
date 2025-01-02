@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { useUserPlayer } from '@/pages/battle/battle.store';
-import type { PlayerViewModel } from '@/player/player.model';
 import UiAnimatedSprite from '@/ui/components/UiAnimatedSprite.vue';
 import { config } from '@/utils/config';
 import type { CellViewModel } from '../models/cell.model';
@@ -69,7 +68,7 @@ const ui = useBattleUiStore();
       event-mode="none"
       playing
       loop
-      :y="-config.TILE_SIZE.y"
+      :y="-config.TILE_SIZE.y * 1.15"
       :x="-15"
     >
       <pixi-text
