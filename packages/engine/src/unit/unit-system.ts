@@ -4,7 +4,6 @@ import { Unit } from './unit.entity';
 import { System } from '../system';
 import { GAME_PHASES } from '../game/game-phase.system';
 import type { UnitCard } from '../card/unit-card.entity';
-import type { GeneralCard } from '../card/general-card.entity';
 import { UNIT_EVENTS } from './unit-enums';
 
 // eslint-disable-next-line @typescript-eslint/ban-types
@@ -83,7 +82,7 @@ export class UnitSystem extends System<UnitSystemOptions> {
     });
   }
 
-  addUnit(card: UnitCard | GeneralCard, position: Point3D) {
+  addUnit(card: UnitCard, position: Point3D) {
     const id = `unit_${++this.nextUnitId}`;
     const unit = new Unit(this.game, card, { id, player: card.player, position });
     this.unitMap.set(unit.id, unit);

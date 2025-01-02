@@ -1,10 +1,9 @@
 import { Damage } from '../../../combat/damage/damage';
 import { NoMitigationStrategy } from '../../../combat/damage/mitigation/no-mitigation.strategy';
 import { NoScalingStrategy } from '../../../combat/damage/scaling/no-scaling.strategy';
-import { PointAOEShape, RingAOEShape } from '../../../targeting/aoe-shapes';
-import { SelfTargetingStrategy } from '../../../targeting/self-targeting.strategy';
+import { AnywhereTargetingStrategy } from '../../../targeting/anywhere-targeting-strategy';
+import { RingAOEShape } from '../../../targeting/aoe-shapes';
 import { TARGETING_TYPE } from '../../../targeting/targeting-strategy';
-import { JOBS } from '../../../utils/job';
 import { RUNES } from '../../../utils/rune';
 import { type SpellCardBlueprint } from '../../card-blueprint';
 import { CARD_KINDS } from '../../card-enums';
@@ -13,7 +12,7 @@ export const testSpell: SpellCardBlueprint = {
   id: 'testSpell',
   iconId: 'spell-fireball',
   name: 'Test Spell With Long Name',
-  description: 'Deal 2 damage to enemies nearby your generam.',
+  description: 'Deal 2 damage to enemies nearby an ally unit.',
   kind: CARD_KINDS.SPELL,
   aiHints: {},
   cost: {
@@ -23,8 +22,8 @@ export const testSpell: SpellCardBlueprint = {
   minTargets: 1,
   targets: [
     {
-      getTargeting(game) {
-        return new SelfTargetingStrategy(game.turnSystem.activePlayer.general);
+      getTargeting(game, card) {
+        return new AnywhereTargetingStrategy(game, card.player, TARGETING_TYPE.ALLY);
       }
     }
   ],
@@ -35,12 +34,11 @@ export const testSpell: SpellCardBlueprint = {
     });
   },
   vfx: {
-    play(game, card) {
+    play() {
       return { tracks: [] };
     }
   },
   onPlay(game, card, cellTargets, unitTargets) {
-    console.log(unitTargets);
     unitTargets.forEach(target => {
       target.takeDamage(
         card,

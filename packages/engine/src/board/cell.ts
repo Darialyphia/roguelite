@@ -42,7 +42,7 @@ export class Cell extends Entity {
     this.obstacle = options.obstacle
       ? new Obstacle(this.game, {
           blueprintId: options.obstacle,
-          id: `obstacle_${this.position.x}.${this.position.y}.${this.position.z}_${nanoid}` as EntityId,
+          id: `obstacle_${this.position.x}.${this.position.y}.${this.position.z}_${nanoid(4)}` as EntityId,
           position: this.position
         })
       : null;

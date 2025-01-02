@@ -21,7 +21,7 @@ import { until } from '@vueuse/core';
 import MulliganOverlay from '@/card/components/MulliganOverlay.vue';
 import PlayerBattleInfos from '@/player/components/PlayerBattleInfos.vue';
 import { makePlayerViewModel } from '@/player/player.model';
-
+import OpponentHand from '@/card/components/OpponentHand.vue';
 definePage({
   name: 'Battle'
 });
@@ -35,7 +35,6 @@ const options: Pick<GameOptions, 'mapId' | 'teams'> = {
         name: 'Daria',
         deck: {
           cards: [
-            { blueprintId: 'testGeneral' },
             { blueprintId: 'lancer' },
             { blueprintId: 'lancer' },
             { blueprintId: 'lancer' },
@@ -73,7 +72,6 @@ const options: Pick<GameOptions, 'mapId' | 'teams'> = {
         name: 'AI',
         deck: {
           cards: [
-            { blueprintId: 'testGeneral' },
             { blueprintId: 'lancer' },
             { blueprintId: 'lancer' },
             { blueprintId: 'lancer' },
@@ -157,7 +155,7 @@ start();
     <MulliganOverlay />
     <PlayedCard />
 
-    <ul class="fixed flex gap-2 pointer-events-auto top-0 left-15">
+    <ul class="fixed pointer-events-auto top-8 left-2">
       <li>
         <button @click="() => console.log(serverSession)">
           Debug server session
@@ -170,19 +168,23 @@ start();
       </li>
     </ul>
 
-    <PlayerBattleInfos
-      :player="opponent"
-      class="opponent-battle-infos"
-      inverted
-    />
+    <header>
+      <div />
+      <OpponentHand class="opponent-hand" />
+      <PlayerBattleInfos
+        :player="opponent"
+        class="opponent-battle-infos"
+        inverted
+      />
+    </header>
 
     <BattleLog class="pointer-events-auto" />
 
-    <div class="bottom-row">
+    <footer class="bottom-row">
       <PlayerBattleInfos :player="userPlayer" class="player-battle-infos" />
       <Hand class="hand" />
       <ActionWheel />
-    </div>
+    </footer>
   </div>
 </template>
 
@@ -194,36 +196,16 @@ start();
   user-select: none;
 }
 
-.active-unit-stats {
-  grid-row: 2;
-  justify-self: start;
-  align-self: start;
-  margin-block-start: var(--size-5);
-  margin-inline-start: 0;
-}
-
-.selected-unit-stats {
-  grid-row: 2;
-  justify-self: end;
-  align-self: start;
-  margin-block-start: var(--size-5);
-  margin-inline-start: 0;
-
-  &:is(.v-enter-active, .v-leave-active) {
-    transition: all 0.2s var(--ease-out-2);
-  }
-
-  &:is(.v-enter-from, .v-leave-to) {
-    opacity: 0;
-    transform: translateX(var(--size-9));
-  }
-}
-
-.bottom-row {
+header,
+footer {
   display: grid;
-  grid-row: 3;
   grid-template-columns: minmax(0, 1fr) minmax(0, 2fr) minmax(0, 1fr);
 }
+
+footer {
+  grid-row: 3;
+}
+
 .action-wheel {
   align-self: end;
   justify-self: end;
@@ -232,9 +214,14 @@ start();
   justify-self: end;
 }
 
-.hand {
+.hand,
+.opponent-hand {
   max-width: 100%;
   justify-self: center;
+}
+
+.opponent-hand {
+  margin-top: -350px;
 }
 
 .player-battle-infos {
@@ -246,8 +233,7 @@ start();
 
 .opponent-battle-infos {
   justify-self: end;
-  margin-top: var(--size-3);
-  padding-left: var(--size-6);
-  padding-right: var(--size-6);
+  align-self: start;
+  margin-inline-end: var(--size-6);
 }
 </style>

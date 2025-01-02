@@ -1,13 +1,13 @@
 import type { Point3D } from '@game/shared';
 import type { TargetingStrategy, TargetingType } from './targeting-strategy';
 import type { Game } from '../game/game';
-import type { Unit } from '../unit/unit.entity';
 import { match } from 'ts-pattern';
+import type { Player } from '../player/player.entity';
 
 export class AnywhereTargetingStrategy implements TargetingStrategy {
   constructor(
     private game: Game,
-    private unit: Unit,
+    private player: Player,
     private type: TargetingType
   ) {}
 
@@ -21,8 +21,8 @@ export class AnywhereTargetingStrategy implements TargetingStrategy {
     return match(this.type)
       .with('any', () => true)
       .with('empty', () => !unit)
-      .with('ally', () => !!unit?.isAlly(this.unit))
-      .with('enemy', () => !!unit?.isEnemy(this.unit))
+      .with('ally', () => !!unit?.player.isAlly(this.player))
+      .with('enemy', () => !!unit?.player.isEnemy(this.player))
       .with('both', () => !!unit)
       .exhaustive();
   }

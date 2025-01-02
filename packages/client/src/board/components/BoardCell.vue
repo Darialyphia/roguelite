@@ -168,6 +168,8 @@ watch(isHovered, hovered => {
                   unitId: ui.selectedUnit.id
                 }
               });
+            } else {
+              ui.unselectUnit();
             }
           })
           .with(UI_MODES.PLAY_CARD, () => {

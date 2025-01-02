@@ -8,7 +8,6 @@ import type { Rune } from '../utils/rune';
 import type { Job } from '../utils/job';
 import type { UnitCard } from './unit-card.entity';
 import type { SpellCard } from './spell-card.entity';
-import type { GeneralCard } from './general-card.entity';
 import type { VFXSequence } from '../vfx/vfx-sequencer';
 import { CARD_KINDS, type CardKind } from './card-enums';
 
@@ -52,23 +51,6 @@ export type UnitCardBlueprint = CardBlueprintBase & {
   getAttackPattern: (game: Game, unit: Unit) => TargetingStrategy;
 };
 
-export type GeneralCardBlueprint = CardBlueprintBase & {
-  kind: Extract<CardKind, typeof CARD_KINDS.GENERAL>;
-  spriteId: string;
-  maxHp: number;
-  atk: number;
-  speed: number;
-  reward: number;
-  jobs: Job[];
-  vfx: {
-    play(game: Game, card: GeneralCard): VFXSequence;
-    destroy(game: Game, card: GeneralCard): VFXSequence;
-  };
-  getAoe: (game: Game, card: UnitCard, points: Point3D[]) => AOEShape;
-  onPlay(game: Game, card: GeneralCard): void;
-  getAttackPattern: (game: Game, unit: Unit) => TargetingStrategy;
-};
-
 export type SpellCardBlueprint = CardBlueprintBase & {
   kind: Extract<CardKind, typeof CARD_KINDS.SPELL>;
   cost: {
@@ -84,11 +66,9 @@ export type SpellCardBlueprint = CardBlueprintBase & {
   onPlay(game: Game, card: SpellCard, cellTargets: Point3D[], unitTargets: Unit[]): void;
 };
 
-export type CardBlueprint = UnitCardBlueprint | SpellCardBlueprint | GeneralCardBlueprint;
+export type CardBlueprint = UnitCardBlueprint | SpellCardBlueprint;
 
 export const isUnitBlueprint = (bp: CardBlueprint): bp is UnitCardBlueprint =>
   bp.kind === CARD_KINDS.UNIT;
 export const isSpellBlueprint = (bp: CardBlueprint): bp is SpellCardBlueprint =>
   bp.kind === CARD_KINDS.SPELL;
-export const isGeneralBlueprint = (bp: CardBlueprint): bp is GeneralCardBlueprint =>
-  bp.kind === CARD_KINDS.GENERAL;

@@ -1,4 +1,4 @@
-import { type Point3D, type Nullable, type AnyObject } from '@game/shared';
+import { type Point3D, type Nullable, type AnyObject, assert } from '@game/shared';
 import { Entity, type EntityId } from '../entity';
 import type { Unit } from '../unit/unit.entity';
 import { Position } from '../utils/position';
@@ -20,7 +20,7 @@ export class Obstacle extends Entity {
   occupant: Nullable<Unit> = null;
   spriteId: string;
   meta: AnyObject = {};
-
+  isAttackable: boolean;
   constructor(
     private game: Game,
     options: ObstacleOptions
@@ -30,6 +30,7 @@ export class Obstacle extends Entity {
     this.spriteId = this.blueprint.spriteId;
     this.position = Position.fromPoint3D(options.position);
     this.playerId = options.playerId;
+    this.isAttackable = this.blueprint.attackable;
     this.checkOccupation = this.checkOccupation.bind(this);
     this.game.on(GAME_EVENTS.UNIT_CREATED, this.checkOccupation);
     this.game.on(GAME_EVENTS.UNIT_AFTER_DESTROY, this.checkOccupation);
@@ -77,5 +78,11 @@ export class Obstacle extends Entity {
     this.game.off(GAME_EVENTS.UNIT_CREATED, this.checkOccupation);
     this.game.off(GAME_EVENTS.UNIT_AFTER_DESTROY, this.checkOccupation);
     this.game.off(GAME_EVENTS.UNIT_AFTER_MOVE, this.checkOccupation);
+  }
+
+  attack(unit: Unit) {
+    assert(this.isAttackable, 'obstacle canno be attack');
+
+    this.blueprint.onAttacked?.(this.game, this, unit);
   }
 }

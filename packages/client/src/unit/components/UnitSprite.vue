@@ -27,7 +27,6 @@ const textures = computed(() => {
 });
 
 const ui = useBattleUiStore();
-const state = useGameClientState();
 const camera = useIsoCamera();
 const selectedFilter = new OutlineFilter(
   camera.viewport.value!.scale.x,

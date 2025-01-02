@@ -18,7 +18,7 @@ export type GameMap = {
     light?: CellLight;
     obstacle?: string;
   }>[][][];
-  startPositions: Point3D[][];
+  altarPositions: Point3D[][];
 };
 
 export const TERRAINS = {

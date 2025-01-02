@@ -12,7 +12,7 @@ export type TeamOptions = {
     id: string;
     name: string;
     deck: { cards: { blueprintId: string }[] };
-    startPosition: Point3D;
+    altarPosition: Point3D;
   }>;
 };
 
@@ -28,7 +28,7 @@ export class Team extends Entity {
     this.game = game;
     options.players.forEach(player => {
       const entity = new Player(game, this, {
-        startPosition: player.startPosition,
+        altarPosition: player.altarPosition,
         id: player.id,
         name: player.name,
         deck: player.deck.cards.map(card => {

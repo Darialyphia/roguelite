@@ -11,14 +11,13 @@ import { TypedEventEmitter } from '../utils/typed-emitter';
 import { RuneManager } from './components/rune-manager';
 import { match } from 'ts-pattern';
 import { Rune, RUNES } from '../utils/rune';
-import { CARD_KINDS } from '../card/card-enums';
-import { GeneralCard } from '../card/general-card.entity';
+import { Obstacle } from '../obstacle/obstacle.entity';
 
 export type PlayerOptions = {
   id: string;
   name: string;
   deck: CardOptions[];
-  startPosition: Point3D;
+  altarPosition: Point3D;
 };
 
 export const PLAYER_EVENTS = {
@@ -66,7 +65,7 @@ export class Player extends Entity {
 
   private readonly runeManager: RuneManager;
 
-  readonly startPosition: Point3D;
+  readonly altarPosition: Point3D;
 
   private emitter = new TypedEventEmitter<PlayerEventMap>();
 
@@ -76,21 +75,13 @@ export class Player extends Entity {
 
   private resourceActionsTaken = 0;
 
-  private generalCard: GeneralCard;
-
   constructor(game: Game, team: Team, options: PlayerOptions) {
     super(createEntityId(options.id));
     this.game = game;
     this.team = team;
     this.name = options.name;
-    this.startPosition = options.startPosition;
+    this.altarPosition = options.altarPosition;
     this.runeManager = new RuneManager();
-
-    const [general] = options.deck.splice(
-      options.deck.findIndex(card => card.blueprint.kind === CARD_KINDS.GENERAL),
-      1
-    );
-    this.generalCard = new GeneralCard(this.game, this, general);
 
     this.cardManager = new CardManagerComponent(this.game, this, {
       deck: options.deck
@@ -100,6 +91,16 @@ export class Player extends Entity {
     this.draw(config.INITIAL_HAND_SIZE);
     this.game.on(GAME_EVENTS.TURN_START, this.onGameTurnStart.bind(this));
     this.game.on(GAME_EVENTS.START_BATTLE, this.onBattleStart.bind(this));
+
+    this.game.boardSystem.getCellAt(options.altarPosition)!.obstacle = new Obstacle(
+      this.game,
+      {
+        blueprintId: 'altar',
+        id: `Player_${this.id}_altar` as EntityId,
+        position: options.altarPosition,
+        playerId: this.id
+      }
+    );
   }
 
   shutdown() {
@@ -183,10 +184,6 @@ export class Player extends Entity {
     return this.cardManager.draw.bind(this.cardManager);
   }
 
-  get general() {
-    return this.units.find(u => u.card.kind === CARD_KINDS.GENERAL)!;
-  }
-
   get opponents() {
     return this.game.playerSystem.players.filter(player => this.isEnemy(player));
   }
@@ -253,9 +250,8 @@ export class Player extends Entity {
     this.draw(config.CARDS_DRAWN_PER_TURN);
   }
 
-  onBattleStart() {
-    this.generalCard.play();
-  }
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
+  onBattleStart() {}
 
   endTurn() {
     console.log('end turn');

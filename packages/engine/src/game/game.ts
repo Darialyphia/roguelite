@@ -130,7 +130,7 @@ export type GameOptions = {
   rngSeed: string;
   rngCtor: Constructor<RngSystem>;
   mapId: string;
-  teams: BetterOmit<TeamOptions['players'][number], 'startPosition'>[][]; // player start positions are originally on the map data
+  teams: BetterOmit<TeamOptions['players'][number], 'altarPosition'>[][]; // player start positions are originally on the map data
   history?: SerializedInput[];
 };
 
@@ -190,7 +190,7 @@ export class Game {
         id: `team.${teamIndex}`,
         players: team.map((player, playerIndex) => ({
           ...player,
-          startPosition: map.startPositions[teamIndex][playerIndex]
+          altarPosition: map.altarPositions[teamIndex][playerIndex]
         }))
       }))
     });

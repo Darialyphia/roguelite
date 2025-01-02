@@ -17,10 +17,10 @@ import type { UnitModifier } from './unit-modifier.entity';
 import type { TargetingStrategy } from '../targeting/targeting-strategy';
 import type { UnitCard } from '../card/unit-card.entity';
 import { CARD_KINDS } from '../card/card-enums';
-import type { GeneralCard } from '../card/general-card.entity';
 import { UNIT_EVENTS } from './unit-enums';
 import { COMBAT_EVENTS, CombatComponent } from '../combat/combat.component';
 import { PathfinderComponent } from '../pathfinding/pathfinder.component';
+import type { Obstacle } from '../obstacle/obstacle.entity';
 
 export type UnitOptions = {
   id: string;
@@ -80,13 +80,13 @@ export class Unit extends Entity {
     apCostPerMovement: new Interceptable<number>(),
     maxCounterattacksPerTurn: new Interceptable<number>(),
 
-    damageDealt: new Interceptable<number, { attacker: Unit; defender: Unit }>(),
+    damageDealt: new Interceptable<number, { attacker: Unit; defender?: Unit }>(),
     damageReceived: new Interceptable<number, { attacker: Unit; defender: Unit }>()
   };
 
-  readonly card: UnitCard | GeneralCard;
+  readonly card: UnitCard;
 
-  constructor(game: Game, card: UnitCard | GeneralCard, options: UnitOptions) {
+  constructor(game: Game, card: UnitCard, options: UnitOptions) {
     super(createEntityId(options.id));
     this.game = game;
     this.card = card;
@@ -129,10 +129,6 @@ export class Unit extends Entity {
 
   get z() {
     return this.movement.z;
-  }
-
-  get isGeneral() {
-    return this.card.kind === CARD_KINDS.GENERAL;
   }
 
   get isUnit() {
@@ -336,7 +332,7 @@ export class Unit extends Entity {
     return this.movement.getPathTo(to);
   }
 
-  getDealtDamage(baseAmount: number, target: Unit) {
+  getDealtDamage(baseAmount: number, target?: Unit) {
     return this.interceptors.damageDealt.getValue(baseAmount + this.atk, {
       attacker: this,
       defender: target
@@ -360,6 +356,28 @@ export class Unit extends Entity {
 
   attack(point: Point3D) {
     this.ap.remove(this.combat.nextAttackApCost);
+
+    const cell = this.game.boardSystem.getCellAt(point)!;
+    if (cell.obstacle?.isAttackable) {
+      return this.attackObstacle(cell.obstacle);
+    }
+
+    this.attackUnit(point);
+  }
+
+  private attackObstacle(obstacle: Obstacle) {
+    this.emitter.emit(UNIT_EVENTS.BEFORE_ATTACK, {
+      cost: this.combat.nextAttackApCost,
+      target: obstacle.position
+    });
+    obstacle.attack(this);
+    this.emitter.emit(UNIT_EVENTS.AFTER_ATTACK, {
+      cost: this.combat.nextAttackApCost,
+      target: obstacle.position
+    });
+  }
+
+  private attackUnit(point: Point3D) {
     this.combat.attack(point);
   }
 
@@ -368,10 +386,16 @@ export class Unit extends Entity {
   }
 
   canAttackAt(point: Point3D) {
-    if (!this.canAttack) return;
-
+    if (!this.canAttack) return false;
     if (this.position.equals(point)) return false;
-    const target = this.game.unitSystem.getUnitAt(point);
+
+    const cell = this.game.boardSystem.getCellAt(point)!;
+
+    if (cell.obstacle?.isAttackable && cell.obstacle.player?.isEnemy(this.player)) {
+      return true;
+    }
+
+    const target = cell.unit;
     if (target && !target.canBeAttacked) return false;
 
     return this.attackTargettingPattern.canTargetAt(point);

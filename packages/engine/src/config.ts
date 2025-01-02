@@ -26,7 +26,11 @@ export const config = {
   // The default amount of time a unit can counter attack eveyr turn
   MAX_COUNTERATTACKS_PER_TURN: 1,
   // The victory point gained at the end of the turn when a shrine is controlled by a player
-  SHRINE_VP_REWARD: 1
+  SHRINE_VP_REWARD: 1,
+  // The victory point awarded for destroying a shrine
+  ALTAR_VP_REWARD: 4,
+  // the Altars HP
+  ALTAR_HP: 12
 } as const;
 
 export type Config = typeof config;

@@ -97,7 +97,7 @@ export const useBattleStore = defineStore('battle', () => {
     }
   });
   fxEmitter.on('card.after_play', async e => {
-    if (e.card.kind === CARD_KINDS.UNIT || e.card.kind === CARD_KINDS.GENERAL) {
+    if (e.card.kind === CARD_KINDS.UNIT) {
       await vfxPlayer.playSequence(e.vfx);
     }
   });
@@ -213,6 +213,12 @@ export const useUserPlayer = () => {
   const store = useBattleStore();
 
   return computed(() => store.state.players.find(p => p.id === PLAYER_ID)!);
+};
+
+export const useOpponentPlayer = () => {
+  const store = useBattleStore();
+
+  return computed(() => store.state.players.find(p => p.id !== PLAYER_ID)!);
 };
 
 export const useGame = () => {

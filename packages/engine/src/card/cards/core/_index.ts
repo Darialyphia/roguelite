@@ -1,4 +1,3 @@
-import { testGeneral } from './test-general';
 import { lancer } from './lancer';
 import { testSpell } from './test-spell';
 import type { CardBlueprint } from '../../card-blueprint';
@@ -16,7 +15,6 @@ import { treasureHunter } from './treasure-hunter';
 
 export const CORE_CARDS = keyBy(
   [
-    testGeneral,
     testSpell,
     lancer,
     dancer,

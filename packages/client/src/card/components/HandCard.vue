@@ -75,7 +75,6 @@ const onMouseDown = (e: MouseEvent) => {
 
 const violations = computed<{ gold?: boolean; runes?: boolean }>(() =>
   match(card)
-    .with({ kind: CARD_KINDS.GENERAL }, () => ({}))
     .with({ kind: CARD_KINDS.UNIT }, card => ({
       gold: !card.getCard().isGoldValid,
       runes: !card.getCard().isRunesValid

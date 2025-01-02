@@ -25,9 +25,6 @@ const metaString = computed(() =>
     .with({ kind: CARD_KINDS.SPELL }, card => {
       return card.kind;
     })
-    .with({ kind: CARD_KINDS.GENERAL }, card =>
-      [card.kind, ...card.jobs.map(j => j.name)].join(' - ')
-    )
     .with({ kind: CARD_KINDS.UNIT }, card =>
       [card.kind, ...card.jobs.map(j => j.name)].join(' - ')
     )
@@ -40,7 +37,6 @@ const metaFontSize = useDynamicFontSize(metaString, {
 });
 
 const getCostByRune = (rune: Rune) => {
-  if (card.kind === CARD_KINDS.GENERAL) return 0;
   return card.cost.runes.filter(r => r.equals(rune)).length;
 };
 
@@ -83,10 +79,7 @@ const runeCosts = computed(() => {
           </li>
         </ul>
       </div>
-      <div
-        class="stats"
-        v-if="card.kind === CARD_KINDS.UNIT || card.kind === CARD_KINDS.GENERAL"
-      >
+      <div class="stats" v-if="card.kind === CARD_KINDS.UNIT">
         <StatCircle :value="card.maxHp" icon="hp" />
         <StatCircle :value="card.atk" icon="atk" />
       </div>
@@ -97,10 +90,7 @@ const runeCosts = computed(() => {
       {{ metaString }}
     </div>
 
-    <div
-      class="reward"
-      v-if="card.kind === CARD_KINDS.UNIT || card.kind === CARD_KINDS.GENERAL"
-    >
+    <div class="reward" v-if="card.kind === CARD_KINDS.UNIT">
       <StatCircle :value="card.reward" icon="vp" />
     </div>
   </div>
@@ -151,7 +141,8 @@ const runeCosts = computed(() => {
 
 .stats {
   justify-self: end;
-  display: grid;
+  display: flex;
+  flex-direction: column;
   gap: 6px;
 }
 

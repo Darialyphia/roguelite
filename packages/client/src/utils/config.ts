@@ -23,7 +23,7 @@ export const config = {
   MOVEMENT_SPEED_PER_TILE: 0.4,
 
   MIN_ZOOM: 1,
-  MAX_ZOOM: 3,
+  MAX_ZOOM: 2,
   INITIAL_ZOOM: 2,
 
   CARD_WIDTH: 102 * PIXEL_ART_ASSETS_SCALING,

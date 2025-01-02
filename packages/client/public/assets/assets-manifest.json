@@ -460,6 +460,33 @@
       "assets": [
         {
           "alias": [
+            "altar"
+          ],
+          "src": [
+            "/assets/obstacles/altar.json"
+          ],
+          "loadParser": "aseprite_loader",
+          "data": {
+            "tags": {
+              "m": true
+            }
+          }
+        },
+        {
+          "alias": [
+            "altar.png"
+          ],
+          "src": [
+            "/assets/obstacles/altar.png"
+          ],
+          "data": {
+            "tags": {
+              "m": true
+            }
+          }
+        },
+        {
+          "alias": [
             "rock"
           ],
           "src": [
@@ -807,6 +834,33 @@
         },
         {
           "alias": [
+            "altar-stats"
+          ],
+          "src": [
+            "/assets/ui/altar-stats.json"
+          ],
+          "loadParser": "aseprite_loader",
+          "data": {
+            "tags": {
+              "m": true
+            }
+          }
+        },
+        {
+          "alias": [
+            "altar-stats.png"
+          ],
+          "src": [
+            "/assets/ui/altar-stats.png"
+          ],
+          "data": {
+            "tags": {
+              "m": true
+            }
+          }
+        },
+        {
+          "alias": [
             "ap.png"
           ],
           "src": [
@@ -1032,6 +1086,19 @@
           ],
           "src": [
             "/assets/ui/gold.png"
+          ],
+          "data": {
+            "tags": {
+              "m": true
+            }
+          }
+        },
+        {
+          "alias": [
+            "graveyard.png"
+          ],
+          "src": [
+            "/assets/ui/graveyard.png"
           ],
           "data": {
             "tags": {

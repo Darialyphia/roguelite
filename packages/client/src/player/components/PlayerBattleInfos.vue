@@ -118,9 +118,7 @@ useBattleEvent(GAME_EVENTS.PLAYER_AFTER_GAIN_RUNE, async e => {
           {{ player.gold }}
         </span>
       </div>
-      <div style="--bg: url('/assets/ui/hand.png')">
-        <span :data-text="player.hand.length">{{ player.hand.length }}</span>
-      </div>
+
       <div style="--bg: url('/assets/ui/deck.png')">
         <span :data-text="player.remainingCardsInDeck">
           {{ player.remainingCardsInDeck }}

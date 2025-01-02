@@ -8,7 +8,7 @@ import type { Terrain } from '@game/engine/src/board/board-utils';
 import type { Cell } from '@game/engine/src/board/cell';
 import type { CellLight } from '@game/engine/src/board/map';
 import type { EntityId } from '@game/engine/src/entity';
-import type { Nullable } from '@game/shared';
+import type { AnyObject, Nullable } from '@game/shared';
 
 export type CellViewModel = {
   id: EntityId;
@@ -22,8 +22,10 @@ export type CellViewModel = {
   obstacle: {
     name: string;
     id: string;
+    blueprintId: string;
     spriteId: string;
     player: PlayerViewModel | null;
+    meta: AnyObject;
   } | null;
   getCell(): Cell;
 };
@@ -41,8 +43,10 @@ export const makeCellViewModel = (game: Game, cell: Cell): CellViewModel => {
     obstacle: cell.obstacle
       ? {
           id: cell.obstacle.id,
+          blueprintId: cell.obstacle.blueprintId,
           name: cell.obstacle.name,
           spriteId: cell.obstacle.spriteId,
+          meta: cell.obstacle.meta,
           player: cell.obstacle.player
             ? makePlayerViewModel(game, cell.obstacle.player)
             : null
