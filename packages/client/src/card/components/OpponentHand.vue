@@ -71,12 +71,14 @@ useBattleEvent(GAME_EVENTS.PLAYER_AFTER_DRAW, async event => {
   display: flex;
   --hand-size: v-bind('player.hand.length');
 
-  > li:not(:last-child) {
-    margin-right: calc(1px * v-bind(cardSpacing));
-
-    width: calc(1px * v-bind('config.CARD_WIDTH'));
-    height: calc(1px * v-bind('config.CARD_HEIGHT'));
+  > li {
+    width: calc(1px * v-bind('config.CARD_WIDTH') * (2 / 3));
+    height: calc(1px * v-bind('config.CARD_HEIGHT') * (2 / 3));
     background: url('/assets/ui/card-back.png');
+    background-size: contain;
+    &:not(:last-child) {
+      margin-right: calc(1px * v-bind(cardSpacing));
+    }
   }
 }
 </style>

@@ -234,6 +234,19 @@
         },
         {
           "alias": [
+            "icon-placeholder"
+          ],
+          "src": [
+            "/assets/icons/placeholder.png"
+          ],
+          "data": {
+            "tags": {
+              "m": true
+            }
+          }
+        },
+        {
+          "alias": [
             "icon-spell-arcane-intellect"
           ],
           "src": [
@@ -1204,6 +1217,32 @@
           ],
           "src": [
             "/assets/ui/player-battle-info.png"
+          ],
+          "data": {
+            "tags": {
+              "m": true
+            }
+          }
+        },
+        {
+          "alias": [
+            "quest-icon-empty.png"
+          ],
+          "src": [
+            "/assets/ui/quest-icon-empty.png"
+          ],
+          "data": {
+            "tags": {
+              "m": true
+            }
+          }
+        },
+        {
+          "alias": [
+            "quest-icon-filled.png"
+          ],
+          "src": [
+            "/assets/ui/quest-icon-filled.png"
           ],
           "data": {
             "tags": {

@@ -30,7 +30,9 @@ export const config = {
   // The victory point awarded for destroying a shrine
   ALTAR_VP_REWARD: 6,
   // the Altars HP
-  ALTAR_HP: 12
+  ALTAR_HP: 12,
+  // How many quest can a player have at the same time
+  MAX_ONGOING_QUESTS: 2
 } as const;
 
 export type Config = typeof config;

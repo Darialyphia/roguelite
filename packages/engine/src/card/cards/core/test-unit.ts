@@ -7,21 +7,21 @@ import { RUNES } from '../../../utils/rune';
 import { type UnitCardBlueprint } from '../../card-blueprint';
 import { CARD_KINDS } from '../../card-enums';
 
-export const monk: UnitCardBlueprint = {
-  id: 'monk',
-  spriteId: 'monk',
-  iconId: 'unit-monk',
-  name: 'Monk',
+export const testUnit: UnitCardBlueprint = {
+  id: 'test-unit',
+  spriteId: 'apprentice',
+  iconId: 'unit-apprentice',
+  name: 'Test unit',
   description: '',
   kind: CARD_KINDS.UNIT,
   aiHints: {},
   cost: {
-    gold: 4,
-    runes: [RUNES.BLUE, RUNES.RED]
+    gold: 3,
+    runes: [RUNES.PURPLE]
   },
-  jobs: [JOBS.SUPPORT, JOBS.FIGHTER],
-  atk: 3,
-  maxHp: 8,
+  jobs: [JOBS.FIGHTER],
+  atk: 2,
+  maxHp: 6,
   speed: 6,
   reward: 1,
   minTargets: 1,

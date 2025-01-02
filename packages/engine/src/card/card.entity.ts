@@ -1,6 +1,6 @@
 import { assert, type Point3D, type Values } from '@game/shared';
 import { createEntityId, Entity } from '../entity';
-import { type CardBlueprint } from './card-blueprint';
+import { isQuestBlueprint, type CardBlueprint } from './card-blueprint';
 import type { Game } from '../game/game';
 import type { Player } from '../player/player.entity';
 import type { VFXSequence } from '../vfx/vfx-sequencer';
@@ -117,6 +117,7 @@ export abstract class Card<
   }
 
   getAoe(targets: Point3D[]) {
+    if (isQuestBlueprint(this.blueprint)) return null;
     if (!this.areTargetsValid(targets)) {
       return null;
     }

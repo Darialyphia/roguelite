@@ -19,7 +19,6 @@ const index = computed(
   () => player.value?.hand.findIndex(c => c.equals(card))!
 );
 
-const { x, y } = useMouse();
 const app = useApplication();
 const isOutOfScreen = usePageLeave();
 const isDragging = ref(false);
@@ -83,6 +82,10 @@ const violations = computed<{ gold?: boolean; runes?: boolean }>(() =>
       gold: !card.getCard().isGoldValid,
       runes: !card.getCard().isRunesValid
     }))
+    .with({ kind: CARD_KINDS.QUEST }, card => ({
+      gold: !card.getCard().isGoldValid,
+      runes: !card.getCard().isRunesValid
+    }))
     .exhaustive()
 );
 </script>
@@ -127,7 +130,7 @@ li {
     filter 0.2s var(--ease-out-2),
     transform 0.15s var(--ease-in-4),
     z-index 0.15s var(--ease-in-4);
-  transform: translateY(250px);
+  transform: translateY(220px) scale(calc(100% * (2 / 3)));
   filter: var(--disabled-filter) drop-shadow(15px 0 2px hsl(0 0 0 /0.5));
 
   &:not(:hover) .violation-warning {

@@ -126,6 +126,20 @@ useBattleEvent(GAME_EVENTS.UNIT_AFTER_DESTROY, async event => {
     { kind: 'text', text: `got destroyed.` }
   ]);
 });
+
+useBattleEvent(GAME_EVENTS.PLAYER_AFTER_GAIN_RUNE, async event => {
+  events.value.push([
+    { kind: 'player', player: event.player },
+    { kind: 'text', text: `gained a ${event.rune.name} rune` }
+  ]);
+});
+
+useBattleEvent(GAME_EVENTS.PLAYER_AFTER_GAIN_GOLD, async event => {
+  events.value.push([
+    { kind: 'player', player: event.player },
+    { kind: 'text', text: `gained a ${event.amount} gold.` }
+  ]);
+});
 const isCollapsed = ref(true);
 
 const listEl = ref<HTMLElement>();

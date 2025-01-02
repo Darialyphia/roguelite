@@ -23,7 +23,6 @@ const computeMargin = () => {
 
   const allowedWidth = root.value.clientWidth;
   const totalWidth = player.value.hand.length * config.CARD_WIDTH;
-
   const excess = totalWidth - allowedWidth;
   return Math.min(-excess / (player.value.hand.length - 1), 0);
 };
@@ -33,6 +32,7 @@ watch(
   async () => {
     await nextTick();
     cardSpacing.value = computeMargin();
+    console.log(cardSpacing.value);
   },
   { immediate: true }
 );

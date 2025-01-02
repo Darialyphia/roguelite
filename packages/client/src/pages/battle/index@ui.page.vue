@@ -35,33 +35,19 @@ const options: Pick<GameOptions, 'mapId' | 'teams'> = {
         name: 'Daria',
         deck: {
           cards: [
-            { blueprintId: 'lancer' },
-            { blueprintId: 'lancer' },
-            { blueprintId: 'lancer' },
-            { blueprintId: 'emperor' },
-            { blueprintId: 'emperor' },
-            { blueprintId: 'emperor' },
-            { blueprintId: 'shaman' },
-            { blueprintId: 'shaman' },
-            { blueprintId: 'shaman' },
-            { blueprintId: 'dancer' },
-            { blueprintId: 'dancer' },
-            { blueprintId: 'dancer' },
-            { blueprintId: 'apprentice' },
-            { blueprintId: 'apprentice' },
-            { blueprintId: 'apprentice' },
-            { blueprintId: 'monk' },
-            { blueprintId: 'monk' },
-            { blueprintId: 'monk' },
-            { blueprintId: 'kings-guard' },
-            { blueprintId: 'kings-guard' },
-            { blueprintId: 'kings-guard' },
-            { blueprintId: 'treasure-hunter' },
-            { blueprintId: 'treasure-hunter' },
-            { blueprintId: 'treasure-hunter' },
-            { blueprintId: 'testSpell' },
-            { blueprintId: 'testSpell' },
-            { blueprintId: 'testSpell' }
+            { blueprintId: 'test-unit' },
+            { blueprintId: 'test-unit' },
+            { blueprintId: 'test-unit' },
+            { blueprintId: 'test-unit' },
+            { blueprintId: 'test-unit' },
+            { blueprintId: 'test-unit' },
+            { blueprintId: 'test-unit' },
+            { blueprintId: 'test-spell' },
+            { blueprintId: 'test-spell' },
+            { blueprintId: 'test-spell' },
+            { blueprintId: 'test-quest' },
+            { blueprintId: 'test-quest' },
+            { blueprintId: 'test-quest' }
           ]
         }
       }
@@ -72,33 +58,19 @@ const options: Pick<GameOptions, 'mapId' | 'teams'> = {
         name: 'AI',
         deck: {
           cards: [
-            { blueprintId: 'lancer' },
-            { blueprintId: 'lancer' },
-            { blueprintId: 'lancer' },
-            { blueprintId: 'emperor' },
-            { blueprintId: 'emperor' },
-            { blueprintId: 'emperor' },
-            { blueprintId: 'shaman' },
-            { blueprintId: 'shaman' },
-            { blueprintId: 'shaman' },
-            { blueprintId: 'dancer' },
-            { blueprintId: 'dancer' },
-            { blueprintId: 'dancer' },
-            { blueprintId: 'apprentice' },
-            { blueprintId: 'apprentice' },
-            { blueprintId: 'apprentice' },
-            { blueprintId: 'monk' },
-            { blueprintId: 'monk' },
-            { blueprintId: 'monk' },
-            { blueprintId: 'kings-guard' },
-            { blueprintId: 'kings-guard' },
-            { blueprintId: 'kings-guard' },
-            { blueprintId: 'treasure-hunter' },
-            { blueprintId: 'treasure-hunter' },
-            { blueprintId: 'treasure-hunter' },
-            { blueprintId: 'testSpell' },
-            { blueprintId: 'testSpell' },
-            { blueprintId: 'testSpell' }
+            { blueprintId: 'test-unit' },
+            { blueprintId: 'test-unit' },
+            { blueprintId: 'test-unit' },
+            { blueprintId: 'test-unit' },
+            { blueprintId: 'test-unit' },
+            { blueprintId: 'test-unit' },
+            { blueprintId: 'test-unit' },
+            { blueprintId: 'test-spell' },
+            { blueprintId: 'test-spell' },
+            { blueprintId: 'test-spell' },
+            { blueprintId: 'test-quest' },
+            { blueprintId: 'test-quest' },
+            { blueprintId: 'test-quest' }
           ]
         }
       }
@@ -221,7 +193,7 @@ footer {
 }
 
 .opponent-hand {
-  margin-top: -380px;
+  margin-top: -250px;
 }
 
 .player-battle-infos {

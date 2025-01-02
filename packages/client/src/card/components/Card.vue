@@ -22,7 +22,7 @@ const imagePath = computed(() => `url(/assets/icons/${card.iconId}.png)`);
 
 const metaString = computed(() =>
   match(card)
-    .with({ kind: CARD_KINDS.SPELL }, card => {
+    .with({ kind: CARD_KINDS.SPELL }, { kind: CARD_KINDS.QUEST }, card => {
       return card.kind;
     })
     .with({ kind: CARD_KINDS.UNIT }, card =>
@@ -57,17 +57,14 @@ const runeCosts = computed(() => {
     <header class="grid grid-cols-2">
       <div class="cost">
         <StatCircle
-          v-if="card.kind === CARD_KINDS.UNIT || card.kind === CARD_KINDS.SPELL"
           :value="card.cost.gold"
           icon="gold"
           :invalid="violations?.gold"
         />
 
-        <ul
-          v-if="card.kind === CARD_KINDS.UNIT || card.kind === CARD_KINDS.SPELL"
-        >
+        <ul>
           <li
-            v-for="(rune, index) in runeCosts"
+            v-for="rune in runeCosts"
             :key="rune.rune.id"
             v-show="rune.count > 0"
             class="rune"
@@ -126,6 +123,7 @@ const runeCosts = computed(() => {
   justify-self: center;
   max-width: calc(1px * v-bind('config.CARD_NAME_TEXTBOX_WIDTH'));
   line-height: 1;
+  filter: contrast(100.00001%);
 }
 
 .description {
@@ -135,7 +133,8 @@ const runeCosts = computed(() => {
   justify-self: center;
   margin-top: 27px;
   line-height: 1.2;
-  font-size: 10px;
+  font-size: 14px;
+  filter: contrast(100.00001%);
 }
 
 .stats {

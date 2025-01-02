@@ -18,6 +18,7 @@ export type PlayerViewModel = {
   gold: number;
   remainingCardsInDeck: number;
   isActive: boolean;
+  quests: CardViewModel[];
   equals(player: PlayerViewModel): boolean;
   isEnemy(unit: UnitViewModel): boolean;
   isAlly(unit: UnitViewModel): boolean;
@@ -38,6 +39,7 @@ export const makePlayerViewModel = (
     remainingCardsInDeck: player.remainingCardsInDeck,
     gold: player.gold,
     isActive: game.turnSystem.activePlayer.equals(player),
+    quests: [...player.quests].map(quest => makeCardViewModel(game, quest)),
     getPlayer() {
       return player;
     },

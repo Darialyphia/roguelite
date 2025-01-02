@@ -2,6 +2,7 @@ import type { Game } from '@game/engine';
 import { type CardBlueprint } from '@game/engine/src/card/card-blueprint';
 import { CARD_KINDS, type CardKind } from '@game/engine/src/card/card-enums';
 import type { Card } from '@game/engine/src/card/card.entity';
+import type { QuestCard } from '@game/engine/src/card/quest-card.entity';
 import type { SpellCard } from '@game/engine/src/card/spell-card.entity';
 import type { UnitCard } from '@game/engine/src/card/unit-card.entity';
 import type { EntityId } from '@game/engine/src/entity';
@@ -41,7 +42,16 @@ type SpellCardViewModel = CardViewModelBase & {
   getCard(): SpellCard;
 };
 
-export type CardViewModel = UnitCardViewModel | SpellCardViewModel;
+type QuestCardViewModel = CardViewModelBase & {
+  kind: (typeof CARD_KINDS)['QUEST'];
+  cost: { gold: number; runes: Rune[] };
+  getCard(): QuestCard;
+};
+
+export type CardViewModel =
+  | UnitCardViewModel
+  | SpellCardViewModel
+  | QuestCardViewModel;
 
 export const makeCardViewModel = (game: Game, card: Card): CardViewModel => {
   return match(card.kind)
@@ -49,7 +59,9 @@ export const makeCardViewModel = (game: Game, card: Card): CardViewModel => {
     .with(CARD_KINDS.SPELL, () =>
       makeSpellCardViewModel(game, card as SpellCard)
     )
-
+    .with(CARD_KINDS.QUEST, () =>
+      makeQuestCardViewModel(game, card as QuestCard)
+    )
     .exhaustive();
 };
 
@@ -100,6 +112,20 @@ const makeSpellCardViewModel = (
   game: Game,
   card: SpellCard
 ): SpellCardViewModel => {
+  return {
+    ...makeCardViewModelBase(game, card),
+    kind: card.kind as any,
+    getCard() {
+      return card;
+    },
+    cost: card.cost
+  };
+};
+
+const makeQuestCardViewModel = (
+  game: Game,
+  card: QuestCard
+): QuestCardViewModel => {
   return {
     ...makeCardViewModelBase(game, card),
     kind: card.kind as any,

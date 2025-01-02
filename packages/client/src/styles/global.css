@@ -15,6 +15,8 @@
     image-rendering: pixelated;
     font-smooth: never;
     -webkit-font-smoothing: none;
+    text-size-adjust: none;
+    -webkit-text-size-adjust: none;
   }
 
   :is(button, a, input, select, textarea):hover {

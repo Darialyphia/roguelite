@@ -11,6 +11,13 @@ import {
 } from '@/pages/battle/battle.store';
 import { waitFor } from '@game/shared';
 import { GAME_EVENTS } from '@game/engine/src/game/game';
+import Card from '@/card/components/Card.vue';
+import {
+  HoverCardRoot,
+  HoverCardTrigger,
+  HoverCardContent,
+  HoverCardPortal
+} from 'radix-vue';
 
 const { player, inverted } = defineProps<{
   player: PlayerViewModel;
@@ -108,6 +115,28 @@ useBattleEvent(GAME_EVENTS.PLAYER_AFTER_GAIN_RUNE, async e => {
     </div>
 
     <div class="stats">
+      <div class="quests">
+        <HoverCardRoot
+          v-for="(quest, index) in player.quests"
+          :key="index"
+          :close-delay="0"
+          :open-delay="300"
+        >
+          <HoverCardTrigger as-child>
+            <div />
+          </HoverCardTrigger>
+          <HoverCardPortal>
+            <HoverCardContent :side-offset="15">
+              <Card :card="quest" />
+            </HoverCardContent>
+          </HoverCardPortal>
+        </HoverCardRoot>
+        <div
+          v-for="i in engineConfig.MAX_ONGOING_QUESTS - player.quests.length"
+          :key="i"
+          class="empty"
+        />
+      </div>
       <div class="large" style="--bg: url('/assets/ui/vp-large.png')">
         <span :data-text="player.victoryPoints">
           {{ player.victoryPoints }}
@@ -213,11 +242,13 @@ useBattleEvent(GAME_EVENTS.PLAYER_AFTER_GAIN_RUNE, async e => {
     text-shadow: 0 2px #fffe00;
     transition:
       --rune-glow-radius 0.5s var(--ease-2),
-      filter 0.3s;
+      filter 0.3s,
+      transform 0.3s;
     --glow: drop-shadow(0 0 var(--rune-glow-radius) var(--glow-color));
     filter: var(--glow) brightness(100%);
     &.glowing {
-      filter: var(--glow) brightness(150%);
+      filter: var(--glow) brightness(150%) contrast(200%);
+      transform: scale(200%);
     }
   }
 
@@ -316,6 +347,21 @@ useBattleEvent(GAME_EVENTS.PLAYER_AFTER_GAIN_RUNE, async e => {
     &.large {
       --size: 60px;
       font-size: var(--size-7);
+    }
+    &.quests {
+      --size: 0px;
+      display: flex;
+      gap: var(--size-3);
+      height: 102px;
+      margin-left: -5px;
+      > div {
+        width: 66px;
+        height: 102px;
+        background-image: url('/assets/ui/quest-icon-filled.png');
+        &.empty {
+          background-image: url('/assets/ui/quest-icon-empty.png');
+        }
+      }
     }
     > span {
       line-height: 1;

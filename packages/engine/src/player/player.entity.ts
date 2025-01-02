@@ -12,6 +12,7 @@ import { RuneManager } from './components/rune-manager';
 import { match } from 'ts-pattern';
 import { Rune, RUNES } from '../utils/rune';
 import { Obstacle } from '../obstacle/obstacle.entity';
+import type { QuestCard } from '../card/quest-card.entity';
 
 export type PlayerOptions = {
   id: string;
@@ -76,6 +77,8 @@ export class Player extends Entity {
   private resourceActionsTaken = 0;
 
   readonly altar: Obstacle;
+
+  readonly quests = new Set<QuestCard>();
 
   constructor(game: Game, team: Team, options: PlayerOptions) {
     super(createEntityId(options.id));
@@ -210,6 +213,7 @@ export class Player extends Entity {
   }
 
   performResourceAction(action: ResourceAction) {
+    this.resourceActionsTaken++;
     match(action)
       .with({ type: 'draw' }, () => {
         this.draw(1);
@@ -221,7 +225,6 @@ export class Player extends Entity {
         this.addRune(RUNES[action.payload.rune as keyof typeof RUNES]);
       })
       .exhaustive();
-    this.resourceActionsTaken++;
   }
 
   mulligan() {

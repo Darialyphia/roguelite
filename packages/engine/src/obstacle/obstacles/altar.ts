@@ -5,7 +5,7 @@ import type { ObstacleBlueprint } from '../obstacle-blueprint';
 export const altar: ObstacleBlueprint = {
   id: 'altar',
   name: 'Altar',
-  description: `Allows it owner to deploy units nearby it. Destroying it awards ${config.ALTAR_VP_REWARD} Vicory Points.`,
+  description: `Allows its owner to deploy units nearby it. Destroying it awards ${config.ALTAR_VP_REWARD} Vicory Points.`,
   spriteId: 'altar',
   iconId: 'obstacle_altar',
   walkable: false,

@@ -10,6 +10,7 @@ import type { UnitCard } from './unit-card.entity';
 import type { SpellCard } from './spell-card.entity';
 import type { VFXSequence } from '../vfx/vfx-sequencer';
 import { CARD_KINDS, type CardKind } from './card-enums';
+import type { QuestCard } from './quest-card.entity';
 
 type CardBlueprintTarget = {
   getTargeting(game: Game, card: Card): TargetingStrategy;
@@ -66,9 +67,26 @@ export type SpellCardBlueprint = CardBlueprintBase & {
   onPlay(game: Game, card: SpellCard, cellTargets: Point3D[], unitTargets: Unit[]): void;
 };
 
-export type CardBlueprint = UnitCardBlueprint | SpellCardBlueprint;
+export type QuestCardBlueprint = CardBlueprintBase & {
+  kind: Extract<CardKind, typeof CARD_KINDS.QUEST>;
+  cost: {
+    gold: number;
+    runes: Rune[];
+  };
+  vfx: {
+    play(game: Game, card: QuestCard): VFXSequence;
+  };
+  minTargets: number;
+  targets: [CardBlueprintTarget, ...CardBlueprintTarget[]];
+  onPlay(game: Game, card: QuestCard): void;
+  onCompleted(game: Game, card: QuestCard): void;
+};
+
+export type CardBlueprint = UnitCardBlueprint | SpellCardBlueprint | QuestCardBlueprint;
 
 export const isUnitBlueprint = (bp: CardBlueprint): bp is UnitCardBlueprint =>
   bp.kind === CARD_KINDS.UNIT;
 export const isSpellBlueprint = (bp: CardBlueprint): bp is SpellCardBlueprint =>
   bp.kind === CARD_KINDS.SPELL;
+export const isQuestBlueprint = (bp: CardBlueprint): bp is QuestCardBlueprint =>
+  bp.kind === CARD_KINDS.QUEST;

@@ -9,7 +9,7 @@ import { type SpellCardBlueprint } from '../../card-blueprint';
 import { CARD_KINDS } from '../../card-enums';
 
 export const testSpell: SpellCardBlueprint = {
-  id: 'testSpell',
+  id: 'test-spell',
   iconId: 'spell-fireball',
   name: 'Test Spell With Long Name',
   description: 'Deal 2 damage to enemies nearby an ally unit.',
