@@ -4,7 +4,6 @@ import {
   useBattleStore,
   useVFXEvent
 } from '@/pages/battle/battle.store';
-import { useIsoCamera } from '@/iso/composables/useIsoCamera';
 import type { UnitViewModel } from '../unit.model';
 import { useShaker } from '@/shared/composables/vfx/useShaker';
 import type { Container } from 'pixi.js';
@@ -14,7 +13,6 @@ import { GAME_EVENTS } from '@game/engine/src/game/game';
 const { unit } = defineProps<{ unit: UnitViewModel }>();
 
 const battleStore = useBattleStore();
-const camera = useIsoCamera();
 
 const scaleX = computed(() => {
   let value = unit
@@ -22,9 +20,6 @@ const scaleX = computed(() => {
     .player.isEnemy(battleStore.state.userPlayer.getPlayer())
     ? -1
     : 1;
-  if (camera.angle.value === 90 || camera.angle.value === 180) {
-    value *= -1;
-  }
 
   return value;
 });

@@ -1,20 +1,18 @@
 <script setup lang="ts">
 import {
-  BLEND_MODES,
   Matrix,
   Graphics as PixiGraphics,
   Container as PixiContainer
 } from 'pixi.js';
 import { radialGradient } from '@/utils/sprite';
 import { useBattleUiStore } from '@/pages/battle/battle-ui.store';
-import { useIsoCamera } from '@/iso/composables/useIsoCamera';
-import { getBlendFilter } from '@pixi/picture';
 import { usePointLights, type PointLightConfig } from './usePointLight';
 import { until } from '@vueuse/core';
+import { useCamera } from '@/board/composables/useCamera';
 
 const { light } = defineProps<{ light: PointLightConfig }>();
 
-const camera = useIsoCamera();
+const camera = useCamera();
 const ui = useBattleUiStore();
 const { registerLight } = usePointLights();
 const renderLight = (g: PixiGraphics) => {

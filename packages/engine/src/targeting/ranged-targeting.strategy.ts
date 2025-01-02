@@ -18,8 +18,10 @@ export class RangedTargetingStrategy implements TargetingStrategy {
   ) {}
 
   isWithinRange(point: Point3D) {
-    if (this.unit.position.isWithinCells(point, this.options.minRange)) return false;
-    if (!this.unit.position.isWithinCells(point, this.options.maxRange)) return false;
+    if (this.unit.position.isWithinCells(point, this.options.minRange, this.game))
+      return false;
+    if (!this.unit.position.isWithinCells(point, this.options.maxRange, this.game))
+      return false;
 
     return true;
   }

@@ -11,6 +11,7 @@
   "dependencies": {
     "@game/shared": "*",
     "eventemitter2": "^6.4.9",
+    "honeycomb-grid": "^4.1.5",
     "lodash-es": "^4.17.21",
     "minimaxer": "^3.4.0",
     "nanoid": "^5.0.8",

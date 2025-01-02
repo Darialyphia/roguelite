@@ -1,9 +1,8 @@
 <script setup lang="ts">
 import { config } from '@/utils/config';
-import AnimatedIsoPoint from '@/iso/components/AnimatedIsoPoint.vue';
 import type { UnitViewModel } from '../unit.model';
 import { useBattleEvent } from '@/pages/battle/battle.store';
-import { waitFor, type Point3D } from '@game/shared';
+import { type Point3D } from '@game/shared';
 import { useBattleUiStore } from '@/pages/battle/battle-ui.store';
 import type { Unit } from '@game/engine/src/unit/unit.entity';
 import { GAME_EVENTS } from '@game/engine/src/game/game';
@@ -78,14 +77,18 @@ const ui = useBattleUiStore();
 </script>
 
 <template>
-  <AnimatedIsoPoint :position="unit.position" :z-index-offset="32">
+  <container
+    :x="unit.screenPosition.x"
+    :y="unit.screenPosition.y"
+    :z-index="unit.screenPosition.y + 1"
+  >
     <container
       :position="offset"
       :ref="(container: any) => ui.assignLayer(container, 'scene')"
     >
       <slot />
     </container>
-  </AnimatedIsoPoint>
+  </container>
 </template>
 
 <style scoped lang="postcss"></style>

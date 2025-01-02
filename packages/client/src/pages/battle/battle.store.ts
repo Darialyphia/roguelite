@@ -143,7 +143,7 @@ export const useBattleStore = defineStore('battle', () => {
     },
     isPlayingFx: readonly(isPlayingFx),
     isReady: computed(() => isDefined(internal.session)),
-    session: readonly(computed(() => internal.session)),
+    session: computed(() => internal.session),
     state: {
       phase,
       cells,

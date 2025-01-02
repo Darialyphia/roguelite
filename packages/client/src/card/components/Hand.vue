@@ -32,7 +32,6 @@ watch(
   async () => {
     await nextTick();
     cardSpacing.value = computeMargin();
-    console.log(cardSpacing.value);
   },
   { immediate: true }
 );

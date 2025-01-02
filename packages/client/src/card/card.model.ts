@@ -21,7 +21,6 @@ type CardViewModelBase = {
   equals(card: CardViewModel): boolean;
   canPlayAt(points: Point3D[]): boolean;
   areTargetsValid(points: Point3D[]): boolean;
-  isWithinRange(point: Point3D, index: number): boolean;
   getAoe(points: Point3D[]): Nullable<AOEShape>;
 };
 
@@ -80,9 +79,7 @@ const makeCardViewModelBase = (game: Game, card: Card): CardViewModelBase => {
     areTargetsValid(points: Point3D[]) {
       return card.areTargetsValid(points);
     },
-    isWithinRange(point, index) {
-      return card.isWithinRange(point, index);
-    },
+
     getAoe(points) {
       return card.getAoe(points);
     }

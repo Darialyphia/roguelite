@@ -45,11 +45,7 @@ const ui = useBattleUiStore();
 
 <template>
   <container>
-    <UiAnimatedSprite
-      :assetId="obstacle.spriteId"
-      :y="-config.TILE_SIZE.y / 2"
-      :tag="tag"
-    />
+    <UiAnimatedSprite :assetId="obstacle.spriteId" :y="-26" :tag="tag" />
 
     <animated-sprite
       v-if="

@@ -1,16 +1,15 @@
 <script lang="ts" setup>
-import { useBattleStore, useUserPlayer } from './battle.store';
+import { useBattleStore } from './battle.store';
 import Board from '@/board/components/Board.vue';
 import { config } from '@/utils/config';
-import IsoWorld from '@/iso/components/IsoWorld.vue';
-import IsoCamera from '@/iso/components/IsoCamera.vue';
 import { useKeyboardControl } from '@/shared/composables/useKeyboardControl';
 import { useSettingsStore } from '@/shared/composables/useSettings';
 import { UI_MODES, useBattleUiStore } from './battle-ui.store';
 import type { Layer } from '@pixi/layers';
-import { providePointLights } from '@/vfx/usePointLight';
 import { until } from '@vueuse/core';
 import { GAME_PHASES } from '@game/engine/src/game/game-phase.system';
+import Camera from '@/board/components/Camera.vue';
+import { provideCamera } from '@/board/composables/useCamera';
 
 definePage({
   name: 'Battle'
@@ -19,19 +18,6 @@ definePage({
 const battleStore = useBattleStore();
 const settingsStore = useSettingsStore();
 const uiStore = useBattleUiStore();
-const isoWorld = useTemplateRef('isoWorld');
-const userPlayer = useUserPlayer();
-
-useKeyboardControl(
-  'keydown',
-  () => settingsStore.settings.bindings.rotateCW.control,
-  () => isoWorld.value?.camera.rotateCW()
-);
-useKeyboardControl(
-  'keydown',
-  () => settingsStore.settings.bindings.rotateCCW.control,
-  () => isoWorld.value?.camera.rotateCCW()
-);
 
 useKeyboardControl(
   'keydown',
@@ -43,10 +29,11 @@ useKeyboardControl(
     })
 );
 const ui = useBattleUiStore();
+const camera = provideCamera();
 until(() => battleStore.state.phase === GAME_PHASES.BATTLE)
   .toBeTruthy()
   .then(() => {
-    isoWorld.value?.camera.viewport.value?.animate({
+    camera.viewport.value?.animate({
       scale: config.INITIAL_ZOOM,
       time: 1500,
       ease(t: number, b: number, c: number, d: number) {
@@ -61,32 +48,27 @@ until(() => battleStore.state.phase === GAME_PHASES.BATTLE)
 </script>
 
 <template>
-  <IsoWorld
-    ref="isoWorld"
+  <container
     v-if="battleStore.session && battleStore.isReady"
-    :angle="0"
-    :width="battleStore.session.game.boardSystem.width"
-    :height="battleStore.session.game.boardSystem.height"
-    :tile-size="config.TILE_SIZE"
     @pointerup="
-      e => {
-        if (e.target !== isoWorld?.camera.viewport.value) return;
+      (e: any) => {
+        if (e.target !== camera.viewport.value) return;
         uiStore.unselectUnit();
         if (uiStore.mode !== UI_MODES.PLAY_CARD) return;
         uiStore.unselectCard();
       }
     "
   >
-    <IsoCamera
+    <Camera
       :width="battleStore.session.game.boardSystem.width"
       :height="battleStore.session.game.boardSystem.height"
       v-slot="{ worldSize }"
     >
       <Board :world-size="worldSize" />
-    </IsoCamera>
+    </Camera>
 
     <Layer :ref="(layer: any) => ui.registerLayer(layer, 'scene')" />
     <Layer :ref="(layer: any) => ui.registerLayer(layer, 'fx')" />
     <Layer :ref="(layer: any) => ui.registerLayer(layer, 'ui')" />
-  </IsoWorld>
+  </container>
 </template>

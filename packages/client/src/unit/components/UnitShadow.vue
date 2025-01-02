@@ -4,9 +4,9 @@ import { useSpritesheet } from '@/shared/composables/useSpritesheet';
 import { type Filter, BlurFilter } from 'pixi.js';
 import { config } from '@/utils/config';
 import { useMultiLayerTexture } from '@/shared/composables/useMultiLayerTexture';
-import { useIsoWorld } from '@/iso/composables/useIsoWorld';
 import type { UnitViewModel } from '../unit.model';
 import { GAME_EVENTS } from '@game/engine/src/game/game';
+import { useCamera } from '@/board/composables/useCamera';
 
 const { unit } = defineProps<{ unit: UnitViewModel }>();
 
@@ -27,16 +27,13 @@ const textures = useMultiLayerTexture({
   dimensions: config.UNIT_SPRITE_SIZE
 });
 const battleStore = useBattleStore();
-const camera = useIsoWorld();
+const camera = useCamera();
 const isSpriteFlipped = computed(() => {
   let value = unit
     .getUnit()
     .player.isEnemy(battleStore.state.userPlayer.getPlayer())
     ? true
     : false;
-  if (camera.angle.value === 180 || camera.angle.value === 270) {
-    value = !value;
-  }
 
   return value;
 });
@@ -49,14 +46,9 @@ const skewX = computed(() => {
 });
 
 const scaleY = computed(() => {
-  if (camera.angle.value === 180 || camera.angle.value === 270) return -0.5;
   return 0.5;
 });
 const y = computed(() => {
-  if (camera.angle.value === 180 || camera.angle.value === 270) {
-    return 0;
-  }
-
   return config.UNIT_SPRITE_SIZE.height * 0.3;
 });
 

@@ -1,13 +1,24 @@
-import { isDefined, isString, type Point3D } from '@game/shared';
+import { isDefined, isString, type Point, type Point3D } from '@game/shared';
 import { Cell } from './cell';
-import { createEntityId, type EntityId } from '../entity';
 import { pointToCellId } from './board-utils';
 import { System } from '../system';
 import type { GameMap } from './map';
+import { defineHex, Grid, Orientation, rectangle, spiral } from 'honeycomb-grid';
+import { config } from '../config';
 
 export type BoardSystemOptions = {
   map: GameMap;
 };
+
+export const BoardHex = defineHex({
+  dimensions: {
+    width: config.TILE_WIDTH,
+    height: config.TILE_HEIGHT
+  },
+  orientation: Orientation.POINTY
+});
+
+type HexFloor = Grid<InstanceType<typeof BoardHex>>;
 
 export class BoardSystem extends System<BoardSystemOptions> {
   name = 'BOARD SYSTEM';
@@ -16,62 +27,78 @@ export class BoardSystem extends System<BoardSystemOptions> {
 
   map!: GameMap;
 
-  cellsMap = new Map<EntityId, Cell>();
+  cellsMap = new Map<string, Cell>();
+
+  floors!: Array<HexFloor>;
+
+  dimensions!: { width: number; height: number };
 
   initialize(options: BoardSystemOptions) {
     this.map = options.map;
-    this.map.cells.forEach((plane, z) => {
-      plane.forEach((row, y) => {
+
+    this.floors = this.map.floors.map(
+      () => new Grid(BoardHex, rectangle({ width: this.map.cols, height: this.map.rows }))
+    );
+
+    this.map.floors.forEach((floor, z) => {
+      floor.forEach((row, y) => {
         row.forEach((cell, x) => {
           if (!cell) return;
+
           const instance = new Cell(this.game, {
             id: pointToCellId({ x, y, z }),
             position: { x, y, z },
+            hex: this.floors[z].createHex({ col: x, row: y }),
             ...cell
           });
           this.cellsMap.set(instance.id, instance);
         });
       });
     });
+
+    this.dimensions = {
+      width: options.map.cols,
+      height: options.map.rows
+    };
   }
 
   // eslint-disable-next-line @typescript-eslint/no-empty-function
   shutdown() {}
 
   get width() {
-    return this.map.width;
+    return this.map.cols;
   }
 
   get height() {
-    return this.map.height;
+    return this.map.rows;
   }
 
   get cells() {
     return [...this.cellsMap.values()];
   }
 
-  getCellAt(posOrKey: EntityId | Point3D) {
+  getCellAt(posOrKey: string | Point3D) {
     if (isString(posOrKey)) {
       return this.cellsMap.get(posOrKey) ?? null;
     }
-    return this.cellsMap.get(createEntityId(pointToCellId(posOrKey))) ?? null;
+    return this.cellsMap.get(pointToCellId(posOrKey)) ?? null;
   }
 
-  getManhattanDistance(p1: Point3D, p2: Point3D) {
-    return Math.abs(p2.x - p1.x) + Math.abs(p2.y - p1.y);
+  getDistance(from: Point3D, to: Point3D) {
+    return this.floors[from.z].distance(
+      { col: from.x, row: from.y },
+      { col: to.x, row: to.y }
+    );
   }
 
   getNeighbors(point: Point3D) {
-    return [
-      this.getCellAt({ x: point.x - 1, y: point.y - 1, z: point.z }),
-      this.getCellAt({ x: point.x - 1, y: point.y, z: point.z }),
-      this.getCellAt({ x: point.x - 1, y: point.y + 1, z: point.z }),
-      this.getCellAt({ x: point.x, y: point.y - 1, z: point.z }),
-      this.getCellAt({ x: point.x, y: point.y + 1, z: point.z }),
-      this.getCellAt({ x: point.x + 1, y: point.y - 1, z: point.z }),
-      this.getCellAt({ x: point.x + 1, y: point.y, z: point.z }),
-      this.getCellAt({ x: point.x + 1, y: point.y + 1, z: point.z })
-    ].filter(isDefined);
+    return this.floors[point.z]
+      .traverse(spiral({ radius: 1 }))
+      .toArray()
+      .map(hex => {
+        return this.getCellAt({ x: hex.x, y: hex.y, z: point.z });
+      })
+      .filter(isDefined);
   }
 
   getNeighbors3D(point: Point3D) {
@@ -79,6 +106,16 @@ export class BoardSystem extends System<BoardSystemOptions> {
       ...this.getNeighbors({ ...point, z: point.z - 1 }),
       ...this.getNeighbors(point),
       ...this.getNeighbors({ ...point, z: point.z + 1 })
-    ];
+    ].filter(cell => !cell.cellAbove);
+  }
+
+  getCellsWithin(topLeft: Point, bottomRight: Point) {
+    return [...this.cellsMap.values()].filter(
+      cell =>
+        cell.x >= topLeft.x &&
+        cell.x <= bottomRight.x &&
+        cell.y >= topLeft.y &&
+        cell.y <= bottomRight.y
+    );
   }
 }

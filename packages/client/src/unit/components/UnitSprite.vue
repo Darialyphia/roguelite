@@ -3,19 +3,17 @@ import { useSpritesheet } from '@/shared/composables/useSpritesheet';
 import { useBattleUiStore } from '@/pages/battle/battle-ui.store';
 import { OutlineFilter } from '@pixi/filter-outline';
 import { type Filter } from 'pixi.js';
-import { useMultiLayerTexture } from '@/shared/composables/useMultiLayerTexture';
-import { config } from '@/utils/config';
 import type { UnitViewModel } from '../unit.model';
 import { ColorOverlayFilter } from '@pixi/filter-color-overlay';
 import { isDefined } from '@game/shared';
 import UnitModifierSprite from './UnitModifierSprite.vue';
-import { useIsoCamera } from '@/iso/composables/useIsoCamera';
 import { AdjustmentFilter } from '@pixi/filter-adjustment';
 import {
   useBattleStore,
   useGameClientState
 } from '@/pages/battle/battle.store';
 import { createSpritesheetFrameObject } from '@/utils/sprite';
+import { useCamera } from '@/board/composables/useCamera';
 
 const { unit } = defineProps<{ unit: UnitViewModel }>();
 
@@ -27,7 +25,7 @@ const textures = computed(() => {
 });
 
 const ui = useBattleUiStore();
-const camera = useIsoCamera();
+const camera = useCamera();
 const selectedFilter = new OutlineFilter(
   camera.viewport.value!.scale.x,
   0xffffff

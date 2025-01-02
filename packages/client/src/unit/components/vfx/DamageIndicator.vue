@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { useIsoCamera } from '@/iso/composables/useIsoCamera';
+import { useCamera } from '@/board/composables/useCamera';
 import { useBattleEvent } from '@/pages/battle/battle.store';
 import type { UnitViewModel } from '@/unit/unit.model';
 import { GAME_EVENTS } from '@game/engine/src/game/game';
@@ -12,15 +12,9 @@ const { unit } = defineProps<{ unit: UnitViewModel }>();
 const damageAmount = ref(0);
 let direction = 1;
 
-const camera = useIsoCamera();
 useBattleEvent(GAME_EVENTS.UNIT_BEFORE_RECEIVE_DAMAGE, e => {
   if (!e.unit.equals(unit.getUnit())) return Promise.resolve();
   damageAmount.value = e.damage.getMitigatedAmount(unit.getUnit());
-
-  // direction = e.from.position.x < e.unit.position.x ? 1 : -1;
-  // if (camera.angle.value === 90 || camera.angle.value === 180) {
-  //   direction *= -1;
-  // }
 
   setTimeout(() => {
     damageAmount.value = 0;

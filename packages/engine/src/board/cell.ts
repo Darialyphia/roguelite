@@ -6,6 +6,7 @@ import { TERRAINS, type Terrain } from './board-utils';
 import type { CellLight } from './map';
 import { Obstacle } from '../obstacle/obstacle.entity';
 import { nanoid } from 'nanoid';
+import type { BoardHex } from './board-system';
 
 export type SerializedCoords = `${string}:${string}:${string}`;
 
@@ -16,6 +17,7 @@ export type CellOptions = {
   light?: CellLight;
   obstacle?: string;
   spriteId: string;
+  hex: InstanceType<typeof BoardHex>;
 };
 
 export class Cell extends Entity {
@@ -28,6 +30,8 @@ export class Cell extends Entity {
   readonly light?: CellLight;
 
   obstacle: Obstacle | null;
+
+  readonly hex: InstanceType<typeof BoardHex>;
 
   constructor(
     private game: Game,
@@ -46,6 +50,7 @@ export class Cell extends Entity {
           position: this.position
         })
       : null;
+    this.hex = options.hex;
   }
 
   get cellAbove(): Cell | null {

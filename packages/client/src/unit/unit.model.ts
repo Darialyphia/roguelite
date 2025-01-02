@@ -6,7 +6,7 @@ import {
 import type { Game } from '@game/engine';
 import type { EntityId } from '@game/engine/src/entity';
 import type { Unit } from '@game/engine/src/unit/unit.entity';
-import { Vec3 } from '@game/shared';
+import { Vec3, type Point } from '@game/shared';
 
 export type UnitViewModel = {
   id: EntityId;
@@ -22,6 +22,7 @@ export type UnitViewModel = {
   modifierInfos: Unit['modifierInfos'];
   player: PlayerViewModel;
   card: CardViewModel;
+  screenPosition: Point;
   getUnit(): Unit;
   equals(unit: UnitViewModel): boolean;
   canMoveTo: Unit['canMoveTo'];
@@ -43,6 +44,10 @@ export const makeUnitViewModel = (game: Game, unit: Unit): UnitViewModel => {
     modifierInfos: [...unit.modifierInfos],
     player: makePlayerViewModel(game, unit.player),
     card: makeCardViewModel(game, unit.card),
+    screenPosition: {
+      x: game.boardSystem.getCellAt(unit.position)!.hex.x,
+      y: game.boardSystem.getCellAt(unit.position)!.hex.y
+    },
     canMoveTo: unit.canMoveTo,
     canAttackAt: unit.canAttackAt,
     getUnit() {

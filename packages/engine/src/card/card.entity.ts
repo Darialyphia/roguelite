@@ -96,7 +96,6 @@ export abstract class Card<
 
   isWithinRange(point: Point3D, index: number) {
     if (index >= this.blueprint.targets.length) return false;
-
     return this.blueprint.targets[index]
       .getTargeting(this.game, this)
       .isWithinRange(point);

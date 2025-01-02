@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import AnimatedIsoPoint from '@/iso/components/AnimatedIsoPoint.vue';
 import { UI_MODES, useBattleUiStore } from '@/pages/battle/battle-ui.store';
 import BoardCellSprite from './BoardCellSprite.vue';
 import UiAnimatedSprite from '@/ui/components/UiAnimatedSprite.vue';
@@ -10,15 +9,12 @@ import {
   usePathHelpers,
   useUserPlayer
 } from '@/pages/battle/battle.store';
-import { useIsoCamera } from '@/iso/composables/useIsoCamera';
 import { match } from 'ts-pattern';
-import { PTransition, External } from 'vue3-pixi';
-import type { Container } from 'pixi.js';
+import { PTransition, External, type ContainerInst } from 'vue3-pixi';
 import BoardCellLightVFX from './BoardCellLightVFX.vue';
 import Card from '@/card/components/Card.vue';
 import { useTimeoutFn } from '@vueuse/core';
 import { config } from '@/utils/config';
-import { useIsoPoint } from '@/iso/composables/useIsoPoint';
 import {
   autoPlacement,
   autoUpdate,
@@ -27,6 +23,7 @@ import {
 } from '@floating-ui/vue';
 import Obstacle from './Obstacle.vue';
 import ObstacleCard from '@/card/components/ObstacleCard.vue';
+import { useCamera } from '../composables/useCamera';
 
 const { cell } = defineProps<{ cell: CellViewModel }>();
 const emit = defineEmits<{ ready: [] }>();
@@ -35,10 +32,10 @@ const battle = useBattleStore();
 const player = useUserPlayer();
 const isHovered = computed(() => ui.hoveredCell?.equals(cell.getCell()));
 
-const camera = useIsoCamera();
+const camera = useCamera();
 const pathHelpers = usePathHelpers();
 
-const spawnAnimation = (container: Container) => {
+const spawnAnimation = (container: ContainerInst) => {
   container.y = -400;
   container.alpha = 0;
   gsap.to(container, {
@@ -56,9 +53,7 @@ const spawnAnimation = (container: Container) => {
 };
 
 const isCardDisplayed = ref(false);
-const { isoPosition } = useIsoPoint({
-  position: computed(() => cell)
-});
+
 const virtualEl = ref({
   getBoundingClientRect() {
     return {
@@ -91,8 +86,8 @@ const showCardTimeout = useTimeoutFn(
     if (!viewport) return;
 
     const position = viewport.toScreen({
-      x: isoPosition.value.x + camera.offset.value.x,
-      y: isoPosition.value.y + camera.offset.value.y
+      x: cell.hex.x + camera.offset.value.x,
+      y: cell.hex.y + camera.offset.value.y
     });
     const width = config.TILE_SIZE.x;
     const height = config.TILE_SIZE.y + config.TILE_SIZE.z;
@@ -128,12 +123,13 @@ watch(isHovered, hovered => {
 </script>
 
 <template>
-  <AnimatedIsoPoint
-    :position="cell"
+  <container
+    :x="cell.hex.x"
+    :y="cell.hex.y"
     @pointerenter="ui.hoverAt(cell)"
     @pointerleave="ui.unHover()"
     @pointerup="
-      e => {
+      () => {
         if (camera.isDragging.value) return;
         if (!ui.mode) return;
 
@@ -207,7 +203,7 @@ watch(isHovered, hovered => {
         <BoardCellLightVFX :cell="cell" />
       </container>
     </PTransition>
-  </AnimatedIsoPoint>
+  </container>
   <External>
     <Teleport to="body">
       <Transition>

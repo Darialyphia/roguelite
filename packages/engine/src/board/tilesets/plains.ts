@@ -23,4 +23,4 @@ export const plainTileset = {
       ]
     }
   }
-} satisfies Record<string, BetterOmit<CellOptions, 'id' | 'position'>>;
+} satisfies Record<string, BetterOmit<CellOptions, 'id' | 'position' | 'hex'>>;

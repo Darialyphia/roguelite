@@ -1,31 +1,22 @@
 <script setup lang="ts">
 import { useApplication } from 'vue3-pixi';
-import { type Viewport } from 'pixi-viewport';
-import { Container, Matrix } from 'pixi.js';
+import { Container } from 'pixi.js';
 import { until, useEventListener } from '@vueuse/core';
-import { useIsoCamera } from '../composables/useIsoCamera';
 import { config } from '@/utils/config';
-import {
-  useBattleStore,
-  useGameClientState
-} from '@/pages/battle/battle.store';
-import { useIsoWorld } from '../composables/useIsoWorld';
+import { useGame } from '@/pages/battle/battle.store';
+import { useCamera } from '../composables/useCamera';
 
-const { width, height } = defineProps<{
-  width: number;
-  height: number;
-}>();
 const app = useApplication();
-
-const camera = useIsoCamera();
+const game = useGame();
+const camera = useCamera();
 const WORLD_PADDING = {
-  x: window.innerWidth / 2,
-  y: window.innerHeight / 2
+  x: 125,
+  y: 50
 };
 
 const boardSize = computed(() => ({
-  width: ((width + height) / 2) * config.TILE_SIZE.x,
-  height: ((width + height) / 2) * (config.TILE_SIZE.y + config.TILE_SIZE.z)
+  width: (game.value.boardSystem.width + 1) * config.TILE_SIZE.x,
+  height: game.value.boardSystem.height * config.TILE_SIZE.y
 }));
 
 const worldSize = computed(() => ({
@@ -47,14 +38,8 @@ until(camera.viewport)
         direction: 'all'
       })
       .clampZoom({ minScale: config.MIN_ZOOM, maxScale: config.MAX_ZOOM })
-      .setZoom(1, false)
-      // .mouseEdges({
-      //   distance: 10,
-      //   speed: 15,
-      //   allowButtons: true
-      // })
-      .pinch({ noDrag: true })
-      .moveCenter(worldSize.value.width / 2, worldSize.value.height - 500);
+      .setZoom(config.INITIAL_ZOOM, false)
+      .pinch({ noDrag: true });
   });
 
 useEventListener('resize', () => {
@@ -65,8 +50,8 @@ useEventListener('resize', () => {
 
 watchEffect(() => {
   camera.offset.value = {
-    x: (height / 2) * config.TILE_SIZE.x + WORLD_PADDING.x / 2,
-    y: boardSize.value.height / 4 + WORLD_PADDING.y / 2
+    x: WORLD_PADDING.x / 2 + config.TILE_SIZE.x * 0.75,
+    y: WORLD_PADDING.y / 2 + config.TILE_SIZE.y
   };
 });
 </script>

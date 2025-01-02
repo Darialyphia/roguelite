@@ -4,6 +4,7 @@ import {
 } from '@/player/player.model';
 import { makeUnitViewModel, type UnitViewModel } from '@/unit/unit.model';
 import type { Game } from '@game/engine';
+import type { BoardHex } from '@game/engine/src/board/board-system';
 import type { Terrain } from '@game/engine/src/board/board-utils';
 import type { Cell } from '@game/engine/src/board/cell';
 import type { CellLight } from '@game/engine/src/board/map';
@@ -19,6 +20,7 @@ export type CellViewModel = {
   z: number;
   unit: Nullable<UnitViewModel>;
   light?: CellLight;
+  hex: InstanceType<typeof BoardHex>;
   obstacle: {
     name: string;
     description: string;
@@ -42,6 +44,7 @@ export const makeCellViewModel = (game: Game, cell: Cell): CellViewModel => {
     z: cell.z,
     light: cell.light,
     unit: cell.unit ? makeUnitViewModel(game, cell.unit) : null,
+    hex: cell.hex,
     obstacle: cell.obstacle
       ? {
           id: cell.obstacle.id,

@@ -8,16 +8,22 @@ export type CellLight = {
   offset: { x: number; y: number };
 };
 
+type GameMapCell = {
+  terrain: Terrain;
+  spriteId: string;
+  light?: CellLight;
+  obstacle?: string;
+};
+
+type GameMapRow = Nullable<GameMapCell>[];
+
+type GameMapFloor = GameMapRow[];
+
 export type GameMap = {
   id: string;
-  height: number;
-  width: number;
-  cells: Nullable<{
-    terrain: Terrain;
-    spriteId: string;
-    light?: CellLight;
-    obstacle?: string;
-  }>[][][];
+  rows: number;
+  cols: number;
+  floors: GameMapFloor[];
   altarPositions: Point3D[][];
 };
 

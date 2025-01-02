@@ -1,4 +1,7 @@
 export const config = {
+  TILE_WIDTH: 64,
+  TILE_HEIGHT: 44,
+
   // the ap spent to move one tile
   AP_COST_PER_MOVEMENT: 1,
   // the ap spent to perform the first attack of a unti each turn

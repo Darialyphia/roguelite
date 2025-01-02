@@ -1,16 +1,15 @@
 <script setup lang="ts">
-import { useIsoCamera } from '@/iso/composables/useIsoCamera';
 import { useSpritesheet } from '@/shared/composables/useSpritesheet';
-import { TERRAINS, type Terrain } from '@game/engine/src/board/board-utils';
 import { Hitbox } from '@/utils/hitbox';
 import type { CellViewModel } from '../models/cell.model';
 import { config } from '@/utils/config';
+import { useCamera } from '../composables/useCamera';
 
 const { cell } = defineProps<{ cell: CellViewModel }>();
 
 const sheet = useSpritesheet<'', 'tile'>(() => cell.spriteId);
 
-const camera = useIsoCamera();
+const camera = useCamera();
 
 const { w, h } = { w: 96, h: 80 };
 const { offsetW, offsetH } = {
@@ -52,6 +51,6 @@ const hitArea = Hitbox.from(
     v-if="sheet"
     :anchor="0.5"
     :hitArea="hitArea"
-    :textures="sheet.sheets.base.tile.animations[camera.angle.value]"
+    :textures="sheet.sheets.base.tile.animations[0]"
   />
 </template>

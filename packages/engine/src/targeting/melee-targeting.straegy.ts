@@ -19,7 +19,7 @@ export class MeleeTargetingStrategy implements TargetingStrategy {
   isWithinRange(point: Point3D) {
     if (!this.options.allowDiagonals && !this.unit.position.isAxisAligned(point))
       return false;
-    if (!this.unit.position.isNearby(point)) return false;
+    if (!this.unit.position.isNearby(point, this.game)) return false;
 
     return true;
   }

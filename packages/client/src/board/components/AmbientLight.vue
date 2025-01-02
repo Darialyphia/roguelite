@@ -1,20 +1,16 @@
 <script setup lang="ts">
-import { useIsoCamera } from '@/iso/composables/useIsoCamera';
-import { useIsoWorld } from '@/iso/composables/useIsoWorld';
-import { useGameClientState, useVFXEvent } from '@/pages/battle/battle.store';
+import { useVFXEvent } from '@/pages/battle/battle.store';
 import { config } from '@/utils/config';
 import { useBattleUiStore } from '@/pages/battle/battle-ui.store';
-import { radialGradient } from '@/utils/sprite';
 import { BLEND_MODES, Graphics as PixiGraphics, Matrix } from 'pixi.js';
-import { External } from 'vue3-pixi';
-import { getBlendFilter } from '@pixi/picture';
 import { waitFor } from '@game/shared';
+import { useCamera } from '../composables/useCamera';
 
 const { worldSize } = defineProps<{
   worldSize: { width: number; height: number };
 }>();
 
-const camera = useIsoCamera();
+const camera = useCamera();
 const ui = useBattleUiStore();
 // const lightTintFirstPass = ref('#FFDD00');
 // const lightTintSecondPass = ref('#FFDD00');

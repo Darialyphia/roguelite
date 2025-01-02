@@ -11,20 +11,22 @@ import { GAME_PHASES } from '@game/engine/src/game/game-phase.system';
 import type { CellViewModel } from '../models/cell.model';
 import { UI_MODES, useBattleUiStore } from '@/pages/battle/battle-ui.store';
 import { isDefined } from '@game/shared';
-import { useIsoCamera } from '@/iso/composables/useIsoCamera';
 import { match } from 'ts-pattern';
+import { useCamera } from '../composables/useCamera';
 
 const { cell } = defineProps<{ cell: CellViewModel }>();
 
 const battleStore = useBattleStore();
-const camera = useIsoCamera();
+const camera = useCamera();
 const ui = useBattleUiStore();
 const state = useGameClientState();
 const pathHelpers = usePathHelpers();
 
 const isWithinCardRange = computed(() => {
   if (!ui.selectedCard) return;
-  return ui.selectedCard.isWithinRange(cell, ui.cardTargets.length);
+  return ui.selectedCard
+    .getCard()
+    .isWithinRange(cell.getCell(), ui.cardTargets.length);
 });
 
 const canTarget = computed(() => {
