@@ -139,7 +139,10 @@ useBattleEvent(GAME_EVENTS.PLAYER_AFTER_GAIN_RUNE, async e => {
       </div>
       <div class="large" style="--bg: url('/assets/ui/vp-large.png')">
         <span :data-text="player.victoryPoints">
-          {{ player.victoryPoints }}
+          <span>{{ player.victoryPoints }}</span>
+          <span class="text-00">
+            /{{ engineConfig.VICTORY_POINTS_WIN_THRESHOLD }}
+          </span>
         </span>
       </div>
       <div style="--bg: url('/assets/ui/gold.png')">
@@ -383,6 +386,7 @@ useBattleEvent(GAME_EVENTS.PLAYER_AFTER_GAIN_RUNE, async e => {
         text-shadow: 0 3px #5d1529;
         inset: 0;
         z-index: -1;
+        text-align: left;
       }
     }
   }

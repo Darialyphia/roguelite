@@ -229,7 +229,6 @@ watch(isHovered, hovered => {
 .card-wrapper {
   z-index: 999;
   pointer-events: none;
-
   &.v-enter-active {
     transition: opacity 0.2s var(--ease-2);
   }
