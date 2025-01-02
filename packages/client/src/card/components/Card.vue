@@ -86,7 +86,7 @@ const runeCosts = computed(() => {
     </header>
     <div class="name">{{ card.name }}</div>
     <div class="description">{{ card.description }}</div>
-    <div class="meta" :class="violations?.job && 'invalid'">
+    <div class="meta">
       {{ metaString }}
     </div>
 
@@ -129,7 +129,6 @@ const runeCosts = computed(() => {
 }
 
 .description {
-  font-family: 'Press Start 2P', system-ui;
   width: calc(1px * v-bind('config.CARD_DESCRIPTION_TEXTBOX_WIDTH'));
   color: #5d1529;
   padding: calc(1px * v-bind('config.CARD_DESCRIPTION_TEXTBOX_PADDING'));

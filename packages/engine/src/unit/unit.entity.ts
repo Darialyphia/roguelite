@@ -93,7 +93,7 @@ export class Unit extends Entity {
     this.card = card;
     this.player = options.player;
     this.modifierManager = new UnitModifierManager(this);
-    this.ap = new ActionPointComponent({ maxAp: config.UNIT_BASE_AP });
+    this.ap = new ActionPointComponent({ maxAp: config.UNIT_BASE_AP, initialValue: 0 });
     this.hp = new HealthComponent({ maxHp: this.card.maxHp });
     this.hp.on(HEALTH_EVENTS.CHANGE, this.checkHp.bind(this));
     this.movement = new MovementComponent({

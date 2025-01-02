@@ -19,6 +19,7 @@ export class Obstacle extends Entity {
   playerId?: EntityId;
   occupant: Nullable<Unit> = null;
   spriteId: string;
+  iconId: string;
   meta: AnyObject = {};
   isAttackable: boolean;
   constructor(
@@ -28,6 +29,7 @@ export class Obstacle extends Entity {
     super(options.id);
     this.blueprintId = options.blueprintId;
     this.spriteId = this.blueprint.spriteId;
+    this.iconId = this.blueprint.iconId;
     this.position = Position.fromPoint3D(options.position);
     this.playerId = options.playerId;
     this.isAttackable = this.blueprint.attackable;

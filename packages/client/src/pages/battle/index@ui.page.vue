@@ -221,7 +221,7 @@ footer {
 }
 
 .opponent-hand {
-  margin-top: -350px;
+  margin-top: -380px;
 }
 
 .player-battle-infos {

@@ -2,6 +2,7 @@ import { Interceptable, type inferInterceptor } from '../../utils/interceptable'
 
 export type ActionPointComponentOptions = {
   maxAp: number;
+  initialValue: number;
 };
 
 type ActionPointInterceptor = ActionPointComponent['interceptors'];
@@ -17,7 +18,7 @@ export class ActionPointComponent {
 
   constructor(options: ActionPointComponentOptions) {
     this.baseMaxAp = options.maxAp;
-    this._current = this.baseMaxAp;
+    this._current = options.initialValue;
   }
 
   get max() {

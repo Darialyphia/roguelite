@@ -21,9 +21,11 @@ export type CellViewModel = {
   light?: CellLight;
   obstacle: {
     name: string;
+    description: string;
     id: string;
     blueprintId: string;
     spriteId: string;
+    iconId: string;
     player: PlayerViewModel | null;
     meta: AnyObject;
   } | null;
@@ -45,6 +47,8 @@ export const makeCellViewModel = (game: Game, cell: Cell): CellViewModel => {
           id: cell.obstacle.id,
           blueprintId: cell.obstacle.blueprintId,
           name: cell.obstacle.name,
+          description: cell.obstacle.description,
+          iconId: cell.obstacle.iconId,
           spriteId: cell.obstacle.spriteId,
           meta: cell.obstacle.meta,
           player: cell.obstacle.player

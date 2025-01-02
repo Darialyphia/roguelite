@@ -208,6 +208,32 @@
         },
         {
           "alias": [
+            "icon-obstacle_altar"
+          ],
+          "src": [
+            "/assets/icons/obstacle_altar.png"
+          ],
+          "data": {
+            "tags": {
+              "m": true
+            }
+          }
+        },
+        {
+          "alias": [
+            "icon-obstacle_shrine"
+          ],
+          "src": [
+            "/assets/icons/obstacle_shrine.png"
+          ],
+          "data": {
+            "tags": {
+              "m": true
+            }
+          }
+        },
+        {
+          "alias": [
             "icon-spell-arcane-intellect"
           ],
           "src": [

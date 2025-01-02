@@ -4,8 +4,10 @@ import type { ObstacleBlueprint } from '../obstacle-blueprint';
 export const shrine: ObstacleBlueprint = {
   id: 'shrine',
   name: 'Victory Shrine',
-  description: 'Grant 1 Victory point to its owner at the end of the turn.',
+  description:
+    'Grant 1 Victory point to the owner of the unit standing on it at the end of the turn.',
   spriteId: 'shrine',
+  iconId: 'obstacle_shrine',
   walkable: true,
   attackable: false,
   onCreated(game, obstacle) {

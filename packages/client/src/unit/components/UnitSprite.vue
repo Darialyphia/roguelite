@@ -36,7 +36,7 @@ camera.viewport.value?.on('zoomed-end', () => {
   selectedFilter.thickness = Math.round(camera.viewport.value!.scale.x);
 });
 const inAoeFilter = new ColorOverlayFilter(0xff0000, 0.3);
-const inactiveFilter = new AdjustmentFilter({
+const exhaustedFilter = new AdjustmentFilter({
   saturation: 0.5,
   brightness: 0.85
 });
@@ -59,6 +59,10 @@ const filters = computed(() => {
 
   if (isInCardAoe.value) {
     result.push(inAoeFilter);
+  }
+
+  if (unit.currentAp === 0) {
+    result.push(exhaustedFilter);
   }
 
   return result;

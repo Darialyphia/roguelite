@@ -7,6 +7,7 @@ export type ObstacleBlueprint = {
   name: string;
   description: string;
   spriteId: string;
+  iconId: string;
   walkable: boolean;
   attackable: boolean;
   onCreated?: (game: Game, obstacle: Obstacle) => void;

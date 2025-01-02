@@ -26,6 +26,7 @@ import {
   useFloating
 } from '@floating-ui/vue';
 import Obstacle from './Obstacle.vue';
+import ObstacleCard from '@/card/components/ObstacleCard.vue';
 
 const { cell } = defineProps<{ cell: CellViewModel }>();
 const emit = defineEmits<{ ready: [] }>();
@@ -120,7 +121,7 @@ watch(isHovered, hovered => {
   if (!hovered) {
     isCardDisplayed.value = false;
     showCardTimeout.stop();
-  } else if (cell.unit) {
+  } else if (cell.unit || cell.obstacle) {
     showCardTimeout.start();
   }
 });
@@ -214,9 +215,10 @@ watch(isHovered, hovered => {
           ref="floating"
           class="card-wrapper"
           :style="floatingCardStyle"
-          v-if="cell.unit && isCardDisplayed"
+          v-if="(cell.unit || cell.obstacle) && isCardDisplayed"
         >
-          <Card :card="cell.unit.card" />
+          <Card v-if="cell.unit" :card="cell.unit.card" />
+          <ObstacleCard v-else-if="cell.obstacle" :obstacle="cell.obstacle" />
         </div>
       </Transition>
     </Teleport>

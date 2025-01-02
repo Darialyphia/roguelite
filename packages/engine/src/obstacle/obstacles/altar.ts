@@ -7,6 +7,7 @@ export const altar: ObstacleBlueprint = {
   name: 'Altar',
   description: `Allows it owner to deploy units nearby it. Destroying it awards ${config.ALTAR_VP_REWARD} Vicory Points.`,
   spriteId: 'altar',
+  iconId: 'obstacle_altar',
   walkable: false,
   attackable: true,
   onCreated(game, obstacle) {
