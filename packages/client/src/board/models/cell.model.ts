@@ -46,7 +46,7 @@ export const makeCellViewModel = (game: Game, cell: Cell): CellViewModel => {
     unit: cell.unit ? makeUnitViewModel(game, cell.unit) : null,
     screenPosition: {
       x: cell.hex.x,
-      y: cell.hex.y + config.TILE_SIZE.z * cell.z
+      y: cell.hex.y - config.TILE_SIZE.z * cell.z
     },
     obstacle: cell.obstacle
       ? {

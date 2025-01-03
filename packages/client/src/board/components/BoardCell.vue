@@ -155,7 +155,7 @@ watch(isHovered, hovered => {
               });
             }
 
-            if (pathHelpers.canAttackAt(ui.selectedUnit, cell)) {
+            if (ui.selectedUnit.canAttackAt(cell)) {
               return battle.dispatch({
                 type: 'attack',
                 payload: {

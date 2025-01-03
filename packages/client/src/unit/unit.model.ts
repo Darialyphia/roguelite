@@ -48,7 +48,7 @@ export const makeUnitViewModel = (game: Game, unit: Unit): UnitViewModel => {
     screenPosition: {
       x: game.boardSystem.getCellAt(unit.position)!.hex.x,
       y:
-        game.boardSystem.getCellAt(unit.position)!.hex.y +
+        game.boardSystem.getCellAt(unit.position)!.hex.y -
         config.TILE_SIZE.z * unit.position.z
     },
     canMoveTo: unit.canMoveTo,

@@ -34,7 +34,6 @@ export type UnitCardBlueprint = CardBlueprintBase & {
   spriteId: string;
   maxHp: number;
   atk: number;
-  speed: number;
   reward: number;
   jobs: Job[];
   cost: {

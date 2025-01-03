@@ -79,7 +79,7 @@ useVFXEvent('TINT_SCREEN', async params => {
     :z-order="9999"
     :z-index="9999"
   >
-    <graphics
+    <!-- <graphics
       :blend-mode="BLEND_MODES.MULTIPLY"
       event-mode="none"
       :x="-camera.offset.value.x"
@@ -92,7 +92,7 @@ useVFXEvent('TINT_SCREEN', async params => {
           g.endFill();
         }
       "
-    />
+    /> -->
     <!-- <graphics
       :filters="
         lightBlendModeFirstPass > BLEND_MODES.SCREEN

@@ -51,7 +51,7 @@ const ui = useBattleUiStore();
 
 const getTextStyle = (color: number) => {
   return new TextStyle({
-    fontSize: 20,
+    fontSize: 18,
     fill: color,
     fontFamily: 'SilkScreen',
     align: 'center'
@@ -74,19 +74,11 @@ const getTextStyle = (color: number) => {
     event-mode="none"
     playing
     loop
-    :y="-35"
+    :y="35"
   >
     <pixi-text
-      :style="getTextStyle(0x84f200)"
-      :x="-22"
-      :y="-2"
-      :scale="0.5"
-      :anchor="0.5"
-    >
-      {{ unit.currentHp }}
-    </pixi-text>
-    <pixi-text
       :style="getTextStyle(0xff0000)"
+      :x="-22"
       :y="-2"
       :scale="0.5"
       :anchor="0.5"
@@ -94,13 +86,13 @@ const getTextStyle = (color: number) => {
       {{ unit.atk }}
     </pixi-text>
     <pixi-text
-      :style="getTextStyle(0x00bcff)"
+      :style="getTextStyle(0x84f200)"
       :x="22"
       :y="-2"
       :scale="0.5"
       :anchor="0.5"
     >
-      {{ unit.currentAp }}
+      {{ unit.currentHp }}
     </pixi-text>
   </animated-sprite>
 </template>

@@ -1,0 +1,26 @@
+{ "frames": {
+   "unit_footman__image__0": {
+    "frame": { "x": 0, "y": 0, "w": 70, "h": 70 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 70, "h": 70 },
+    "sourceSize": { "w": 70, "h": 70 },
+    "duration": 100
+   }
+ },
+ "meta": {
+  "app": "https://www.aseprite.org/",
+  "version": "1.3.10.1-x64",
+  "image": "unit_footman.png",
+  "format": "RGBA8888",
+  "size": { "w": 70, "h": 70 },
+  "scale": "1",
+  "frameTags": [
+  ],
+  "layers": [
+   { "name": "image", "opacity": 255, "blendMode": "normal" }
+  ],
+  "slices": [
+  ]
+ }
+}

@@ -92,13 +92,17 @@ export class BoardSystem extends System<BoardSystemOptions> {
   }
 
   getNeighbors(point: Point3D) {
-    return this.floors[point.z]
-      .traverse(spiral({ radius: 1 }))
+    const floor = this.floors[point.z];
+    if (!floor) return [];
+
+    const neighbors = floor
+      .traverse(spiral({ radius: 1, start: { col: point.x, row: point.y } }))
       .toArray()
       .map(hex => {
-        return this.getCellAt({ x: hex.x, y: hex.y, z: point.z });
+        return this.getCellAt({ x: hex.col, y: hex.row, z: point.z });
       })
       .filter(isDefined);
+    return neighbors;
   }
 
   getNeighbors3D(point: Point3D) {

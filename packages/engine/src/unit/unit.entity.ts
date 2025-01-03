@@ -391,8 +391,15 @@ export class Unit extends Entity {
   }
 
   canAttackAt(point: Point3D) {
-    if (!this.canAttack) return false;
-    if (this.position.equals(point)) return false;
+    console.log({ point, entity: this });
+    if (!this.canAttack) {
+      console.log('cannot attack');
+      return false;
+    }
+    if (this.position.equals(point)) {
+      console.log('cant attack itself');
+      return false;
+    }
 
     const cell = this.game.boardSystem.getCellAt(point)!;
 
@@ -401,7 +408,10 @@ export class Unit extends Entity {
     }
 
     const target = cell.unit;
-    if (target && !target.canBeAttacked) return false;
+    if (target && !target.canBeAttacked) {
+      console.log('target cannot be attacked');
+      return false;
+    }
 
     return this.attackTargettingPattern.canTargetAt(point);
   }

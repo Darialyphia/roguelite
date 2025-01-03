@@ -27,7 +27,7 @@ const tag = computed(() => {
 
 const getTextStyle = (color: number) => {
   return new TextStyle({
-    fontSize: 20,
+    fontSize: 18,
     fill: color,
     fontFamily: 'SilkScreen',
     align: 'center'
@@ -64,8 +64,8 @@ const ui = useBattleUiStore();
       event-mode="none"
       playing
       loop
-      :y="-config.TILE_SIZE.y * 1.15"
-      :x="-15"
+      :y="12"
+      :x="-18"
     >
       <pixi-text
         :style="getTextStyle(0x84f200)"

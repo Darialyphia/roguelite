@@ -10,8 +10,8 @@ const app = useApplication();
 const game = useGame();
 const camera = useCamera();
 const WORLD_PADDING = {
-  x: 125,
-  y: 50
+  x: 200,
+  y: 100
 };
 
 const boardSize = computed(() => ({
@@ -20,7 +20,10 @@ const boardSize = computed(() => ({
 }));
 
 const worldSize = computed(() => ({
-  width: boardSize.value.width + WORLD_PADDING.x,
+  width: Math.min(
+    boardSize.value.width + WORLD_PADDING.x,
+    window.innerWidth / 2
+  ),
   height: boardSize.value.height + WORLD_PADDING.y
 }));
 

@@ -22,7 +22,7 @@ export const config = {
   MOVEMENT_BOUNCE_HEIGHT: 30,
   MOVEMENT_SPEED_PER_TILE: 0.3,
 
-  MIN_ZOOM: 1,
+  MIN_ZOOM: 2,
   MAX_ZOOM: 2,
   INITIAL_ZOOM: 2,
 
