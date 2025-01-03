@@ -30,6 +30,8 @@ export class SpellCard extends Card<SpellCardBlueprint> {
       targets,
       vfx: this.blueprint.vfx.play(this.game, this)
     });
+    this.player.spendGold(this.blueprint.cost.gold);
+
     const aoeShape = this.blueprint.getAoe(this.game, this, targets);
     this.blueprint.onPlay(
       this.game,

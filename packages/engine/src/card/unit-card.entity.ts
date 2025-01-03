@@ -26,10 +26,6 @@ export class UnitCard extends Card<UnitCardBlueprint> {
     return this.blueprint.reward;
   }
 
-  get speed() {
-    return this.blueprint.speed;
-  }
-
   get spriteId() {
     return this.blueprint.spriteId;
   }
