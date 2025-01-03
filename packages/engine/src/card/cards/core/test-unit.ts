@@ -33,9 +33,7 @@ export const testUnit: UnitCardBlueprint = {
     }
   ],
   getAttackPattern(game, unit) {
-    return new MeleeTargetingStrategy(game, unit, TARGETING_TYPE.ENEMY, {
-      allowDiagonals: false
-    });
+    return new MeleeTargetingStrategy(game, unit, TARGETING_TYPE.ENEMY);
   },
   getAoe(game) {
     return new PointAOEShape(game);

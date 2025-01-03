@@ -3,9 +3,7 @@ import { NoMitigationStrategy } from '../../../combat/damage/mitigation/no-mitig
 import { NoScalingStrategy } from '../../../combat/damage/scaling/no-scaling.strategy';
 import { PLAYER_EVENTS } from '../../../player/player.entity';
 import { AnywhereTargetingStrategy } from '../../../targeting/anywhere-targeting-strategy';
-import { RingAOEShape } from '../../../targeting/aoe-shapes';
 import { TARGETING_TYPE } from '../../../targeting/targeting-strategy';
-import { RUNES } from '../../../utils/rune';
 import { type QuestCardBlueprint } from '../../card-blueprint';
 import { CARD_KINDS } from '../../card-enums';
 
@@ -17,8 +15,8 @@ export const testQuest: QuestCardBlueprint = {
   kind: CARD_KINDS.QUEST,
   aiHints: {},
   cost: {
-    gold: 2,
-    runes: [RUNES.RED, RUNES.COLORLESS]
+    gold: 1,
+    runes: []
   },
   minTargets: 1,
   targets: [

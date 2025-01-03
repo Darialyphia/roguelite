@@ -103,15 +103,14 @@ const tag = computed(() => {
       return null;
     })
     .with(UI_MODES.PLAY_CARD, () => {
-      if (isInCardAoe.value) {
-        return 'danger';
-      }
-
       if (canTarget.value) {
-        return 'targeting';
+        return 'targeting-valid';
       }
       if (isWithinCardRange.value) {
-        return 'targeting-valid';
+        return 'targeting';
+      }
+      if (isInCardAoe.value) {
+        return 'danger';
       }
 
       return null;

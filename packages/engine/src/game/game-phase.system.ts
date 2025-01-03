@@ -41,11 +41,10 @@ export class GamePhaseSystem extends System<never> {
       `Cannot enter phase ${GAME_PHASES.BATTLE} from phase ${this.phase}`
     );
 
-    this.stateMachine.dispatch(GAME_PHASE_TRANSITIONS.START_BATTLE);
-
     this.game.playerSystem.players.forEach(player => {
       player.mulligan();
     });
+    this.stateMachine.dispatch(GAME_PHASE_TRANSITIONS.START_BATTLE);
     this.game.emit(GAME_EVENTS.START_BATTLE);
     this.game.turnSystem.startGameTurn();
   }

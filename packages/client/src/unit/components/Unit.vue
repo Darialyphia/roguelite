@@ -64,7 +64,6 @@ const spawnAnimation = (container: Container) => {
     y: 0,
     duration: 1,
     ease: Bounce.easeOut,
-    delay: Math.random() * 0.5,
     onComplete() {
       isSpawnAnimationDone.value = true;
     }

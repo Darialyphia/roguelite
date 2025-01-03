@@ -257,7 +257,6 @@ export class Player extends Entity {
   onBattleStart() {}
 
   endTurn() {
-    console.log('end turn');
     this.emitter.emit(PLAYER_EVENTS.END_TURN, { id: this.id });
   }
 }

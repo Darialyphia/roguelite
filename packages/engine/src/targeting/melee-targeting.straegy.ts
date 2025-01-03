@@ -4,21 +4,14 @@ import type { Unit } from '../unit/unit.entity';
 import type { Game } from '../game/game';
 import { match } from 'ts-pattern';
 
-export type MeleeTargetingStrategyOptions = {
-  allowDiagonals: boolean;
-};
-
 export class MeleeTargetingStrategy implements TargetingStrategy {
   constructor(
     private game: Game,
     private unit: Unit,
-    private type: TargetingType,
-    private options: MeleeTargetingStrategyOptions
+    private type: TargetingType
   ) {}
 
   isWithinRange(point: Point3D) {
-    if (!this.options.allowDiagonals && !this.unit.position.isAxisAligned(point))
-      return false;
     if (!this.unit.position.isNearby(point, this.game)) return false;
 
     return true;
