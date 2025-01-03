@@ -38,6 +38,7 @@ export type RingAOEShapeOptions = {
   allow3D: boolean;
   targetingType: NonEmptyTargetingType;
 };
+
 export class RingAOEShape implements AOEShape {
   constructor(
     private game: Game,
@@ -49,6 +50,43 @@ export class RingAOEShape implements AOEShape {
     return this.options.allow3D
       ? this.game.boardSystem.getNeighbors3D(points[0])
       : this.game.boardSystem.getNeighbors(points[0]);
+  }
+
+  getUnits(points: Point3D[]) {
+    return this.getCells(points)
+      .map(cell => cell.unit)
+      .filter((unit): unit is Unit => {
+        if (!isDefined(unit)) return false;
+
+        return match(this.options.targetingType)
+          .with('ally', () => !!unit?.isAlly(this.unit))
+          .with('enemy', () => !!unit?.isEnemy(this.unit))
+          .with('both', () => !!unit)
+          .exhaustive();
+      });
+  }
+}
+
+export type IntersectiongAOEShapeOptions = {
+  allow3D: boolean;
+  targetingType: NonEmptyTargetingType;
+};
+export class IntersectionAoeShape implements AOEShape {
+  constructor(
+    private game: Game,
+    private unit: Unit,
+    private options: IntersectiongAOEShapeOptions
+  ) {}
+
+  getCells(points: Point3D[]) {
+    const selfNeighbors = this.options.allow3D
+      ? this.game.boardSystem.getNeighbors3D(this.unit.position)
+      : this.game.boardSystem.getNeighbors(this.unit.position);
+    const pointNeighbors = this.options.allow3D
+      ? this.game.boardSystem.getNeighbors3D(points[0])
+      : this.game.boardSystem.getNeighbors(points[0]);
+
+    return selfNeighbors.filter(cell => pointNeighbors.some(other => other.equals(cell)));
   }
 
   getUnits(points: Point3D[]) {

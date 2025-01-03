@@ -9,6 +9,8 @@ import { useBattleUiStore } from '@/pages/battle/battle-ui.store';
 import { usePointLights, type PointLightConfig } from './usePointLight';
 import { until } from '@vueuse/core';
 import { useCamera } from '@/board/composables/useCamera';
+import { BLEND_MODES } from 'pixi.js';
+import { getBlendFilter } from '@pixi/picture';
 
 const { light } = defineProps<{ light: PointLightConfig }>();
 
@@ -45,10 +47,10 @@ let unsub: () => void = () => {};
 until(containerRef)
   .toBeTruthy()
   .then(container => {
-    // unsub = registerLight(Object.assign(light, { root: container }));
+    unsub = registerLight(Object.assign(light, { root: container }));
   });
 onBeforeUnmount(() => {
-  // unsub();
+  unsub();
 });
 </script>
 

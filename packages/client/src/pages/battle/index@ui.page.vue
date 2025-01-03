@@ -38,11 +38,15 @@ const options: Pick<GameOptions, 'mapId' | 'teams'> = {
             { blueprintId: 'red-footman' },
             { blueprintId: 'red-footman' },
             { blueprintId: 'red-footman' },
-            { blueprintId: 'red-footman' },
+            { blueprintId: 'red-berserk' },
+            { blueprintId: 'red-berserk' },
+            { blueprintId: 'red-berserk' },
             { blueprintId: 'red-archer' },
             { blueprintId: 'red-archer' },
             { blueprintId: 'red-archer' },
-            { blueprintId: 'red-archer' },
+            { blueprintId: 'red-emperor' },
+            { blueprintId: 'red-emperor' },
+            { blueprintId: 'red-emperor' },
             { blueprintId: 'test-spell' },
             { blueprintId: 'test-spell' },
             { blueprintId: 'test-spell' },
@@ -62,11 +66,15 @@ const options: Pick<GameOptions, 'mapId' | 'teams'> = {
             { blueprintId: 'red-footman' },
             { blueprintId: 'red-footman' },
             { blueprintId: 'red-footman' },
-            { blueprintId: 'red-footman' },
+            { blueprintId: 'red-berserk' },
+            { blueprintId: 'red-berserk' },
+            { blueprintId: 'red-berserk' },
             { blueprintId: 'red-archer' },
             { blueprintId: 'red-archer' },
             { blueprintId: 'red-archer' },
-            { blueprintId: 'red-archer' },
+            { blueprintId: 'red-emperor' },
+            { blueprintId: 'red-emperor' },
+            { blueprintId: 'red-emperor' },
             { blueprintId: 'test-spell' },
             { blueprintId: 'test-spell' },
             { blueprintId: 'test-spell' },
@@ -80,7 +88,7 @@ const options: Pick<GameOptions, 'mapId' | 'teams'> = {
   ]
 };
 const serverSession = new ServerSession({
-  rngSeed: 'omegalul',
+  rngSeed: 'it is what it is',
   ...options
 });
 const clientSession = new ClientSession(options);
@@ -190,7 +198,7 @@ footer {
 
 .hand,
 .opponent-hand {
-  max-width: 100%;
+  width: 100%;
   justify-self: center;
 }
 

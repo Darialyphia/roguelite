@@ -34,9 +34,8 @@ until(camera.viewport)
       .drag({
         mouseButtons: 'left'
       })
-      .pinch()
       .decelerate({ friction: 0.88 })
-      .wheel({ smooth: 20, percent: 0.25 })
+      // .wheel({ smooth: 20, percent: 0.25 })
       .clamp({
         direction: 'all'
       })

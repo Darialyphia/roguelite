@@ -1,13 +1,9 @@
 import type { Control } from '@/shared/composables/useKeyboardControl';
 
 export const defaultKeyBindings = {
-  rotateCW: {
-    label: 'Rotate map clockwise',
-    control: { key: 'KeyE', modifier: null }
-  },
-  rotateCCW: {
-    label: 'Rotate map counter clockwise',
-    control: { key: 'KeyQ', modifier: null }
+  showAttackRange: {
+    label: 'Display unit attack range',
+    control: { key: 'ShiftLeft', modifier: null }
   },
   endTurn: {
     label: "End the current unit's turn",

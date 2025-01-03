@@ -13,6 +13,8 @@ import { UI_MODES, useBattleUiStore } from '@/pages/battle/battle-ui.store';
 import { isDefined } from '@game/shared';
 import { match } from 'ts-pattern';
 import { useCamera } from '../composables/useCamera';
+import { useIsKeyboardControlPressed } from '@/shared/composables/useKeyboardControl';
+import { useSettingsStore } from '@/shared/composables/useSettings';
 
 const { cell } = defineProps<{ cell: CellViewModel }>();
 
@@ -38,13 +40,18 @@ const canMove = computed(() => {
   return !!ui.selectedUnit && pathHelpers.canMoveTo(ui.selectedUnit, cell);
 });
 
+const settingsStore = useSettingsStore();
+const isAttackRangeDisplayed = useIsKeyboardControlPressed(
+  () => settingsStore.settings.bindings.showAttackRange.control
+);
 const canAttack = computed(() => {
   if (ui.mode === UI_MODES.PLAY_CARD) return false;
-  return (
-    ui.mode === UI_MODES.BASIC &&
-    isDefined(cell.getCell().unit) &&
-    ui.selectedUnit?.getUnit().canAttackAt(cell)
-  );
+  if (ui.mode !== UI_MODES.BASIC) return false;
+
+  return isAttackRangeDisplayed.value
+    ? ui.selectedUnit?.getUnit().attackTargettingPattern.isWithinRange(cell)
+    : isDefined(cell.getCell().unit) &&
+        ui.selectedUnit?.getUnit().canAttackAt(cell);
 });
 
 const isOnPath = computed(() => {
@@ -69,12 +76,6 @@ const isInCardAoe = computed(() => {
 });
 const userPlayer = useUserPlayer();
 
-const isDangerZone = computed(() => {
-  if (!canMove.value) return false;
-  return state.value.units
-    .filter(u => userPlayer.value.isEnemy(u))
-    .some(enemy => pathHelpers.canAttackAt(enemy, cell));
-});
 const tag = computed(() => {
   if (
     battleStore.state.phase !== GAME_PHASES.BATTLE ||
@@ -97,7 +98,7 @@ const tag = computed(() => {
       }
 
       if (canMove.value) {
-        return isDangerZone.value ? 'danger' : 'movement';
+        return 'movement';
       }
 
       return null;

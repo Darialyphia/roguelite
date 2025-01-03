@@ -51,8 +51,8 @@ export const makeUnitViewModel = (game: Game, unit: Unit): UnitViewModel => {
         game.boardSystem.getCellAt(unit.position)!.hex.y -
         config.TILE_SIZE.z * unit.position.z
     },
-    canMoveTo: unit.canMoveTo,
-    canAttackAt: unit.canAttackAt,
+    canMoveTo: unit.canMoveTo.bind(unit),
+    canAttackAt: unit.canAttackAt.bind(unit),
     getUnit() {
       return unit;
     },

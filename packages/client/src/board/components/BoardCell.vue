@@ -107,7 +107,7 @@ const showCardTimeout = useTimeoutFn(
       }
     };
   },
-  500,
+  1000,
   {
     immediate: false
   }
@@ -155,6 +155,7 @@ watch(isHovered, hovered => {
               });
             }
 
+            console.log('can attack', ui.selectedUnit.canAttackAt(cell));
             if (ui.selectedUnit.canAttackAt(cell)) {
               return battle.dispatch({
                 type: 'attack',

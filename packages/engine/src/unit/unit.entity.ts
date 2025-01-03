@@ -72,7 +72,6 @@ export class Unit extends Entity {
     canBeCardTarget: new Interceptable<boolean>(),
     canSummonUnitsNearby: new Interceptable<boolean>(),
 
-    speed: new Interceptable<number>(),
     attack: new Interceptable<number>(),
     attackTargetingPattern: new Interceptable<TargetingStrategy>(),
     attackAOEShape: new Interceptable<AOEShape>(),
@@ -154,10 +153,6 @@ export class Unit extends Entity {
 
   get description() {
     return this.card.description;
-  }
-
-  get speed(): number {
-    return this.interceptors.speed.getValue(this.card.speed, {});
   }
 
   get canSummonUnitsNearby(): boolean {
@@ -393,11 +388,9 @@ export class Unit extends Entity {
   canAttackAt(point: Point3D) {
     console.log({ point, entity: this });
     if (!this.canAttack) {
-      console.log('cannot attack');
       return false;
     }
     if (this.position.equals(point)) {
-      console.log('cant attack itself');
       return false;
     }
 
@@ -409,7 +402,6 @@ export class Unit extends Entity {
 
     const target = cell.unit;
     if (target && !target.canBeAttacked) {
-      console.log('target cannot be attacked');
       return false;
     }
 
