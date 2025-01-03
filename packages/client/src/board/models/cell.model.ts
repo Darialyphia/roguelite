@@ -3,13 +3,13 @@ import {
   type PlayerViewModel
 } from '@/player/player.model';
 import { makeUnitViewModel, type UnitViewModel } from '@/unit/unit.model';
+import { config } from '@/utils/config';
 import type { Game } from '@game/engine';
-import type { BoardHex } from '@game/engine/src/board/board-system';
 import type { Terrain } from '@game/engine/src/board/board-utils';
 import type { Cell } from '@game/engine/src/board/cell';
 import type { CellLight } from '@game/engine/src/board/map';
 import type { EntityId } from '@game/engine/src/entity';
-import type { AnyObject, Nullable } from '@game/shared';
+import type { AnyObject, Nullable, Point } from '@game/shared';
 
 export type CellViewModel = {
   id: EntityId;
@@ -20,7 +20,7 @@ export type CellViewModel = {
   z: number;
   unit: Nullable<UnitViewModel>;
   light?: CellLight;
-  hex: InstanceType<typeof BoardHex>;
+  screenPosition: Point;
   obstacle: {
     name: string;
     description: string;
@@ -44,7 +44,10 @@ export const makeCellViewModel = (game: Game, cell: Cell): CellViewModel => {
     z: cell.z,
     light: cell.light,
     unit: cell.unit ? makeUnitViewModel(game, cell.unit) : null,
-    hex: cell.hex,
+    screenPosition: {
+      x: cell.hex.x,
+      y: cell.hex.y + config.TILE_SIZE.z * cell.z
+    },
     obstacle: cell.obstacle
       ? {
           id: cell.obstacle.id,

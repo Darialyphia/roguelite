@@ -3,6 +3,7 @@ import {
   makePlayerViewModel,
   type PlayerViewModel
 } from '@/player/player.model';
+import { config } from '@/utils/config';
 import type { Game } from '@game/engine';
 import type { EntityId } from '@game/engine/src/entity';
 import type { Unit } from '@game/engine/src/unit/unit.entity';
@@ -46,7 +47,9 @@ export const makeUnitViewModel = (game: Game, unit: Unit): UnitViewModel => {
     card: makeCardViewModel(game, unit.card),
     screenPosition: {
       x: game.boardSystem.getCellAt(unit.position)!.hex.x,
-      y: game.boardSystem.getCellAt(unit.position)!.hex.y
+      y:
+        game.boardSystem.getCellAt(unit.position)!.hex.y +
+        config.TILE_SIZE.z * unit.position.z
     },
     canMoveTo: unit.canMoveTo,
     canAttackAt: unit.canAttackAt,

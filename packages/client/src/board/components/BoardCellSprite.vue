@@ -11,31 +11,34 @@ const sheet = useSpritesheet<'', 'tile'>(() => cell.spriteId);
 
 const camera = useCamera();
 
-const { w, h } = { w: 96, h: 80 };
+const { w, h } = {
+  w: config.TILE_SIZE.x,
+  h: config.TILE_SIZE.y - config.TILE_SIZE.z
+};
 const { offsetW, offsetH } = {
   offsetW: -config.TILE_SIZE.x / 2,
-  offsetH: -config.TILE_SIZE.z * 3
+  offsetH: -config.TILE_SIZE.z * 3.5
 };
 const hitArea = Hitbox.from(
   [
     [
       offsetW + w * 0,
-      offsetH + h * 0.5,
+      offsetH + h * (1 / 3),
 
       offsetW + w * 0.5,
-      offsetH + h * 0.2,
+      offsetH + h * 0,
 
       offsetW + w,
-      offsetH + h * 0.5,
+      offsetH + h * (1 / 3),
 
       offsetW + w,
-      offsetH + h * 0.7,
+      offsetH + h * (2 / 3),
 
       offsetW + w * 0.5,
       offsetH + h,
 
       offsetW + w * 0,
-      offsetH + h * 0.7
+      offsetH + h * (2 / 3)
     ]
   ],
   { width: 96, height: 80 },
@@ -47,7 +50,7 @@ const hitArea = Hitbox.from(
 </script>
 
 <template>
-  <AnimatedSprite
+  <animated-sprite
     v-if="sheet"
     :anchor="0.5"
     :hitArea="hitArea"

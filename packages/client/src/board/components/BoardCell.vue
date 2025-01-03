@@ -86,8 +86,8 @@ const showCardTimeout = useTimeoutFn(
     if (!viewport) return;
 
     const position = viewport.toScreen({
-      x: cell.hex.x + camera.offset.value.x,
-      y: cell.hex.y + camera.offset.value.y
+      x: cell.screenPosition.x + camera.offset.value.x,
+      y: cell.screenPosition.y + camera.offset.value.y
     });
     const width = config.TILE_SIZE.x;
     const height = config.TILE_SIZE.y + config.TILE_SIZE.z;
@@ -124,8 +124,8 @@ watch(isHovered, hovered => {
 
 <template>
   <container
-    :x="cell.hex.x"
-    :y="cell.hex.y"
+    :x="cell.screenPosition.x"
+    :y="cell.screenPosition.y"
     @pointerenter="ui.hoverAt(cell)"
     @pointerleave="ui.unHover()"
     @pointerup="

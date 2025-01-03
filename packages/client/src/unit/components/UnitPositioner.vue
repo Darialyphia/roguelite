@@ -1,7 +1,10 @@
 <script setup lang="ts">
 import { config } from '@/utils/config';
 import type { UnitViewModel } from '../unit.model';
-import { useBattleEvent } from '@/pages/battle/battle.store';
+import {
+  useBattleEvent,
+  useGameClientState
+} from '@/pages/battle/battle.store';
 import { type Point3D } from '@game/shared';
 import { useBattleUiStore } from '@/pages/battle/battle-ui.store';
 import type { Unit } from '@game/engine/src/unit/unit.entity';
@@ -16,20 +19,24 @@ const offset = {
   x: 0,
   y: -24
 };
-
+const state = useGameClientState();
 useBattleEvent(GAME_EVENTS.UNIT_AFTER_MOVE, e => {
   return new Promise(resolve => {
     if (!e.unit.equals(unit.getUnit())) return resolve();
 
-    const start = e.previousPosition;
-    const end = e.position;
+    const start = state.value.cells.find(c =>
+      c.getCell().position.equals(e.previousPosition)
+    )!.screenPosition;
+    const end = state.value.cells.find(c =>
+      c.getCell().position.equals(e.position)
+    )!.screenPosition;
+
     const midPoint = {
       x: (start.x + end.x) / 2,
-      y: (start.y + end.y) / 2,
-      z: (start.z + end.z) / 2 + (bounce ? config.MOVEMENT_BOUNCE_HEIGHT : 0)
+      y: (start.y + end.y) / 2 - (bounce ? config.MOVEMENT_BOUNCE_HEIGHT : 0)
     };
 
-    gsap.to(unit.position, {
+    gsap.to(unit.screenPosition, {
       motionPath: [start, midPoint, end],
       duration: config.MOVEMENT_SPEED_PER_TILE,
       onComplete: resolve
