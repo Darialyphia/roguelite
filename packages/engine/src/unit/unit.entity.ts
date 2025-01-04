@@ -326,6 +326,10 @@ export class Unit extends Entity {
     );
   }
 
+  get remainingMovement() {
+    return Math.floor(this.ap.current / this.apCostPerMovement);
+  }
+
   addToBoard() {
     this.emitter.emit(UNIT_EVENTS.CREATED, { id: this.id });
   }
@@ -362,6 +366,11 @@ export class Unit extends Entity {
 
   getPathTo(to: Point3D) {
     return this.movement.getPathTo(to);
+  }
+
+  getPossibleMoves() {
+    if (!this.canMove) return [];
+    return this.movement.getAllPossibleMoves(this.ap.current / this.apCostPerMovement);
   }
 
   getDealtDamage(baseAmount: number, target?: Unit) {

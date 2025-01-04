@@ -17,6 +17,6 @@ export class DrawResourceActionInput extends Input<typeof schema> {
       'You are not the active player'
     );
 
-    this.player.performResourceAction({ type: 'draw', payload: {} });
+    this.player.performResourceAction(this.serialize() as any);
   }
 }

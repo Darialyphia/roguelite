@@ -1,3 +1,9 @@
+import {
+  mergeTraits,
+  attackIfAble,
+  walkTowardsEnemies,
+  meleeFighter
+} from '../../../ai/ai-traits';
 import { PointAOEShape } from '../../../targeting/aoe-shapes';
 import { MeleeTargetingStrategy } from '../../../targeting/melee-targeting.straegy';
 import { TARGETING_TYPE } from '../../../targeting/targeting-strategy';
@@ -18,7 +24,7 @@ export const redAvenger: UnitCardBlueprint = {
   description:
     '@Fearsome@.\nIf an ally unit died during your opponent last turn, this has @Rush@.',
   kind: CARD_KINDS.UNIT,
-  aiHints: {},
+  aiHints: meleeFighter,
   cost: {
     gold: 4,
     runes: [RUNES.RED, RUNES.RED]

@@ -24,7 +24,14 @@ const getNodeKey = <T>(node: T, adapter: GraphAdapter<T>): NodeKey => {
   throw new Error('Adapter must implement method getKey');
 };
 
-export const dijkstra = <T>(adapter: GraphAdapter<T>, startNode: T, finishNode?: T) => {
+export const dijkstra = <T>(
+  adapter: GraphAdapter<T>,
+  {
+    startNode,
+    finishNode,
+    maxWeight
+  }: { startNode: T; finishNode?: T; maxWeight?: number }
+) => {
   const getKey = (node: T) => getNodeKey(node, adapter);
   const parents: Record<NodeKey, T> = {};
   const costs: Record<NodeKey, number> = {};
@@ -50,7 +57,8 @@ export const dijkstra = <T>(adapter: GraphAdapter<T>, startNode: T, finishNode?:
       const newCost = cost + edge.weight;
 
       const isTooExpensive =
-        isDefined(costs[childNodeKey]) && newCost > costs[childNodeKey];
+        isDefined(costs[childNodeKey]) &&
+        newCost > Math.min(costs[childNodeKey], maxWeight ?? Infinity);
       if (isTooExpensive) return;
 
       costs[childNodeKey] = newCost;
@@ -74,7 +82,7 @@ export const findShortestPath = <T>(
   finishNode: T
 ) => {
   const getKey = (node: T) => getNodeKey(node, adapter);
-  const { costs, parents } = dijkstra(adapter, startNode, finishNode);
+  const { costs, parents } = dijkstra(adapter, { startNode, finishNode });
 
   const optimalPath = [finishNode];
   let parent = parents[getKey(finishNode)];

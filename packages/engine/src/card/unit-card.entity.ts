@@ -6,10 +6,6 @@ import type { UnitCardBlueprint } from './card-blueprint';
 export class UnitCard extends Card<UnitCardBlueprint> {
   unit!: Unit;
 
-  get cost() {
-    return this.blueprint.cost;
-  }
-
   get jobs() {
     return this.blueprint.jobs;
   }

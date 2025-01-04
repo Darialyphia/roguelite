@@ -23,6 +23,8 @@ import PlayerBattleInfos from '@/player/components/PlayerBattleInfos.vue';
 import { makePlayerViewModel } from '@/player/player.model';
 import OpponentHand from '@/card/components/OpponentHand.vue';
 import TurnIndicator from '@/player/components/TurnIndicator.vue';
+import AIWorker from '@/ai.worker?worker';
+
 definePage({
   name: 'Battle'
 });
@@ -94,10 +96,13 @@ const options: Pick<GameOptions, 'mapId' | 'teams'> = {
     ]
   ]
 };
-const serverSession = new ServerSession({
-  rngSeed: 'it is what it is',
+const SEED = 'Winners win';
+const serverOptions = {
+  rngSeed: SEED,
   ...options
-});
+};
+
+const serverSession = new ServerSession(serverOptions);
 const clientSession = new ClientSession(options);
 
 const battleStore = useBattleStore();
@@ -113,8 +118,14 @@ const start = () => {
   clientSession.initialize([...serverSession.game.rngSystem.values]);
   const ai = new AI(serverSession, AI_ID as EntityId);
 
-  const handleAi = async (input: SerializedInput) => {
-    const aiAction = await ai.onUpdate();
+  const aiWorker = new AIWorker();
+  aiWorker.postMessage({
+    type: 'init',
+    payload: { options: serverOptions, playerId: AI_ID }
+  });
+
+  aiWorker.addEventListener('message', async event => {
+    const aiAction = event.data as SerializedInput | undefined;
     if (!aiAction) return;
 
     await until(() => battleStore.isPlayingFx).not.toBeTruthy();
@@ -125,14 +136,17 @@ const start = () => {
       await waitFor(300);
     }
     serverSession.dispatch(aiAction);
-  };
+  });
 
   battleStore.init(clientSession, input => {
     serverSession.dispatch(input);
   });
   serverSession.subscribe((input, opts) => {
     clientSession.dispatch(input, opts);
-    handleAi(input);
+    aiWorker.postMessage({
+      type: 'compute',
+      payload: { action: JSON.parse(JSON.stringify(input)) }
+    });
   });
 };
 start();

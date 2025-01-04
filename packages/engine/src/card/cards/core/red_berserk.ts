@@ -1,3 +1,4 @@
+import { meleeFighter } from '../../../ai/ai-traits';
 import { PointAOEShape } from '../../../targeting/aoe-shapes';
 import { MeleeTargetingStrategy } from '../../../targeting/melee-targeting.straegy';
 import { TARGETING_TYPE } from '../../../targeting/targeting-strategy';
@@ -16,7 +17,7 @@ export const redBerserk: UnitCardBlueprint = {
   name: 'Berserk',
   description: '@Splash Attack@.',
   kind: CARD_KINDS.UNIT,
-  aiHints: {},
+  aiHints: meleeFighter,
   cost: {
     gold: 4,
     runes: [RUNES.RED, RUNES.COLORLESS, RUNES.COLORLESS]

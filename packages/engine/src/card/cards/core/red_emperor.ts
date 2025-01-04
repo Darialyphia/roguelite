@@ -1,3 +1,4 @@
+import { meleeFighter } from '../../../ai/ai-traits';
 import { PointAOEShape } from '../../../targeting/aoe-shapes';
 import { MeleeTargetingStrategy } from '../../../targeting/melee-targeting.straegy';
 import { TARGETING_TYPE } from '../../../targeting/targeting-strategy';
@@ -17,7 +18,7 @@ export const redEmperor: UnitCardBlueprint = {
   name: 'Emperor',
   description: '@Commander@.',
   kind: CARD_KINDS.UNIT,
-  aiHints: {},
+  aiHints: meleeFighter,
   cost: {
     gold: 5,
     runes: [RUNES.RED, RUNES.RED]

@@ -26,7 +26,9 @@ export class AI {
     return this.game.playerSystem.getPlayerById(this.playerId)!;
   }
 
-  onUpdate() {
+  onUpdate(input: SerializedInput) {
+    this.session.dispatch(input);
+
     const isActive = match(this.game.phase)
       .with(GAME_PHASES.MULLIGAN, () => true)
       .with(GAME_PHASES.BATTLE, () =>

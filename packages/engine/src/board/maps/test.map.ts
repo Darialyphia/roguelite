@@ -58,7 +58,7 @@ export const testMap1v1: GameMap = {
         plainTileset.GRASS,
         plainTileset.GRASS,
         plainTileset.GRASS,
-        plainTileset.GRASS,
+        { ...plainTileset.GRASS, obstacle: 'shrine' },
         plainTileset.GRASS,
         plainTileset.GRASS,
         plainTileset.GRASS,

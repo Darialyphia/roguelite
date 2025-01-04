@@ -6,6 +6,7 @@ import {
 import { config } from '@/utils/config';
 import type { Game } from '@game/engine';
 import type { EntityId } from '@game/engine/src/entity';
+import type { Keyword } from '@game/engine/src/unit/keywords';
 import type { Unit } from '@game/engine/src/unit/unit.entity';
 import { Vec3, type Point } from '@game/shared';
 
@@ -24,6 +25,7 @@ export type UnitViewModel = {
   player: PlayerViewModel;
   card: CardViewModel;
   screenPosition: Point;
+  keywords: Keyword[];
   getUnit(): Unit;
   equals(unit: UnitViewModel): boolean;
   canMoveTo: Unit['canMoveTo'];
@@ -51,6 +53,7 @@ export const makeUnitViewModel = (game: Game, unit: Unit): UnitViewModel => {
         game.boardSystem.getCellAt(unit.position)!.hex.y -
         config.TILE_SIZE.z * unit.position.z
     },
+    keywords: unit.keywords,
     canMoveTo: unit.canMoveTo.bind(unit),
     canAttackAt: unit.canAttackAt.bind(unit),
     getUnit() {

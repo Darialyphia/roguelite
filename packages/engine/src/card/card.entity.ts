@@ -74,6 +74,10 @@ export abstract class Card<
     return this.blueprint.description;
   }
 
+  get cost() {
+    return this.blueprint.cost;
+  }
+
   get minTargets() {
     return this.blueprint.minTargets;
   }

@@ -1,4 +1,4 @@
-import type { Defined } from '@game/shared';
+import { isDefined, type Defined, type Point3D } from '@game/shared';
 import type { CardAiHints } from '../card/card-blueprint';
 
 export const mergeTraits = (...traits: CardAiHints[]): CardAiHints => {
@@ -24,6 +24,19 @@ export const mergeTraits = (...traits: CardAiHints[]): CardAiHints => {
 
         return isRelevant && current;
       }, true) as any;
+    }
+
+    if (key === 'relevantMoves') {
+      const moves: Point3D[] = [];
+      traits.forEach(trait => {
+        moves.push(
+          // @ts-expect-error
+          ...(trait.relevantMoves?.(...args) as Point3D[]).filter(move => {
+            return !moves.some(m => m.x === move.x && m.y === move.y && m.z === move.z);
+          })
+        );
+      });
+      return moves as any;
     }
 
     return traits.reduce((totalScore, trait) => {
@@ -71,3 +84,54 @@ export const avoidEnemiesInMelee = (weight = 5): CardAiHints => {
     }
   };
 };
+
+/**
+ * Indicates that the point where the card is targeted doesnt mapGetters
+ * this forces it to be cast on its owner's altar, to eliminate a lot of unnecessary moves when creating the decision tree
+ */
+export const irrelevantTarget = (): CardAiHints => {
+  return {
+    isRelevantTarget(point, game, card) {
+      const forcedTarget = card.player.altarPosition;
+      return (
+        point.x === forcedTarget.x &&
+        point.y === forcedTarget.y &&
+        point.z === forcedTarget.z
+      );
+    }
+  };
+};
+
+export const walkTowardsEnemies = (): CardAiHints => {
+  return {
+    relevantMoves(game, unit) {
+      const allMoves = unit.getPossibleMoves();
+
+      const enemiesNeighbors = [
+        ...new Set(
+          unit.player.enemiesPositions
+            .map(pos =>
+              game.boardSystem
+                .getNeighbors3D(pos)
+                .filter(cell => cell.isWalkable && !cell.unit)
+            )
+            .flat()
+        )
+      ];
+
+      const paths = enemiesNeighbors.map(cell => unit.getPathTo(cell)).filter(isDefined);
+      const moves = paths
+        .map(path => {
+          if (path.distance <= unit.remainingMovement) return path.path.at(-1)!;
+          return path.path[unit.remainingMovement - 1];
+        })
+        .filter(point => {
+          allMoves.some(p => p.x === point.x && p.y === point.y && p.z === point.z);
+        });
+
+      return moves;
+    }
+  };
+};
+
+export const meleeFighter = mergeTraits(attackIfAble(), walkTowardsEnemies());

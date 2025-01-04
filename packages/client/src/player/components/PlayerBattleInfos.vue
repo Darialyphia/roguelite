@@ -352,6 +352,7 @@ useBattleEvent(GAME_EVENTS.PLAYER_AFTER_GAIN_RUNE, async e => {
     }
     &.quests {
       --size: 0px;
+      pointer-events: auto;
       display: flex;
       gap: var(--size-3);
       height: 102px;

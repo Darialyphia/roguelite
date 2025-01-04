@@ -14,6 +14,7 @@ import { Rune, RUNES } from '../utils/rune';
 import { Obstacle } from '../obstacle/obstacle.entity';
 import type { QuestCard } from '../card/quest-card.entity';
 import { EventTrackerComponent } from './components/event-tracker.component';
+import type { SerializedInput } from '../input/input-system';
 
 export type PlayerOptions = {
   id: string;
@@ -49,10 +50,9 @@ export type PlayerEventMap = {
   [PLAYER_EVENTS.AFTER_PLAY_CARD]: [{ card: Card; targets: Point3D[] }];
 };
 
-type ResourceAction =
-  | { type: 'draw'; payload: Record<string, never> }
-  | { type: 'gold'; payload: Record<string, never> }
-  | { type: 'rune'; payload: { rune: string } };
+type ResourceAction = SerializedInput & {
+  type: 'drawResourceAction' | 'goldResourceAction' | 'runeResourceAction';
+};
 
 export class Player extends Entity {
   private game: Game;
@@ -78,6 +78,8 @@ export class Player extends Entity {
   public hasMulliganed = false;
 
   private resourceActionsTaken = 0;
+
+  lastResourceActionTaken: ResourceAction | null = null;
 
   readonly altar: Obstacle;
 
@@ -132,6 +134,7 @@ export class Player extends Entity {
   get enemyDiedLastTurn() {
     return this.eventTracker.enemyDiedLastTurn;
   }
+
   get gold() {
     return this.goldManager.amount;
   }
@@ -180,6 +183,10 @@ export class Player extends Entity {
     return [...this.cardManager.hand];
   }
 
+  get deck() {
+    return this.cardManager.deck;
+  }
+
   get deckSize() {
     return this.cardManager.deckSize;
   }
@@ -212,6 +219,17 @@ export class Player extends Entity {
     return this.game.unitSystem.units.filter(u => u.player.equals(this));
   }
 
+  get enemyUnits() {
+    return this.game.unitSystem.units.filter(u => !u.player.equals(this));
+  }
+
+  get enemiesPositions(): Point3D[] {
+    return [
+      ...this.enemyUnits.map(e => e.position),
+      ...this.opponents.map(o => o.altarPosition)
+    ];
+  }
+
   private forwardEvents() {
     this.cardManager.deck.on(DECK_EVENTS.BEFORE_DRAW, e => {
       this.emitter.emit(DECK_EVENTS.BEFORE_DRAW, e);
@@ -223,14 +241,15 @@ export class Player extends Entity {
 
   performResourceAction(action: ResourceAction) {
     this.resourceActionsTaken++;
+    this.lastResourceActionTaken = action;
     match(action)
-      .with({ type: 'draw' }, () => {
+      .with({ type: 'drawResourceAction' }, () => {
         this.draw(1);
       })
-      .with({ type: 'gold' }, () => {
+      .with({ type: 'goldResourceAction' }, () => {
         this.goldManager.deposit(1);
       })
-      .with({ type: 'rune' }, action => {
+      .with({ type: 'runeResourceAction' }, action => {
         this.addRune(RUNES[action.payload.rune as keyof typeof RUNES]);
       })
       .exhaustive();

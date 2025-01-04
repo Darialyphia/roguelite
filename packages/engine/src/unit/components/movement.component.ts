@@ -4,6 +4,8 @@ import { PathfinderComponent } from '../../pathfinding/pathfinder.component';
 import type { PathfindingStrategy } from '../../pathfinding/strategies/pathinding-strategy';
 import { Position } from '../../utils/position';
 import { TypedEventEmitter } from '../../utils/typed-emitter';
+import { cellIdToPoint } from '../../board/board-utils';
+import type { SerializedCoords } from '../../board/cell';
 
 export type MovementComponentOptions = {
   position: Point3D;
@@ -60,6 +62,14 @@ export class MovementComponent {
 
   isAt(point: Point3D) {
     return this.position.equals(point);
+  }
+
+  getAllPossibleMoves(maxDistance: number) {
+    const distanceMap = this.pathfinding.getDistanceMap(this.position, maxDistance);
+
+    return Object.entries(distanceMap.costs)
+      .filter(([, cost]) => cost <= maxDistance)
+      .map(([cellId]) => cellIdToPoint(cellId as SerializedCoords));
   }
 
   canMoveTo(point: Point3D, maxDistance: number) {

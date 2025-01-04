@@ -11,7 +11,6 @@ import type { SpellCard } from './spell-card.entity';
 import type { VFXSequence } from '../vfx/vfx-sequencer';
 import { CARD_KINDS, type CardKind } from './card-enums';
 import type { QuestCard } from './quest-card.entity';
-import type { SerializedInput } from '../input/input-system';
 
 type CardBlueprintTarget = {
   getTargeting(game: Game, card: Card): TargetingStrategy;
@@ -19,6 +18,7 @@ type CardBlueprintTarget = {
 
 export type CardAiHints = {
   isRelevantTarget?: (point: Point3D, game: Game, card: Card, index: number) => boolean;
+  relevantMoves?: (game: Game, unit: Unit) => Point3D[];
   maxUsesPerTurn?: (game: Game, card: Card) => number;
   prePlayScoreModifier?: (game: Game, card: Card, targets: Point3D[]) => number;
   postPlayScoreModifier?: (game: Game, card: Card, targets: Point3D[]) => number;
@@ -37,6 +37,10 @@ export type CardBlueprintBase = {
   description: string;
   shouldHighlightInHand?: (game: Game, card: Card) => boolean;
   aiHints: CardAiHints;
+  cost: {
+    gold: number;
+    runes: Rune[];
+  };
 };
 
 export type UnitCardBlueprint = CardBlueprintBase & {
@@ -46,10 +50,6 @@ export type UnitCardBlueprint = CardBlueprintBase & {
   atk: number;
   reward: number;
   jobs: Job[];
-  cost: {
-    gold: number;
-    runes: Rune[];
-  };
   vfx: {
     play(game: Game, card: UnitCard): VFXSequence;
     destroy(game: Game, card: UnitCard): VFXSequence;
@@ -63,10 +63,6 @@ export type UnitCardBlueprint = CardBlueprintBase & {
 
 export type SpellCardBlueprint = CardBlueprintBase & {
   kind: Extract<CardKind, typeof CARD_KINDS.SPELL>;
-  cost: {
-    gold: number;
-    runes: Rune[];
-  };
   vfx: {
     play(game: Game, card: SpellCard): VFXSequence;
   };
@@ -78,10 +74,6 @@ export type SpellCardBlueprint = CardBlueprintBase & {
 
 export type QuestCardBlueprint = CardBlueprintBase & {
   kind: Extract<CardKind, typeof CARD_KINDS.QUEST>;
-  cost: {
-    gold: number;
-    runes: Rune[];
-  };
   vfx: {
     play(game: Game, card: QuestCard): VFXSequence;
   };

@@ -5,7 +5,7 @@ export const shrine: ObstacleBlueprint = {
   id: 'shrine',
   name: 'Victory Shrine',
   description:
-    'Grant 1 Victory point to the owner of the unit standing on it at the end of the turn.',
+    'Grant 1 Victory point to the owner of the unit standing on it at start of their turn.',
   spriteId: 'shrine',
   iconId: 'obstacle_shrine',
   walkable: true,

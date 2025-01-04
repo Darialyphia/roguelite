@@ -3,10 +3,6 @@ import { Card, CARD_EVENTS } from './card.entity';
 import type { SpellCardBlueprint } from './card-blueprint';
 
 export class SpellCard extends Card<SpellCardBlueprint> {
-  get cost() {
-    return this.blueprint.cost;
-  }
-
   get isGoldValid() {
     return this.player.canSpendGold(this.cost.gold);
   }
