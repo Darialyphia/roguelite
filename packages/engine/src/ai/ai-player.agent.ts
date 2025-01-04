@@ -32,8 +32,8 @@ export class AIPlayerAgent implements AIAgent {
 
     const tree = new Minimax(root);
     tree.opts.method = SEARCH_METHODS.TIME;
-    tree.opts.pruning = PRUNING_TYPES.NONE;
-    tree.opts.timeout = 500;
+    tree.opts.pruning = PRUNING_TYPES.ALPHA_BETA;
+    tree.opts.timeout = 3000;
     tree.GetMoves = parent => {
       return this.getValidMoves(parent.gamestate);
     };
@@ -53,7 +53,7 @@ export class AIPlayerAgent implements AIAgent {
         move,
         0,
         NODE_AIM.MAX,
-        this.getValidMoves(simulator.game)
+        isLeafNode ? [] : this.getValidMoves(simulator.game)
       );
       node.value = score;
 
@@ -68,7 +68,10 @@ export class AIPlayerAgent implements AIAgent {
     tree.evaluate();
 
     const path = tree.getOptimalMoves().slice(1);
-    if (game.gamePhaseSystem.phase === GAME_PHASES.BATTLE) {
+    if (
+      game.gamePhaseSystem.phase === GAME_PHASES.BATTLE &&
+      path.at(-1)!.type !== 'endTurn'
+    ) {
       path.push({ type: 'endTurn', payload: { playerId: this.player.id } });
     }
     return path;
@@ -88,7 +91,7 @@ export class AIPlayerAgent implements AIAgent {
     const moveScores = this.computeMoveScores(game);
     const combatScores = this.computeCombatScores(game);
     const cardScores = this.computeCardScores(game);
-    const resourceScores = this.computeResourceActionScores();
+    const resourceScores = this.computeResourceActionScores(game);
 
     const moves = [...moveScores, ...combatScores, ...cardScores, ...resourceScores];
     moves.push({ type: 'endTurn', payload: { playerId: this.player.id } });
@@ -100,8 +103,8 @@ export class AIPlayerAgent implements AIAgent {
     return { type: 'mulligan', payload: { playerId: this.player.id, indices: [] } };
   }
 
-  private computeResourceActionScores(): SerializedInput[] {
-    if (!this.player.canPerformResourceAction) {
+  private computeResourceActionScores(game: Game): SerializedInput[] {
+    if (!game.turnSystem.activePlayer.canPerformResourceAction) {
       return [];
     }
 
