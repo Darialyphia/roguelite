@@ -116,7 +116,7 @@ export class CombatComponent {
     });
 
     const unit = this.game.unitSystem.getUnitAt(target)!;
-    if (!unit) return; // means unit dies from attack
+    if (!unit) return; // means unit died from attack
     if (unit.canCounterAttackAt(this.unit.position)) {
       unit.counterAttack(this.unit);
     }

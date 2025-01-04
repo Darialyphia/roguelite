@@ -237,7 +237,7 @@ export class Unit extends Entity {
 
   get canCounterAttack(): boolean {
     return this.interceptors.canCounterAttack.getValue(
-      this.combat.counterAttacksCount >= this.maxCounterattacksPerTurn,
+      this.combat.counterAttacksCount < this.maxCounterattacksPerTurn,
       {}
     );
   }
