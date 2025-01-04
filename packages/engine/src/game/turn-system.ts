@@ -67,6 +67,7 @@ export class TurnSystem extends System<never> {
   startGameTurn() {
     this._turnCount++;
     this.emitter.emit(TURN_EVENTS.TURN_START, { turnCount: this.turnCount });
+    this._activePlayer.startTurn();
   }
 
   endGameTurn() {
@@ -81,6 +82,7 @@ export class TurnSystem extends System<never> {
       this.startGameTurn();
     } else {
       this._activePlayer = nextPlayer;
+      this._activePlayer.startTurn();
     }
   }
 }

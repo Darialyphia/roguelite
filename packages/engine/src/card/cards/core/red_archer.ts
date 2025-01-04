@@ -14,7 +14,7 @@ export const redArcher: UnitCardBlueprint = {
   spriteId: 'archer',
   iconId: 'unit_archer',
   name: 'Archer',
-  description: 'Ranged(2).',
+  description: '@Ranged(2)@.',
   kind: CARD_KINDS.UNIT,
   aiHints: {},
   cost: {

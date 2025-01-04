@@ -86,6 +86,10 @@ export abstract class Card<
     return this.blueprint.targets;
   }
 
+  get shouldHighlightInHand() {
+    return this.blueprint.shouldHighlightInHand?.(this.game, this) ?? false;
+  }
+
   get aiHints() {
     return this.blueprint.aiHints;
   }

@@ -21,6 +21,7 @@ export type CardBlueprintBase = {
   name: string;
   iconId: string;
   description: string;
+  shouldHighlightInHand?: (game: Game, card: Card) => boolean;
   aiHints: {
     isRelevantTarget?: (point: Point3D, game: Game, card: Card, index: number) => boolean;
     maxUsesPerTurn?: number;

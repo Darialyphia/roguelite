@@ -66,9 +66,9 @@ const filters = computed(() => {
   return result;
 });
 
-const modifierSpriteIds = computed(() => {
-  return unit.modifierInfos.map(infos => infos?.spriteId).filter(isDefined);
-});
+// const modifierSpriteIds = computed(() => {
+//   return unit.modifierInfos.map(infos => infos?.spriteId).filter(isDefined);
+// });
 </script>
 
 <template>
@@ -79,10 +79,10 @@ const modifierSpriteIds = computed(() => {
     event-mode="none"
     :filters="filters"
   >
-    <UnitModifierSprite
+    <!-- <UnitModifierSprite
       v-for="modifier in modifierSpriteIds"
       :key="modifier"
       :sprite-id="modifier"
-    />
+    /> -->
   </animated-sprite>
 </template>

@@ -23,7 +23,6 @@ const computeMargin = () => {
   const totalWidth = player.value.hand.length * config.CARD_WIDTH;
 
   const excess = totalWidth - allowedWidth;
-  console.log(allowedWidth, totalWidth, excess);
   return Math.min(-excess / (player.value.hand.length - 1), 0);
 };
 

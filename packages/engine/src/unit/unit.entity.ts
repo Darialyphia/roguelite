@@ -21,6 +21,7 @@ import { UNIT_EVENTS } from './unit-enums';
 import { COMBAT_EVENTS, CombatComponent } from '../combat/combat.component';
 import { PathfinderComponent } from '../pathfinding/pathfinder.component';
 import type { Obstacle } from '../obstacle/obstacle.entity';
+import { KeywordManagerComponent } from './components/keyword-manager.component';
 
 export type UnitOptions = {
   id: string;
@@ -63,11 +64,14 @@ export class Unit extends Entity {
 
   readonly movement: MovementComponent;
 
+  readonly keywordManager: KeywordManagerComponent;
+
   private readonly combat: CombatComponent;
 
   private interceptors = {
     canMove: new Interceptable<boolean>(),
     canAttack: new Interceptable<boolean>(),
+    canCounterAttack: new Interceptable<boolean>(),
     canBeAttackTarget: new Interceptable<boolean>(),
     canBeCardTarget: new Interceptable<boolean>(),
     canSummonUnitsNearby: new Interceptable<boolean>(),
@@ -95,6 +99,7 @@ export class Unit extends Entity {
     this.ap = new ActionPointComponent({ maxAp: config.UNIT_BASE_AP, initialValue: 0 });
     this.hp = new HealthComponent({ maxHp: this.card.maxHp });
     this.hp.on(HEALTH_EVENTS.CHANGE, this.checkHp.bind(this));
+    this.keywordManager = new KeywordManagerComponent();
     this.movement = new MovementComponent({
       position: options.position,
       pathfinding: new PathfinderComponent(
@@ -117,6 +122,18 @@ export class Unit extends Entity {
 
   get position() {
     return this.movement.position;
+  }
+
+  get keywords() {
+    return this.keywordManager.keywords;
+  }
+
+  get addKeyword() {
+    return this.keywordManager.add.bind(this.keywordManager);
+  }
+
+  get removeKeyword() {
+    return this.keywordManager.remove.bind(this.keywordManager);
   }
 
   get x() {
@@ -218,6 +235,13 @@ export class Unit extends Entity {
     );
   }
 
+  get canCounterAttack(): boolean {
+    return this.interceptors.canCounterAttack.getValue(
+      this.combat.counterAttacksCount >= this.maxCounterattacksPerTurn,
+      {}
+    );
+  }
+
   get isAt() {
     return this.movement.isAt.bind(this.movement);
   }
@@ -294,7 +318,7 @@ export class Unit extends Entity {
     );
   }
 
-  onAddedToBoard() {
+  addToBoard() {
     this.emitter.emit(UNIT_EVENTS.CREATED, { id: this.id });
   }
 
@@ -386,7 +410,6 @@ export class Unit extends Entity {
   }
 
   canAttackAt(point: Point3D) {
-    console.log({ point, entity: this });
     if (!this.canAttack) {
       return false;
     }

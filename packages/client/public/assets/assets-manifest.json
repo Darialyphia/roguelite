@@ -507,6 +507,19 @@
         },
         {
           "alias": [
+            "icon-unit_avenger"
+          ],
+          "src": [
+            "/assets/icons/unit_avenger.png"
+          ],
+          "data": {
+            "tags": {
+              "m": true
+            }
+          }
+        },
+        {
+          "alias": [
             "icon-unit_berserk"
           ],
           "src": [
@@ -1683,6 +1696,33 @@
           ],
           "src": [
             "/assets/units/archer.png"
+          ],
+          "data": {
+            "tags": {
+              "m": true
+            }
+          }
+        },
+        {
+          "alias": [
+            "avenger"
+          ],
+          "src": [
+            "/assets/units/avenger.json"
+          ],
+          "loadParser": "aseprite_loader",
+          "data": {
+            "tags": {
+              "m": true
+            }
+          }
+        },
+        {
+          "alias": [
+            "avenger.png"
+          ],
+          "src": [
+            "/assets/units/avenger.png"
           ],
           "data": {
             "tags": {

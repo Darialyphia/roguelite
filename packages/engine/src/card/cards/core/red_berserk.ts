@@ -2,7 +2,6 @@ import { PointAOEShape } from '../../../targeting/aoe-shapes';
 import { MeleeTargetingStrategy } from '../../../targeting/melee-targeting.straegy';
 import { TARGETING_TYPE } from '../../../targeting/targeting-strategy';
 import { UnitSummonTargetingtrategy } from '../../../targeting/unit-summon-targeting.strategy';
-import { RangedModifierMixin } from '../../../unit/modifier-mixins/ranged.mixin';
 import { SplashAttackdModifierMixin } from '../../../unit/modifier-mixins/splash-attack.mixin';
 import { UnitModifier } from '../../../unit/unit-modifier.entity';
 import { JOBS } from '../../../utils/job';
@@ -15,7 +14,7 @@ export const redBerserk: UnitCardBlueprint = {
   spriteId: 'berserk',
   iconId: 'unit_berserk',
   name: 'Berserk',
-  description: 'Splash Attack.',
+  description: '@Splash Attack@.',
   kind: CARD_KINDS.UNIT,
   aiHints: {},
   cost: {

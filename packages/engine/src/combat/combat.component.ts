@@ -35,13 +35,17 @@ export type CombatEventMap = {
 
 export class CombatComponent {
   private attacksCount = 0;
-  private counterAttacksCount = 0;
+  private _counterAttacksCount = 0;
   private emitter = new TypedEventEmitter<CombatEventMap>();
 
   constructor(
     private game: Game,
     private unit: Unit
   ) {}
+
+  get counterAttacksCount() {
+    return this._counterAttacksCount;
+  }
 
   get nextAttackApCost() {
     return this.unit.apCostPerAttack + config.AP_INCREASE_PER_ATTACK * this.attacksCount;
@@ -60,7 +64,7 @@ export class CombatComponent {
   }
 
   canCounterAttackAt(position: Point3D) {
-    if (this.counterAttacksCount >= this.unit.maxCounterattacksPerTurn) return false;
+    if (!this.unit.canCounterAttack) return false;
     return this.unit.attackTargettingPattern.canTargetAt(position);
   }
 
@@ -69,7 +73,7 @@ export class CombatComponent {
   }
 
   resetCounterAttackCount() {
-    this.counterAttacksCount = 0;
+    this._counterAttacksCount = 0;
   }
 
   counterAttack(attacker: Unit) {
@@ -86,7 +90,7 @@ export class CombatComponent {
     });
 
     this.dealDamage(targets, damage);
-    this.counterAttacksCount++;
+    this._counterAttacksCount++;
 
     this.emitter.emit(COMBAT_EVENTS.AFTER_COUNTERATTACK, {
       target: attacker

@@ -2,30 +2,31 @@ import { PointAOEShape } from '../../../targeting/aoe-shapes';
 import { MeleeTargetingStrategy } from '../../../targeting/melee-targeting.straegy';
 import { TARGETING_TYPE } from '../../../targeting/targeting-strategy';
 import { UnitSummonTargetingtrategy } from '../../../targeting/unit-summon-targeting.strategy';
-import { CommanderModifierMixin } from '../../../unit/modifier-mixins/commander.mixin';
-import { RangedModifierMixin } from '../../../unit/modifier-mixins/ranged.mixin';
+import { FearsomeModifierMixin } from '../../../unit/modifier-mixins/fearsome.mixin';
+import { RushModifierMixin } from '../../../unit/modifier-mixins/rush.mixin';
 import { UnitModifier } from '../../../unit/unit-modifier.entity';
 import { JOBS } from '../../../utils/job';
 import { RUNES } from '../../../utils/rune';
 import { type UnitCardBlueprint } from '../../card-blueprint';
 import { CARD_KINDS } from '../../card-enums';
 
-export const redEmperor: UnitCardBlueprint = {
-  id: 'red-emperor',
-  spriteId: 'emperor',
-  iconId: 'unit_emperor',
-  name: 'Emperor',
-  description: '@Commander@.',
+export const redAvenger: UnitCardBlueprint = {
+  id: 'red-avenger',
+  spriteId: 'avenger',
+  iconId: 'unit_avenger',
+  name: 'Avenger',
+  description:
+    '@Fearsome@.\nIf an ally unit died during your opponent last turn, this has @Rush@.',
   kind: CARD_KINDS.UNIT,
   aiHints: {},
   cost: {
-    gold: 5,
+    gold: 4,
     runes: [RUNES.RED, RUNES.RED]
   },
-  jobs: [JOBS.SHOOTER],
-  atk: 4,
-  maxHp: 6,
-  reward: 2,
+  jobs: [JOBS.FIGHTER],
+  atk: 3,
+  maxHp: 3,
+  reward: 1,
   minTargets: 1,
   targets: [
     {
@@ -48,12 +49,24 @@ export const redEmperor: UnitCardBlueprint = {
       return { tracks: [] };
     }
   },
+  shouldHighlightInHand(game, card) {
+    return card.player.allyDiedLastTurn;
+  },
   onPlay(game, card) {
     card.unit.addModifier(
-      new UnitModifier(RangedModifierMixin.modifierName, game, {
+      new UnitModifier(FearsomeModifierMixin.modifierName, game, {
         stackable: false,
-        mixins: [new CommanderModifierMixin(game, 2)]
+        mixins: [new FearsomeModifierMixin(game)]
       })
     );
+
+    if (card.player.allyDiedLastTurn) {
+      card.unit.addModifier(
+        new UnitModifier(RushModifierMixin.modifierName, game, {
+          stackable: false,
+          mixins: [new RushModifierMixin(game)]
+        })
+      );
+    }
   }
 };

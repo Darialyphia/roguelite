@@ -87,7 +87,7 @@ export class UnitSystem extends System<UnitSystemOptions> {
     const unit = new Unit(this.game, card, { id, player: card.player, position });
     this.unitMap.set(unit.id, unit);
     this.forwardListeners(unit);
-    unit.onAddedToBoard();
+    unit.addToBoard();
 
     if (this.game.phase === GAME_PHASES.BATTLE) {
       // this.game.turnSystem.insertInCurrentQueue(unit);
