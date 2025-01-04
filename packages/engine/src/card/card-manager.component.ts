@@ -56,7 +56,8 @@ export class CardManagerComponent {
   }
 
   discard(card: Card) {
-    this.hand.splice(this.hand.indexOf(card, 1), 1);
+    const index = this.hand.findIndex(handCard => handCard.equals(card));
+    this.hand.splice(index, 1);
     this.discardPile.add(card);
   }
 

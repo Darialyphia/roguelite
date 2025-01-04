@@ -251,6 +251,7 @@ export class Player extends Entity {
 
   playCard(index: number, targets: Point3D[]) {
     const card = this.cardManager.getCardAt(index);
+    console.log('play card', card?.id);
     if (!card) return;
     this.emitter.emit(PLAYER_EVENTS.BEFORE_PLAY_CARD, { card, targets });
     this.cardManager.play(card, targets);
