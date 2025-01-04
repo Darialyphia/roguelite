@@ -63,11 +63,6 @@ export class CombatComponent {
     return this.emitter.off.bind(this.emitter);
   }
 
-  canCounterAttackAt(position: Point3D) {
-    if (!this.unit.canCounterAttack) return false;
-    return this.unit.attackTargettingPattern.canTargetAt(position);
-  }
-
   resetAttackCount() {
     this.attacksCount = 0;
   }

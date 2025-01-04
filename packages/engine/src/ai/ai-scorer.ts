@@ -10,7 +10,7 @@ const sum = (arr: number[]) => arr.reduce((total, curr) => total + curr, 0);
 const WEIGHTS = {
   HP: 1,
   CARD_IN_HAND: 2,
-  VICTORY_POINT: 10
+  VICTORY_POINT: 15
 } as const;
 
 const BASE_SCORES = {

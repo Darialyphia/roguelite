@@ -5,7 +5,7 @@ import {
   useBattleEvent,
   useGameClientState
 } from '@/pages/battle/battle.store';
-import { type Point3D } from '@game/shared';
+import { clamp, type Point3D } from '@game/shared';
 import { useBattleUiStore } from '@/pages/battle/battle-ui.store';
 import type { Unit } from '@game/engine/src/unit/unit.entity';
 import { GAME_EVENTS } from '@game/engine/src/game/game';
@@ -47,31 +47,38 @@ useBattleEvent(GAME_EVENTS.UNIT_AFTER_MOVE, e => {
 const attackAnimation = async (e: { unit: Unit; target: Point3D }) => {
   if (!e.unit.equals(unit.getUnit())) return;
 
-  const start = e.unit.position;
-  const end = e.target;
+  const start = state.value.cells.find(c =>
+    c.getCell().position.equals(e.unit.position)
+  )!.screenPosition;
+  const end = state.value.cells.find(c =>
+    c.getCell().position.equals(e.target)
+  )!.screenPosition;
+
   const impactPoint = {
-    x: start.x + (end.x - start.x) * 0.55,
-    y: start.y + (end.y - start.y) * 0.55,
-    z: start.z + (end.z - start.z) * 0.55
+    x:
+      start.x +
+      clamp((end.x - start.x) * 0.55, -config.TILE_SIZE.x, config.TILE_SIZE.x),
+    y:
+      start.y +
+      clamp((end.y - start.y) * 0.55, -config.TILE_SIZE.y, config.TILE_SIZE.y)
   };
   const anticipation = {
     x: start.x - (end.x - start.x) * 0.2,
-    y: start.y - (end.y - start.y) * 0.2,
-    z: start.z - (end.z - start.z) * 0.2
+    y: start.y - (end.y - start.y) * 0.2
   };
   const tl = gsap.timeline();
 
-  tl.to(unit.position, {
+  tl.to(unit.screenPosition, {
     ...anticipation,
     duration: 0.15
   })
-    .to(unit.position, {
+    .to(unit.screenPosition, {
       ...impactPoint,
       duration: 0.05,
       ease: Power1.easeIn
     })
 
-    .to(unit.position, {
+    .to(unit.screenPosition, {
       ...start,
       duration: 0.1
     });

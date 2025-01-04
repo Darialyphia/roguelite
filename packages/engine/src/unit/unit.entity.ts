@@ -442,7 +442,7 @@ export class Unit extends Entity {
   }
 
   canCounterAttackAt(point: Point3D) {
-    return this.combat.canCounterAttackAt(point);
+    return this.canCounterAttack && this.attackTargettingPattern.canTargetAt(point);
   }
 
   destroy(source: Card) {

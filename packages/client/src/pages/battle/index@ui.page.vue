@@ -22,6 +22,7 @@ import MulliganOverlay from '@/card/components/MulliganOverlay.vue';
 import PlayerBattleInfos from '@/player/components/PlayerBattleInfos.vue';
 import { makePlayerViewModel } from '@/player/player.model';
 import OpponentHand from '@/card/components/OpponentHand.vue';
+import TurnIndicator from '@/player/components/TurnIndicator.vue';
 definePage({
   name: 'Battle'
 });
@@ -142,7 +143,7 @@ start();
   <div class="layout">
     <MulliganOverlay />
     <PlayedCard />
-
+    <TurnIndicator />
     <ul class="fixed pointer-events-auto top-8 left-2">
       <li>
         <button @click="() => console.log(serverSession)">

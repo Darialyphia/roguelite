@@ -1383,6 +1383,19 @@
         },
         {
           "alias": [
+            "rune-empty.png"
+          ],
+          "src": [
+            "/assets/ui/rune-empty.png"
+          ],
+          "data": {
+            "tags": {
+              "m": true
+            }
+          }
+        },
+        {
+          "alias": [
             "rune-green-small.png"
           ],
           "src": [

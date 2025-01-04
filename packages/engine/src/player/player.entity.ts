@@ -251,7 +251,6 @@ export class Player extends Entity {
 
   playCard(index: number, targets: Point3D[]) {
     const card = this.cardManager.getCardAt(index);
-    console.log('play card', card?.id);
     if (!card) return;
     this.emitter.emit(PLAYER_EVENTS.BEFORE_PLAY_CARD, { card, targets });
     this.cardManager.play(card, targets);
@@ -262,6 +261,7 @@ export class Player extends Entity {
     this.resourceActionsTaken = 0;
     this.draw(config.CARDS_DRAWN_PER_TURN);
     this.addGold(config.GOLD_PER_TURN);
+    this.emitter.emit(PLAYER_EVENTS.START_TURN, { id: this.id });
   }
 
   // eslint-disable-next-line @typescript-eslint/no-empty-function
