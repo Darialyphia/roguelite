@@ -1,3 +1,4 @@
+import { attackIfAble, mergeTraits } from '../../../ai/ai-traits';
 import { PointAOEShape } from '../../../targeting/aoe-shapes';
 import { MeleeTargetingStrategy } from '../../../targeting/melee-targeting.straegy';
 import { TARGETING_TYPE } from '../../../targeting/targeting-strategy';
@@ -14,7 +15,7 @@ export const redFootman: UnitCardBlueprint = {
   name: 'Footman',
   description: '',
   kind: CARD_KINDS.UNIT,
-  aiHints: {},
+  aiHints: mergeTraits(attackIfAble()),
   cost: {
     gold: 3,
     runes: [RUNES.RED]

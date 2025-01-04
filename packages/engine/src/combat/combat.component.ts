@@ -34,7 +34,7 @@ export type CombatEventMap = {
 };
 
 export class CombatComponent {
-  private attacksCount = 0;
+  private _attacksCount = 0;
   private _counterAttacksCount = 0;
   private emitter = new TypedEventEmitter<CombatEventMap>();
 
@@ -47,8 +47,12 @@ export class CombatComponent {
     return this._counterAttacksCount;
   }
 
+  get attacksCount() {
+    return this._attacksCount;
+  }
+
   get nextAttackApCost() {
-    return this.unit.apCostPerAttack + config.AP_INCREASE_PER_ATTACK * this.attacksCount;
+    return this.unit.apCostPerAttack + config.AP_INCREASE_PER_ATTACK * this._attacksCount;
   }
 
   get on() {
@@ -64,7 +68,7 @@ export class CombatComponent {
   }
 
   resetAttackCount() {
-    this.attacksCount = 0;
+    this._attacksCount = 0;
   }
 
   resetCounterAttackCount() {
@@ -108,7 +112,7 @@ export class CombatComponent {
     });
 
     this.dealDamage(targets, damage);
-    this.attacksCount++;
+    this._attacksCount++;
 
     this.emitter.emit(COMBAT_EVENTS.AFTER_ATTACK, {
       target,

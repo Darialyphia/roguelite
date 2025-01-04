@@ -1,3 +1,4 @@
+import { attackIfAble, avoidEnemiesInMelee, mergeTraits } from '../../../ai/ai-traits';
 import { PointAOEShape } from '../../../targeting/aoe-shapes';
 import { MeleeTargetingStrategy } from '../../../targeting/melee-targeting.straegy';
 import { TARGETING_TYPE } from '../../../targeting/targeting-strategy';
@@ -16,7 +17,7 @@ export const redArcher: UnitCardBlueprint = {
   name: 'Archer',
   description: '@Ranged(2)@.',
   kind: CARD_KINDS.UNIT,
-  aiHints: {},
+  aiHints: mergeTraits(attackIfAble(10), avoidEnemiesInMelee()),
   cost: {
     gold: 3,
     runes: [RUNES.RED, RUNES.COLORLESS]

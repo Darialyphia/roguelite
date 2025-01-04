@@ -6,6 +6,7 @@ import { GAME_EVENTS, type Game } from '../game/game';
 import type { SerializedInput } from '../input/input-system';
 import { RUNES } from '../utils/rune';
 import type { ScoreModifier } from './ai-scorer';
+import type { EntityId } from '../entity';
 
 export class AiHeuristics {
   private game: Game;
@@ -26,11 +27,12 @@ export class AiHeuristics {
     });
   }
 
-  shouldAvoidPlayingCard(card: Card) {
+  shouldAvoidPlayingCard(game: Game, card: Card) {
     if (!this.cardsPlayedByActivePlayer[card.blueprintId]) return false;
     if (!card.aiHints.maxUsesPerTurn) return false;
     return (
-      this.cardsPlayedByActivePlayer[card.blueprintId] >= card.aiHints.maxUsesPerTurn
+      this.cardsPlayedByActivePlayer[card.blueprintId] >=
+      card.aiHints.maxUsesPerTurn(game, card)
     );
   }
 
@@ -121,18 +123,65 @@ export class AiHeuristics {
 
     if (input.type === 'playCard') {
       const card = game.turnSystem.activePlayer.getCardAt(input.payload.index);
-      const { preScoreModifier, postScoreModifier } = card.aiHints;
+      const { prePlayScoreModifier, postPlayScoreModifier } = card.aiHints;
 
       return {
-        pre: preScoreModifier
-          ? (game: Game) => preScoreModifier(game, card, input.payload.targets)
+        pre: prePlayScoreModifier
+          ? (game: Game) => prePlayScoreModifier(game, card, input.payload.targets)
           : defaultModifier.pre,
-        post: postScoreModifier
-          ? (game: Game) => postScoreModifier(game, card, input.payload.targets)
+        post: postPlayScoreModifier
+          ? (game: Game) => postPlayScoreModifier(game, card, input.payload.targets)
           : defaultModifier.pre
       };
     }
 
+    if (input.type === 'attack') {
+      const unit = game.unitSystem.getUnitById(input.payload.unitId as EntityId)!;
+      const { preAttackScoreModifier, postAttackScoreModifier } = unit.card.aiHints;
+
+      return {
+        pre: preAttackScoreModifier
+          ? (game: Game) => preAttackScoreModifier(game, unit, input.payload)
+          : defaultModifier.pre,
+        post: postAttackScoreModifier
+          ? (game: Game) => postAttackScoreModifier(game, unit, input.payload)
+          : defaultModifier.pre
+      };
+    }
+
+    if (input.type === 'move') {
+      const unit = game.unitSystem.getUnitById(input.payload.unitId as EntityId)!;
+      const { preMoveScoreModifier, postMoveScoreModifier } = unit.card.aiHints;
+
+      return {
+        pre: preMoveScoreModifier
+          ? (game: Game) => preMoveScoreModifier(game, unit, input.payload)
+          : defaultModifier.pre,
+        post: postMoveScoreModifier
+          ? (game: Game) => postMoveScoreModifier(game, unit, input.payload)
+          : defaultModifier.pre
+      };
+    }
+
+    if (input.type === 'endTurn') {
+      return {
+        pre: defaultModifier.pre,
+        post: (game: Game) => {
+          const units = game.turnSystem.activePlayer.units.reduce((total, unit) => {
+            return unit.card.aiHints.endTurnWhileOnBoardScoreModifier
+              ? total + unit.card.aiHints.endTurnWhileOnBoardScoreModifier(game, unit)
+              : total;
+          }, 0);
+          const hand = game.turnSystem.activePlayer.hand.reduce((total, card) => {
+            return card.aiHints.endTurnWhileInHandScoreModifier
+              ? total + card.aiHints.endTurnWhileInHandScoreModifier(game, card)
+              : total;
+          }, 0);
+
+          return units + hand;
+        }
+      };
+    }
     return defaultModifier;
   }
 }

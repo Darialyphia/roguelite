@@ -221,6 +221,14 @@ export class Unit extends Entity {
     return this.interceptors.attackAOEShape.getValue(new PointAOEShape(this.game), {});
   }
 
+  get attacksPerformedThisTurn() {
+    return this.combat.attacksCount;
+  }
+
+  get counterAttacksPerformedThisTurn() {
+    return this.combat.counterAttacksCount;
+  }
+
   get canMove(): boolean {
     return this.interceptors.canMove.getValue(
       this.ap.current >= this.apCostPerMovement,

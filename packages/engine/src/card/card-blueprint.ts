@@ -11,9 +11,23 @@ import type { SpellCard } from './spell-card.entity';
 import type { VFXSequence } from '../vfx/vfx-sequencer';
 import { CARD_KINDS, type CardKind } from './card-enums';
 import type { QuestCard } from './quest-card.entity';
+import type { SerializedInput } from '../input/input-system';
 
 type CardBlueprintTarget = {
   getTargeting(game: Game, card: Card): TargetingStrategy;
+};
+
+export type CardAiHints = {
+  isRelevantTarget?: (point: Point3D, game: Game, card: Card, index: number) => boolean;
+  maxUsesPerTurn?: (game: Game, card: Card) => number;
+  prePlayScoreModifier?: (game: Game, card: Card, targets: Point3D[]) => number;
+  postPlayScoreModifier?: (game: Game, card: Card, targets: Point3D[]) => number;
+  preAttackScoreModifier?: (game: Game, unit: Unit, target: Point3D) => number;
+  postAttackScoreModifier?: (game: Game, unit: Unit, target: Point3D) => number;
+  preMoveScoreModifier?: (game: Game, unit: Unit, target: Point3D) => number;
+  postMoveScoreModifier?: (game: Game, unit: Unit, target: Point3D) => number;
+  endTurnWhileInHandScoreModifier?: (game: Game, card: Card) => number;
+  endTurnWhileOnBoardScoreModifier?: (game: Game, unit: Unit) => number;
 };
 
 export type CardBlueprintBase = {
@@ -22,12 +36,7 @@ export type CardBlueprintBase = {
   iconId: string;
   description: string;
   shouldHighlightInHand?: (game: Game, card: Card) => boolean;
-  aiHints: {
-    isRelevantTarget?: (point: Point3D, game: Game, card: Card, index: number) => boolean;
-    maxUsesPerTurn?: number;
-    preScoreModifier?: (game: Game, card: Card, targets: Point3D[]) => number;
-    postScoreModifier?: (game: Game, card: Card, targets: Point3D[]) => number;
-  };
+  aiHints: CardAiHints;
 };
 
 export type UnitCardBlueprint = CardBlueprintBase & {

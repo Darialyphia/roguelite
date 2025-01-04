@@ -35,7 +35,6 @@ export class GamePhaseSystem extends System<never> {
   }
 
   startBattle() {
-    this.log('start battle');
     assert(
       this.stateMachine.can(GAME_PHASE_TRANSITIONS.START_BATTLE),
       `Cannot enter phase ${GAME_PHASES.BATTLE} from phase ${this.phase}`
@@ -50,7 +49,6 @@ export class GamePhaseSystem extends System<never> {
   }
 
   endBattle() {
-    this.log('end battle');
     assert(
       this.stateMachine.can(GAME_PHASE_TRANSITIONS.END_BATTLE),
       `Cannot enter phase ${GAME_PHASES.END} from phase ${this.phase}`

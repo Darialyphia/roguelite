@@ -25,7 +25,7 @@ export class AIPlayerAgent implements AIAgent {
     const root = new Node(
       NODE_TYPE.ROOT,
       game.clone(this.nextSimulationId++),
-      { type: 'endTurn', payload: { playerId: '1' } } as SerializedInput,
+      { type: 'endTurn', payload: { playerId: this.player.id } } as SerializedInput,
       0,
       NODE_AIM.MAX
     );
@@ -51,7 +51,9 @@ export class AIPlayerAgent implements AIAgent {
         isLeafNode ? NODE_TYPE.LEAF : NODE_TYPE.INNER,
         simulator.game,
         move,
-        0
+        0,
+        NODE_AIM.MAX,
+        this.getValidMoves(simulator.game)
       );
       node.value = score;
 
@@ -61,10 +63,21 @@ export class AIPlayerAgent implements AIAgent {
     return tree;
   }
 
+  getOptimalPath(game: Game): SerializedInput[] {
+    const tree = this.makeTree(game);
+    tree.evaluate();
+
+    const path = tree.getOptimalMoves().slice(1);
+    if (game.gamePhaseSystem.phase === GAME_PHASES.BATTLE) {
+      path.push({ type: 'endTurn', payload: { playerId: this.player.id } });
+    }
+    return path;
+  }
+
   getNextInput(game: Game): SerializedInput {
     const tree = this.makeTree(game);
-
     const result = tree.evaluate();
+
     return result.move;
   }
 
@@ -170,7 +183,7 @@ export class AIPlayerAgent implements AIAgent {
     for (const [index, card] of game.turnSystem.activePlayer.hand.entries()) {
       const canPlay =
         game.turnSystem.activePlayer.canPlayCardAt(index) &&
-        !this.heuristics.shouldAvoidPlayingCard(card);
+        !this.heuristics.shouldAvoidPlayingCard(game, card);
       if (!canPlay) continue;
 
       const targets = this.getPotentialTargets(game, card, cells);
