@@ -1161,6 +1161,19 @@
         },
         {
           "alias": [
+            "deck-big.png"
+          ],
+          "src": [
+            "/assets/ui/deck-big.png"
+          ],
+          "data": {
+            "tags": {
+              "m": true
+            }
+          }
+        },
+        {
+          "alias": [
             "deck.png"
           ],
           "src": [
@@ -1660,6 +1673,33 @@
         },
         {
           "alias": [
+            "vp-counter"
+          ],
+          "src": [
+            "/assets/ui/vp-counter.json"
+          ],
+          "loadParser": "aseprite_loader",
+          "data": {
+            "tags": {
+              "m": true
+            }
+          }
+        },
+        {
+          "alias": [
+            "vp-counter.png"
+          ],
+          "src": [
+            "/assets/ui/vp-counter.png"
+          ],
+          "data": {
+            "tags": {
+              "m": true
+            }
+          }
+        },
+        {
+          "alias": [
             "vp-empty.png"
           ],
           "src": [
@@ -1677,6 +1717,46 @@
           ],
           "src": [
             "/assets/ui/vp-large.png"
+          ],
+          "data": {
+            "tags": {
+              "m": true
+            }
+          }
+        },
+        {
+          "alias": [
+            "vp-progress-bar"
+          ],
+          "src": [
+            "/assets/ui/vp-progress-bar.json"
+          ],
+          "loadParser": "aseprite_loader",
+          "data": {
+            "tags": {
+              "m": true
+            }
+          }
+        },
+        {
+          "alias": [
+            "vp-progress-bar.png"
+          ],
+          "src": [
+            "/assets/ui/vp-progress-bar.png"
+          ],
+          "data": {
+            "tags": {
+              "m": true
+            }
+          }
+        },
+        {
+          "alias": [
+            "vp-xl.png"
+          ],
+          "src": [
+            "/assets/ui/vp-xl.png"
           ],
           "data": {
             "tags": {
