@@ -57,7 +57,9 @@ const state = useGameClientState();
     class="player-infos"
     :class="inverted && 'is-inverted'"
   >
-    <div class="name dual-color-text">{{ player.name }}</div>
+    <div class="name dual-color-text" :data-text="player.name">
+      {{ player.name }}
+    </div>
     <ul class="resources">
       <UiSimpleTooltip v-for="rune in runes" :key="rune.type">
         <template #trigger>
@@ -74,7 +76,7 @@ const state = useGameClientState();
       </UiSimpleTooltip>
 
       <li class="gold">
-        <span class="dual-color-text">
+        <span class="dual-color-text" :data-text="player.gold">
           {{ player.gold }}
         </span>
       </li>
@@ -162,6 +164,10 @@ const state = useGameClientState();
   color: transparent;
   position: relative;
 
+  :has(> &) {
+    position: relative;
+    z-index: 0;
+  }
   &:after {
     background: none;
     content: attr(data-text);
