@@ -22,6 +22,9 @@ import MulliganOverlay from '@/card/components/MulliganOverlay.vue';
 import PlayerBattleInfos from '@/player/components/PlayerBattleInfos.vue';
 import { makePlayerViewModel } from '@/player/player.model';
 import OpponentHand from '@/card/components/OpponentHand.vue';
+import TurnIndicator from '@/player/components/TurnIndicator.vue';
+import AIWorker from '@/ai.worker?worker';
+
 definePage({
   name: 'Battle'
 });
@@ -35,16 +38,27 @@ const options: Pick<GameOptions, 'mapId' | 'teams'> = {
         name: 'Daria',
         deck: {
           cards: [
-            { blueprintId: 'test-unit' },
-            { blueprintId: 'test-unit' },
-            { blueprintId: 'test-unit' },
-            { blueprintId: 'test-unit' },
-            { blueprintId: 'test-unit' },
-            { blueprintId: 'test-unit' },
-            { blueprintId: 'test-unit' },
-            { blueprintId: 'test-spell' },
-            { blueprintId: 'test-spell' },
-            { blueprintId: 'test-spell' },
+            { blueprintId: 'red-combustion' },
+            { blueprintId: 'red-combustion' },
+            { blueprintId: 'red-combustion' },
+            { blueprintId: 'red-footman' },
+            { blueprintId: 'red-footman' },
+            { blueprintId: 'red-footman' },
+            { blueprintId: 'red-berserk' },
+            { blueprintId: 'red-berserk' },
+            { blueprintId: 'red-berserk' },
+            { blueprintId: 'red-avenger' },
+            { blueprintId: 'red-avenger' },
+            { blueprintId: 'red-avenger' },
+            { blueprintId: 'red-archer' },
+            { blueprintId: 'red-archer' },
+            { blueprintId: 'red-archer' },
+            { blueprintId: 'red-emperor' },
+            { blueprintId: 'red-emperor' },
+            { blueprintId: 'red-emperor' },
+            { blueprintId: 'red-fireball' },
+            { blueprintId: 'red-fireball' },
+            { blueprintId: 'red-fireball' },
             { blueprintId: 'test-quest' },
             { blueprintId: 'test-quest' },
             { blueprintId: 'test-quest' }
@@ -58,16 +72,24 @@ const options: Pick<GameOptions, 'mapId' | 'teams'> = {
         name: 'AI',
         deck: {
           cards: [
-            { blueprintId: 'test-unit' },
-            { blueprintId: 'test-unit' },
-            { blueprintId: 'test-unit' },
-            { blueprintId: 'test-unit' },
-            { blueprintId: 'test-unit' },
-            { blueprintId: 'test-unit' },
-            { blueprintId: 'test-unit' },
-            { blueprintId: 'test-spell' },
-            { blueprintId: 'test-spell' },
-            { blueprintId: 'test-spell' },
+            { blueprintId: 'red-footman' },
+            { blueprintId: 'red-footman' },
+            { blueprintId: 'red-footman' },
+            { blueprintId: 'red-avenger' },
+            { blueprintId: 'red-avenger' },
+            { blueprintId: 'red-avenger' },
+            { blueprintId: 'red-berserk' },
+            { blueprintId: 'red-berserk' },
+            { blueprintId: 'red-berserk' },
+            { blueprintId: 'red-archer' },
+            { blueprintId: 'red-archer' },
+            { blueprintId: 'red-archer' },
+            { blueprintId: 'red-emperor' },
+            { blueprintId: 'red-emperor' },
+            { blueprintId: 'red-emperor' },
+            { blueprintId: 'red-fireball' },
+            { blueprintId: 'red-fireball' },
+            { blueprintId: 'red-fireball' },
             { blueprintId: 'test-quest' },
             { blueprintId: 'test-quest' },
             { blueprintId: 'test-quest' }
@@ -77,10 +99,13 @@ const options: Pick<GameOptions, 'mapId' | 'teams'> = {
     ]
   ]
 };
-const serverSession = new ServerSession({
-  rngSeed: 'omegalul',
+const SEED = 'Winners win';
+const serverOptions = {
+  rngSeed: SEED,
   ...options
-});
+};
+
+const serverSession = new ServerSession(serverOptions);
 const clientSession = new ClientSession(options);
 
 const battleStore = useBattleStore();
@@ -96,8 +121,14 @@ const start = () => {
   clientSession.initialize([...serverSession.game.rngSystem.values]);
   const ai = new AI(serverSession, AI_ID as EntityId);
 
-  const handleAi = async (input: SerializedInput) => {
-    const aiAction = await ai.onUpdate();
+  const aiWorker = new AIWorker();
+  aiWorker.postMessage({
+    type: 'init',
+    payload: { options: serverOptions, playerId: AI_ID }
+  });
+
+  aiWorker.addEventListener('message', async event => {
+    const aiAction = event.data as SerializedInput | undefined;
     if (!aiAction) return;
 
     await until(() => battleStore.isPlayingFx).not.toBeTruthy();
@@ -108,14 +139,17 @@ const start = () => {
       await waitFor(300);
     }
     serverSession.dispatch(aiAction);
-  };
+  });
 
   battleStore.init(clientSession, input => {
     serverSession.dispatch(input);
   });
   serverSession.subscribe((input, opts) => {
     clientSession.dispatch(input, opts);
-    handleAi(input);
+    aiWorker.postMessage({
+      type: 'compute',
+      payload: { action: JSON.parse(JSON.stringify(input)) }
+    });
   });
 };
 start();
@@ -126,7 +160,7 @@ start();
   <div class="layout">
     <MulliganOverlay />
     <PlayedCard />
-
+    <TurnIndicator />
     <ul class="fixed pointer-events-auto top-8 left-2">
       <li>
         <button @click="() => console.log(serverSession)">
@@ -188,7 +222,7 @@ footer {
 
 .hand,
 .opponent-hand {
-  max-width: 100%;
+  width: 100%;
   justify-self: center;
 }
 

@@ -1,10 +1,13 @@
 export const config = {
+  TILE_WIDTH: 64,
+  TILE_HEIGHT: 44,
+
   // the ap spent to move one tile
   AP_COST_PER_MOVEMENT: 1,
   // the ap spent to perform the first attack of a unti each turn
   AP_COST_PER_ATTACK: 1,
   // the additional ap spent for every subsequent attack after the first
-  AP_INCREASE_PER_ATTACK: 2,
+  AP_INCREASE_PER_ATTACK: 1,
   // the amount of cards drawn at the start of the game
   INITIAL_HAND_SIZE: 3,
   // the maximum amount of cards a player can hold at once in their hand
@@ -16,7 +19,7 @@ export const config = {
   // gold gained per turn
   GOLD_PER_TURN: 3,
   // the standard amount of AP a unit has
-  UNIT_BASE_AP: 4,
+  UNIT_BASE_AP: 3,
   // how many times a player can draw / gain gold / add a rune every turn
   MAX_RESOURCE_ACTION_PER_TURN: 1,
   // how many victory points are needed to win the game

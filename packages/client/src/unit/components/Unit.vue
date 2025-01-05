@@ -6,30 +6,26 @@ import UnitStatsIndicators from './UnitStatsIndicators.vue';
 import UnitPositioner from './UnitPositioner.vue';
 import type { UnitViewModel } from '../unit.model';
 import UnitVFX from './vfx/UnitVFX.vue';
-import { whenever } from '@vueuse/core';
-import { useIsoCamera } from '@/iso/composables/useIsoCamera';
-import { useIsoPoint } from '@/iso/composables/useIsoPoint';
+
 import { useBattleEvent } from '@/pages/battle/battle.store';
-import { External, PTransition } from 'vue3-pixi';
+import { PTransition } from 'vue3-pixi';
 import type { Container } from 'pixi.js';
 import AlphaTransition from '@/ui/components/AlphaTransition.vue';
 import { waitFor } from '@game/shared';
 import { GAME_EVENTS } from '@game/engine/src/game/game';
+import { useCamera } from '@/board/composables/useCamera';
 
 const { unit } = defineProps<{ unit: UnitViewModel }>();
 
-const camera = useIsoCamera();
-const { isoPosition } = useIsoPoint({
-  position: computed(() => unit.position)
-});
+const camera = useCamera();
 
 const centerCamera = () => {
   const viewport = camera.viewport.value;
   if (!viewport) return;
 
   const position = {
-    x: isoPosition.value.x + camera.offset.value.x,
-    y: isoPosition.value.y + camera.offset.value.y
+    x: unit.screenPosition.x + camera.offset.value.x,
+    y: unit.screenPosition.y + camera.offset.value.y
   };
 
   const isWithinViewport =
@@ -61,14 +57,13 @@ useBattleEvent(GAME_EVENTS.UNIT_BEFORE_RECEIVE_DAMAGE, async e => {
 
 const isSpawnAnimationDone = ref(false);
 const spawnAnimation = (container: Container) => {
-  container.y = -60;
+  container.y = -40;
   container.alpha = 0;
   gsap.to(container, { alpha: 1, duration: 0.3 });
   gsap.to(container, {
     y: 0,
     duration: 1,
     ease: Bounce.easeOut,
-    delay: Math.random() * 0.5,
     onComplete() {
       isSpawnAnimationDone.value = true;
     }

@@ -20,9 +20,12 @@ export class PathfinderComponent {
     this.strategy = strategy;
   }
 
-  getDistanceMap(from: Point3D): DistanceMap {
+  getDistanceMap(from: Point3D, maxDistance?: number): DistanceMap {
     this.strategy.setOrigin(from);
-    const map = dijkstra(this.strategy, pointToCellId(from));
+    const map = dijkstra(this.strategy, {
+      startNode: pointToCellId(from),
+      maxWeight: maxDistance
+    });
 
     return {
       costs: map.costs,

@@ -169,7 +169,6 @@ useBattleEvent(GAME_EVENTS.PLAYER_AFTER_GAIN_RUNE, async e => {
   gap: var(--size-4);
   font-family: 'Silkscreen';
   font-weight: var(--font-weight-6);
-  pointer-events: auto;
 
   &.is-inverted {
     flex-direction: row-reverse;
@@ -353,6 +352,7 @@ useBattleEvent(GAME_EVENTS.PLAYER_AFTER_GAIN_RUNE, async e => {
     }
     &.quests {
       --size: 0px;
+      pointer-events: auto;
       display: flex;
       gap: var(--size-3);
       height: 102px;

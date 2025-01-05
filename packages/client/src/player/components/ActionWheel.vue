@@ -21,106 +21,132 @@ const getRuneCountByType = (rune: Rune) =>
     class="hexagonal-grid action-wheel"
     v-if="state.phase === GAME_PHASES.BATTLE"
   >
-    <button
-      aria-label="add Order rune"
-      style="--bg: url('/assets/ui/rune-yellow.png')"
-      :disabled="!userPlayer.canPerformResourceAction || !userPlayer.isActive"
-      @click="
-        battle.dispatch({
-          type: 'runeResourceAction',
-          payload: {
-            rune: 'YELLOW'
-          }
-        })
-      "
-    />
-    <button
-      aria-label="add Chaos rune"
-      style="--bg: url('/assets/ui/rune-purple.png')"
-      :disabled="!userPlayer.canPerformResourceAction || !userPlayer.isActive"
-      @click="
-        battle.dispatch({
-          type: 'runeResourceAction',
-          payload: {
-            rune: 'PURPLE'
-          }
-        })
-      "
-    />
-    <button
-      aria-label="add Creation rune"
-      style="--bg: url('/assets/ui/rune-green.png')"
-      :disabled="!userPlayer.canPerformResourceAction || !userPlayer.isActive"
-      @click="
-        battle.dispatch({
-          type: 'runeResourceAction',
-          payload: {
-            rune: 'GREEN'
-          }
-        })
-      "
-    />
-    <button
-      aria-label="add Destruction rune"
-      style="--bg: url('/assets/ui/rune-red.png')"
-      :disabled="!userPlayer.canPerformResourceAction || !userPlayer.isActive"
-      @click="
-        battle.dispatch({
-          type: 'runeResourceAction',
-          payload: {
-            rune: 'RED'
-          }
-        })
-      "
-    />
-    <button
-      aria-label="add Aether rune"
-      style="--bg: url('/assets/ui/rune-blue.png')"
-      :disabled="!userPlayer.canPerformResourceAction || !userPlayer.isActive"
-      @click="
-        battle.dispatch({
-          type: 'runeResourceAction',
-          payload: {
-            rune: 'BLUE'
-          }
-        })
-      "
-    />
-    <button
-      aria-label="gain one additional gold"
-      style="--bg: url('/assets/ui/gold-action.png')"
-      :disabled="!userPlayer.canPerformResourceAction || !userPlayer.isActive"
-      @click="
-        battle.dispatch({
-          type: 'goldResourceAction',
-          payload: {}
-        })
-      "
-    >
-      {{ getRuneCountByType(RUNES.BLUE) || '' }}
-    </button>
-    <button
-      aria-label="draw an additional card"
-      style="--bg: url('/assets/ui/draw-action.png')"
-      :disabled="!userPlayer.canPerformResourceAction || !userPlayer.isActive"
-      @click="
-        battle.dispatch({
-          type: 'drawResourceAction',
-          payload: {}
-        })
-      "
-    />
-    <button
-      aria-label="end turn"
-      :disabled="!userPlayer.isActive"
-      style="--bg: url('/assets/ui/end-turn-action.png')"
-      @click="
-        battle.dispatch({
-          type: 'endTurn',
-          payload: {}
-        })
-      "
-    />
+    <div class="hex-wrapper">
+      <button
+        aria-label="add Order rune"
+        style="--bg: url('/assets/ui/rune-yellow.png')"
+        :disabled="!userPlayer.canPerformResourceAction || !userPlayer.isActive"
+        @click="
+          battle.dispatch({
+            type: 'runeResourceAction',
+            payload: {
+              rune: 'YELLOW'
+            }
+          })
+        "
+      />
+      <div class="hex-back" />
+    </div>
+
+    <div class="hex-wrapper">
+      <button
+        aria-label="add Chaos rune"
+        style="--bg: url('/assets/ui/rune-purple.png')"
+        :disabled="!userPlayer.canPerformResourceAction || !userPlayer.isActive"
+        @click="
+          battle.dispatch({
+            type: 'runeResourceAction',
+            payload: {
+              rune: 'PURPLE'
+            }
+          })
+        "
+      />
+      <div class="hex-back" />
+    </div>
+
+    <div class="hex-wrapper">
+      <button
+        aria-label="add Creation rune"
+        style="--bg: url('/assets/ui/rune-green.png')"
+        :disabled="!userPlayer.canPerformResourceAction || !userPlayer.isActive"
+        @click="
+          battle.dispatch({
+            type: 'runeResourceAction',
+            payload: {
+              rune: 'GREEN'
+            }
+          })
+        "
+      />
+      <div class="hex-back" />
+    </div>
+    <div class="hex-wrapper">
+      <button
+        aria-label="add Destruction rune"
+        style="--bg: url('/assets/ui/rune-red.png')"
+        :disabled="!userPlayer.canPerformResourceAction || !userPlayer.isActive"
+        @click="
+          battle.dispatch({
+            type: 'runeResourceAction',
+            payload: {
+              rune: 'RED'
+            }
+          })
+        "
+      />
+      <div class="hex-back" />
+    </div>
+    <div class="hex-wrapper">
+      <button
+        aria-label="add Aether rune"
+        style="--bg: url('/assets/ui/rune-blue.png')"
+        :disabled="!userPlayer.canPerformResourceAction || !userPlayer.isActive"
+        @click="
+          battle.dispatch({
+            type: 'runeResourceAction',
+            payload: {
+              rune: 'BLUE'
+            }
+          })
+        "
+      />
+      <div class="hex-back" />
+    </div>
+    <div class="hex-wrapper">
+      <button
+        aria-label="gain one additional gold"
+        style="--bg: url('/assets/ui/gold-action.png')"
+        :disabled="!userPlayer.canPerformResourceAction || !userPlayer.isActive"
+        @click="
+          battle.dispatch({
+            type: 'goldResourceAction',
+            payload: {}
+          })
+        "
+      >
+        {{ getRuneCountByType(RUNES.BLUE) || '' }}
+      </button>
+      <div class="hex-back" />
+    </div>
+    <div class="hex-wrapper">
+      <button
+        aria-label="draw an additional card"
+        style="--bg: url('/assets/ui/draw-action.png')"
+        :disabled="!userPlayer.canPerformResourceAction || !userPlayer.isActive"
+        @click="
+          battle.dispatch({
+            type: 'drawResourceAction',
+            payload: {}
+          })
+        "
+      />
+      <div class="hex-back" />
+    </div>
+    <div class="hex-wrapper">
+      <button
+        aria-label="end turn"
+        :disabled="!userPlayer.isActive"
+        style="--bg: url('/assets/ui/end-turn-action.png')"
+        @click="
+          battle.dispatch({
+            type: 'endTurn',
+            payload: {}
+          })
+        "
+      />
+      <div class="hex-back" />
+    </div>
   </div>
 </template>
 
@@ -191,11 +217,37 @@ const getRuneCountByType = (rune: Rune) =>
   filter: drop-shadow(0 10px 0 #32021b);
 }
 
+.hex-wrapper {
+  display: grid;
+  grid-template-columns: 1fr;
+  transform-style: preserve-3d;
+  perspective: 500px;
+  perspective-origin: center;
+
+  > * {
+    grid-row: 1;
+    grid-column: 1;
+    transition: transform 1s var(--ease-bounce-2);
+  }
+
+  &:has(button:disabled) .hex-back {
+    transform: rotateY(0deg);
+  }
+}
+
+.hex-back {
+  transform: rotateY(180deg);
+  backface-visibility: hidden;
+  background: url('/assets/ui/rune-empty.png');
+  background-size: cover;
+}
+
 button {
   background: var(--bg);
   pointer-events: auto;
+  backface-visibility: hidden;
   &:disabled {
-    filter: grayscale(80%) brightness(75%);
+    transform: rotateY(180deg);
   }
   &:hover {
     filter: brightness(120%);

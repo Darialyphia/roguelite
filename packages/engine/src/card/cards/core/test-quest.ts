@@ -1,11 +1,8 @@
-import { Damage } from '../../../combat/damage/damage';
-import { NoMitigationStrategy } from '../../../combat/damage/mitigation/no-mitigation.strategy';
-import { NoScalingStrategy } from '../../../combat/damage/scaling/no-scaling.strategy';
+import { irrelevantTarget, mergeTraits } from '../../../ai/ai-traits';
+import { GAME_EVENTS } from '../../../game/game';
 import { PLAYER_EVENTS } from '../../../player/player.entity';
 import { AnywhereTargetingStrategy } from '../../../targeting/anywhere-targeting-strategy';
-import { RingAOEShape } from '../../../targeting/aoe-shapes';
 import { TARGETING_TYPE } from '../../../targeting/targeting-strategy';
-import { RUNES } from '../../../utils/rune';
 import { type QuestCardBlueprint } from '../../card-blueprint';
 import { CARD_KINDS } from '../../card-enums';
 
@@ -13,12 +10,12 @@ export const testQuest: QuestCardBlueprint = {
   id: 'test-quest',
   iconId: 'placeholder',
   name: 'Test Quest',
-  description: 'Summon a unit. Reward: 1 VP.',
+  description: 'Summon 3 unit. Reward: 1 VP.',
   kind: CARD_KINDS.QUEST,
-  aiHints: {},
+  aiHints: mergeTraits(irrelevantTarget()),
   cost: {
-    gold: 2,
-    runes: [RUNES.RED, RUNES.COLORLESS]
+    gold: 1,
+    runes: []
   },
   minTargets: 1,
   targets: [
@@ -34,15 +31,19 @@ export const testQuest: QuestCardBlueprint = {
     }
   },
   onPlay(game, card) {
-    card.meta.onSumon = card.player.on(PLAYER_EVENTS.AFTER_PLAY_CARD, e => {
-      if (e.card.kind === CARD_KINDS.UNIT) {
-        card.complete();
+    let count = 0;
+    card.meta.onSummon = game.on(GAME_EVENTS.UNIT_CREATED, e => {
+      if (e.unit.player.isAlly(card.player)) {
+        count++;
+        if (count === 3) {
+          card.complete();
+        }
       }
     });
   },
   onCompleted(game, card) {
     card.player.team.earnVictoryPoints(1);
-    card.meta.onSumon();
+    card.meta.onSummon();
     delete card.meta.onSumon;
   }
 };

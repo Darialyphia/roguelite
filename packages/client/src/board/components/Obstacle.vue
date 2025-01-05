@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { useUserPlayer } from '@/pages/battle/battle.store';
+import { useGameClientState, useUserPlayer } from '@/pages/battle/battle.store';
 import UiAnimatedSprite from '@/ui/components/UiAnimatedSprite.vue';
 import { config } from '@/utils/config';
 import type { CellViewModel } from '../models/cell.model';
@@ -8,12 +8,14 @@ import { TextStyle } from 'pixi.js';
 import { useSpritesheet } from '@/shared/composables/useSpritesheet';
 import { createSpritesheetFrameObject } from '@/utils/sprite';
 import { useBattleUiStore } from '@/pages/battle/battle-ui.store';
+import { GAME_PHASES } from '@game/engine/src/game/game-phase.system';
 
 const { obstacle } = defineProps<{
   obstacle: Defined<CellViewModel['obstacle']>;
 }>();
 
 const userPlayer = useUserPlayer();
+const state = useGameClientState();
 
 const tag = computed(() => {
   if (!obstacle.player) return 'idle';
@@ -27,7 +29,7 @@ const tag = computed(() => {
 
 const getTextStyle = (color: number) => {
   return new TextStyle({
-    fontSize: 20,
+    fontSize: 18,
     fill: color,
     fontFamily: 'SilkScreen',
     align: 'center'
@@ -45,17 +47,14 @@ const ui = useBattleUiStore();
 
 <template>
   <container>
-    <UiAnimatedSprite
-      :assetId="obstacle.spriteId"
-      :y="-config.TILE_SIZE.y / 2"
-      :tag="tag"
-    />
+    <UiAnimatedSprite :assetId="obstacle.spriteId" :y="-26" :tag="tag" />
 
     <animated-sprite
       v-if="
         textures &&
         obstacle.blueprintId === 'altar' &&
-        !obstacle.meta.isDestroyed
+        !obstacle.meta.isDestroyed &&
+        state.phase !== GAME_PHASES.MULLIGAN
       "
       :ref="
         (obj: any) => {
@@ -68,8 +67,8 @@ const ui = useBattleUiStore();
       event-mode="none"
       playing
       loop
-      :y="-config.TILE_SIZE.y * 1.15"
-      :x="-15"
+      :y="12"
+      :x="-18"
     >
       <pixi-text
         :style="getTextStyle(0x84f200)"

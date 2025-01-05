@@ -1,4 +1,5 @@
 import { isNumber, Vec3, type Point3D } from '@game/shared';
+import type { Game } from '../game/game';
 
 export class Position extends Vec3 {
   static fromPoint3D(pt: Point3D) {
@@ -9,20 +10,12 @@ export class Position extends Vec3 {
     return new Position(this.x, this.y, this.z);
   }
 
-  isWithinCells(point: Point3D, range: number | Point3D) {
-    if (isNumber(range)) {
-      range = { x: range, y: range, z: range };
-    }
-
-    return (
-      Math.abs(point.x - this.x) <= range.x &&
-      Math.abs(point.y - this.y) <= range.y &&
-      Math.abs(point.z - this.z) <= range.z
-    );
+  isWithinCells(point: Point3D, range: number, game: Game) {
+    return game.boardSystem.getDistance(this, point) <= range;
   }
 
-  isNearby(point: Point3D) {
-    return this.isWithinCells(point, 1);
+  isNearby(point: Point3D, game: Game) {
+    return this.isWithinCells(point, 1, game);
   }
 
   isSamePlane(point: Point3D) {

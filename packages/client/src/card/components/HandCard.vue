@@ -110,7 +110,10 @@ const violations = computed<{ gold?: boolean; runes?: boolean }>(() =>
       <Transition appear>
         <Card
           :card="card"
-          :class="isDragging && 'is-dragging'"
+          :class="{
+            'is-dragging': isDragging,
+            'is-highlighted': card.shouldHighlightInHand
+          }"
           :violations="violations"
         />
       </Transition>
@@ -170,6 +173,12 @@ li {
 .is-dragging {
   transform: scale(0.666);
   transform-origin: top left;
+}
+
+.is-highlighted {
+  box-shadow:
+    0 0 2rem yellow,
+    0 0 3rem lime;
 }
 
 .violation-warning {

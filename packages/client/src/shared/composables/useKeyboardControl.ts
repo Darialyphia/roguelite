@@ -17,17 +17,39 @@ type ValiatedKeyboardEvent<TControl extends Control> = KeyboardEvent & {
   ctrlKey: TControl['modifier'] extends 'ctrl' ? true : false;
 };
 
+const isShiftModifier = (control: Control, e: KeyboardEvent) => {
+  if (control.key === 'ShiftLeft' || control.key === 'ShiftRight') return false;
+
+  return e.shiftKey;
+};
+
+const isCtrlModifier = (control: Control, e: KeyboardEvent) => {
+  if (control.key === 'CtrlLeft' || control.key === 'CtrlRight') return false;
+
+  return e.ctrlKey;
+};
+
+const isAltModifier = (control: Control, e: KeyboardEvent) => {
+  if (control.key === 'AltLeft' || control.key === 'AltRight') return false;
+
+  return e.ctrlKey;
+};
+
 const isMatch = <TControl extends Control>(
   e: KeyboardEvent,
   control: TControl
 ): e is ValiatedKeyboardEvent<TControl> => {
   if (e.repeat) return false;
   if (e.code !== control.key) return false;
+  const shift = isShiftModifier(control, e);
+  const ctrl = isCtrlModifier(control, e);
+  const alt = isAltModifier(control, e);
+
   const match =
-    (control.modifier === null && !e.shiftKey && !e.ctrlKey && !e.altKey) ||
-    (control.modifier == 'shift' && e.shiftKey) ||
-    (control.modifier == 'alt' && e.altKey) ||
-    (control.modifier == 'ctrl' && e.ctrlKey);
+    (control.modifier === null && !shift && !ctrl && !alt) ||
+    (control.modifier == 'shift' && shift) ||
+    (control.modifier == 'alt' && alt) ||
+    (control.modifier == 'ctrl' && ctrl);
 
   if (match) {
     e.preventDefault();
@@ -45,4 +67,24 @@ export const useKeyboardControl = <TControl extends Control>(
     if (!isMatch(e, _control)) return;
     cb(e);
   });
+};
+
+export const useIsKeyboardControlPressed = <TControl extends Control>(
+  control: MaybeRefOrGetter<TControl>
+) => {
+  const isPressed = ref(false);
+
+  useEventListener('keydown', e => {
+    if (e.repeat) return;
+    const _control = toValue(control);
+    if (!isMatch(e, _control)) return;
+    isPressed.value = true;
+  });
+  useEventListener('keyup', e => {
+    const _control = toValue(control);
+    if (!isMatch(e, _control)) return;
+    isPressed.value = false;
+  });
+
+  return isPressed;
 };

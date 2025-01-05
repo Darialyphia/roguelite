@@ -34,8 +34,8 @@ export type CombatEventMap = {
 };
 
 export class CombatComponent {
-  private attacksCount = 0;
-  private counterAttacksCount = 0;
+  private _attacksCount = 0;
+  private _counterAttacksCount = 0;
   private emitter = new TypedEventEmitter<CombatEventMap>();
 
   constructor(
@@ -43,8 +43,16 @@ export class CombatComponent {
     private unit: Unit
   ) {}
 
+  get counterAttacksCount() {
+    return this._counterAttacksCount;
+  }
+
+  get attacksCount() {
+    return this._attacksCount;
+  }
+
   get nextAttackApCost() {
-    return this.unit.apCostPerAttack + config.AP_INCREASE_PER_ATTACK * this.attacksCount;
+    return this.unit.apCostPerAttack + config.AP_INCREASE_PER_ATTACK * this._attacksCount;
   }
 
   get on() {
@@ -59,17 +67,12 @@ export class CombatComponent {
     return this.emitter.off.bind(this.emitter);
   }
 
-  canCounterAttackAt(position: Point3D) {
-    if (this.counterAttacksCount >= this.unit.maxCounterattacksPerTurn) return false;
-    return this.unit.attackTargettingPattern.canTargetAt(position);
-  }
-
   resetAttackCount() {
-    this.attacksCount = 0;
+    this._attacksCount = 0;
   }
 
   resetCounterAttackCount() {
-    this.counterAttacksCount = 0;
+    this._counterAttacksCount = 0;
   }
 
   counterAttack(attacker: Unit) {
@@ -86,7 +89,7 @@ export class CombatComponent {
     });
 
     this.dealDamage(targets, damage);
-    this.counterAttacksCount++;
+    this._counterAttacksCount++;
 
     this.emitter.emit(COMBAT_EVENTS.AFTER_COUNTERATTACK, {
       target: attacker
@@ -109,7 +112,7 @@ export class CombatComponent {
     });
 
     this.dealDamage(targets, damage);
-    this.attacksCount++;
+    this._attacksCount++;
 
     this.emitter.emit(COMBAT_EVENTS.AFTER_ATTACK, {
       target,
@@ -117,7 +120,7 @@ export class CombatComponent {
     });
 
     const unit = this.game.unitSystem.getUnitAt(target)!;
-    if (!unit) return; // means unit dies from attack
+    if (!unit) return; // means unit died from attack
     if (unit.canCounterAttackAt(this.unit.position)) {
       unit.counterAttack(this.unit);
     }

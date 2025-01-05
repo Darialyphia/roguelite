@@ -1,5 +1,5 @@
 import type { EntityId, Entity } from '../../entity';
-import { UNIT_MODIFIER_EVENTS, UnitModifier } from '../unit-modifier.entity';
+import { UnitModifier } from '../unit-modifier.entity';
 import type { Unit } from '../unit.entity';
 
 export class UnitModifierManager {

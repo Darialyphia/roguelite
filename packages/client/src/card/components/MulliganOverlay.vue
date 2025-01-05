@@ -1,9 +1,14 @@
 <script setup lang="ts">
 import { GAME_PHASES } from '@game/engine/src/game/game-phase.system';
-import { useBattleStore, useUserPlayer } from '@/pages/battle/battle.store';
+import {
+  useBattleEvent,
+  useBattleStore,
+  useUserPlayer
+} from '@/pages/battle/battle.store';
 import Card from './Card.vue';
 import UiButton from '@/ui/components/UiButton.vue';
 import { useBattleUiStore } from '@/pages/battle/battle-ui.store';
+import { GAME_EVENTS } from '@game/engine/src/game/game';
 
 const indices = ref<number[]>([]);
 
@@ -12,6 +17,10 @@ const userPlayer = useUserPlayer();
 const hasConfirmed = ref(false);
 const battle = useBattleStore();
 const ui = useBattleUiStore();
+const isDisplayed = ref(true);
+useBattleEvent(GAME_EVENTS.START_BATTLE, async () => {
+  isDisplayed.value = false;
+});
 </script>
 
 <template>
@@ -19,6 +28,7 @@ const ui = useBattleUiStore();
     <div
       class="mulligan-overlay"
       v-if="
+        isDisplayed &&
         battle.state.phase === GAME_PHASES.MULLIGAN &&
         ui.isBoardAppearAnimationDone
       "

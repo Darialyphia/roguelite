@@ -9,6 +9,8 @@ import { GAME_PHASES } from '../game/game-phase.system';
 export class AI {
   private heuristics: AiHeuristics;
 
+  private optimalPath: SerializedInput[] = [];
+
   constructor(
     private session: ServerSession,
     private playerId: EntityId
@@ -24,7 +26,9 @@ export class AI {
     return this.game.playerSystem.getPlayerById(this.playerId)!;
   }
 
-  onUpdate() {
+  onUpdate(input: SerializedInput) {
+    this.session.dispatch(input);
+
     const isActive = match(this.game.phase)
       .with(GAME_PHASES.MULLIGAN, () => true)
       .with(GAME_PHASES.BATTLE, () =>
@@ -39,11 +43,15 @@ export class AI {
   }
 
   private evaluateNextAction(): SerializedInput {
-    const now = Date.now();
-    const agent = new AIPlayerAgent(this.player, this.heuristics);
-    const input = agent.getNextInput(this.game);
-    console.log(`AI input computed ${input.type} in ${Date.now() - now}`, input);
+    if (!this.optimalPath.length) {
+      const now = Date.now();
+      const agent = new AIPlayerAgent(this.player, this.heuristics);
+      this.optimalPath = agent.getOptimalPath(this.game);
+      console.log(`AI optimal path computed in ${Date.now() - now}`, [
+        ...this.optimalPath
+      ]);
+    }
 
-    return input;
+    return this.optimalPath.shift()!;
   }
 }

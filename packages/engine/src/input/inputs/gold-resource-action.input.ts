@@ -17,6 +17,6 @@ export class GoldResourceActionInput extends Input<typeof schema> {
       'You are not the active player'
     );
 
-    this.player.performResourceAction({ type: 'gold', payload: {} });
+    this.player.performResourceAction(this.serialize() as any);
   }
 }

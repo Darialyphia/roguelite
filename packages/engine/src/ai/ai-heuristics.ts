@@ -1,11 +1,11 @@
-import { isDefined } from '@game/shared';
+import { isDefined, type Point3D } from '@game/shared';
 import type { Card } from '../card/card.entity';
-import { SpellCard } from '../card/spell-card.entity';
-import { UnitCard } from '../card/unit-card.entity';
 import { GAME_EVENTS, type Game } from '../game/game';
 import type { SerializedInput } from '../input/input-system';
 import { RUNES } from '../utils/rune';
 import type { ScoreModifier } from './ai-scorer';
+import type { EntityId } from '../entity';
+import type { Unit } from '../unit/unit.entity';
 
 export class AiHeuristics {
   private game: Game;
@@ -26,30 +26,35 @@ export class AiHeuristics {
     });
   }
 
-  shouldAvoidPlayingCard(card: Card) {
+  shouldAvoidPlayingCard(game: Game, card: Card) {
     if (!this.cardsPlayedByActivePlayer[card.blueprintId]) return false;
     if (!card.aiHints.maxUsesPerTurn) return false;
     return (
-      this.cardsPlayedByActivePlayer[card.blueprintId] >= card.aiHints.maxUsesPerTurn
+      this.cardsPlayedByActivePlayer[card.blueprintId] >=
+      card.aiHints.maxUsesPerTurn(game, card)
     );
   }
 
-  getResourceActionPreScoreModifier(
+  getRelevantMoves(game: Game, unit: Unit) {
+    if (!unit.card.aiHints.relevantMoves) return unit.getPossibleMoves();
+
+    return unit.card.aiHints.relevantMoves(game, unit);
+  }
+
+  getResourceActionScore(
     game: Game,
     input: SerializedInput & {
       type: 'drawResourceAction' | 'runeResourceAction' | 'goldResourceAction';
     }
   ) {
     const player = game.turnSystem.activePlayer;
-    const hand = player.hand.filter(
-      card => card instanceof UnitCard || card instanceof SpellCard
-    );
+    const hand = player.hand;
 
     const cardsWithUnlockedRunes = hand.filter(
       card => !player.hasUnlockedRunes(card.cost.runes)
     );
     const needRune = !!cardsWithUnlockedRunes.length;
-    // AI hasnt unlocked al runes for card in hand and chose to draw or gain gold instead, bias against it
+    // AI hasnt unlocked all runes for card in hand and chose to draw or gain gold instead, bias against it
     // it might not always be the best plays but it avoids the AI taking a resource action and still not being able to play any card
     if (needRune && input.type !== 'runeResourceAction') {
       return Number.NEGATIVE_INFINITY;
@@ -84,17 +89,15 @@ export class AiHeuristics {
         }
       });
 
-      // no best rune to be played over another, the current choie is as good as any
+      // no best rune to be played over another, the current choice is as good as any
       if (!isDefined(bestRune)) return 0;
 
       return bestRune === input.payload.rune ? 0 : Number.NEGATIVE_INFINITY;
     }
 
-    const needGold = player.hand
-      .filter(card => card instanceof UnitCard)
-      .every(card => {
-        card.cost.gold > player.gold;
-      });
+    const needGold = player.hand.every(card => {
+      card.cost.gold > player.gold;
+    });
     if (needGold && input.type === 'drawResourceAction') {
       return Number.NEGATIVE_INFINITY;
     }
@@ -108,31 +111,67 @@ export class AiHeuristics {
       post: () => 0
     };
 
-    if (
-      input.type === 'drawResourceAction' ||
-      input.type === 'goldResourceAction' ||
-      input.type === 'runeResourceAction'
-    ) {
-      return {
-        pre: (game: Game) => this.getResourceActionPreScoreModifier(game, input),
-        post: () => 0
-      };
-    }
-
     if (input.type === 'playCard') {
       const card = game.turnSystem.activePlayer.getCardAt(input.payload.index);
-      const { preScoreModifier, postScoreModifier } = card.aiHints;
+      const { prePlayScoreModifier, postPlayScoreModifier } = card.aiHints;
 
       return {
-        pre: preScoreModifier
-          ? (game: Game) => preScoreModifier(game, card, input.payload.targets)
+        pre: prePlayScoreModifier
+          ? (game: Game) => prePlayScoreModifier(game, card, input.payload.targets)
           : defaultModifier.pre,
-        post: postScoreModifier
-          ? (game: Game) => postScoreModifier(game, card, input.payload.targets)
+        post: postPlayScoreModifier
+          ? (game: Game) => postPlayScoreModifier(game, card, input.payload.targets)
           : defaultModifier.pre
       };
     }
 
+    if (input.type === 'attack') {
+      const unit = game.unitSystem.getUnitById(input.payload.unitId as EntityId)!;
+      const { preAttackScoreModifier, postAttackScoreModifier } = unit.card.aiHints;
+
+      return {
+        pre: preAttackScoreModifier
+          ? (game: Game) => preAttackScoreModifier(game, unit, input.payload)
+          : defaultModifier.pre,
+        post: postAttackScoreModifier
+          ? (game: Game) => postAttackScoreModifier(game, unit, input.payload)
+          : defaultModifier.pre
+      };
+    }
+
+    if (input.type === 'move') {
+      const unit = game.unitSystem.getUnitById(input.payload.unitId as EntityId)!;
+      const { preMoveScoreModifier, postMoveScoreModifier } = unit.card.aiHints;
+
+      return {
+        pre: preMoveScoreModifier
+          ? (game: Game) => preMoveScoreModifier(game, unit, input.payload)
+          : defaultModifier.pre,
+        post: postMoveScoreModifier
+          ? (game: Game) => postMoveScoreModifier(game, unit, input.payload)
+          : defaultModifier.pre
+      };
+    }
+
+    if (input.type === 'endTurn') {
+      return {
+        pre: (game: Game) => {
+          const units = game.turnSystem.activePlayer.units.reduce((total, unit) => {
+            return unit.card.aiHints.endTurnWhileOnBoardScoreModifier
+              ? total + unit.card.aiHints.endTurnWhileOnBoardScoreModifier(game, unit)
+              : total;
+          }, 0);
+          const hand = game.turnSystem.activePlayer.hand.reduce((total, card) => {
+            return card.aiHints.endTurnWhileInHandScoreModifier
+              ? total + card.aiHints.endTurnWhileInHandScoreModifier(game, card)
+              : total;
+          }, 0);
+
+          return units + hand;
+        },
+        post: defaultModifier.post
+      };
+    }
     return defaultModifier;
   }
 }

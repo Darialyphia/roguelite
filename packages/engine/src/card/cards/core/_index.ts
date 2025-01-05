@@ -1,10 +1,24 @@
-import { testSpell } from './test-spell';
+import { redFireball } from './red-fireball';
 import type { CardBlueprint } from '../../card-blueprint';
-import { testUnit } from './test-unit';
+import { redFootman } from './red_footman';
 import { keyBy } from 'lodash-es';
 import { testQuest } from './test-quest';
+import { redArcher } from './red_archer';
+import { redEmperor } from './red_emperor';
+import { redBerserk } from './red_berserk';
+import { redAvenger } from './red_avenger';
+import { redCombustion } from './red_combustion';
 
-export const CORE_CARDS = keyBy([testUnit, testSpell, testQuest], 'id') as Record<
-  string,
-  CardBlueprint
->;
+export const CORE_CARDS = keyBy(
+  [
+    redFootman,
+    redArcher,
+    redEmperor,
+    redBerserk,
+    redAvenger,
+    redFireball,
+    redCombustion,
+    testQuest
+  ],
+  'id'
+) as Record<string, CardBlueprint>;

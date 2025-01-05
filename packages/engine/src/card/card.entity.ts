@@ -74,6 +74,10 @@ export abstract class Card<
     return this.blueprint.description;
   }
 
+  get cost() {
+    return this.blueprint.cost;
+  }
+
   get minTargets() {
     return this.blueprint.minTargets;
   }
@@ -86,6 +90,10 @@ export abstract class Card<
     return this.blueprint.targets;
   }
 
+  get shouldHighlightInHand() {
+    return this.blueprint.shouldHighlightInHand?.(this.game, this) ?? false;
+  }
+
   get aiHints() {
     return this.blueprint.aiHints;
   }
@@ -96,7 +104,6 @@ export abstract class Card<
 
   isWithinRange(point: Point3D, index: number) {
     if (index >= this.blueprint.targets.length) return false;
-
     return this.blueprint.targets[index]
       .getTargeting(this.game, this)
       .isWithinRange(point);

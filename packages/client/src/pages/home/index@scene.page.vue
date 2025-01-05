@@ -14,10 +14,10 @@ const screen = useScreen();
     :y="screen.height / 2"
     @render="
       graphics => {
-        graphics.clear();
-        graphics.beginFill(0xde3249);
-        graphics.drawCircle(0, 0, 200);
-        graphics.endFill();
+        // graphics.clear();
+        // graphics.beginFill(0xde3249);
+        // graphics.drawCircle(0, 0, 200);
+        // graphics.endFill();
       }
     "
   />

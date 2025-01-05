@@ -1,16 +1,38 @@
 import { Vec3 } from '@game/shared';
-import { TERRAINS } from '../board-utils';
 import type { GameMap } from '../map';
 import { plainTileset } from '../tilesets/plains';
 
 export const testMap1v1: GameMap = {
   id: 'testMap1v1',
-  width: 11,
-  height: 7,
-  cells: [
-    // level 0
+  cols: 9,
+  rows: 9,
+  floors: [
     [
       [
+        null,
+        null,
+        plainTileset.GRASS,
+        plainTileset.GRASS,
+        plainTileset.GRASS,
+        plainTileset.GRASS,
+        plainTileset.GRASS,
+        null,
+        null,
+        null
+      ],
+      [
+        null,
+        plainTileset.GRASS,
+        plainTileset.GRASS,
+        plainTileset.GRASS,
+        plainTileset.GRASS,
+        plainTileset.GRASS,
+        plainTileset.GRASS,
+        null,
+        null
+      ],
+      [
+        null,
         plainTileset.GRASS,
         plainTileset.GRASS,
         plainTileset.GRASS,
@@ -18,10 +40,7 @@ export const testMap1v1: GameMap = {
         plainTileset.GRASS,
         plainTileset.GRASS,
         plainTileset.GRASS,
-        plainTileset.GRASS,
-        plainTileset.GRASS,
-        plainTileset.GRASS,
-        plainTileset.GRASS
+        null
       ],
       [
         plainTileset.GRASS,
@@ -32,25 +51,9 @@ export const testMap1v1: GameMap = {
         plainTileset.GRASS,
         plainTileset.GRASS,
         plainTileset.GRASS,
-        plainTileset.GRASS,
-        plainTileset.GRASS,
-        plainTileset.GRASS
+        null
       ],
       [
-        plainTileset.GRASS,
-        plainTileset.GRASS,
-        plainTileset.GRASS,
-        plainTileset.GRASS,
-        plainTileset.GRASS,
-        plainTileset.GRASS,
-        plainTileset.GRASS,
-        plainTileset.GRASS,
-        plainTileset.GRASS,
-        plainTileset.GRASS,
-        plainTileset.GRASS
-      ],
-      [
-        plainTileset.GRASS,
         plainTileset.GRASS,
         plainTileset.GRASS,
         plainTileset.GRASS,
@@ -59,7 +62,6 @@ export const testMap1v1: GameMap = {
         plainTileset.GRASS,
         plainTileset.GRASS,
         plainTileset.GRASS,
-        plainTileset.GRASS,
         plainTileset.GRASS
       ],
       [
@@ -71,11 +73,10 @@ export const testMap1v1: GameMap = {
         plainTileset.GRASS,
         plainTileset.GRASS,
         plainTileset.GRASS,
-        plainTileset.GRASS,
-        plainTileset.GRASS,
-        plainTileset.GRASS
+        null
       ],
       [
+        null,
         plainTileset.GRASS,
         plainTileset.GRASS,
         plainTileset.GRASS,
@@ -83,25 +84,32 @@ export const testMap1v1: GameMap = {
         plainTileset.GRASS,
         plainTileset.GRASS,
         plainTileset.GRASS,
-        plainTileset.GRASS,
-        plainTileset.GRASS,
-        plainTileset.GRASS,
-        plainTileset.GRASS
+        null
       ],
       [
+        null,
         plainTileset.GRASS,
         plainTileset.GRASS,
         plainTileset.GRASS,
         plainTileset.GRASS,
         plainTileset.GRASS,
         plainTileset.GRASS,
+        null,
+        null
+      ],
+      [
+        null,
+        null,
         plainTileset.GRASS,
         plainTileset.GRASS,
         plainTileset.GRASS,
         plainTileset.GRASS,
-        plainTileset.GRASS
+        plainTileset.GRASS,
+        null,
+        null,
+        null
       ]
     ]
   ],
-  altarPositions: [[new Vec3(0, 3, 0)], [new Vec3(10, 3, 0)]]
+  altarPositions: [[new Vec3(1, 4, 0)], [new Vec3(7, 4, 0)]]
 };

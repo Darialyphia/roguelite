@@ -25,15 +25,16 @@ export class AIPlayerAgent implements AIAgent {
     const root = new Node(
       NODE_TYPE.ROOT,
       game.clone(this.nextSimulationId++),
-      { type: 'endTurn', payload: { playerId: '1' } } as SerializedInput,
+      { type: 'rootNode', payload: {} } as unknown as SerializedInput,
       0,
       NODE_AIM.MAX
     );
+    root.value = 0;
 
     const tree = new Minimax(root);
     tree.opts.method = SEARCH_METHODS.TIME;
-    tree.opts.pruning = PRUNING_TYPES.NONE;
-    tree.opts.timeout = 500;
+    tree.opts.pruning = PRUNING_TYPES.ALPHA_BETA;
+    tree.opts.timeout = 2000;
     tree.GetMoves = parent => {
       return this.getValidMoves(parent.gamestate);
     };
@@ -44,15 +45,19 @@ export class AIPlayerAgent implements AIAgent {
         this.nextSimulationId++
       );
 
-      const scorer = new AIScorer(this.player.id, this.heuristics, simulator);
-      const score = scorer.getScore();
       const isLeafNode = move.type === 'endTurn' || move.type === 'mulligan';
+      const scorer = new AIScorer(this.player.id, this.heuristics, simulator);
+
+      const score = scorer.getScore(false);
+
       const node = new Node(
         isLeafNode ? NODE_TYPE.LEAF : NODE_TYPE.INNER,
         simulator.game,
         move,
-        0
+        0,
+        NODE_AIM.MAX
       );
+
       node.value = score;
 
       return node;
@@ -61,10 +66,21 @@ export class AIPlayerAgent implements AIAgent {
     return tree;
   }
 
+  getOptimalPath(game: Game): SerializedInput[] {
+    const tree = this.makeTree(game);
+    const now = performance.now();
+    tree.evaluate();
+    console.log('Tree evaluated in', performance.now() - now);
+
+    const path = tree.getOptimalMoves().slice(1);
+
+    return path;
+  }
+
   getNextInput(game: Game): SerializedInput {
     const tree = this.makeTree(game);
-
     const result = tree.evaluate();
+
     return result.move;
   }
 
@@ -72,12 +88,14 @@ export class AIPlayerAgent implements AIAgent {
     if (game.phase === GAME_PHASES.MULLIGAN) {
       return [this.handleMulligan()];
     }
-    const moveScores = this.computeMoveScores(game);
-    const combatScores = this.computeCombatScores(game);
-    const cardScores = this.computeCardScores(game);
-    const resourceScores = this.computeResourceActionScores();
 
-    const moves = [...moveScores, ...combatScores, ...cardScores, ...resourceScores];
+    const moves = game.turnSystem.activePlayer.canPerformResourceAction
+      ? this.computeResourceActions(game)
+      : [
+          ...this.computeMoveActions(game),
+          ...this.computeCombatActions(game),
+          ...this.computeCardActions(game)
+        ];
     moves.push({ type: 'endTurn', payload: { playerId: this.player.id } });
 
     return moves;
@@ -87,13 +105,23 @@ export class AIPlayerAgent implements AIAgent {
     return { type: 'mulligan', payload: { playerId: this.player.id, indices: [] } };
   }
 
-  private computeResourceActionScores(): SerializedInput[] {
-    if (!this.player.canPerformResourceAction) {
+  private computeResourceActions(game: Game): SerializedInput[] {
+    if (!game.turnSystem.activePlayer.canPerformResourceAction) {
       return [];
     }
 
     const results: SerializedInput[] = [];
-    Object.values(RUNES).forEach(rune => {
+    const relevantRunes = Object.values(RUNES).filter(rune => {
+      if (rune === RUNES.COLORLESS) return false;
+
+      const player = game.turnSystem.activePlayer;
+      return (
+        player.hand.some(card => card.cost.runes.some(r => rune.equals(r))) ||
+        player.deck.cards.some(card => card.cost.runes.some(r => rune.equals(r)))
+      );
+    });
+
+    relevantRunes.forEach(rune => {
       results.push({
         type: 'runeResourceAction',
         payload: { playerId: this.player.id, rune: rune.id as any }
@@ -111,32 +139,29 @@ export class AIPlayerAgent implements AIAgent {
     return results;
   }
 
-  private computeMoveScores(game: Game) {
+  private computeMoveActions(game: Game) {
     const results: SerializedInput[] = [];
 
     game.turnSystem.activePlayer.units.forEach(unit => {
-      const cells = game.boardSystem.cells.filter(cell => {
-        return unit.canMoveTo(cell);
-      });
+      const points = this.heuristics.getRelevantMoves(game, unit);
 
-      for (const cell of cells) {
+      for (const point of points) {
         results.push({
           type: 'move',
           payload: {
             playerId: this.player.id,
-            x: cell.x,
-            y: cell.y,
-            z: cell.z,
+            x: point.x,
+            y: point.y,
+            z: point.z,
             unitId: unit.id
           }
         });
       }
     });
-
     return results;
   }
 
-  private computeCombatScores(game: Game) {
+  private computeCombatActions(game: Game) {
     const results: SerializedInput[] = [];
 
     game.turnSystem.activePlayer.units.forEach(unit => {
@@ -161,7 +186,7 @@ export class AIPlayerAgent implements AIAgent {
     return results;
   }
 
-  private computeCardScores(game: Game) {
+  private computeCardActions(game: Game) {
     const results: SerializedInput[] = [];
 
     // cells is a computed getter, let's evaluate it early instead of doing it in every loop iteration
@@ -170,7 +195,7 @@ export class AIPlayerAgent implements AIAgent {
     for (const [index, card] of game.turnSystem.activePlayer.hand.entries()) {
       const canPlay =
         game.turnSystem.activePlayer.canPlayCardAt(index) &&
-        !this.heuristics.shouldAvoidPlayingCard(card);
+        !this.heuristics.shouldAvoidPlayingCard(game, card);
       if (!canPlay) continue;
 
       const targets = this.getPotentialTargets(game, card, cells);

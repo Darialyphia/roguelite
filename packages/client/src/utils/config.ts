@@ -4,9 +4,9 @@ const PIXEL_ART_ASSETS_SCALING = 3;
 
 export const config = {
   TILE_SIZE: {
-    x: 96,
-    y: 48,
-    z: 16
+    x: 64,
+    y: 56,
+    z: 8
   },
 
   UNIT_SPRITE_SIZE: {
@@ -19,10 +19,10 @@ export const config = {
     height: 80
   },
 
-  MOVEMENT_BOUNCE_HEIGHT: 1.5,
-  MOVEMENT_SPEED_PER_TILE: 0.4,
+  MOVEMENT_BOUNCE_HEIGHT: 30,
+  MOVEMENT_SPEED_PER_TILE: 0.3,
 
-  MIN_ZOOM: 1,
+  MIN_ZOOM: 2,
   MAX_ZOOM: 2,
   INITIAL_ZOOM: 2,
 

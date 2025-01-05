@@ -18,10 +18,10 @@ type CardViewModelBase = {
   name: string;
   description: string;
   cost?: CardBlueprint['cost'];
+  shouldHighlightInHand: boolean;
   equals(card: CardViewModel): boolean;
   canPlayAt(points: Point3D[]): boolean;
   areTargetsValid(points: Point3D[]): boolean;
-  isWithinRange(point: Point3D, index: number): boolean;
   getAoe(points: Point3D[]): Nullable<AOEShape>;
 };
 
@@ -31,7 +31,6 @@ type UnitCardViewModel = CardViewModelBase & {
   atk: number;
   maxHp: number;
   reward: number;
-  speed: number;
   jobs: Job[];
   getCard(): UnitCard;
 };
@@ -71,6 +70,7 @@ const makeCardViewModelBase = (game: Game, card: Card): CardViewModelBase => {
     iconId: card.iconId,
     name: card.name,
     description: card.description,
+    shouldHighlightInHand: card.shouldHighlightInHand,
     equals(otherCard) {
       return otherCard.getCard().equals(card);
     },
@@ -80,9 +80,7 @@ const makeCardViewModelBase = (game: Game, card: Card): CardViewModelBase => {
     areTargetsValid(points: Point3D[]) {
       return card.areTargetsValid(points);
     },
-    isWithinRange(point, index) {
-      return card.isWithinRange(point, index);
-    },
+
     getAoe(points) {
       return card.getAoe(points);
     }
@@ -101,7 +99,6 @@ const makeUnitCardViewModel = (
     },
     atk: card.atk,
     maxHp: card.maxHp,
-    speed: card.speed,
     reward: card.reward,
     cost: card.cost,
     jobs: card.jobs

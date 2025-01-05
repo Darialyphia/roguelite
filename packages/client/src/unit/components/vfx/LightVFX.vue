@@ -1,14 +1,7 @@
 <script setup lang="ts">
-import { waitFor, type BetterOmit, type Point } from '@game/shared';
-import { BLEND_MODES, Matrix, Graphics as PixiGraphics } from 'pixi.js';
-import { onTick, PTransitionGroup } from 'vue3-pixi';
-import { radialGradient } from '@/utils/sprite';
-import { config } from '@/utils/config';
-import { useBattleUiStore } from '@/pages/battle/battle-ui.store';
-import { useIsoWorld } from '@/iso/composables/useIsoWorld';
+import { BLEND_MODES } from 'pixi.js';
+import { onTick } from 'vue3-pixi';
 import type { UnitViewModel } from '@/unit/unit.model';
-import { useIsoCamera } from '@/iso/composables/useIsoCamera';
-import { getBlendFilter } from '@pixi/picture';
 import PointLight from '@/vfx/PointLight.vue';
 import type { PointLightConfig } from '@/vfx/usePointLight';
 import { useVFXEvent } from '@/pages/battle/battle.store';
@@ -41,8 +34,8 @@ const secondPass = ref<PointLightConfig>({
   position: { x: 0, y: 0 },
   radius: 100,
   colorStops: [
-    [0, 'hsla(250, 65%, 75%, 30%)'],
-    [0.25, 'hsla(60, 65%, 75%, 30%)'],
+    [0, 'hsla(250, 65%, 75%, 0%)'],
+    [0.25, 'hsla(60, 65%, 75%, 0%)'],
     [1, 'rgba(0,0,0,0)']
   ]
 });

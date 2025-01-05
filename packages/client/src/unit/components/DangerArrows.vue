@@ -2,12 +2,12 @@
 import { PTransitionGroup } from 'vue3-pixi';
 import { DropShadowFilter } from '@pixi/filter-drop-shadow';
 import {
+  useGame,
   useGameClientState,
   usePathHelpers,
   useUserPlayer
 } from '@/pages/battle/battle.store';
 import { useBattleUiStore } from '@/pages/battle/battle-ui.store';
-import { useIsoWorld } from '@/iso/composables/useIsoWorld';
 import { config } from '@/utils/config';
 
 const state = useGameClientState();
@@ -15,7 +15,7 @@ const userPlayer = useUserPlayer();
 
 const ui = useBattleUiStore();
 const pathHelpers = usePathHelpers();
-const isoWorld = useIsoWorld();
+const game = useGame();
 
 const attackerPositions = computed(() => {
   return state.value.units
@@ -33,19 +33,14 @@ const attackerPositions = computed(() => {
       return false;
     })
     .map(unit => {
-      const iso = isoWorld.toIso(unit.position);
+      const cell = game.value.boardSystem.getCellAt(unit.position)!;
       return {
         id: unit.id,
-        x: iso.x,
-        y: iso.y,
-        cartesianPos: unit.position
+        x: cell.hex.x,
+        y: cell.hex.y,
+        gamePos: unit.position
       };
     });
-});
-
-const hoveredCellIsoPosition = computed(() => {
-  if (!ui.hoveredCell) return null;
-  return isoWorld.toIso(ui.hoveredCell);
 });
 
 const filters = [
@@ -81,26 +76,26 @@ const filters = [
         :alpha="0.75"
         :filters="filters"
         @render="
-          g => {
-            if (!hoveredCellIsoPosition) return;
-            g.clear();
-            g.moveTo(pos.x, pos.y);
-            g.lineStyle(2, '#ffdaad');
-            const midPoint = {
-              x: (pos.cartesianPos.x + ui.hoveredCell!.x) / 2,
-              y: (pos.cartesianPos.y + ui.hoveredCell!.y) / 2,
-              z: (pos.cartesianPos.z + ui.hoveredCell!.z) / 2
-            };
+          // g => {
+          //   if (!ui.hoveredCell) return;
+          //   g.clear();
+          //   g.moveTo(pos.x, pos.y);
+          //   g.lineStyle(2, '#ffdaad');
+          //   const midPoint = {
+          //     x: (pos.gamePos.x + ui.hoveredCell!.x) / 2,
+          //     y: (pos.gamePos.y + ui.hoveredCell!.y) / 2,
+          //     z: (pos.gamePos.z + ui.hoveredCell!.z) / 2
+          //   };
 
-            const iso = isoWorld.toIso({ ...midPoint, z: midPoint.z + 8 });
+          //   const iso = isoWorld.toIso({ ...midPoint, z: midPoint.z + 8 });
 
-            g.quadraticCurveTo(
-              iso.x,
-              iso.y,
-              hoveredCellIsoPosition.x,
-              hoveredCellIsoPosition.y + 20
-            );
-          }
+          //   g.quadraticCurveTo(
+          //     iso.x,
+          //     iso.y,
+          //     hoveredCellIsoPosition.x,
+          //     hoveredCellIsoPosition.y + 20
+          //   );
+          // }
         "
       />
     </PTransitionGroup>

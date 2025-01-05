@@ -3,10 +3,6 @@ import { Card, CARD_EVENTS } from './card.entity';
 import type { SpellCardBlueprint } from './card-blueprint';
 
 export class SpellCard extends Card<SpellCardBlueprint> {
-  get cost() {
-    return this.blueprint.cost;
-  }
-
   get isGoldValid() {
     return this.player.canSpendGold(this.cost.gold);
   }
@@ -30,6 +26,8 @@ export class SpellCard extends Card<SpellCardBlueprint> {
       targets,
       vfx: this.blueprint.vfx.play(this.game, this)
     });
+    this.player.spendGold(this.blueprint.cost.gold);
+
     const aoeShape = this.blueprint.getAoe(this.game, this, targets);
     this.blueprint.onPlay(
       this.game,

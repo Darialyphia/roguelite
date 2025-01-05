@@ -3,16 +3,18 @@ import type { Team } from './team.entity';
 import { GAME_EVENTS, type Game } from '../game/game';
 import { CardManagerComponent } from '../card/card-manager.component';
 import type { Card, CardOptions } from '../card/card.entity';
-import { GoldManagerComponent } from './components/gold-manager';
+import { GoldManagerComponent } from './components/gold-manager.component';
 import { config } from '../config';
 import { DECK_EVENTS } from '../card/deck.entity';
 import type { Point3D, Values } from '@game/shared';
 import { TypedEventEmitter } from '../utils/typed-emitter';
-import { RuneManager } from './components/rune-manager';
+import { RuneManager } from './components/rune-manager.component';
 import { match } from 'ts-pattern';
 import { Rune, RUNES } from '../utils/rune';
 import { Obstacle } from '../obstacle/obstacle.entity';
 import type { QuestCard } from '../card/quest-card.entity';
+import { EventTrackerComponent } from './components/event-tracker.component';
+import type { SerializedInput } from '../input/input-system';
 
 export type PlayerOptions = {
   id: string;
@@ -48,10 +50,9 @@ export type PlayerEventMap = {
   [PLAYER_EVENTS.AFTER_PLAY_CARD]: [{ card: Card; targets: Point3D[] }];
 };
 
-type ResourceAction =
-  | { type: 'draw'; payload: Record<string, never> }
-  | { type: 'gold'; payload: Record<string, never> }
-  | { type: 'rune'; payload: { rune: string } };
+type ResourceAction = SerializedInput & {
+  type: 'drawResourceAction' | 'goldResourceAction' | 'runeResourceAction';
+};
 
 export class Player extends Entity {
   private game: Game;
@@ -63,6 +64,8 @@ export class Player extends Entity {
   private readonly cardManager: CardManagerComponent;
 
   private readonly goldManager: GoldManagerComponent;
+
+  private readonly eventTracker: EventTrackerComponent;
 
   private readonly runeManager: RuneManager;
 
@@ -76,6 +79,8 @@ export class Player extends Entity {
 
   private resourceActionsTaken = 0;
 
+  lastResourceActionTaken: ResourceAction | null = null;
+
   readonly altar: Obstacle;
 
   readonly quests = new Set<QuestCard>();
@@ -86,15 +91,14 @@ export class Player extends Entity {
     this.team = team;
     this.name = options.name;
     this.altarPosition = options.altarPosition;
+    this.eventTracker = new EventTrackerComponent(this.game, this);
     this.runeManager = new RuneManager();
-
     this.cardManager = new CardManagerComponent(this.game, this, {
       deck: options.deck
     });
-    this.goldManager = new GoldManagerComponent(this.game, config.INITIAL_GOLD);
+    this.goldManager = new GoldManagerComponent(config.INITIAL_GOLD);
     this.forwardEvents();
     this.draw(config.INITIAL_HAND_SIZE);
-    this.game.on(GAME_EVENTS.TURN_START, this.onGameTurnStart.bind(this));
     this.game.on(GAME_EVENTS.START_BATTLE, this.onBattleStart.bind(this));
 
     this.altar = new Obstacle(this.game, {
@@ -121,6 +125,14 @@ export class Player extends Entity {
 
   get off() {
     return this.emitter.off.bind(this.emitter);
+  }
+
+  get allyDiedLastTurn() {
+    return this.eventTracker.allyDiedLastTurn;
+  }
+
+  get enemyDiedLastTurn() {
+    return this.eventTracker.enemyDiedLastTurn;
   }
 
   get gold() {
@@ -171,6 +183,10 @@ export class Player extends Entity {
     return [...this.cardManager.hand];
   }
 
+  get deck() {
+    return this.cardManager.deck;
+  }
+
   get deckSize() {
     return this.cardManager.deckSize;
   }
@@ -203,6 +219,17 @@ export class Player extends Entity {
     return this.game.unitSystem.units.filter(u => u.player.equals(this));
   }
 
+  get enemyUnits() {
+    return this.game.unitSystem.units.filter(u => !u.player.equals(this));
+  }
+
+  get enemiesPositions(): Point3D[] {
+    return [
+      ...this.enemyUnits.map(e => e.position),
+      ...this.opponents.map(o => o.altarPosition)
+    ];
+  }
+
   private forwardEvents() {
     this.cardManager.deck.on(DECK_EVENTS.BEFORE_DRAW, e => {
       this.emitter.emit(DECK_EVENTS.BEFORE_DRAW, e);
@@ -214,14 +241,15 @@ export class Player extends Entity {
 
   performResourceAction(action: ResourceAction) {
     this.resourceActionsTaken++;
+    this.lastResourceActionTaken = action;
     match(action)
-      .with({ type: 'draw' }, () => {
+      .with({ type: 'drawResourceAction' }, () => {
         this.draw(1);
       })
-      .with({ type: 'gold' }, () => {
+      .with({ type: 'goldResourceAction' }, () => {
         this.goldManager.deposit(1);
       })
-      .with({ type: 'rune' }, action => {
+      .with({ type: 'runeResourceAction' }, action => {
         this.addRune(RUNES[action.payload.rune as keyof typeof RUNES]);
       })
       .exhaustive();
@@ -248,16 +276,17 @@ export class Player extends Entity {
     this.emitter.emit(PLAYER_EVENTS.AFTER_PLAY_CARD, { card, targets });
   }
 
-  onGameTurnStart() {
+  startTurn() {
     this.resourceActionsTaken = 0;
     this.draw(config.CARDS_DRAWN_PER_TURN);
+    this.addGold(config.GOLD_PER_TURN);
+    this.emitter.emit(PLAYER_EVENTS.START_TURN, { id: this.id });
   }
 
   // eslint-disable-next-line @typescript-eslint/no-empty-function
   onBattleStart() {}
 
   endTurn() {
-    console.log('end turn');
     this.emitter.emit(PLAYER_EVENTS.END_TURN, { id: this.id });
   }
 }

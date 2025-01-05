@@ -21,6 +21,7 @@ import { UNIT_EVENTS } from './unit-enums';
 import { COMBAT_EVENTS, CombatComponent } from '../combat/combat.component';
 import { PathfinderComponent } from '../pathfinding/pathfinder.component';
 import type { Obstacle } from '../obstacle/obstacle.entity';
+import { KeywordManagerComponent } from './components/keyword-manager.component';
 
 export type UnitOptions = {
   id: string;
@@ -63,16 +64,18 @@ export class Unit extends Entity {
 
   readonly movement: MovementComponent;
 
+  readonly keywordManager: KeywordManagerComponent;
+
   private readonly combat: CombatComponent;
 
   private interceptors = {
     canMove: new Interceptable<boolean>(),
     canAttack: new Interceptable<boolean>(),
+    canCounterAttack: new Interceptable<boolean>(),
     canBeAttackTarget: new Interceptable<boolean>(),
     canBeCardTarget: new Interceptable<boolean>(),
     canSummonUnitsNearby: new Interceptable<boolean>(),
 
-    speed: new Interceptable<number>(),
     attack: new Interceptable<number>(),
     attackTargetingPattern: new Interceptable<TargetingStrategy>(),
     attackAOEShape: new Interceptable<AOEShape>(),
@@ -96,6 +99,7 @@ export class Unit extends Entity {
     this.ap = new ActionPointComponent({ maxAp: config.UNIT_BASE_AP, initialValue: 0 });
     this.hp = new HealthComponent({ maxHp: this.card.maxHp });
     this.hp.on(HEALTH_EVENTS.CHANGE, this.checkHp.bind(this));
+    this.keywordManager = new KeywordManagerComponent();
     this.movement = new MovementComponent({
       position: options.position,
       pathfinding: new PathfinderComponent(
@@ -118,6 +122,18 @@ export class Unit extends Entity {
 
   get position() {
     return this.movement.position;
+  }
+
+  get keywords() {
+    return this.keywordManager.keywords;
+  }
+
+  get addKeyword() {
+    return this.keywordManager.add.bind(this.keywordManager);
+  }
+
+  get removeKeyword() {
+    return this.keywordManager.remove.bind(this.keywordManager);
   }
 
   get x() {
@@ -156,10 +172,6 @@ export class Unit extends Entity {
     return this.card.description;
   }
 
-  get speed(): number {
-    return this.interceptors.speed.getValue(this.card.speed, {});
-  }
-
   get canSummonUnitsNearby(): boolean {
     return this.interceptors.canSummonUnitsNearby.getValue(false, {});
   }
@@ -170,6 +182,10 @@ export class Unit extends Entity {
 
   get canBeCardTarget(): boolean {
     return this.interceptors.canBeCardTarget.getValue(true, {});
+  }
+
+  get isDead() {
+    return this.hp.isDead;
   }
 
   get atk() {
@@ -209,6 +225,14 @@ export class Unit extends Entity {
     return this.interceptors.attackAOEShape.getValue(new PointAOEShape(this.game), {});
   }
 
+  get attacksPerformedThisTurn() {
+    return this.combat.attacksCount;
+  }
+
+  get counterAttacksPerformedThisTurn() {
+    return this.combat.counterAttacksCount;
+  }
+
   get canMove(): boolean {
     return this.interceptors.canMove.getValue(
       this.ap.current >= this.apCostPerMovement,
@@ -219,6 +243,13 @@ export class Unit extends Entity {
   get canAttack(): boolean {
     return this.interceptors.canAttack.getValue(
       this.ap.current >= this.combat.nextAttackApCost,
+      {}
+    );
+  }
+
+  get canCounterAttack(): boolean {
+    return this.interceptors.canCounterAttack.getValue(
+      this.combat.counterAttacksCount < this.maxCounterattacksPerTurn,
       {}
     );
   }
@@ -299,7 +330,11 @@ export class Unit extends Entity {
     );
   }
 
-  onAddedToBoard() {
+  get remainingMovement() {
+    return Math.floor(this.ap.current / this.apCostPerMovement);
+  }
+
+  addToBoard() {
     this.emitter.emit(UNIT_EVENTS.CREATED, { id: this.id });
   }
 
@@ -335,6 +370,11 @@ export class Unit extends Entity {
 
   getPathTo(to: Point3D) {
     return this.movement.getPathTo(to);
+  }
+
+  getPossibleMoves() {
+    if (!this.canMove) return [];
+    return this.movement.getAllPossibleMoves(this.ap.current / this.apCostPerMovement);
   }
 
   getDealtDamage(baseAmount: number, target?: Unit) {
@@ -391,8 +431,12 @@ export class Unit extends Entity {
   }
 
   canAttackAt(point: Point3D) {
-    if (!this.canAttack) return false;
-    if (this.position.equals(point)) return false;
+    if (!this.canAttack) {
+      return false;
+    }
+    if (this.position.equals(point)) {
+      return false;
+    }
 
     const cell = this.game.boardSystem.getCellAt(point)!;
 
@@ -401,7 +445,9 @@ export class Unit extends Entity {
     }
 
     const target = cell.unit;
-    if (target && !target.canBeAttacked) return false;
+    if (target && !target.canBeAttacked) {
+      return false;
+    }
 
     return this.attackTargettingPattern.canTargetAt(point);
   }
@@ -417,7 +463,7 @@ export class Unit extends Entity {
   }
 
   canCounterAttackAt(point: Point3D) {
-    return this.combat.canCounterAttackAt(point);
+    return this.canCounterAttack && this.attackTargettingPattern.canTargetAt(point);
   }
 
   destroy(source: Card) {

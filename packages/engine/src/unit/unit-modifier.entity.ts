@@ -5,17 +5,23 @@ import type { UnitModifierMixin } from './modifier-mixins/unit-modifier-mixin';
 import type { Unit } from './unit.entity';
 import { TypedEventEmitter } from '../utils/typed-emitter';
 
-export type UnitModifierOptions = {
+export type UnitModifierInfos = {
+  iconId?: string;
+  name?: string;
+  description?: string;
+};
+
+export type UnitModifierOptions = UnitModifierInfos & {
   mixins: UnitModifierMixin[];
 } & (
-  | {
-      stackable: true;
-      initialStacks: number;
-    }
-  | {
-      stackable: false;
-    }
-);
+    | {
+        stackable: true;
+        initialStacks: number;
+      }
+    | {
+        stackable: false;
+      }
+  );
 
 export const UNIT_MODIFIER_EVENTS = {
   BEFORE_APPLIED: 'before_applied',
@@ -37,7 +43,7 @@ export type UnitModifierEventMap = {
 
 export type UnitModifierEvent = Values<typeof UNIT_MODIFIER_EVENTS>;
 
-export abstract class UnitModifier extends Entity {
+export class UnitModifier extends Entity {
   private emitter = new TypedEventEmitter<UnitModifierEventMap>();
 
   private mixins: UnitModifierMixin[];
@@ -48,14 +54,9 @@ export abstract class UnitModifier extends Entity {
 
   protected stackable: boolean;
 
-  protected target!: Unit;
+  protected _target!: Unit;
 
-  abstract infos?: {
-    iconId?: string;
-    spriteId?: string;
-    name?: string;
-    description?: string;
-  };
+  readonly infos: UnitModifierInfos;
 
   constructor(id: EntityId, game: Game, options: UnitModifierOptions) {
     super(id);
@@ -63,6 +64,11 @@ export abstract class UnitModifier extends Entity {
     this.mixins = options.mixins;
     this.stackable = options.stackable;
     this.stacks = options.stackable ? options.initialStacks : -1;
+    this.infos = {
+      description: options.description,
+      name: options.name,
+      iconId: options.iconId
+    };
   }
 
   get on() {
@@ -77,6 +83,10 @@ export abstract class UnitModifier extends Entity {
     return this.emitter.off.bind(this.emitter);
   }
 
+  get target() {
+    return this._target;
+  }
+
   addStacks(amount: number) {
     assert(this.stackable, `Modifier ${this.id} is not stackable`);
     this.stacks += amount;
@@ -86,13 +96,13 @@ export abstract class UnitModifier extends Entity {
     assert(this.stackable, `Modifier ${this.id} is not stackable`);
     this.stacks -= amount;
     if (this.stacks === 0) {
-      this.target.removeModifier(this.id);
+      this._target.removeModifier(this.id);
     }
   }
 
   applyTo(unit: Unit) {
     this.emitter.emit(UNIT_MODIFIER_EVENTS.BEFORE_APPLIED);
-    this.target = unit;
+    this._target = unit;
     this.mixins.forEach(mixin => {
       mixin.onApplied(unit, this);
     });
@@ -114,7 +124,7 @@ export abstract class UnitModifier extends Entity {
   remove() {
     this.emitter.emit(UNIT_MODIFIER_EVENTS.BEFORE_REMOVED);
     this.mixins.forEach(mixin => {
-      mixin.onRemoved(this.target, this);
+      mixin.onRemoved(this._target, this);
     });
     this.emitter.emit(UNIT_MODIFIER_EVENTS.AFTER_REMOVED);
   }

@@ -16,16 +16,30 @@ type CardBlueprintTarget = {
   getTargeting(game: Game, card: Card): TargetingStrategy;
 };
 
+export type CardAiHints = {
+  isRelevantTarget?: (point: Point3D, game: Game, card: Card, index: number) => boolean;
+  relevantMoves?: (game: Game, unit: Unit) => Point3D[];
+  maxUsesPerTurn?: (game: Game, card: Card) => number;
+  prePlayScoreModifier?: (game: Game, card: Card, targets: Point3D[]) => number;
+  postPlayScoreModifier?: (game: Game, card: Card, targets: Point3D[]) => number;
+  preAttackScoreModifier?: (game: Game, unit: Unit, target: Point3D) => number;
+  postAttackScoreModifier?: (game: Game, unit: Unit, target: Point3D) => number;
+  preMoveScoreModifier?: (game: Game, unit: Unit, target: Point3D) => number;
+  postMoveScoreModifier?: (game: Game, unit: Unit, target: Point3D) => number;
+  endTurnWhileInHandScoreModifier?: (game: Game, card: Card) => number;
+  endTurnWhileOnBoardScoreModifier?: (game: Game, unit: Unit) => number;
+};
+
 export type CardBlueprintBase = {
   id: string;
   name: string;
   iconId: string;
   description: string;
-  aiHints: {
-    isRelevantTarget?: (point: Point3D, game: Game, card: Card, index: number) => boolean;
-    maxUsesPerTurn?: number;
-    preScoreModifier?: (game: Game, card: Card, targets: Point3D[]) => number;
-    postScoreModifier?: (game: Game, card: Card, targets: Point3D[]) => number;
+  shouldHighlightInHand?: (game: Game, card: Card) => boolean;
+  aiHints: CardAiHints;
+  cost: {
+    gold: number;
+    runes: Rune[];
   };
 };
 
@@ -34,13 +48,8 @@ export type UnitCardBlueprint = CardBlueprintBase & {
   spriteId: string;
   maxHp: number;
   atk: number;
-  speed: number;
   reward: number;
   jobs: Job[];
-  cost: {
-    gold: number;
-    runes: Rune[];
-  };
   vfx: {
     play(game: Game, card: UnitCard): VFXSequence;
     destroy(game: Game, card: UnitCard): VFXSequence;
@@ -54,10 +63,6 @@ export type UnitCardBlueprint = CardBlueprintBase & {
 
 export type SpellCardBlueprint = CardBlueprintBase & {
   kind: Extract<CardKind, typeof CARD_KINDS.SPELL>;
-  cost: {
-    gold: number;
-    runes: Rune[];
-  };
   vfx: {
     play(game: Game, card: SpellCard): VFXSequence;
   };
@@ -69,10 +74,6 @@ export type SpellCardBlueprint = CardBlueprintBase & {
 
 export type QuestCardBlueprint = CardBlueprintBase & {
   kind: Extract<CardKind, typeof CARD_KINDS.QUEST>;
-  cost: {
-    gold: number;
-    runes: Rune[];
-  };
   vfx: {
     play(game: Game, card: QuestCard): VFXSequence;
   };

@@ -1,4 +1,4 @@
-import type { IsoCameraContext } from '@/iso/composables/useIsoCamera';
+import type { CameraContext } from '@/board/composables/useCamera';
 import { useSafeInject } from '@/shared/composables/useSafeInject';
 import { config } from '@/utils/config';
 import { dist, mapRange, type Point } from '@game/shared';
@@ -22,7 +22,7 @@ type PointLightContext = {
 const POINT_LIGHTS_INJECTION_KEY = Symbol(
   'pointLights'
 ) as InjectionKey<PointLightContext>;
-export const providePointLights = (camera: IsoCameraContext) => {
+export const providePointLights = (camera: CameraContext) => {
   const lights: PointLighInstance[] = [];
 
   const PROXIMITY_THRESHOLD = 300; // Example threshold distance

@@ -6,9 +6,14 @@ import { CARD_KINDS } from '@game/engine/src/card/card-enums';
 import { match } from 'ts-pattern';
 import { RUNES, type Rune } from '@game/engine/src/utils/rune';
 import { useDynamicFontSize } from '@/shared/composables/useDynamicFontSize';
+import TextWithKeywords from './TextWithKeywords.vue';
 
 const { card, violations } = defineProps<{
-  card: CardViewModel;
+  card: Pick<
+    CardViewModel,
+    'name' | 'description' | 'kind' | 'iconId' | 'cost'
+  > &
+    Partial<Pick<CardViewModel & { kind: 'unit' }, 'atk' | 'maxHp' | 'reward'>>;
   violations?: { job?: boolean; ap?: boolean; gold?: boolean; runes?: boolean };
 }>();
 
@@ -25,9 +30,7 @@ const metaString = computed(() =>
     .with({ kind: CARD_KINDS.SPELL }, { kind: CARD_KINDS.QUEST }, card => {
       return card.kind;
     })
-    .with({ kind: CARD_KINDS.UNIT }, card =>
-      [card.kind, ...card.jobs.map(j => j.name)].join(' - ')
-    )
+    .with({ kind: CARD_KINDS.UNIT }, card => [card.kind].join(' - '))
     .exhaustive()
 );
 const metaFontSize = useDynamicFontSize(metaString, {
@@ -77,18 +80,22 @@ const runeCosts = computed(() => {
         </ul>
       </div>
       <div class="stats" v-if="card.kind === CARD_KINDS.UNIT">
-        <StatCircle :value="card.maxHp" icon="hp" />
-        <StatCircle :value="card.atk" icon="atk" />
+        <StatCircle :value="card.reward!" icon="vp" />
       </div>
     </header>
     <div class="name">{{ card.name }}</div>
-    <div class="description">{{ card.description }}</div>
+    <div class="description">
+      <TextWithKeywords :text="card.description" />
+    </div>
     <div class="meta">
       {{ metaString }}
     </div>
 
-    <div class="reward" v-if="card.kind === CARD_KINDS.UNIT">
-      <StatCircle :value="card.reward" icon="vp" />
+    <div class="attack" v-if="card.kind === CARD_KINDS.UNIT">
+      <StatCircle :value="card.atk!" icon="atk" />
+    </div>
+    <div class="hp" v-if="card.kind === CARD_KINDS.UNIT">
+      <StatCircle :value="card.maxHp!" icon="hp" />
     </div>
   </div>
 </template>
@@ -144,9 +151,15 @@ const runeCosts = computed(() => {
   gap: 6px;
 }
 
-.reward {
+.hp {
   position: absolute;
   right: 0;
+  bottom: 0;
+}
+
+.attack {
+  position: absolute;
+  right: left;
   bottom: 0;
 }
 
