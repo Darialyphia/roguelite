@@ -56,7 +56,9 @@ export const redAvenger: UnitCardBlueprint = {
     }
   },
   shouldHighlightInHand(game, card) {
-    return card.player.allyDiedLastTurn;
+    return (
+      game.turnSystem.activePlayer.equals(card.player) && card.player.allyDiedLastTurn
+    );
   },
   onPlay(game, card) {
     card.unit.addModifier(

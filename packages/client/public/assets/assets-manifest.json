@@ -260,6 +260,19 @@
         },
         {
           "alias": [
+            "icon-spell-combustion"
+          ],
+          "src": [
+            "/assets/icons/spell-combustion.png"
+          ],
+          "data": {
+            "tags": {
+              "m": true
+            }
+          }
+        },
+        {
+          "alias": [
             "icon-spell-fireball"
           ],
           "src": [

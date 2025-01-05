@@ -2,16 +2,16 @@ import { Damage } from '../../../combat/damage/damage';
 import { NoMitigationStrategy } from '../../../combat/damage/mitigation/no-mitigation.strategy';
 import { NoScalingStrategy } from '../../../combat/damage/scaling/no-scaling.strategy';
 import { AnywhereTargetingStrategy } from '../../../targeting/anywhere-targeting-strategy';
-import { PointAOEShape, RingAOEShape } from '../../../targeting/aoe-shapes';
+import { PointAOEShape } from '../../../targeting/aoe-shapes';
 import { TARGETING_TYPE } from '../../../targeting/targeting-strategy';
 import { RUNES } from '../../../utils/rune';
 import { type SpellCardBlueprint } from '../../card-blueprint';
 import { CARD_KINDS } from '../../card-enums';
 
-export const testSpell: SpellCardBlueprint = {
-  id: 'test-spell',
+export const redFireball: SpellCardBlueprint = {
+  id: 'red-fireball',
   iconId: 'spell-fireball',
-  name: 'Fire blast',
+  name: 'Fire ball',
   description: 'Deal 2 damage to an enemy.',
   kind: CARD_KINDS.SPELL,
   aiHints: {},

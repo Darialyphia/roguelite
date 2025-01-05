@@ -38,6 +38,9 @@ const options: Pick<GameOptions, 'mapId' | 'teams'> = {
         name: 'Daria',
         deck: {
           cards: [
+            { blueprintId: 'red-combustion' },
+            { blueprintId: 'red-combustion' },
+            { blueprintId: 'red-combustion' },
             { blueprintId: 'red-footman' },
             { blueprintId: 'red-footman' },
             { blueprintId: 'red-footman' },
@@ -53,9 +56,9 @@ const options: Pick<GameOptions, 'mapId' | 'teams'> = {
             { blueprintId: 'red-emperor' },
             { blueprintId: 'red-emperor' },
             { blueprintId: 'red-emperor' },
-            { blueprintId: 'test-spell' },
-            { blueprintId: 'test-spell' },
-            { blueprintId: 'test-spell' },
+            { blueprintId: 'red-fireball' },
+            { blueprintId: 'red-fireball' },
+            { blueprintId: 'red-fireball' },
             { blueprintId: 'test-quest' },
             { blueprintId: 'test-quest' },
             { blueprintId: 'test-quest' }
@@ -84,9 +87,9 @@ const options: Pick<GameOptions, 'mapId' | 'teams'> = {
             { blueprintId: 'red-emperor' },
             { blueprintId: 'red-emperor' },
             { blueprintId: 'red-emperor' },
-            { blueprintId: 'test-spell' },
-            { blueprintId: 'test-spell' },
-            { blueprintId: 'test-spell' },
+            { blueprintId: 'red-fireball' },
+            { blueprintId: 'red-fireball' },
+            { blueprintId: 'red-fireball' },
             { blueprintId: 'test-quest' },
             { blueprintId: 'test-quest' },
             { blueprintId: 'test-quest' }

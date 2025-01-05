@@ -1,4 +1,4 @@
-import { testSpell } from './test-spell';
+import { redFireball } from './red-fireball';
 import type { CardBlueprint } from '../../card-blueprint';
 import { redFootman } from './red_footman';
 import { keyBy } from 'lodash-es';
@@ -7,8 +7,18 @@ import { redArcher } from './red_archer';
 import { redEmperor } from './red_emperor';
 import { redBerserk } from './red_berserk';
 import { redAvenger } from './red_avenger';
+import { redCombustion } from './red_combustion';
 
 export const CORE_CARDS = keyBy(
-  [redFootman, redArcher, redEmperor, redBerserk, redAvenger, testSpell, testQuest],
+  [
+    redFootman,
+    redArcher,
+    redEmperor,
+    redBerserk,
+    redAvenger,
+    redFireball,
+    redCombustion,
+    testQuest
+  ],
   'id'
 ) as Record<string, CardBlueprint>;

@@ -103,3 +103,29 @@ export class IntersectionAoeShape implements AOEShape {
       });
   }
 }
+
+export class CompositeAOEShape implements AOEShape {
+  constructor(private shapes: AOEShape[]) {}
+
+  getCells(points: Point3D[]) {
+    const cells = new Set<Cell>();
+    this.shapes.forEach(shape => {
+      shape.getCells(points).forEach(cell => {
+        cells.add(cell);
+      });
+    });
+
+    return [...cells];
+  }
+
+  getUnits(points: Point3D[]) {
+    const units = new Set<Unit>();
+    this.shapes.forEach(shape => {
+      shape.getUnits(points).forEach(unit => {
+        units.add(unit);
+      });
+    });
+
+    return [...units];
+  }
+}

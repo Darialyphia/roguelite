@@ -184,6 +184,10 @@ export class Unit extends Entity {
     return this.interceptors.canBeCardTarget.getValue(true, {});
   }
 
+  get isDead() {
+    return this.hp.isDead;
+  }
+
   get atk() {
     return this.interceptors.attack.getValue(this.card.atk, {});
   }

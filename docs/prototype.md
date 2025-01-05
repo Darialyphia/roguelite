@@ -44,7 +44,7 @@ Note: all numbers provide din this design document  are subject to change and ar
 - Unit can move on the board by spending one AP per tile.
 - Unit can attack another nearby unit as long as they are axis aligned (no diagonals), by spending 1AP. The cost increases by 2 for every attack (1, then 3, then 5, etc...)
 - When attacked for the first time in a turn, a unit will counterattack.
-- [REALLY NOT SURE ABOUT THIS ONE] Units have a class. They can play Spell Cards by spending AP as long as their class align with the spell's class (mages can play mage cards, fighters can play fighter cards, etc...).
+
 - Units may also have activated abilities that are used by spending the correspondiong AP cost. 
 - Abilities and unit passive effect gated by a higher rune requirement than what they needed to be played.
 
