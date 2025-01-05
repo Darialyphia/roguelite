@@ -20,6 +20,7 @@ import type { SerializedInput } from '@game/engine/src/input/input-system';
 import { until } from '@vueuse/core';
 import MulliganOverlay from '@/card/components/MulliganOverlay.vue';
 import PlayerBattleInfos from '@/player/components/PlayerBattleInfos.vue';
+import PlayerBattleInfosV2 from '@/player/components/PlayerBattleInfosV2.vue';
 import { makePlayerViewModel } from '@/player/player.model';
 import OpponentHand from '@/card/components/OpponentHand.vue';
 import TurnIndicator from '@/player/components/TurnIndicator.vue';
@@ -161,7 +162,7 @@ start();
     <MulliganOverlay />
     <PlayedCard />
     <TurnIndicator />
-    <ul class="fixed pointer-events-auto top-8 left-2">
+    <ul class="fixed pointer-events-auto bottom-8 right-2">
       <li>
         <button @click="() => console.log(serverSession)">
           Debug server session
@@ -175,9 +176,9 @@ start();
     </ul>
 
     <header>
-      <div />
+      <PlayerBattleInfosV2 :player="userPlayer" class="player-battle-infos" />
       <OpponentHand class="opponent-hand" />
-      <PlayerBattleInfos
+      <PlayerBattleInfosV2
         :player="opponent"
         class="opponent-battle-infos"
         inverted
@@ -187,9 +188,9 @@ start();
     <BattleLog class="pointer-events-auto" />
 
     <footer class="bottom-row">
-      <PlayerBattleInfos :player="userPlayer" class="player-battle-infos" />
-      <Hand class="hand" />
       <ActionWheel />
+      <Hand class="hand" />
+      <div />
     </footer>
   </div>
 </template>
@@ -208,16 +209,18 @@ footer {
   grid-template-columns: minmax(0, 0.25fr) minmax(0, 0.5fr) minmax(0, 0.25fr);
 }
 
+header {
+  padding-top: var(--size-3);
+}
+
 footer {
   grid-row: 3;
 }
 
 .action-wheel {
   align-self: end;
-  justify-self: end;
   margin-block-end: var(--size-6);
-  margin-inline-end: var(--size-6);
-  justify-self: end;
+  margin-inline-start: var(--size-6);
 }
 
 .hand,

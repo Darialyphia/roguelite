@@ -136,8 +136,6 @@ Units have the following stats:
 
 - Health Points (HP): the amount of damage a unit can take before being destroyed
 
-- Reward Points (RP): the amount of Victory Points awarded to your opponent when the unit is destroyed.
-
 Units cannot act the turn they are summoned (unless specified otherwise on the card text).
 
 Units have 3 Action Points (called AP) that refreshes every turn. AP are used by the unit to perform actions.
@@ -198,28 +196,28 @@ A shrine can only be controlled by one player. While multiple units cannot norma
 
 Players accumulate Victory Points (VP) by accomplishing certain feats.
 
-VP can be earned by
+A player win the game by having 15 VP.
 
-- Destroying units: when a player destroys an enemy unit, VP are awarded equal to the destroyed unit Reward Points. Destroying an allied unit (wether by self-inflicted destruction, or being in the area of effect of an allied damaging spell, for example) does not provide any VP to any player.
+VPs can be earned by
 
 - Controlling shrines.
 
 - Fulfilling quest cards.
 
-- Destroying the enemy general awards 6 VP: 3 VP when it is reduced to half its HP, and an additional 3 VP when it is destroyed completely.
+- Destroying the enemy general awards 8 VP: 4 VP when it is reduced to half its HP, and an additional 4 VP when it is destroyed completely.
 
 
 ## Comeback Mechanic
 
 To help balance the game and offer comeback opportunities, players gain a bonus when their opponent reaches certain VP thresholds:
 
-When the opponent reaches 4 VP, the player draws an extra card.
+When the opponent reaches 5 VP, the player draws an extra card.
 
-When the opponent reaches 8 VP, the player draws an additional extra card.
+When the opponent reaches 10 VP, the player draws an additional extra card.
 
 ## Turn Limit and Endgame
 
-The game has a turn limit of 10 turns per player (20 turns total). If neither player has reached 12 VP by the end of the game, bonus turns are introduced:
+The game has a turn limit of 10 turns per player (20 turns total). If neither player has reached 15 VP by the end of the game, bonus turns are introduced:
 
 Both players take additional turns until one player has more VP than the other at the end of a full round (both players have completed a turn).
 

@@ -228,7 +228,7 @@ const isAction = (event: Pick<Token, 'kind'>[]) =>
 <style scoped lang="postcss">
 .combat-log {
   position: fixed;
-  top: 20%;
+  top: 35%;
 
   font-family: 'Press Start 2P';
   color: #efef9f;

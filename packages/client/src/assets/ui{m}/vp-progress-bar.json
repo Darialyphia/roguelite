@@ -1,0 +1,162 @@
+{ "frames": {
+   "vp-progress-bar__Layer 1_0_0": {
+    "frame": { "x": 0, "y": 0, "w": 12, "h": 68 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 12, "h": 68 },
+    "sourceSize": { "w": 12, "h": 68 },
+    "duration": 1
+   },
+   "vp-progress-bar__Layer 1_1_0": {
+    "frame": { "x": 0, "y": 68, "w": 12, "h": 68 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 12, "h": 68 },
+    "sourceSize": { "w": 12, "h": 68 },
+    "duration": 100
+   },
+   "vp-progress-bar__Layer 1_2_0": {
+    "frame": { "x": 0, "y": 136, "w": 12, "h": 68 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 12, "h": 68 },
+    "sourceSize": { "w": 12, "h": 68 },
+    "duration": 100
+   },
+   "vp-progress-bar__Layer 1_3_0": {
+    "frame": { "x": 0, "y": 204, "w": 12, "h": 68 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 12, "h": 68 },
+    "sourceSize": { "w": 12, "h": 68 },
+    "duration": 100
+   },
+   "vp-progress-bar__Layer 1_4_0": {
+    "frame": { "x": 0, "y": 272, "w": 12, "h": 68 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 12, "h": 68 },
+    "sourceSize": { "w": 12, "h": 68 },
+    "duration": 100
+   },
+   "vp-progress-bar__Layer 1_5_0": {
+    "frame": { "x": 0, "y": 340, "w": 12, "h": 68 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 12, "h": 68 },
+    "sourceSize": { "w": 12, "h": 68 },
+    "duration": 100
+   },
+   "vp-progress-bar__Layer 1_6_0": {
+    "frame": { "x": 0, "y": 408, "w": 12, "h": 68 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 12, "h": 68 },
+    "sourceSize": { "w": 12, "h": 68 },
+    "duration": 100
+   },
+   "vp-progress-bar__Layer 1_7_0": {
+    "frame": { "x": 0, "y": 476, "w": 12, "h": 68 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 12, "h": 68 },
+    "sourceSize": { "w": 12, "h": 68 },
+    "duration": 100
+   },
+   "vp-progress-bar__Layer 1_8_0": {
+    "frame": { "x": 0, "y": 544, "w": 12, "h": 68 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 12, "h": 68 },
+    "sourceSize": { "w": 12, "h": 68 },
+    "duration": 100
+   },
+   "vp-progress-bar__Layer 1_9_0": {
+    "frame": { "x": 0, "y": 612, "w": 12, "h": 68 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 12, "h": 68 },
+    "sourceSize": { "w": 12, "h": 68 },
+    "duration": 100
+   },
+   "vp-progress-bar__Layer 1_10_0": {
+    "frame": { "x": 0, "y": 680, "w": 12, "h": 68 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 12, "h": 68 },
+    "sourceSize": { "w": 12, "h": 68 },
+    "duration": 100
+   },
+   "vp-progress-bar__Layer 1_11_0": {
+    "frame": { "x": 0, "y": 748, "w": 12, "h": 68 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 12, "h": 68 },
+    "sourceSize": { "w": 12, "h": 68 },
+    "duration": 100
+   },
+   "vp-progress-bar__Layer 1_12_0": {
+    "frame": { "x": 0, "y": 816, "w": 12, "h": 68 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 12, "h": 68 },
+    "sourceSize": { "w": 12, "h": 68 },
+    "duration": 100
+   },
+   "vp-progress-bar__Layer 1_13_0": {
+    "frame": { "x": 0, "y": 884, "w": 12, "h": 68 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 12, "h": 68 },
+    "sourceSize": { "w": 12, "h": 68 },
+    "duration": 100
+   },
+   "vp-progress-bar__Layer 1_14_0": {
+    "frame": { "x": 0, "y": 952, "w": 12, "h": 68 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 12, "h": 68 },
+    "sourceSize": { "w": 12, "h": 68 },
+    "duration": 100
+   },
+   "vp-progress-bar__Layer 1_15_0": {
+    "frame": { "x": 0, "y": 1020, "w": 12, "h": 68 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 12, "h": 68 },
+    "sourceSize": { "w": 12, "h": 68 },
+    "duration": 100
+   }
+ },
+ "meta": {
+  "app": "https://www.aseprite.org/",
+  "version": "1.3.10.1-x64",
+  "image": "vp-progress-bar.png",
+  "format": "RGBA8888",
+  "size": { "w": 12, "h": 1088 },
+  "scale": "1",
+  "frameTags": [
+   { "name": "0", "from": 0, "to": 0, "direction": "forward", "color": "#000000ff" },
+   { "name": "1", "from": 1, "to": 1, "direction": "forward", "color": "#000000ff" },
+   { "name": "2", "from": 2, "to": 2, "direction": "forward", "color": "#000000ff" },
+   { "name": "3", "from": 3, "to": 3, "direction": "forward", "color": "#000000ff" },
+   { "name": "4", "from": 4, "to": 4, "direction": "forward", "color": "#000000ff" },
+   { "name": "5", "from": 5, "to": 5, "direction": "forward", "color": "#000000ff" },
+   { "name": "6", "from": 6, "to": 6, "direction": "forward", "color": "#000000ff" },
+   { "name": "7", "from": 7, "to": 7, "direction": "forward", "color": "#000000ff" },
+   { "name": "8", "from": 8, "to": 8, "direction": "forward", "color": "#000000ff" },
+   { "name": "9", "from": 9, "to": 9, "direction": "forward", "color": "#000000ff" },
+   { "name": "10", "from": 10, "to": 10, "direction": "forward", "color": "#000000ff" },
+   { "name": "11", "from": 11, "to": 11, "direction": "forward", "color": "#000000ff" },
+   { "name": "12", "from": 12, "to": 12, "direction": "forward", "color": "#000000ff" },
+   { "name": "13", "from": 13, "to": 13, "direction": "forward", "color": "#000000ff" },
+   { "name": "14", "from": 14, "to": 14, "direction": "forward", "color": "#000000ff" },
+   { "name": "15", "from": 15, "to": 15, "direction": "forward", "color": "#000000ff" }
+  ],
+  "layers": [
+   { "name": "Layer 1", "opacity": 255, "blendMode": "normal" }
+  ],
+  "slices": [
+  ]
+ }
+}

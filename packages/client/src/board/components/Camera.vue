@@ -10,8 +10,8 @@ const app = useApplication();
 const game = useGame();
 const camera = useCamera();
 const WORLD_PADDING = {
-  x: 200,
-  y: 100
+  x: 100,
+  y: 0
 };
 
 const boardSize = computed(() => ({

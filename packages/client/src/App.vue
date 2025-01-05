@@ -2,6 +2,7 @@
 import { External } from 'vue3-pixi';
 import { useAssets } from './shared/composables/useAssets';
 import PixiApp from './PixiApp.vue';
+import { TooltipProvider } from 'radix-vue';
 
 const { loaded } = useAssets();
 
@@ -13,9 +14,11 @@ const uiRoot = useTemplateRef('uiRoot');
   <PixiApp v-else>
     <RouterView name="scene" />
     <External :root="uiRoot!">
-      <div class="ui">
-        <RouterView name="ui" />
-      </div>
+      <TooltipProvider :delay-duration="400">
+        <div class="ui">
+          <RouterView name="ui" />
+        </div>
+      </TooltipProvider>
     </External>
   </PixiApp>
   <div ref="uiRoot" />
