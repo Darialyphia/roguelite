@@ -15,20 +15,27 @@ import { match } from 'ts-pattern';
 import { useCamera } from '../composables/useCamera';
 import { useIsKeyboardControlPressed } from '@/shared/composables/useKeyboardControl';
 import { useSettingsStore } from '@/shared/composables/useSettings';
+import { CARD_KINDS } from '@game/engine/src/card/card-enums';
 
 const { cell } = defineProps<{ cell: CellViewModel }>();
 
 const battleStore = useBattleStore();
 const camera = useCamera();
 const ui = useBattleUiStore();
-const state = useGameClientState();
 const pathHelpers = usePathHelpers();
 
 const isWithinCardRange = computed(() => {
   if (!ui.selectedCard) return;
-  return ui.selectedCard
+  const isTargetable = ui.selectedCard
     .getCard()
     .isWithinRange(cell.getCell(), ui.cardTargets.length);
+
+  if (ui.selectedCard.kind === CARD_KINDS.UNIT) {
+    console.log(cell.x, cell.y, cell.isWalkable, cell.isOccupied);
+    return isTargetable && cell.isWalkable && !cell.isOccupied;
+  }
+
+  return isTargetable;
 });
 
 const canTarget = computed(() => {

@@ -9,7 +9,12 @@ import type { Terrain } from '@game/engine/src/board/board-utils';
 import type { Cell } from '@game/engine/src/board/cell';
 import type { CellLight } from '@game/engine/src/board/map';
 import type { EntityId } from '@game/engine/src/entity';
-import type { AnyObject, Nullable, Point } from '@game/shared';
+import {
+  isDefined,
+  type AnyObject,
+  type Nullable,
+  type Point
+} from '@game/shared';
 
 export type CellViewModel = {
   id: EntityId;
@@ -21,6 +26,8 @@ export type CellViewModel = {
   unit: Nullable<UnitViewModel>;
   light?: CellLight;
   screenPosition: Point;
+  isWalkable: boolean;
+  isOccupied: boolean;
   obstacle: {
     name: string;
     description: string;
@@ -48,6 +55,8 @@ export const makeCellViewModel = (game: Game, cell: Cell): CellViewModel => {
       x: cell.hex.x,
       y: cell.hex.y - config.TILE_SIZE.z * cell.z
     },
+    isWalkable: cell.isWalkable,
+    isOccupied: isDefined(cell.unit),
     obstacle: cell.obstacle
       ? {
           id: cell.obstacle.id,

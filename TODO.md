@@ -32,7 +32,8 @@
 - [ ] Add some visual feedback whenever a player gains gold.
 - [ ] Add some visual feedback whenever a player unlocks a rune.
 - [ ] Add some visual feedback whenever a player fulfills a quest.
-- [ ] Add some visual feedbacks on units to easily know how much AP they have left. Be careful not to clutter the board too much, it could decrease readability when multiple units are packed close to each other
+- [ ] Add some visual feedbacks on units to easily know how much AP they have left. Be careful not to clutter the board too much, it could decrease readability when multiple units are packed close to each other.
+- [ ] Add a highlight on a board cell to show the AOE of a unit attack or a spell.
 
 ### Refactoring
 
@@ -40,7 +41,9 @@
 
 ### Bugs
 
-- [ ] you can click and drag the camera vertically but that shouldn't be possible. The worldSize in the Camera component is probably wrong. In a last resort, remove the ability to drag the viewport altogether.
+- [ ] You can click and drag the camera vertically but that shouldn't be possible. The worldSize in the Camera component is probably wrong. In a last resort, remove the ability to drag the viewport altogether.
+- [ ] Units appear below tiles when they are on some places in the top row.
+- [ ] AI sometimes just oves units to the top of the map withotu any specific reason.
 
 ## Medium Priority (enhancements)
 
