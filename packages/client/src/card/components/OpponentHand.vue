@@ -57,11 +57,13 @@ useBattleEvent(GAME_EVENTS.PLAYER_AFTER_DRAW, async event => {
 </script>
 
 <template>
-  <section class="flex justify-center" ref="root">
-    <ul class="opponent-hand" v-if="state.phase === GAME_PHASES.BATTLE">
-      <li v-for="(card, index) in player.hand" :key="`${card.id}|${index}`" />
-    </ul>
-  </section>
+  <ul
+    class="opponent-hand"
+    v-if="state.phase === GAME_PHASES.BATTLE"
+    ref="root"
+  >
+    <li v-for="(card, index) in player.hand" :key="`${card.id}|${index}`" />
+  </ul>
 </template>
 
 <style scoped lang="postcss">

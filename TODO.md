@@ -44,7 +44,7 @@
 - [ ] You can click and drag the camera vertically but that shouldn't be possible. The worldSize in the Camera component is probably wrong. In a last resort, remove the ability to drag the viewport altogether.
 - [ ] Units appear below tiles when they are on some places in the top row.
 - [ ] AI sometimes just oves units to the top of the map withotu any specific reason.
-- [ ] Cards in the opponent's hand are sometimes not displayed properly.
+- [ ] The card spacing in the opponent's hand after the first turn is incorrect, resulting in cards being spaced too much.
 
 ## Medium Priority (enhancements)
 

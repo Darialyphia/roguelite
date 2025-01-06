@@ -128,6 +128,7 @@ const cellUiRoot = document.body;
   <container
     :x="cell.screenPosition.x"
     :y="cell.screenPosition.y"
+    :z-order="cell.screenPosition.y"
     @pointerenter="ui.hoverAt(cell)"
     @pointerleave="ui.unHover()"
     @pointerup="
