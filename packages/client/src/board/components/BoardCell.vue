@@ -155,7 +155,6 @@ watch(isHovered, hovered => {
               });
             }
 
-            console.log('can attack', ui.selectedUnit.canAttackAt(cell));
             if (ui.selectedUnit.canAttackAt(cell)) {
               return battle.dispatch({
                 type: 'attack',
@@ -166,9 +165,9 @@ watch(isHovered, hovered => {
                   unitId: ui.selectedUnit.id
                 }
               });
-            } else {
-              ui.unselectUnit();
             }
+
+            ui.unselectUnit();
           })
           .with(UI_MODES.PLAY_CARD, () => {
             if (ui.isTargetValid(cell)) {

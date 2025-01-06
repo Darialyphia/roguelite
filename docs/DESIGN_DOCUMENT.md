@@ -89,7 +89,6 @@ Players get one Resource Action per turn that they can activate during any of th
 
 Each player controls a general, a unique and versatile unit that acts as the focal point of their strategy. Generals differ from regular units in several key ways:
 
-
 Victory points: generals are high-value targets. Damaging a general awards Victory Points (VP) as follows:
 
 - 3 VP when the general is reduced to half its HP (rounded down).
