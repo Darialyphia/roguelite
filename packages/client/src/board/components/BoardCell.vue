@@ -120,6 +120,8 @@ watch(isHovered, hovered => {
     showCardTimeout.start();
   }
 });
+
+const cellUiRoot = document.body;
 </script>
 
 <template>
@@ -204,20 +206,16 @@ watch(isHovered, hovered => {
       </container>
     </PTransition>
   </container>
-  <External>
-    <Teleport to="body">
-      <Transition>
-        <div
-          ref="floating"
-          class="card-wrapper"
-          :style="floatingCardStyle"
-          v-if="(cell.unit || cell.obstacle) && isCardDisplayed"
-        >
-          <Card v-if="cell.unit" :card="cell.unit.card" />
-          <ObstacleCard v-else-if="cell.obstacle" :obstacle="cell.obstacle" />
-        </div>
-      </Transition>
-    </Teleport>
+  <External
+    :root="cellUiRoot"
+    v-if="(cell.unit || cell.obstacle) && isCardDisplayed"
+  >
+    <Transition appear>
+      <div ref="floating" class="card-wrapper" :style="floatingCardStyle">
+        <Card v-if="cell.unit" :card="cell.unit.card" />
+        <ObstacleCard v-else-if="cell.obstacle" :obstacle="cell.obstacle" />
+      </div>
+    </Transition>
   </External>
 </template>
 
