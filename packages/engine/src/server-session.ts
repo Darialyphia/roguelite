@@ -6,7 +6,9 @@ import type { SerializedInput } from './input/input-system';
 import { InputSimulator } from './input/input-simulator';
 import type { EntityId } from './entity';
 
-export type ServerSessionOptions = BetterOmit<GameOptions, 'rngCtor' | 'id'>;
+export type ServerSessionOptions = BetterOmit<GameOptions, 'rngCtor' | 'id'> & {
+  id?: string;
+};
 
 export type SimulationResult = {
   damageTaken: Record<EntityId, number>;
@@ -24,7 +26,7 @@ export class ServerSession {
 
   constructor(options: ServerSessionOptions) {
     this.game = new Game({
-      id: 'SERVER',
+      id: options.id ?? 'SERVER',
       rngSeed: options.rngSeed,
       rngCtor: ServerRngSystem,
       mapId: options.mapId,

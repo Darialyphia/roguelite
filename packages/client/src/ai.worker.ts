@@ -24,7 +24,7 @@ self.addEventListener('message', ({ data }) => {
 
   match(options)
     .with({ type: 'init' }, ({ payload }) => {
-      const session = new ServerSession(payload.options);
+      const session = new ServerSession({ ...payload.options, id: 'AI' });
       session.initialize();
       ai = new AI(session, createEntityId(payload.playerId));
     })
