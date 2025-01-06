@@ -6,26 +6,23 @@ import { TooltipProvider } from 'radix-vue';
 
 const { loaded } = useAssets();
 
-const uiRoot = useTemplateRef('uiRoot');
+const uiRoot = document.getElementById('#app');
 </script>
 
 <template>
   <div v-if="!loaded">Loading...</div>
   <PixiApp v-else>
     <RouterView name="scene" />
-    <External :root="uiRoot!">
+    <External :root="uiRoot!" id="ui-root">
       <TooltipProvider :delay-duration="400">
-        <div class="ui">
-          <RouterView name="ui" />
-        </div>
+        <RouterView name="ui" />
       </TooltipProvider>
     </External>
   </PixiApp>
-  <div ref="uiRoot" />
 </template>
 
-<style scoped>
-.ui {
+<style>
+#ui-root {
   position: absolute;
   inset: 0;
   pointer-events: none;

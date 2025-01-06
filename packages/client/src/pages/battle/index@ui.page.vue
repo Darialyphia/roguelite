@@ -234,7 +234,7 @@ footer {
 }
 
 .player-battle-infos {
-  align-self: end;
+  align-self: start;
   justify-self: start;
   margin-block-end: var(--size-6);
   margin-inline-start: var(--size-6);

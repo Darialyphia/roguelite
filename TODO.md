@@ -53,3 +53,7 @@
 ## Low Priority (nice to have)
 
 - [ ] When drawing a card, it would be cool if the card appeared from the deck icon in the player infos then went into the hand
+
+## Change Log
+
+- [x] 06/01/2025: Cards in the opponent's hand are sometimes not displayed properly.

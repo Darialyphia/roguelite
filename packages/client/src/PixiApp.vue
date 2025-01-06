@@ -72,7 +72,7 @@ useEventListener(
 </script>
 
 <template>
-  <section>
+  <main>
     <canvas ref="canvas" />
-  </section>
+  </main>
 </template>

@@ -57,11 +57,11 @@ useBattleEvent(GAME_EVENTS.PLAYER_AFTER_DRAW, async event => {
 </script>
 
 <template>
-  <div class="flex justify-center" ref="root">
+  <section class="flex justify-center" ref="root">
     <ul class="opponent-hand" v-if="state.phase === GAME_PHASES.BATTLE">
       <li v-for="(card, index) in player.hand" :key="`${card.id}|${index}`" />
     </ul>
-  </div>
+  </section>
 </template>
 
 <style scoped lang="postcss">
@@ -70,11 +70,13 @@ useBattleEvent(GAME_EVENTS.PLAYER_AFTER_DRAW, async event => {
   --hand-size: v-bind('player.hand.length');
 
   > li {
-    width: calc(1px * v-bind('config.CARD_WIDTH') * (2 / 3));
-    height: calc(1px * v-bind('config.CARD_HEIGHT') * (2 / 3));
+    width: calc(1px * v-bind('config.CARD_WIDTH'));
+    height: calc(1px * v-bind('config.CARD_HEIGHT'));
     background: url('/assets/ui/card-back.png');
     background-size: contain;
     background-repeat: no-repeat;
+    transform: translateY(-90px) scale(calc(100% * (2 / 3)));
+
     &:not(:last-child) {
       margin-right: calc(1px * v-bind(cardSpacing));
     }
