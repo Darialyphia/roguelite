@@ -31,7 +31,6 @@ const isWithinCardRange = computed(() => {
     .isWithinRange(cell.getCell(), ui.cardTargets.length);
 
   if (ui.selectedCard.kind === CARD_KINDS.UNIT) {
-    console.log(cell.x, cell.y, cell.isWalkable, cell.isOccupied);
     return isTargetable && cell.isWalkable && !cell.isOccupied;
   }
 
