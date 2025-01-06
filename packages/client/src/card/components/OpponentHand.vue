@@ -77,7 +77,7 @@ useBattleEvent(GAME_EVENTS.PLAYER_AFTER_DRAW, async event => {
     background: url('/assets/ui/card-back.png');
     background-size: contain;
     background-repeat: no-repeat;
-    transform: translateY(-90px) scale(calc(100% * (2 / 3)));
+    transform: scale(calc(100% * (2 / 3)));
 
     &:not(:last-child) {
       margin-right: calc(1px * v-bind(cardSpacing));

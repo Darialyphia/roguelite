@@ -198,8 +198,8 @@ start();
 <style scoped lang="postcss">
 .layout {
   display: grid;
-  height: 100%;
-  grid-template-rows: auto 1fr auto;
+  height: 100dvh;
+  grid-template-rows: 1fr 1fr;
   user-select: none;
 }
 
@@ -211,10 +211,6 @@ footer {
 
 header {
   padding-top: var(--size-3);
-}
-
-footer {
-  grid-row: 3;
 }
 
 .action-wheel {
@@ -230,7 +226,7 @@ footer {
 }
 
 .opponent-hand {
-  margin-top: -250px;
+  margin-top: -350px;
 }
 
 .player-battle-infos {
