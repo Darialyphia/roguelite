@@ -4,7 +4,6 @@ import { MeleeTargetingStrategy } from '../../../targeting/melee-targeting.strae
 import { TARGETING_TYPE } from '../../../targeting/targeting-strategy';
 import { UnitSummonTargetingtrategy } from '../../../targeting/unit-summon-targeting.strategy';
 import { JOBS } from '../../../utils/job';
-import { RUNES } from '../../../utils/rune';
 import { type UnitCardBlueprint } from '../../card-blueprint';
 import { CARD_KINDS, UNIT_TYPES } from '../../card-enums';
 

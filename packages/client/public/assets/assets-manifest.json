@@ -1005,6 +1005,33 @@
         },
         {
           "alias": [
+            "ap-indicator"
+          ],
+          "src": [
+            "/assets/ui/ap-indicator.json"
+          ],
+          "loadParser": "aseprite_loader",
+          "data": {
+            "tags": {
+              "m": true
+            }
+          }
+        },
+        {
+          "alias": [
+            "ap-indicator.png"
+          ],
+          "src": [
+            "/assets/ui/ap-indicator.png"
+          ],
+          "data": {
+            "tags": {
+              "m": true
+            }
+          }
+        },
+        {
+          "alias": [
             "ap.png"
           ],
           "src": [

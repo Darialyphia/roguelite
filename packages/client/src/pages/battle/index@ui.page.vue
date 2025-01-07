@@ -31,7 +31,7 @@ definePage({
 });
 
 const options: Pick<GameOptions, 'mapId' | 'teams'> = {
-  mapId: 'testMap1v1',
+  mapId: '1v1',
   teams: [
     [
       {

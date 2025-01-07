@@ -6,7 +6,8 @@
     "@game/tsconfig": "*",
     "@types/lodash-es": "^4.17.12",
     "@types/seedrandom": "^3.0.8",
-    "eslint-config-daria": "*"
+    "eslint-config-daria": "*",
+    "vitest": "^2.1.8"
   },
   "dependencies": {
     "@game/shared": "*",
@@ -21,7 +22,8 @@
     "zod": "^3.21.4"
   },
   "scripts": {
-    "dev": "echo 1",
+    "dev": "echo 'no dev script'",
+    "test": "vitest",
     "type-check": "tsc --noEmit"
   }
 }

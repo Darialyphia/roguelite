@@ -2,8 +2,8 @@ import { Vec3 } from '@game/shared';
 import type { GameMap } from '../map';
 import { plainTileset } from '../tilesets/plains';
 
-export const testMap1v1: GameMap = {
-  id: 'testMap1v1',
+export const map1v1: GameMap = {
+  id: '1v1',
   cols: 13,
   rows: 13,
   floors: [
