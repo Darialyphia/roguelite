@@ -19,9 +19,13 @@ export class FearsomeModifierMixin extends UnitModifierMixin {
   onBeforeAttack({ target }: { target: Point3D }) {
     const unit = this.game.unitSystem.getUnitAt(target);
     if (!unit) return;
+    const unsub = unit.addInterceptor('canCounterAttack', () => {
+      return false;
+    });
 
-    const unsub = unit.addInterceptor('canCounterAttack', () => false);
-    this.modifier.target.once(UNIT_EVENTS.AFTER_ATTACK, unsub);
+    this.modifier.target.once(UNIT_EVENTS.AFTER_ATTACK, () => {
+      unsub();
+    });
   }
 
   onApplied(unit: Unit, modifier: UnitModifier): void {

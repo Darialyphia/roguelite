@@ -383,6 +383,12 @@ export class Unit extends Entity {
     this.ap.remove(path.distance * this.apCostPerMovement);
   }
 
+  teleport(to: Point3D) {
+    this.movement.position.x = to.x;
+    this.movement.position.y = to.y;
+    this.movement.position.z = to.z;
+  }
+
   get getPathTo() {
     return this.movement.getPathTo.bind(this.movement);
   }

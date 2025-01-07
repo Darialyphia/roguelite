@@ -114,14 +114,18 @@ export class CombatComponent {
     this.dealDamage(targets, damage);
     this._attacksCount++;
 
+    const unit = this.game.unitSystem.getUnitAt(target)!;
+    if (!unit) return; // means unit died from attack
+    // we check counterattack before emitting AFTER_ATTACK event to enable effects that would prevent counter attack for one attack only
+    // ex: Fearsome
+    const shouldCounterAttack = unit.canCounterAttackAt(this.unit.position);
+
     this.emitter.emit(COMBAT_EVENTS.AFTER_ATTACK, {
       target,
       cost
     });
 
-    const unit = this.game.unitSystem.getUnitAt(target)!;
-    if (!unit) return; // means unit died from attack
-    if (unit.canCounterAttackAt(this.unit.position)) {
+    if (shouldCounterAttack) {
       unit.counterAttack(this.unit);
     }
   }

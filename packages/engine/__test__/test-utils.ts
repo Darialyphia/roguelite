@@ -72,8 +72,8 @@ export const gameBuilder = () => {
         game,
         team1: game.playerSystem.teams[0],
         team2: game.playerSystem.teams[1],
-        player1: game.playerSystem.getPlayerById(createEntityId('p1')),
-        player2: game.playerSystem.getPlayerById(createEntityId('p2'))
+        player1: game.playerSystem.getPlayerById(createEntityId('p1'))!,
+        player2: game.playerSystem.getPlayerById(createEntityId('p2'))!
       };
     }
   };
