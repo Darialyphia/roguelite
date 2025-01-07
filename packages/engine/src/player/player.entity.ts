@@ -87,6 +87,11 @@ export class Player extends Entity {
 
   general!: Unit;
 
+  acquiredGeneralRewards = {
+    half: false,
+    full: false
+  };
+
   constructor(game: Game, team: Team, options: PlayerOptions) {
     super(createEntityId(options.id));
     this.game = game;
@@ -287,6 +292,22 @@ export class Player extends Entity {
 
   // eslint-disable-next-line @typescript-eslint/no-empty-function
   onBattleStart() {}
+
+  triggerGeneralHalfReward() {
+    if (this.acquiredGeneralRewards.half) return;
+
+    this.acquiredGeneralRewards.half = true;
+    this;
+    this.opponents[0].team.earnVictoryPoints(this.game.config.GENERAL_VP_HALF_REWARD);
+  }
+
+  triggerGeneralFullReward() {
+    if (this.acquiredGeneralRewards.full) return;
+
+    this.acquiredGeneralRewards.full = true;
+    this;
+    this.opponents[0].team.earnVictoryPoints(this.game.config.GENERAL_VP_FULL_REWARD);
+  }
 
   endTurn() {
     this.emitter.emit(PLAYER_EVENTS.END_TURN, { id: this.id });

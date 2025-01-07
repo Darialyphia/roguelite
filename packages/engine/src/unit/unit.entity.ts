@@ -110,6 +110,9 @@ export class Unit extends Entity {
     this.combat = new CombatComponent(this.game, this);
     this.game.on('turn.turn_start', this.onGameTurnStart.bind(this));
     this.forwardEvents();
+    if (this.isGeneral) {
+      this.handleGeneralRewards();
+    }
   }
 
   get spriteId() {
@@ -497,5 +500,21 @@ export class Unit extends Entity {
     this.modifierManager.add(modifier);
 
     return () => this.removeModifier(modifier.id);
+  }
+
+  private handleGeneralRewards() {
+    const unsubHalf = this.hp.on('CHANGE', () => {
+      if (this.hp.current <= this.hp.max / 2) {
+        this.player.triggerGeneralHalfReward();
+        unsubHalf();
+      }
+    });
+
+    const unsubFull = this.hp.on('CHANGE', () => {
+      if (this.hp.current === 0) {
+        this.player.triggerGeneralFullReward();
+        unsubFull();
+      }
+    });
   }
 }

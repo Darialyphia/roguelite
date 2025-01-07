@@ -8,7 +8,7 @@
   - [x] Distinguish between generals and minion
   - [x] Add a player general to the board at the start of the game
   - [x] Provide visual feedback to distinguish generals from minions 
-  - [ ] General rewards at 50% HP and when destroyed
+  - [x] General rewards at 50% HP and when destroyed
   - [ ] General Ghost mechanic
 - [ ] Adds the Comeback mechanic that draws cards for the opponent when you reach see some VP thresholds. See the [General section](docs/DESIGN_DOCUMENT.md#comeback-mechanic) in the design document.
 - [ ] Rework the way shrine work to match the current design in the [Design document](docs/DESIGN_DOCUMENT.md#shrines)

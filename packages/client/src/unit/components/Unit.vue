@@ -15,6 +15,7 @@ import { waitFor } from '@game/shared';
 import { GAME_EVENTS } from '@game/engine/src/game/game';
 import { useCamera } from '@/board/composables/useCamera';
 import UnitGeneralIndicator from './UnitGeneralIndicator.vue';
+import GeneralRewardIndicators from './GeneralRewardIndicators.vue';
 
 const { unit } = defineProps<{ unit: UnitViewModel }>();
 
@@ -85,10 +86,16 @@ const spawnAnimation = (container: Container) => {
       </UnitOrientation>
     </PTransition>
     <UnitVFX :unit="unit" />
+
     <template v-if="isSpawnAnimationDone">
       <AlphaTransition :duration="{ enter: 200, leave: 200 }">
         <UnitGeneralIndicator v-if="unit.isGeneral" :unit="unit" />
       </AlphaTransition>
+
+      <AlphaTransition :duration="{ enter: 200, leave: 200 }">
+        <GeneralRewardIndicators v-if="unit.isGeneral" :unit="unit" />
+      </AlphaTransition>
+
       <AlphaTransition :duration="{ enter: 200, leave: 200 }">
         <UnitStatsIndicators :unit="unit" />
       </AlphaTransition>

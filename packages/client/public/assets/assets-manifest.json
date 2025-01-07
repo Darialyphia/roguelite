@@ -1253,6 +1253,33 @@
         },
         {
           "alias": [
+            "general-vp-threshold-indicator"
+          ],
+          "src": [
+            "/assets/ui/general-vp-threshold-indicator.json"
+          ],
+          "loadParser": "aseprite_loader",
+          "data": {
+            "tags": {
+              "m": true
+            }
+          }
+        },
+        {
+          "alias": [
+            "general-vp-threshold-indicator.png"
+          ],
+          "src": [
+            "/assets/ui/general-vp-threshold-indicator.png"
+          ],
+          "data": {
+            "tags": {
+              "m": true
+            }
+          }
+        },
+        {
+          "alias": [
             "gold-action.png"
           ],
           "src": [
