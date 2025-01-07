@@ -6,21 +6,23 @@ import type { Card, CardOptions } from '../card/card.entity';
 import { GoldManagerComponent } from './components/gold-manager.component';
 import { config } from '../config';
 import { DECK_EVENTS } from '../card/deck.entity';
-import type { Point3D, Values } from '@game/shared';
+import { assert, type Point3D, type Values } from '@game/shared';
 import { TypedEventEmitter } from '../utils/typed-emitter';
 import { RuneManager } from './components/rune-manager.component';
 import { match } from 'ts-pattern';
 import { Rune, RUNES } from '../utils/rune';
-import { Obstacle } from '../obstacle/obstacle.entity';
 import type { QuestCard } from '../card/quest-card.entity';
 import { EventTrackerComponent } from './components/event-tracker.component';
 import type { SerializedInput } from '../input/input-system';
+import type { UnitCard } from '../card/unit-card.entity';
+import { createCard } from '../card/card-factory';
+import type { Unit } from '../unit/unit.entity';
 
 export type PlayerOptions = {
   id: string;
   name: string;
-  deck: CardOptions[];
-  altarPosition: Point3D;
+  deck: { general: CardOptions; cards: CardOptions[] };
+  generalPosition: Point3D;
 };
 
 export const PLAYER_EVENTS = {
@@ -69,7 +71,7 @@ export class Player extends Entity {
 
   private readonly runeManager: RuneManager;
 
-  readonly altarPosition: Point3D;
+  readonly generalPosition: Point3D;
 
   private emitter = new TypedEventEmitter<PlayerEventMap>();
 
@@ -81,33 +83,26 @@ export class Player extends Entity {
 
   lastResourceActionTaken: ResourceAction | null = null;
 
-  readonly altar: Obstacle;
-
   readonly quests = new Set<QuestCard>();
+
+  general!: Unit;
 
   constructor(game: Game, team: Team, options: PlayerOptions) {
     super(createEntityId(options.id));
     this.game = game;
     this.team = team;
     this.name = options.name;
-    this.altarPosition = options.altarPosition;
+    this.generalPosition = options.generalPosition;
     this.eventTracker = new EventTrackerComponent(this.game, this);
     this.runeManager = new RuneManager();
     this.cardManager = new CardManagerComponent(this.game, this, {
-      deck: options.deck
+      deck: options.deck.cards
     });
     this.goldManager = new GoldManagerComponent(config.INITIAL_GOLD);
     this.forwardEvents();
     this.draw(config.INITIAL_HAND_SIZE);
     this.game.on(GAME_EVENTS.START_BATTLE, this.onBattleStart.bind(this));
-
-    this.altar = new Obstacle(this.game, {
-      blueprintId: 'altar',
-      id: `Player_${this.id}_altar` as EntityId,
-      position: options.altarPosition,
-      playerId: this.id
-    });
-    this.game.boardSystem.getCellAt(options.altarPosition)!.obstacle = this.altar;
+    this.placeGeneral(options.deck.general);
   }
 
   shutdown() {
@@ -137,6 +132,13 @@ export class Player extends Entity {
 
   get gold() {
     return this.goldManager.amount;
+  }
+
+  private placeGeneral(options: CardOptions) {
+    const generalCard = createCard(this.game, this, options) as UnitCard;
+    generalCard.play([this.generalPosition]);
+    this.general = generalCard.unit;
+    assert(this.general.isGeneral, 'General unit type needs to be a general');
   }
 
   addGold(amount: number) {
@@ -226,7 +228,7 @@ export class Player extends Entity {
   get enemiesPositions(): Point3D[] {
     return [
       ...this.enemyUnits.map(e => e.position),
-      ...this.opponents.map(o => o.altarPosition)
+      ...this.opponents.map(o => o.generalPosition)
     ];
   }
 

@@ -38,6 +38,7 @@ const options: Pick<GameOptions, 'mapId' | 'teams'> = {
         id: PLAYER_ID,
         name: 'Daria',
         deck: {
+          general: { blueprintId: 'red-general-flame-lord' },
           cards: [
             { blueprintId: 'red-combustion' },
             { blueprintId: 'red-combustion' },
@@ -72,6 +73,7 @@ const options: Pick<GameOptions, 'mapId' | 'teams'> = {
         id: AI_ID,
         name: 'AI',
         deck: {
+          general: { blueprintId: 'red-general-flame-lord' },
           cards: [
             { blueprintId: 'red-footman' },
             { blueprintId: 'red-footman' },

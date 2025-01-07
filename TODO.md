@@ -5,6 +5,10 @@
 ### Gameplay
 
 - [ ] The altar mechanic has been replaced by a moving general. See the [General section](docs/DESIGN_DOCUMENT.md#generals) in the design document.
+  - [x] Distinguish between generals and minion
+  - [x] Add a player general to the board at the start of the game
+  - [ ] General rewards at 50% HP and when destroyed
+  - [ ] General Ghost mechanic 
 - [ ] Adds the Comeback mechanic that draws cards for the opponent when you reach see some VP thresholds. See the [General section](docs/DESIGN_DOCUMENT.md#comeback-mechanic) in the design document.
 - [ ] Rework the way shrine work to match the current design in the [Design document](docs/DESIGN_DOCUMENT.md#shrines)
 - [ ] Remove the Reward points from units as this feature has been removed from the design document.
@@ -34,6 +38,7 @@
 - [ ] Add some visual feedback whenever a player fulfills a quest.
 - [ ] Add some visual feedbacks on units to easily know how much AP they have left. Be careful not to clutter the board too much, it could decrease readability when multiple units are packed close to each other.
 - [ ] Add a highlight on a board cell to show the AOE of a unit attack or a spell.
+- [ ] Improve the TextWithKeyword component to be able to display things like rune, AP or gold icons. Then rename it to CardDescription
 
 ### Refactoring
 

@@ -559,6 +559,19 @@
         },
         {
           "alias": [
+            "icon-unit_flame-lord"
+          ],
+          "src": [
+            "/assets/icons/unit_flame-lord.png"
+          ],
+          "data": {
+            "tags": {
+              "m": true
+            }
+          }
+        },
+        {
+          "alias": [
             "icon-unit_footman"
           ],
           "src": [
@@ -1204,6 +1217,33 @@
           ],
           "src": [
             "/assets/ui/end-turn-action.png"
+          ],
+          "data": {
+            "tags": {
+              "m": true
+            }
+          }
+        },
+        {
+          "alias": [
+            "general-indicator"
+          ],
+          "src": [
+            "/assets/ui/general-indicator.json"
+          ],
+          "loadParser": "aseprite_loader",
+          "data": {
+            "tags": {
+              "m": true
+            }
+          }
+        },
+        {
+          "alias": [
+            "general-indicator.png"
+          ],
+          "src": [
+            "/assets/ui/general-indicator.png"
           ],
           "data": {
             "tags": {
@@ -1883,6 +1923,33 @@
           ],
           "src": [
             "/assets/units/emperor.png"
+          ],
+          "data": {
+            "tags": {
+              "m": true
+            }
+          }
+        },
+        {
+          "alias": [
+            "flame-lord"
+          ],
+          "src": [
+            "/assets/units/flame-lord.json"
+          ],
+          "loadParser": "aseprite_loader",
+          "data": {
+            "tags": {
+              "m": true
+            }
+          }
+        },
+        {
+          "alias": [
+            "flame-lord.png"
+          ],
+          "src": [
+            "/assets/units/flame-lord.png"
           ],
           "data": {
             "tags": {

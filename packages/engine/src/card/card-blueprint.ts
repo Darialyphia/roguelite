@@ -9,7 +9,7 @@ import type { Job } from '../utils/job';
 import type { UnitCard } from './unit-card.entity';
 import type { SpellCard } from './spell-card.entity';
 import type { VFXSequence } from '../vfx/vfx-sequencer';
-import { CARD_KINDS, type CardKind } from './card-enums';
+import { CARD_KINDS, type CardKind, type UnitType } from './card-enums';
 import type { QuestCard } from './quest-card.entity';
 
 type CardBlueprintTarget = {
@@ -56,6 +56,7 @@ export type UnitCardBlueprint = CardBlueprintBase & {
   };
   minTargets: number;
   targets: [CardBlueprintTarget, ...CardBlueprintTarget[]];
+  unitType: UnitType;
   getAoe: (game: Game, card: UnitCard, points: Point3D[]) => AOEShape;
   onPlay(game: Game, card: UnitCard, cellTargets: Point3D[], unitTargets: Unit[]): void;
   getAttackPattern: (game: Game, unit: Unit) => TargetingStrategy;

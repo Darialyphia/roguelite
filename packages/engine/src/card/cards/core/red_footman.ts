@@ -6,7 +6,7 @@ import { UnitSummonTargetingtrategy } from '../../../targeting/unit-summon-targe
 import { JOBS } from '../../../utils/job';
 import { RUNES } from '../../../utils/rune';
 import { type UnitCardBlueprint } from '../../card-blueprint';
-import { CARD_KINDS } from '../../card-enums';
+import { CARD_KINDS, UNIT_TYPES } from '../../card-enums';
 
 export const redFootman: UnitCardBlueprint = {
   id: 'red-footman',
@@ -15,6 +15,7 @@ export const redFootman: UnitCardBlueprint = {
   name: 'Footman',
   description: '',
   kind: CARD_KINDS.UNIT,
+  unitType: UNIT_TYPES.MINION,
   aiHints: meleeFighter,
   cost: {
     gold: 3,

@@ -11,7 +11,7 @@ const game = useGame();
 const camera = useCamera();
 const WORLD_PADDING = {
   x: 100,
-  y: -60
+  y: 50
 };
 
 const boardSize = computed(() => ({
@@ -41,7 +41,8 @@ until(camera.viewport)
       })
       .clampZoom({ minScale: config.MIN_ZOOM, maxScale: config.MAX_ZOOM })
       .setZoom(config.INITIAL_ZOOM, false)
-      .pinch({ noDrag: true });
+      .pinch({ noDrag: true })
+      .moveCenter({ x: 0, y: WORLD_PADDING.y * 6 });
   });
 
 useEventListener('resize', () => {
@@ -53,7 +54,7 @@ useEventListener('resize', () => {
 watchEffect(() => {
   camera.offset.value = {
     x: WORLD_PADDING.x / 2 + config.TILE_SIZE.x * 0.75,
-    y: WORLD_PADDING.y / 2 + config.TILE_SIZE.y
+    y: WORLD_PADDING.y + config.TILE_SIZE.y
   };
 });
 </script>
@@ -76,7 +77,7 @@ watchEffect(() => {
     :sortable-children="true"
   >
     <container :sortable-children="true" v-bind="camera.offset.value">
-      <slot :worldSize="worldSize" />
+      <slot :worldSize="worldSize" v-if="camera.viewport.value" />
     </container>
   </viewport>
 </template>

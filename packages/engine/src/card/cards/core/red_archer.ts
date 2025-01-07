@@ -8,7 +8,7 @@ import { UnitModifier } from '../../../unit/unit-modifier.entity';
 import { JOBS } from '../../../utils/job';
 import { RUNES } from '../../../utils/rune';
 import { type UnitCardBlueprint } from '../../card-blueprint';
-import { CARD_KINDS } from '../../card-enums';
+import { CARD_KINDS, UNIT_TYPES } from '../../card-enums';
 
 export const redArcher: UnitCardBlueprint = {
   id: 'red-archer',
@@ -17,6 +17,7 @@ export const redArcher: UnitCardBlueprint = {
   name: 'Archer',
   description: '@Ranged(2)@.',
   kind: CARD_KINDS.UNIT,
+  unitType: UNIT_TYPES.MINION,
   aiHints: meleeFighter,
   cost: {
     gold: 3,

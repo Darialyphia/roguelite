@@ -92,7 +92,7 @@ export const avoidEnemiesInMelee = (weight = 5): CardAiHints => {
 export const irrelevantTarget = (): CardAiHints => {
   return {
     isRelevantTarget(point, game, card) {
-      const forcedTarget = card.player.altarPosition;
+      const forcedTarget = card.player.generalPosition;
       return (
         point.x === forcedTarget.x &&
         point.y === forcedTarget.y &&

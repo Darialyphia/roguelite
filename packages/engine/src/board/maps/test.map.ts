@@ -521,5 +521,5 @@ export const testMap1v1: GameMap = {
       [null, null, null, null, null, null, null, null, null, null, null, null]
     ]
   ],
-  altarPositions: [[new Vec3(1, 6, 2)], [new Vec3(11, 6, 2)]]
+  generalPositions: [[new Vec3(1, 6, 2)], [new Vec3(11, 6, 2)]]
 };

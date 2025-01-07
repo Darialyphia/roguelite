@@ -11,8 +11,8 @@ export type TeamOptions = {
   players: Array<{
     id: string;
     name: string;
-    deck: { cards: { blueprintId: string }[] };
-    altarPosition: Point3D;
+    deck: { general: { blueprintId: string }; cards: { blueprintId: string }[] };
+    generalPosition: Point3D;
   }>;
 };
 
@@ -27,21 +27,35 @@ export class Team extends Entity {
     super(createEntityId(options.id));
     this.game = game;
     options.players.forEach(player => {
+      const generalBlueprint =
+        CARDS_DICTIONARY[
+          player.deck.general.blueprintId as keyof typeof CARDS_DICTIONARY
+        ];
+      if (!generalBlueprint) {
+        throw new Error(`blueprint not found: ${player.deck.general.blueprintId}`);
+      }
+
       const entity = new Player(game, this, {
-        altarPosition: player.altarPosition,
+        generalPosition: player.generalPosition,
         id: player.id,
         name: player.name,
-        deck: player.deck.cards.map(card => {
-          const blueprint =
-            CARDS_DICTIONARY[card.blueprintId as keyof typeof CARDS_DICTIONARY];
-          if (!blueprint) {
-            throw new Error(`blueprint not found: ${card.blueprintId}`);
-          }
-          return {
-            id: `${player.id}_card_${card.blueprintId}_${nanoid(4)}`,
-            blueprint
-          };
-        })
+        deck: {
+          general: {
+            id: `${player.id}_general_${player.deck.general.blueprintId}`,
+            blueprint: generalBlueprint
+          },
+          cards: player.deck.cards.map(card => {
+            const blueprint =
+              CARDS_DICTIONARY[card.blueprintId as keyof typeof CARDS_DICTIONARY];
+            if (!blueprint) {
+              throw new Error(`blueprint not found: ${card.blueprintId}`);
+            }
+            return {
+              id: `${player.id}_card_${card.blueprintId}_${nanoid(4)}`,
+              blueprint
+            };
+          })
+        }
       });
       this.playerMap.set(entity.id, entity);
     });

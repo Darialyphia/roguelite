@@ -8,9 +8,11 @@ import { redEmperor } from './red_emperor';
 import { redBerserk } from './red_berserk';
 import { redAvenger } from './red_avenger';
 import { redCombustion } from './red_combustion';
+import { redGeneralFlameLord } from './red_general_flame-lord';
 
 export const CORE_CARDS = keyBy(
   [
+    redGeneralFlameLord,
     redFootman,
     redArcher,
     redEmperor,

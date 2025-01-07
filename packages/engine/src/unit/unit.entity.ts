@@ -16,7 +16,7 @@ import { UnitModifierManager } from './components/modifier-manager.component';
 import type { UnitModifier } from './unit-modifier.entity';
 import type { TargetingStrategy } from '../targeting/targeting-strategy';
 import type { UnitCard } from '../card/unit-card.entity';
-import { CARD_KINDS } from '../card/card-enums';
+import { CARD_KINDS, UNIT_TYPES } from '../card/card-enums';
 import { UNIT_EVENTS } from './unit-enums';
 import { COMBAT_EVENTS, CombatComponent } from '../combat/combat.component';
 import { PathfinderComponent } from '../pathfinding/pathfinder.component';
@@ -172,8 +172,12 @@ export class Unit extends Entity {
     return this.card.description;
   }
 
+  get isGeneral() {
+    return this.card.unitType === UNIT_TYPES.GENERAL;
+  }
+
   get canSummonUnitsNearby(): boolean {
-    return this.interceptors.canSummonUnitsNearby.getValue(false, {});
+    return this.interceptors.canSummonUnitsNearby.getValue(this.isGeneral, {});
   }
 
   get canBeAttacked(): boolean {

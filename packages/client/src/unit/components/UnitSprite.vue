@@ -5,13 +5,7 @@ import { OutlineFilter } from '@pixi/filter-outline';
 import { type Filter } from 'pixi.js';
 import type { UnitViewModel } from '../unit.model';
 import { ColorOverlayFilter } from '@pixi/filter-color-overlay';
-import { isDefined } from '@game/shared';
-import UnitModifierSprite from './UnitModifierSprite.vue';
 import { AdjustmentFilter } from '@pixi/filter-adjustment';
-import {
-  useBattleStore,
-  useGameClientState
-} from '@/pages/battle/battle.store';
 import { createSpritesheetFrameObject } from '@/utils/sprite';
 import { useCamera } from '@/board/composables/useCamera';
 
@@ -20,7 +14,7 @@ const { unit } = defineProps<{ unit: UnitViewModel }>();
 const sheet = useSpritesheet<'', 'base'>(() => unit.spriteId);
 const textures = computed(() => {
   if (!sheet.value) return null;
-
+  console.log(sheet.value.sheets);
   return createSpritesheetFrameObject('idle', sheet.value.sheets.base.base);
 });
 

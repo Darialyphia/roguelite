@@ -203,6 +203,7 @@ const state = useGameClientState();
       'vp progress resources'
       'vp progress bottom';
   }
+  filter: drop-shadow(0 0 0.5em hsl(0 0 0 / 0.5));
 }
 
 .name {

@@ -24,7 +24,7 @@ export type GameMap = {
   rows: number;
   cols: number;
   floors: GameMapFloor[];
-  altarPositions: Point3D[][];
+  generalPositions: Point3D[][];
 };
 
 export const TERRAINS = {

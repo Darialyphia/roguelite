@@ -26,6 +26,7 @@ export type UnitViewModel = {
   card: CardViewModel;
   screenPosition: Point;
   keywords: Keyword[];
+  isGeneral: boolean;
   getUnit(): Unit;
   equals(unit: UnitViewModel): boolean;
   canMoveTo: Unit['canMoveTo'];
@@ -36,6 +37,7 @@ export const makeUnitViewModel = (game: Game, unit: Unit): UnitViewModel => {
   return {
     id: unit.id,
     name: unit.name,
+    isGeneral: unit.isGeneral,
     spriteId: unit.spriteId,
     iconId: unit.iconId,
     position: Vec3.fromPoint3D(unit.position),
