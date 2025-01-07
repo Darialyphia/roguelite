@@ -1,5 +1,9 @@
-import type { Point3D } from '@game/shared';
-import type { TargetingStrategy, TargetingType } from './targeting-strategy';
+import { isDefined, type Point3D } from '@game/shared';
+import {
+  TARGETING_TYPE,
+  type TargetingStrategy,
+  type TargetingType
+} from './targeting-strategy';
 import type { Game } from '../game/game';
 import { match } from 'ts-pattern';
 import type { Player } from '../player/player.entity';
@@ -19,11 +23,29 @@ export class AnywhereTargetingStrategy implements TargetingStrategy {
     const unit = this.game.unitSystem.getUnitAt(point);
 
     return match(this.type)
-      .with('any', () => true)
-      .with('empty', () => !unit)
-      .with('ally', () => !!unit?.player.isAlly(this.player))
-      .with('enemy', () => !!unit?.player.isEnemy(this.player))
-      .with('both', () => !!unit)
+      .with(TARGETING_TYPE.ANYWHERE, () => true)
+      .with(TARGETING_TYPE.EMPTY, () => !unit)
+      .with(TARGETING_TYPE.ALLY_UNIT, () => !!unit?.player.isAlly(this.player))
+      .with(
+        TARGETING_TYPE.ALLY_GENERAL,
+        () => !!unit?.player.isAlly(this.player) && unit.isGeneral
+      )
+      .with(
+        TARGETING_TYPE.ALLY_MINION,
+        () => !!unit?.player.isAlly(this.player) && !unit.isGeneral
+      )
+      .with(TARGETING_TYPE.ENEMY_UNIT, () => !!unit?.player.isEnemy(this.player))
+      .with(
+        TARGETING_TYPE.ENEMY_GENERAL,
+        () => !!unit?.player.isEnemy(this.player) && unit.isGeneral
+      )
+      .with(
+        TARGETING_TYPE.ENEMY_MINION,
+        () => !!unit?.player.isEnemy(this.player) && !unit.isGeneral
+      )
+      .with(TARGETING_TYPE.UNIT, () => isDefined(unit))
+      .with(TARGETING_TYPE.GENERAL, () => isDefined(unit) && unit?.isGeneral)
+      .with(TARGETING_TYPE.MINION, () => isDefined(unit) && !unit.isGeneral)
       .exhaustive();
   }
 }

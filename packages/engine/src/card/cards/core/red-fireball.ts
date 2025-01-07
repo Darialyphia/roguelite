@@ -23,7 +23,11 @@ export const redFireball: SpellCardBlueprint = {
   targets: [
     {
       getTargeting(game, card) {
-        return new AnywhereTargetingStrategy(game, card.player, TARGETING_TYPE.ENEMY);
+        return new AnywhereTargetingStrategy(
+          game,
+          card.player,
+          TARGETING_TYPE.ENEMY_UNIT
+        );
       }
     }
   ],

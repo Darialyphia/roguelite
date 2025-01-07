@@ -1,6 +1,6 @@
 # PHASE 1: Prototype
 
-The goal of this phase is to shape up the core game mechanics and the UI for the battle screen.
+The goal of this phase is to shape up the core game mechanics and the UI for the battle screen. This is so we can iterate quickly on game mechanics and "find the fun".
 There is no need for a back end as this point, and the games will be single player VS AI with hardcoded decks that we change manually as we need to test cards and implement mechanics.
 
 ## High Priority (core mechanics)

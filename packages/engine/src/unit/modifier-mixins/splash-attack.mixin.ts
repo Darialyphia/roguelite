@@ -19,7 +19,7 @@ export class SplashAttackdModifierMixin extends UnitModifierMixin {
   interceptor() {
     return new IntersectionAoeShape(this.game, this.modifier.target, {
       allow3D: false,
-      targetingType: TARGETING_TYPE.ENEMY
+      targetingType: TARGETING_TYPE.ENEMY_UNIT
     });
   }
 

@@ -17,7 +17,7 @@ export const redCombustion: SpellCardBlueprint = {
   iconId: 'spell-combustion',
   name: 'Combustion',
   description:
-    'Deal 3 damage to an enemy unit. If it dies, deal 1 damage to all nearby units.',
+    'Deal 3 damage to an enemy minion. If it dies, deal 1 damage to all nearby units.',
   kind: CARD_KINDS.SPELL,
   aiHints: {},
   cost: {
@@ -28,7 +28,11 @@ export const redCombustion: SpellCardBlueprint = {
   targets: [
     {
       getTargeting(game, card) {
-        return new AnywhereTargetingStrategy(game, card.player, TARGETING_TYPE.ENEMY);
+        return new AnywhereTargetingStrategy(
+          game,
+          card.player,
+          TARGETING_TYPE.ENEMY_MINION
+        );
       }
     }
   ],
@@ -37,7 +41,7 @@ export const redCombustion: SpellCardBlueprint = {
       new PointAOEShape(game),
       new RingAOEShape(game, game.unitSystem.getUnitAt(points[0])!, {
         allow3D: true,
-        targetingType: TARGETING_TYPE.BOTH
+        targetingType: TARGETING_TYPE.ENEMY_UNIT
       })
     ]);
   },

@@ -1,9 +1,4 @@
-import {
-  mergeTraits,
-  attackIfAble,
-  walkTowardsEnemies,
-  meleeFighter
-} from '../../../ai/ai-traits';
+import { meleeFighter } from '../../../ai/ai-traits';
 import { PointAOEShape } from '../../../targeting/aoe-shapes';
 import { MeleeTargetingStrategy } from '../../../targeting/melee-targeting.straegy';
 import { TARGETING_TYPE } from '../../../targeting/targeting-strategy';
@@ -42,7 +37,7 @@ export const redAvenger: UnitCardBlueprint = {
     }
   ],
   getAttackPattern(game, unit) {
-    return new MeleeTargetingStrategy(game, unit, TARGETING_TYPE.ENEMY);
+    return new MeleeTargetingStrategy(game, unit, TARGETING_TYPE.ENEMY_UNIT);
   },
   getAoe(game) {
     return new PointAOEShape(game);

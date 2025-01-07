@@ -1,7 +1,7 @@
 import type { Game } from '../game/game';
 import { isDefined, type Point3D } from '@game/shared';
 import type { Cell } from '../board/cell';
-import type { NonEmptyTargetingType } from './targeting-strategy';
+import { TARGETING_TYPE, type NonEmptyTargetingType } from './targeting-strategy';
 import { match } from 'ts-pattern';
 import type { Unit } from '../unit/unit.entity';
 
@@ -59,9 +59,27 @@ export class RingAOEShape implements AOEShape {
         if (!isDefined(unit)) return false;
 
         return match(this.options.targetingType)
-          .with('ally', () => !!unit?.isAlly(this.unit))
-          .with('enemy', () => !!unit?.isEnemy(this.unit))
-          .with('both', () => !!unit)
+          .with(TARGETING_TYPE.ALLY_UNIT, () => !!unit?.isAlly(this.unit))
+          .with(
+            TARGETING_TYPE.ALLY_GENERAL,
+            () => !!unit.isAlly(this.unit) && unit.isGeneral
+          )
+          .with(
+            TARGETING_TYPE.ALLY_MINION,
+            () => !!unit?.isAlly(this.unit) && !unit.isGeneral
+          )
+          .with(TARGETING_TYPE.ENEMY_UNIT, () => !!unit?.isEnemy(this.unit))
+          .with(
+            TARGETING_TYPE.ENEMY_GENERAL,
+            () => !!unit?.isEnemy(this.unit) && unit.isGeneral
+          )
+          .with(
+            TARGETING_TYPE.ENEMY_MINION,
+            () => !!unit?.isEnemy(this.unit) && !unit.isGeneral
+          )
+          .with(TARGETING_TYPE.UNIT, () => isDefined(unit))
+          .with(TARGETING_TYPE.GENERAL, () => isDefined(unit) && unit?.isGeneral)
+          .with(TARGETING_TYPE.MINION, () => isDefined(unit) && !unit.isGeneral)
           .exhaustive();
       });
   }
@@ -96,9 +114,27 @@ export class IntersectionAoeShape implements AOEShape {
         if (!isDefined(unit)) return false;
 
         return match(this.options.targetingType)
-          .with('ally', () => !!unit?.isAlly(this.unit))
-          .with('enemy', () => !!unit?.isEnemy(this.unit))
-          .with('both', () => !!unit)
+          .with(TARGETING_TYPE.ALLY_UNIT, () => !!unit?.isAlly(this.unit))
+          .with(
+            TARGETING_TYPE.ALLY_GENERAL,
+            () => !!unit.isAlly(this.unit) && unit.isGeneral
+          )
+          .with(
+            TARGETING_TYPE.ALLY_MINION,
+            () => !!unit?.isAlly(this.unit) && !unit.isGeneral
+          )
+          .with(TARGETING_TYPE.ENEMY_UNIT, () => !!unit?.isEnemy(this.unit))
+          .with(
+            TARGETING_TYPE.ENEMY_GENERAL,
+            () => !!unit?.isEnemy(this.unit) && unit.isGeneral
+          )
+          .with(
+            TARGETING_TYPE.ENEMY_MINION,
+            () => !!unit?.isEnemy(this.unit) && !unit.isGeneral
+          )
+          .with(TARGETING_TYPE.UNIT, () => isDefined(unit))
+          .with(TARGETING_TYPE.GENERAL, () => isDefined(unit) && unit?.isGeneral)
+          .with(TARGETING_TYPE.MINION, () => isDefined(unit) && !unit.isGeneral)
           .exhaustive();
       });
   }

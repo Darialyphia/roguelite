@@ -40,7 +40,7 @@ const getRuneCountByType = (rune: Rune) =>
 
     <div class="hex-wrapper">
       <button
-        aria-label="add Chaos rune"
+        aria-label="add Oblivion rune"
         style="--bg: url('/assets/ui/rune-purple.png')"
         :disabled="!userPlayer.canPerformResourceAction || !userPlayer.isActive"
         @click="
@@ -89,7 +89,7 @@ const getRuneCountByType = (rune: Rune) =>
     </div>
     <div class="hex-wrapper">
       <button
-        aria-label="add Aether rune"
+        aria-label="add Arcane rune"
         style="--bg: url('/assets/ui/rune-blue.png')"
         :disabled="!userPlayer.canPerformResourceAction || !userPlayer.isActive"
         @click="

@@ -20,7 +20,7 @@ export const testQuest: QuestCardBlueprint = {
   targets: [
     {
       getTargeting(game, card) {
-        return new AnywhereTargetingStrategy(game, card.player, TARGETING_TYPE.ANY);
+        return new AnywhereTargetingStrategy(game, card.player, TARGETING_TYPE.ANYWHERE);
       }
     }
   ],

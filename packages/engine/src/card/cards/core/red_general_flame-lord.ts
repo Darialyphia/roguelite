@@ -33,7 +33,7 @@ export const redGeneralFlameLord: UnitCardBlueprint = {
     }
   ],
   getAttackPattern(game, unit) {
-    return new MeleeTargetingStrategy(game, unit, TARGETING_TYPE.ENEMY);
+    return new MeleeTargetingStrategy(game, unit, TARGETING_TYPE.ENEMY_UNIT);
   },
   getAoe(game) {
     return new PointAOEShape(game);
