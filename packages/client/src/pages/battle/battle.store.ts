@@ -248,11 +248,18 @@ export const usePathHelpers = () => {
 
   const canMoveToCache = new Map<string, boolean>();
 
-  const toCacheKey = (unit: UnitViewModel, point: Point3D) =>
-    `${unit.id}_${point.x}_${point.y}_${point.z}`;
+  const toCacheKey = (
+    unit: UnitViewModel,
+    point: Point3D,
+    maxDistance?: number
+  ) => `${unit.id}_${point.x}_${point.y}_${point.z}_${maxDistance}`;
 
-  const getPath = (unit: UnitViewModel, point: Point3D) => {
-    const key = toCacheKey(unit, point);
+  const getPath = (
+    unit: UnitViewModel,
+    point: Point3D,
+    maxDistance: number
+  ) => {
+    const key = toCacheKey(unit, point, maxDistance);
 
     if (!pathCache.has(key)) {
       pathCache.set(key, unit.getUnit().getPathTo(point));
@@ -262,13 +269,9 @@ export const usePathHelpers = () => {
   };
 
   const getCanMoveTo = (unit: UnitViewModel, point: Point3D) => {
-    const key = toCacheKey(unit, point);
-
-    if (!canMoveToCache.has(key)) {
-      canMoveToCache.set(key, unit.getUnit().canMoveTo(point));
-    }
-
-    return canMoveToCache.get(key)!;
+    return unit.possibleMoves.some(
+      p => p.x === point.x && p.y === point.y && p.z === point.z
+    );
   };
 
   useBattleEvent(GAME_EVENTS.FLUSHED, async () => {
@@ -290,7 +293,7 @@ export const usePathHelpers = () => {
     },
 
     getPathTo(unit: UnitViewModel, point: Point3D) {
-      return getPath(unit, point);
+      return getPath(unit, point, unit.remainingMovement);
     },
 
     canAttackAt(unit: UnitViewModel, point: Point3D) {
@@ -300,7 +303,7 @@ export const usePathHelpers = () => {
           return false;
         }
 
-        const path = getPath(unit, cell);
+        const path = getPath(unit, cell, unit.remainingMovement);
         if (!path) {
           return false;
         }

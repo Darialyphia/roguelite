@@ -65,6 +65,10 @@ export class Team extends Entity {
     return [...this.playerMap.values()];
   }
 
+  get opponents() {
+    return this.game.playerSystem.players.filter(p => p.team.id !== this.id);
+  }
+
   get victoryPoints() {
     return this._victoryPoints;
   }
@@ -74,8 +78,25 @@ export class Team extends Entity {
   }
 
   earnVictoryPoints(amount: number) {
+    const prev = this._victoryPoints;
     this._victoryPoints += amount;
-    if (this._victoryPoints >= this.game.config.VICTORY_POINTS_WIN_THRESHOLD) {
+    if (
+      prev > this.game.config.VP_SECOND_REWARD_THRESHOLD &&
+      this.victoryPoints <= this.game.config.VP_SECOND_REWARD_THRESHOLD
+    ) {
+      this.opponents.forEach(opponent => {
+        opponent.draw(1);
+      });
+    }
+    if (
+      prev > this.game.config.VP_FIRST_REWARD_THRESHOLD &&
+      this.victoryPoints <= this.game.config.VP_FIRST_REWARD_THRESHOLD
+    ) {
+      this.opponents.forEach(opponent => {
+        opponent.draw(1);
+      });
+    }
+    if (this._victoryPoints >= this.game.config.VP_WIN_THRESHOLD) {
       this.game.gamePhaseSystem.endBattle();
     }
   }

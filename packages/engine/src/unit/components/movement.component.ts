@@ -73,13 +73,13 @@ export class MovementComponent {
   }
 
   canMoveTo(point: Point3D, maxDistance: number) {
-    const path = this.pathfinding.getPathTo(this, point);
+    const path = this.pathfinding.getPathTo(this, point, maxDistance);
     if (!path) return false;
     return path.distance <= maxDistance;
   }
 
-  getPathTo(point: Point3D) {
-    return this.pathfinding.getPathTo(this, point);
+  getPathTo(point: Point3D, maxDistance?: number) {
+    return this.pathfinding.getPathTo(this, point, maxDistance);
   }
 
   move(to: Point3D) {

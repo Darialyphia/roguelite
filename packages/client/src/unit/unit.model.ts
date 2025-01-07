@@ -8,7 +8,7 @@ import type { Game } from '@game/engine';
 import type { EntityId } from '@game/engine/src/entity';
 import type { Keyword } from '@game/engine/src/unit/keywords';
 import type { Unit } from '@game/engine/src/unit/unit.entity';
-import { Vec3, type Point } from '@game/shared';
+import { Vec3, type Point, type Point3D } from '@game/shared';
 
 export type UnitViewModel = {
   id: EntityId;
@@ -28,6 +28,8 @@ export type UnitViewModel = {
   keywords: Keyword[];
   isGeneral: boolean;
   isDead: boolean;
+  remainingMovement: number;
+  possibleMoves: Point3D[];
   getUnit(): Unit;
   equals(unit: UnitViewModel): boolean;
   canMoveTo: Unit['canMoveTo'];
@@ -58,6 +60,8 @@ export const makeUnitViewModel = (game: Game, unit: Unit): UnitViewModel => {
         config.TILE_SIZE.z * unit.position.z
     },
     keywords: unit.keywords,
+    remainingMovement: unit.remainingMovement,
+    possibleMoves: unit.getPossibleMoves(),
     canMoveTo: unit.canMoveTo.bind(unit),
     canAttackAt: unit.canAttackAt.bind(unit),
     getUnit() {

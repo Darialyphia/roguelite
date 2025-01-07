@@ -35,7 +35,7 @@ export class PathfinderComponent {
     };
   }
 
-  getPathTo(from: Point3D, to: Point3D) {
+  getPathTo(from: Point3D, to: Point3D, maxDistance?: number) {
     const entityAtPoint = this.game.unitSystem.getUnitAt(to);
     if (entityAtPoint) return null;
 
@@ -44,7 +44,8 @@ export class PathfinderComponent {
     const path = findShortestPath<SerializedCoords>(
       this.strategy,
       pointToCellId(from),
-      pointToCellId(to)
+      pointToCellId(to),
+      maxDistance
     );
 
     if (!path) return null;

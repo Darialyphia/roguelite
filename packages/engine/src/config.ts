@@ -23,9 +23,11 @@ export const config = {
   // how many times a player can draw / gain gold / add a rune every turn
   MAX_RESOURCE_ACTION_PER_TURN: 1,
   // how many victory points are needed to win the game
-  VICTORY_POINTS_WIN_THRESHOLD: 12,
-  // the max amount of turn a game can last
-  MAX_TURN_COUNT: 10,
+  VP_WIN_THRESHOLD: 15,
+  // how many victory points are needed to grant the opponent the first come back reward
+  VP_FIRST_REWARD_THRESHOLD: 5,
+  // how many victory points are needed to grant the opponent the second come back reward
+  VP_SECOND_REWARD_THRESHOLD: 10,
   // The default amount of time a unit can counter attack eveyr turn
   MAX_COUNTERATTACKS_PER_TURN: 1,
   // The victory point gained at the end of the turn when a shrine is controlled by a player

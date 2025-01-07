@@ -383,8 +383,8 @@ export class Unit extends Entity {
     this.ap.remove(path.distance * this.apCostPerMovement);
   }
 
-  getPathTo(to: Point3D) {
-    return this.movement.getPathTo(to);
+  get getPathTo() {
+    return this.movement.getPathTo.bind(this.movement);
   }
 
   getPossibleMoves() {

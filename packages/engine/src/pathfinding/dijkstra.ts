@@ -79,10 +79,11 @@ export const dijkstra = <T>(
 export const findShortestPath = <T>(
   adapter: GraphAdapter<T>,
   startNode: T,
-  finishNode: T
+  finishNode: T,
+  maxWeight?: number
 ) => {
   const getKey = (node: T) => getNodeKey(node, adapter);
-  const { costs, parents } = dijkstra(adapter, { startNode, finishNode });
+  const { costs, parents } = dijkstra(adapter, { startNode, finishNode, maxWeight });
 
   const optimalPath = [finishNode];
   let parent = parents[getKey(finishNode)];
