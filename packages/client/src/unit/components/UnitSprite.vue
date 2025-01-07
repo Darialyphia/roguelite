@@ -14,7 +14,6 @@ const { unit } = defineProps<{ unit: UnitViewModel }>();
 const sheet = useSpritesheet<'', 'base'>(() => unit.spriteId);
 const textures = computed(() => {
   if (!sheet.value) return null;
-  console.log(sheet.value.sheets);
   return createSpritesheetFrameObject('idle', sheet.value.sheets.base.base);
 });
 

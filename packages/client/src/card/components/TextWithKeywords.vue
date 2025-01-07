@@ -77,6 +77,10 @@ const tokens = computed<Token[]>(() => {
                 cost: token.card.cost,
                 iconId: token.card.iconId,
                 kind: token.card.kind,
+                unitType:
+                  token.card.kind === CARD_KINDS.UNIT
+                    ? token.card.unitType
+                    : undefined,
                 atk:
                   token.card.kind === CARD_KINDS.UNIT
                     ? token.card.atk

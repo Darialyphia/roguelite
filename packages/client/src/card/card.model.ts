@@ -1,6 +1,10 @@
 import type { Game } from '@game/engine';
 import { type CardBlueprint } from '@game/engine/src/card/card-blueprint';
-import { CARD_KINDS, type CardKind } from '@game/engine/src/card/card-enums';
+import {
+  CARD_KINDS,
+  type CardKind,
+  type UnitType
+} from '@game/engine/src/card/card-enums';
 import type { Card } from '@game/engine/src/card/card.entity';
 import type { QuestCard } from '@game/engine/src/card/quest-card.entity';
 import type { SpellCard } from '@game/engine/src/card/spell-card.entity';
@@ -32,6 +36,7 @@ type UnitCardViewModel = CardViewModelBase & {
   maxHp: number;
   reward: number;
   jobs: Job[];
+  unitType: UnitType;
   getCard(): UnitCard;
 };
 
@@ -94,6 +99,7 @@ const makeUnitCardViewModel = (
   return {
     ...makeCardViewModelBase(game, card),
     kind: card.kind as any,
+    unitType: card.unitType,
     getCard() {
       return card;
     },

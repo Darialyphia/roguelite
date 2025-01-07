@@ -13,7 +13,12 @@ const { card, violations } = defineProps<{
     CardViewModel,
     'name' | 'description' | 'kind' | 'iconId' | 'cost'
   > &
-    Partial<Pick<CardViewModel & { kind: 'unit' }, 'atk' | 'maxHp' | 'reward'>>;
+    Partial<
+      Pick<
+        CardViewModel & { kind: 'unit' },
+        'atk' | 'maxHp' | 'reward' | 'unitType'
+      >
+    >;
   violations?: { job?: boolean; ap?: boolean; gold?: boolean; runes?: boolean };
 }>();
 
@@ -30,7 +35,7 @@ const metaString = computed(() =>
     .with({ kind: CARD_KINDS.SPELL }, { kind: CARD_KINDS.QUEST }, card => {
       return card.kind;
     })
-    .with({ kind: CARD_KINDS.UNIT }, card => [card.kind].join(' - '))
+    .with({ kind: CARD_KINDS.UNIT }, card => [card.unitType].join(' - '))
     .exhaustive()
 );
 const metaFontSize = useDynamicFontSize(metaString, {
