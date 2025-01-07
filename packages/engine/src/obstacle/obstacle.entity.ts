@@ -34,9 +34,7 @@ export class Obstacle extends Entity {
     this.playerId = options.playerId;
     this.isAttackable = this.blueprint.attackable;
     this.checkOccupation = this.checkOccupation.bind(this);
-    this.game.on(GAME_EVENTS.UNIT_CREATED, this.checkOccupation);
-    this.game.on(GAME_EVENTS.UNIT_AFTER_DESTROY, this.checkOccupation);
-    this.game.on(GAME_EVENTS.UNIT_AFTER_MOVE, this.checkOccupation);
+    this.game.on('*', this.checkOccupation);
 
     this.checkOccupation();
     this.blueprint.onCreated?.(this.game, this);
@@ -77,9 +75,7 @@ export class Obstacle extends Entity {
   destroy() {
     this.blueprint.onDestroyed?.(this.game, this);
     this.game.boardSystem.getCellAt(this.position)!.obstacle = null;
-    this.game.off(GAME_EVENTS.UNIT_CREATED, this.checkOccupation);
-    this.game.off(GAME_EVENTS.UNIT_AFTER_DESTROY, this.checkOccupation);
-    this.game.off(GAME_EVENTS.UNIT_AFTER_MOVE, this.checkOccupation);
+    this.game.off('*', this.checkOccupation);
   }
 
   attack(unit: Unit) {

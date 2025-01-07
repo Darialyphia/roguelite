@@ -1,4 +1,5 @@
 import { GAME_EVENTS } from '../../game/game';
+import { PLAYER_EVENTS } from '../../player/player.entity';
 import type { ObstacleBlueprint } from '../obstacle-blueprint';
 
 export const shrine: ObstacleBlueprint = {
@@ -10,17 +11,17 @@ export const shrine: ObstacleBlueprint = {
   iconId: 'obstacle_shrine',
   walkable: true,
   attackable: false,
-  onCreated(game, obstacle) {
-    obstacle.meta.unsub = game.on(GAME_EVENTS.TURN_END, () => {
-      if (obstacle.occupant) {
-        obstacle.occupant.player.team.earnVictoryPoints(game.config.SHRINE_VP_REWARD);
-        obstacle.playerId = obstacle.occupant.player.id;
-      } else {
-        obstacle.playerId = undefined;
-      }
-    });
-  },
   onDestroyed(game, obstacle) {
     obstacle.meta.unsub();
+  },
+  onEnter(game, obstacle) {
+    obstacle.meta.unsub = obstacle.occupant?.player.on(PLAYER_EVENTS.START_TURN, () => {
+      obstacle.occupant!.player.team.earnVictoryPoints(game.config.SHRINE_VP_REWARD);
+      obstacle.playerId = obstacle.occupant!.player.id;
+    });
+  },
+  onLeave(game, obstacle) {
+    obstacle.meta.unsub();
+    obstacle.playerId = undefined;
   }
 };

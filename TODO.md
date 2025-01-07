@@ -8,7 +8,6 @@ There is no need for a back end as this point, and the games will be single play
 ### Gameplay
 
 - [ ] Adds the Comeback mechanic that draws cards for the opponent when you reach see some VP thresholds. See the [General section](docs/DESIGN_DOCUMENT.md#comeback-mechanic) in the design document.
-- [ ] Rework the way shrine work to match the current design in the [Design document](docs/DESIGN_DOCUMENT.md#shrines)
 - [ ] Add the ability for units to have activated abilities.
 - [ ] Add a `VigilantModifierMixin` that implements the Vigilant keyword.
 - [ ] Add a `Taunt` [keyword](packages/engine/src/unit/keywords.ts) that makes nearby enemies unable to move and forced to attack the taunter if they attack. Add the [UnitModifierMixin](packages/engine/src/unit/modifier-mixins/unit-modifier-mixin.ts) implementing the keyword
@@ -48,6 +47,7 @@ There is no need for a back end as this point, and the games will be single play
 - [ ] AI sometimes just oves units to the top of the map withotu any specific reason.
 - [ ] The card spacing in the opponent's hand after the first turn is incorrect, resulting in cards being spaced too much.
 
+
 ## Medium Priority (enhancements)
 
 - [ ] make the Battle Log interactive by giving it the possibility to hover pars of the events to highlight them on the board.
@@ -85,6 +85,7 @@ Players will be able to
 
 # Change Log
 
+- [x ] 07/01/2025: Rework the way shrine work to match the current design in the [Design document](docs/DESIGN_DOCUMENT.md#shrines)
 - [x] 07/01/2025: The altar mechanic has been replaced by a moving general. See the [General section](docs/DESIGN_DOCUMENT.md#generals) in the design document.
   - [x] Distinguish between generals and minion
   - [x] Add a player general to the board at the start of the game

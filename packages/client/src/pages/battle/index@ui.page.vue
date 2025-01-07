@@ -212,13 +212,12 @@ footer {
 }
 
 header {
-  padding-top: var(--size-3);
 }
 
 .action-wheel {
   align-self: end;
-  margin-block-end: var(--size-6);
-  margin-inline-start: var(--size-6);
+  margin-block-end: var(--size-9);
+  margin-inline-start: var(--size-11);
 }
 
 .hand,
@@ -234,13 +233,10 @@ header {
 .player-battle-infos {
   align-self: start;
   justify-self: start;
-  margin-block-end: var(--size-6);
-  margin-inline-start: var(--size-6);
 }
 
 .opponent-battle-infos {
   justify-self: end;
   align-self: start;
-  margin-inline-end: var(--size-6);
 }
 </style>
