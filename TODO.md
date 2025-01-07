@@ -48,6 +48,7 @@ There is no need for a back end as this point, and the games will be single play
 - [ ] The card spacing in the opponent's hand after the first turn is incorrect, resulting in cards being spaced too much.
 - [ ] The [FearsomeModifierMixin](/packages/engine/src/unit/modifier-mixins/fearsome.mixin.ts) seems to not work at all
 
+
 ## Medium Priority (enhancements)
 
 - [ ] make the Battle Log interactive by giving it the possibility to hover pars of the events to highlight them on the board.
