@@ -11,10 +11,15 @@ import { useCamera } from '@/board/composables/useCamera';
 
 const { unit } = defineProps<{ unit: UnitViewModel }>();
 
-const sheet = useSpritesheet<'', 'base'>(() => unit.spriteId);
+const sheet = useSpritesheet<'', 'base' | 'ghost'>(() => unit.spriteId);
 const textures = computed(() => {
   if (!sheet.value) return null;
-  return createSpritesheetFrameObject('idle', sheet.value.sheets.base.base);
+  return createSpritesheetFrameObject(
+    'idle',
+    unit.isGeneral && unit.isDead
+      ? sheet.value.sheets.base.ghost
+      : sheet.value.sheets.base.base
+  );
 });
 
 const ui = useBattleUiStore();

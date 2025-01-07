@@ -58,7 +58,7 @@ const ui = useBattleUiStore();
       playing
       loop
       :x="23"
-      :y="-12"
+      :y="0"
     />
 
     <animated-sprite
@@ -79,7 +79,7 @@ const ui = useBattleUiStore();
       playing
       loop
       :x="23"
-      :y="2"
+      :y="17"
     />
   </container>
 </template>

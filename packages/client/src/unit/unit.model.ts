@@ -27,6 +27,7 @@ export type UnitViewModel = {
   screenPosition: Point;
   keywords: Keyword[];
   isGeneral: boolean;
+  isDead: boolean;
   getUnit(): Unit;
   equals(unit: UnitViewModel): boolean;
   canMoveTo: Unit['canMoveTo'];
@@ -49,6 +50,7 @@ export const makeUnitViewModel = (game: Game, unit: Unit): UnitViewModel => {
     modifierInfos: [...unit.modifierInfos],
     player: makePlayerViewModel(game, unit.player),
     card: makeCardViewModel(game, unit.card),
+    isDead: unit.isDead,
     screenPosition: {
       x: game.boardSystem.getCellAt(unit.position)!.hex.x,
       y:

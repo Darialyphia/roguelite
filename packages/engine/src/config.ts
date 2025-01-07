@@ -31,9 +31,9 @@ export const config = {
   // The victory point gained at the end of the turn when a shrine is controlled by a player
   SHRINE_VP_REWARD: 1,
   // The victory point awarded for bringing a general to 50% HP
-  GENERAL_VP_HALF_REWARD: 5,
+  GENERAL_VP_HALF_REWARD: 4,
   // The victory point awarded for bringing a general to 0% HP
-  GENERAL_VP_FULL_REWARD: 5,
+  GENERAL_VP_FULL_REWARD: 4,
   // the Altars HP
   ALTAR_HP: 12,
   // How many quest can a player have at the same time

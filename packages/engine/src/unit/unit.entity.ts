@@ -74,6 +74,7 @@ export class Unit extends Entity {
     canCounterAttack: new Interceptable<boolean>(),
     canBeAttackTarget: new Interceptable<boolean>(),
     canBeCardTarget: new Interceptable<boolean>(),
+    canBeDestroyed: new Interceptable<boolean>(),
     canSummonUnitsNearby: new Interceptable<boolean>(),
 
     attack: new Interceptable<number>(),
@@ -184,11 +185,17 @@ export class Unit extends Entity {
   }
 
   get canBeAttacked(): boolean {
-    return this.interceptors.canBeAttackTarget.getValue(true, {});
+    return this.interceptors.canBeAttackTarget.getValue(
+      this.isGeneral ? !this.isDead : true,
+      {}
+    );
   }
 
   get canBeCardTarget(): boolean {
-    return this.interceptors.canBeCardTarget.getValue(true, {});
+    return this.interceptors.canBeCardTarget.getValue(
+      this.isGeneral ? !this.isDead : true,
+      {}
+    );
   }
 
   get isDead() {
@@ -243,9 +250,14 @@ export class Unit extends Entity {
     );
   }
 
+  get canBeDestroyed(): boolean {
+    return this.interceptors.canBeDestroyed.getValue(!this.isGeneral, {});
+  }
+
   get canAttack(): boolean {
+    const base = this.ap.current >= this.combat.nextAttackApCost;
     return this.interceptors.canAttack.getValue(
-      this.ap.current >= this.combat.nextAttackApCost,
+      this.isGeneral ? base && !this.isDead : base,
       {}
     );
   }
@@ -470,6 +482,8 @@ export class Unit extends Entity {
   }
 
   destroy(source: Card) {
+    if (!this.canBeDestroyed) return;
+
     this.emitter.emit(UNIT_EVENTS.BEFORE_DESTROY, { source });
     this.game.unitSystem.removeUnit(this);
     this.emitter.emit(UNIT_EVENTS.AFTER_DESTROY, { source });

@@ -46,6 +46,6 @@ const ui = useBattleUiStore();
     playing
     loop
     :x="23"
-    :y="-30"
+    :y="-15"
   />
 </template>
