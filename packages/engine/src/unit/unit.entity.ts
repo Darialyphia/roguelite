@@ -196,10 +196,6 @@ export class Unit extends Entity {
     return this.interceptors.attack.getValue(this.card.atk, {});
   }
 
-  get reward() {
-    return this.card.reward;
-  }
-
   get apCostPerMovement() {
     return this.interceptors.apCostPerMovement.getValue(
       this.game.config.AP_COST_PER_MOVEMENT,

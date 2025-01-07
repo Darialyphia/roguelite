@@ -59,8 +59,6 @@ export class Team extends Entity {
       });
       this.playerMap.set(entity.id, entity);
     });
-
-    this.game.on('unit.after_destroy', this.onUnitDestroyed.bind(this));
   }
 
   get players() {
@@ -80,10 +78,5 @@ export class Team extends Entity {
     if (this._victoryPoints >= this.game.config.VICTORY_POINTS_WIN_THRESHOLD) {
       this.game.gamePhaseSystem.endBattle();
     }
-  }
-
-  private onUnitDestroyed({ unit }: { unit: Unit }) {
-    if (unit.player.team.equals(this)) return;
-    this.earnVictoryPoints(unit.reward);
   }
 }

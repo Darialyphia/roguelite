@@ -26,7 +26,6 @@ export const redBerserk: UnitCardBlueprint = {
   jobs: [JOBS.FIGHTER],
   atk: 4,
   maxHp: 4,
-  reward: 1,
   minTargets: 1,
   targets: [
     {

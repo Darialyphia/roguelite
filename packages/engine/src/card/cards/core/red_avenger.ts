@@ -33,7 +33,6 @@ export const redAvenger: UnitCardBlueprint = {
   jobs: [JOBS.FIGHTER],
   atk: 3,
   maxHp: 3,
-  reward: 1,
   minTargets: 1,
   targets: [
     {

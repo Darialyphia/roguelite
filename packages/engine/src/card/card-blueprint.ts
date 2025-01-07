@@ -48,7 +48,6 @@ export type UnitCardBlueprint = CardBlueprintBase & {
   spriteId: string;
   maxHp: number;
   atk: number;
-  reward: number;
   jobs: Job[];
   vfx: {
     play(game: Game, card: UnitCard): VFXSequence;

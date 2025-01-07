@@ -137,7 +137,7 @@ useBattleEvent(GAME_EVENTS.PLAYER_AFTER_GAIN_RUNE, async event => {
 useBattleEvent(GAME_EVENTS.PLAYER_AFTER_GAIN_GOLD, async event => {
   events.value.push([
     { kind: 'player', player: event.player },
-    { kind: 'text', text: `gained a ${event.amount} gold.` }
+    { kind: 'text', text: `gained ${event.amount} gold.` }
   ]);
 });
 const isCollapsed = ref(true);

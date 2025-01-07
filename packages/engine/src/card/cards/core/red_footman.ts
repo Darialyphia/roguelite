@@ -24,7 +24,6 @@ export const redFootman: UnitCardBlueprint = {
   jobs: [JOBS.FIGHTER],
   atk: 2,
   maxHp: 4,
-  reward: 1,
   minTargets: 1,
   targets: [
     {

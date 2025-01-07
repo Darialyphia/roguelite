@@ -14,10 +14,7 @@ const { card, violations } = defineProps<{
     'name' | 'description' | 'kind' | 'iconId' | 'cost'
   > &
     Partial<
-      Pick<
-        CardViewModel & { kind: 'unit' },
-        'atk' | 'maxHp' | 'reward' | 'unitType'
-      >
+      Pick<CardViewModel & { kind: 'unit' }, 'atk' | 'maxHp' | 'unitType'>
     >;
   violations?: { job?: boolean; ap?: boolean; gold?: boolean; runes?: boolean };
 }>();
@@ -84,9 +81,6 @@ const runeCosts = computed(() => {
           </li>
         </ul>
       </div>
-      <div class="stats" v-if="card.kind === CARD_KINDS.UNIT">
-        <StatCircle :value="card.reward!" icon="vp" />
-      </div>
     </header>
     <div class="name">{{ card.name }}</div>
     <div class="description">
@@ -147,13 +141,6 @@ const runeCosts = computed(() => {
   line-height: 1.2;
   font-size: 14px;
   filter: contrast(100.00001%);
-}
-
-.stats {
-  justify-self: end;
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
 }
 
 .hp {

@@ -88,10 +88,6 @@ const tokens = computed<Token[]>(() => {
                 maxHp:
                   token.card.kind === CARD_KINDS.UNIT
                     ? token.card.maxHp
-                    : undefined,
-                reward:
-                  token.card.kind === CARD_KINDS.UNIT
-                    ? token.card.reward
                     : undefined
               }"
             />

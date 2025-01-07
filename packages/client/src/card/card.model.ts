@@ -34,7 +34,6 @@ type UnitCardViewModel = CardViewModelBase & {
   cost: { gold: number; runes: Rune[] };
   atk: number;
   maxHp: number;
-  reward: number;
   jobs: Job[];
   unitType: UnitType;
   getCard(): UnitCard;
@@ -105,7 +104,6 @@ const makeUnitCardViewModel = (
     },
     atk: card.atk,
     maxHp: card.maxHp,
-    reward: card.reward,
     cost: card.cost,
     jobs: card.jobs
   };

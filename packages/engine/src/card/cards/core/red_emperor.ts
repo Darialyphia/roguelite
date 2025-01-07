@@ -27,7 +27,6 @@ export const redEmperor: UnitCardBlueprint = {
   jobs: [JOBS.SHOOTER],
   atk: 4,
   maxHp: 6,
-  reward: 2,
   minTargets: 1,
   targets: [
     {

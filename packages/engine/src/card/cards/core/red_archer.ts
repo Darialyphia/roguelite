@@ -26,7 +26,6 @@ export const redArcher: UnitCardBlueprint = {
   jobs: [JOBS.SHOOTER],
   atk: 2,
   maxHp: 4,
-  reward: 1,
   minTargets: 1,
   targets: [
     {

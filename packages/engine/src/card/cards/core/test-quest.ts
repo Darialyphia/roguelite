@@ -1,6 +1,5 @@
 import { irrelevantTarget, mergeTraits } from '../../../ai/ai-traits';
 import { GAME_EVENTS } from '../../../game/game';
-import { PLAYER_EVENTS } from '../../../player/player.entity';
 import { AnywhereTargetingStrategy } from '../../../targeting/anywhere-targeting-strategy';
 import { TARGETING_TYPE } from '../../../targeting/targeting-strategy';
 import { type QuestCardBlueprint } from '../../card-blueprint';

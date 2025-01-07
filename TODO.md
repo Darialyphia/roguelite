@@ -12,7 +12,6 @@
   - [ ] General Ghost mechanic
 - [ ] Adds the Comeback mechanic that draws cards for the opponent when you reach see some VP thresholds. See the [General section](docs/DESIGN_DOCUMENT.md#comeback-mechanic) in the design document.
 - [ ] Rework the way shrine work to match the current design in the [Design document](docs/DESIGN_DOCUMENT.md#shrines)
-- [ ] Remove the Reward points from units as this feature has been removed from the design document.
 - [ ] Add the ability for units to have activated abilities.
 - [ ] Add a `VigilantModifierMixin` that implements the Vigilant keyword.
 - [ ] Add a `Taunt` [keyword](packages/engine/src/unit/keywords.ts) that makes nearby enemies unable to move and forced to attack the taunter if they attack. Add the [UnitModifierMixin](packages/engine/src/unit/modifier-mixins/unit-modifier-mixin.ts) implementing the keyword
@@ -62,4 +61,5 @@
 
 ## Change Log
 
+- [X] 07/01/2025: Remove the Reward points from units as this feature has been removed from the design document.
 - [x] 06/01/2025: Cards in the opponent's hand are sometimes not displayed properly.

@@ -19,10 +19,6 @@ export class UnitCard extends Card<UnitCardBlueprint> {
     return this.blueprint.maxHp;
   }
 
-  get reward() {
-    return this.blueprint.reward;
-  }
-
   get unitType() {
     return this.blueprint.unitType;
   }
