@@ -97,7 +97,10 @@ const spawnAnimation = (container: Container) => {
       </AlphaTransition>
 
       <AlphaTransition :duration="{ enter: 200, leave: 200 }">
-        <UnitStatsIndicators :unit="unit" />
+        <UnitStatsIndicators
+          :unit="unit"
+          v-if="!unit.isGeneral || !unit.isDead"
+        />
       </AlphaTransition>
     </template>
   </UnitPositioner>

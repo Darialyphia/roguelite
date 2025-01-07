@@ -70,8 +70,8 @@ There are 5 types of runes of different color:
 - Creation (Green)
 - Destruction (Red)
 - Order (Yellow), 
-- Chaos (Purple)
-- Aether (Blue)
+- Oblivion (Purple)
+- Arcane (Blue)
 
 Once a player acquires a rune, it is never spent: for example once you have 2 red runes, you can play as many cards that have up to 2 red runes as a requirement.general
 

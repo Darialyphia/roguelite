@@ -1,5 +1,5 @@
 import { Game } from '../../game/game';
-import { PLAYER_EVENTS } from '../../player/player.entity';
+import { PLAYER_EVENTS } from '../../player/player-enums';
 import { UnitModifier } from '../unit-modifier.entity';
 import type { Unit } from '../unit.entity';
 import { UnitModifierMixin } from './unit-modifier-mixin';
@@ -7,14 +7,11 @@ import { UnitModifierMixin } from './unit-modifier-mixin';
 export class DurationModifierMixin extends UnitModifierMixin {
   private modifier!: UnitModifier;
 
-  private maxDuration: number;
-
   constructor(
     game: Game,
     private duration = 1
   ) {
     super(game);
-    this.maxDuration = this.duration;
   }
 
   onTurnStart() {

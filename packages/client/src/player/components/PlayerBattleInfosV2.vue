@@ -203,13 +203,15 @@ const state = useGameClientState();
       'vp progress resources'
       'vp progress bottom';
   }
-  filter: drop-shadow(0 0 0.5em hsl(0 0 0 / 0.5));
+  filter: drop-shadow(0 0 5px hsl(0 0 0 / 0.7));
+  /* background-color: #32021b; */
 }
 
 .name {
   grid-area: name;
   font-size: var(--font-size-5);
   text-align: right;
+
   .is-inverted & {
     text-align: left;
   }
@@ -220,6 +222,10 @@ const state = useGameClientState();
   display: flex;
   justify-content: space-between;
   gap: var(--size-2);
+
+  .is-inverted & {
+    flex-direction: row-reverse;
+  }
 }
 
 .bottom-row {
@@ -259,7 +265,7 @@ const state = useGameClientState();
   background-image: url('/assets/ui/gold.png');
   background-repeat: no-repeat;
   background-position: 0 0;
-  font-size: var(--font-size-5);
+  font-size: var(--font-size-6);
   display: flex;
   align-items: center;
   pointer-events: auto;

@@ -15,12 +15,7 @@ import { InputSystem, type SerializedInput } from '../input/input-system';
 import type { RngSystem } from '../rng/rng-system';
 import { mapValues, mapKeys } from 'lodash-es';
 import { GamePhaseSystem } from './game-phase.system';
-import {
-  PLAYER_EVENTS,
-  type Player,
-  type PlayerEvent,
-  type PlayerEventMap
-} from '../player/player.entity';
+import { type Player, type PlayerEventMap } from '../player/player.entity';
 import { MAPS_DICTIONARY } from '../board/maps/_index';
 import type { TeamOptions } from '../player/team.entity';
 import {
@@ -30,6 +25,7 @@ import {
   type CardEventMap
 } from '../card/card.entity';
 import { UNIT_EVENTS, type UnitEvent } from '../unit/unit-enums';
+import { PLAYER_EVENTS, type PlayerEvent } from '../player/player-enums';
 
 // augments the paylod of an event with additional data
 // for example: a unit may emit a AFTER_MOVE event without a reference to itself

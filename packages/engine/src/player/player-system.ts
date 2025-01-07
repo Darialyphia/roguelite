@@ -1,6 +1,7 @@
 import type { EntityId } from '../entity';
 import { System } from '../system';
-import { PLAYER_EVENTS, type Player } from './player.entity';
+import { PLAYER_EVENTS } from './player-enums';
+import { type Player } from './player.entity';
 import { Team, type TeamOptions } from './team.entity';
 
 export type PlayerSystemOptions = { teams: TeamOptions[] };

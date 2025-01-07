@@ -13,7 +13,7 @@ export const RUNES = {
   RED: new Rune('RED', 'Destruction'),
   YELLOW: new Rune('YELLOW', 'Order'),
   GREEN: new Rune('GREEN', 'Creation'),
-  PURPLE: new Rune('PURPLE', '  Chaos'),
-  BLUE: new Rune('BLUE', 'Aether'),
+  PURPLE: new Rune('PURPLE', 'Oblivion'),
+  BLUE: new Rune('BLUE', 'Arcane'),
   COLORLESS: new Rune('COLORLESS', 'Colorless')
 } as const;
