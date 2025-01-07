@@ -5,7 +5,6 @@ import { createSpritesheetFrameObject } from '@/utils/sprite';
 import type { UnitViewModel } from '../unit.model';
 import { useBattleEvent } from '@/pages/battle/battle.store';
 import { TextStyle, type AnimatedSprite } from 'pixi.js';
-import { SpellCard } from '@game/engine/src/card/spell-card.entity';
 import { useBattleUiStore } from '@/pages/battle/battle-ui.store';
 import { GAME_EVENTS } from '@game/engine/src/game/game';
 

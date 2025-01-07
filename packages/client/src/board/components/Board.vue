@@ -35,8 +35,9 @@ until(computed(() => readyCells.value === battleStore.state.cells.length))
     @ready="readyCells++"
   />
 
-  <Unit v-for="unit in battleStore.state.units" :key="unit.id" :unit="unit" />
+  <template v-if="ui.isBoardAppearAnimationDone">
+    <Unit v-for="unit in battleStore.state.units" :key="unit.id" :unit="unit" />
+  </template>
 
-  <!-- <DangerArrows /> -->
   <AmbientLight :world-size="worldSize" />
 </template>
