@@ -40,6 +40,9 @@ const options: Pick<GameOptions, 'mapId' | 'teams'> = {
         deck: {
           general: { blueprintId: 'red-general-flame-lord' },
           cards: [
+            { blueprintId: 'red-burning-blade' },
+            { blueprintId: 'red-burning-blade' },
+            { blueprintId: 'red-burning-blade' },
             { blueprintId: 'red-combustion' },
             { blueprintId: 'red-combustion' },
             { blueprintId: 'red-combustion' },
@@ -87,6 +90,9 @@ const options: Pick<GameOptions, 'mapId' | 'teams'> = {
         deck: {
           general: { blueprintId: 'red-general-flame-lord' },
           cards: [
+            { blueprintId: 'red-burning-blade' },
+            { blueprintId: 'red-burning-blade' },
+            { blueprintId: 'red-burning-blade' },
             { blueprintId: 'red-combustion' },
             { blueprintId: 'red-combustion' },
             { blueprintId: 'red-combustion' },

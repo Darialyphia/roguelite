@@ -78,7 +78,7 @@ const cards = computed(() => {
   pointer-events: auto;
 }
 ul {
-  gap: var(--size-3);
+  gap: var(--size-6);
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(20rem, 1fr));
 }

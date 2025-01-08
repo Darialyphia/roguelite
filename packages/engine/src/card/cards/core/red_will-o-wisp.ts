@@ -20,7 +20,7 @@ export const redWillOWisp: UnitCardBlueprint = {
   spriteId: 'will-o-wisp',
   iconId: 'unit_will-o-wisp',
   name: 'Will-o-wisp',
-  description: 'Inflict @Burn(1)@ to minions damaged by this unit',
+  description: 'Inflict @Burn(1)@ to minions damaged by this unit.',
   kind: CARD_KINDS.UNIT,
   unitType: UNIT_TYPES.MINION,
   aiHints: meleeFighter,

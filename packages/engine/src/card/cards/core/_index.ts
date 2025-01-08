@@ -13,6 +13,7 @@ import { redExorcist } from './red_exorcist';
 import { redFireElemental } from './red_fire-elemental';
 import { redWarLeader } from './red_warleader';
 import { redWillOWisp } from './red_will-o-wisp';
+import { redBurningBlade } from './red_burning_blade';
 
 export const CORE_CARDS = keyBy(
   [
@@ -28,6 +29,7 @@ export const CORE_CARDS = keyBy(
     redWarLeader,
     redFireball,
     redCombustion,
+    redBurningBlade,
     testQuest
   ],
   'id'

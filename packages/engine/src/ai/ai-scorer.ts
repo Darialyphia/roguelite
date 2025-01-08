@@ -9,6 +9,7 @@ const sum = (arr: number[]) => arr.reduce((total, curr) => total + curr, 0);
 
 const WEIGHTS = {
   HP: 1,
+  ATK: 1,
   UNIT: 4,
   CARD_IN_HAND: 2,
   VICTORY_POINT: 20,
@@ -82,7 +83,7 @@ export class AIScorer {
       player.units.map(unit => {
         let score =
           // base score for a unit just existing - helps the AI killing off a low hp unit rather than doing full damage on another one
-          BASE_SCORES.UNIT + unit.hp.current * WEIGHTS.HP;
+          BASE_SCORES.UNIT + unit.hp.current * WEIGHTS.HP + unit.atk * WEIGHTS.ATK;
 
         // Reward allies for being closer to enemy units
         if (this.player.equals(unit.player)) {
