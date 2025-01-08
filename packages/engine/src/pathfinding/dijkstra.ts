@@ -50,8 +50,8 @@ export const dijkstra = <T>(
     // Early return when the shortest path in our
     // graph is already the finishNode
     if (isDefined(finishNode) && nodeKey === getKey(finishNode)) break;
-
-    adapter.getEdges(node).forEach(edge => {
+    const edges = adapter.getEdges(node);
+    edges.forEach(edge => {
       const childNode = edge.node;
       const childNodeKey = getKey(childNode);
       const newCost = cost + edge.weight;

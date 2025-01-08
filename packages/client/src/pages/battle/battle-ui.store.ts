@@ -110,7 +110,7 @@ export const useInternalBattleUiStore = defineStore(
     const store = useBattleStore();
     const hoveredCell = shallowRef<Nullable<Cell>>(null);
     const highlightedUnit = ref<Nullable<UnitViewModel>>(null);
-    const selectedUnit = ref<Nullable<UnitViewModel>>(null);
+    const selectedUnitId = ref<Nullable<string>>(null);
 
     watch(hoveredCell, cell => {
       if (!store.session) return;
@@ -122,7 +122,7 @@ export const useInternalBattleUiStore = defineStore(
       }
     });
 
-    return { hoveredCell, highlightedUnit, selectedUnit };
+    return { hoveredCell, highlightedUnit, selectedUnitId };
   }
 );
 
@@ -182,12 +182,14 @@ export const useBattleUiStore = defineStore('battle-ui', () => {
       uiStore.highlightedUnit = null;
     },
 
-    selectedUnit: computed(() => uiStore.selectedUnit),
+    selectedUnit: computed(() =>
+      battleStore.state.units.find(unit => unit.id === uiStore.selectedUnitId)
+    ),
     selectUnit(unit: UnitViewModel) {
-      uiStore.selectedUnit = unit;
+      uiStore.selectedUnitId = unit.id;
     },
     unselectUnit() {
-      uiStore.selectedUnit = null;
+      uiStore.selectedUnitId = null;
     },
 
     mode: computed(() => modeContext.value?.mode),

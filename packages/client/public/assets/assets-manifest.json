@@ -559,6 +559,19 @@
         },
         {
           "alias": [
+            "icon-unit_exorcist"
+          ],
+          "src": [
+            "/assets/icons/unit_exorcist.png"
+          ],
+          "data": {
+            "tags": {
+              "m": true
+            }
+          }
+        },
+        {
+          "alias": [
             "icon-unit_flame-lord"
           ],
           "src": [
@@ -1977,6 +1990,33 @@
           ],
           "src": [
             "/assets/units/emperor.png"
+          ],
+          "data": {
+            "tags": {
+              "m": true
+            }
+          }
+        },
+        {
+          "alias": [
+            "exorcist"
+          ],
+          "src": [
+            "/assets/units/exorcist.json"
+          ],
+          "loadParser": "aseprite_loader",
+          "data": {
+            "tags": {
+              "m": true
+            }
+          }
+        },
+        {
+          "alias": [
+            "exorcist.png"
+          ],
+          "src": [
+            "/assets/units/exorcist.png"
           ],
           "data": {
             "tags": {

@@ -3,6 +3,7 @@ import { NoMitigationStrategy } from '../../../combat/damage/mitigation/no-mitig
 import { NoScalingStrategy } from '../../../combat/damage/scaling/no-scaling.strategy';
 import { AnywhereTargetingStrategy } from '../../../targeting/anywhere-targeting-strategy';
 import { PointAOEShape } from '../../../targeting/aoe-shapes';
+import { SpellTargetingtrategy } from '../../../targeting/spell-targeting.strategy';
 import { TARGETING_TYPE } from '../../../targeting/targeting-strategy';
 import { RUNES } from '../../../utils/rune';
 import { type SpellCardBlueprint } from '../../card-blueprint';
@@ -23,11 +24,10 @@ export const redFireball: SpellCardBlueprint = {
   targets: [
     {
       getTargeting(game, card) {
-        return new AnywhereTargetingStrategy(
-          game,
-          card.player,
-          TARGETING_TYPE.ENEMY_UNIT
-        );
+        return new SpellTargetingtrategy(game, card, {
+          maxRange: 3,
+          targetingType: TARGETING_TYPE.ENEMY_UNIT
+        });
       }
     }
   ],

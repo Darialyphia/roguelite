@@ -52,6 +52,9 @@ const options: Pick<GameOptions, 'mapId' | 'teams'> = {
             { blueprintId: 'red-avenger' },
             { blueprintId: 'red-avenger' },
             { blueprintId: 'red-avenger' },
+            { blueprintId: 'red-exorcist' },
+            { blueprintId: 'red-exorcist' },
+            { blueprintId: 'red-exorcist' },
             { blueprintId: 'red-archer' },
             { blueprintId: 'red-archer' },
             { blueprintId: 'red-archer' },
@@ -75,15 +78,21 @@ const options: Pick<GameOptions, 'mapId' | 'teams'> = {
         deck: {
           general: { blueprintId: 'red-general-flame-lord' },
           cards: [
+            { blueprintId: 'red-combustion' },
+            { blueprintId: 'red-combustion' },
+            { blueprintId: 'red-combustion' },
             { blueprintId: 'red-footman' },
             { blueprintId: 'red-footman' },
             { blueprintId: 'red-footman' },
-            { blueprintId: 'red-avenger' },
-            { blueprintId: 'red-avenger' },
-            { blueprintId: 'red-avenger' },
             { blueprintId: 'red-berserk' },
             { blueprintId: 'red-berserk' },
             { blueprintId: 'red-berserk' },
+            { blueprintId: 'red-avenger' },
+            { blueprintId: 'red-avenger' },
+            { blueprintId: 'red-avenger' },
+            { blueprintId: 'red-exorcist' },
+            { blueprintId: 'red-exorcist' },
+            { blueprintId: 'red-exorcist' },
             { blueprintId: 'red-archer' },
             { blueprintId: 'red-archer' },
             { blueprintId: 'red-archer' },
@@ -102,7 +111,7 @@ const options: Pick<GameOptions, 'mapId' | 'teams'> = {
     ]
   ]
 };
-const SEED = 'Winners win';
+const SEED = 'There it is dood';
 const serverOptions = {
   rngSeed: SEED,
   ...options
@@ -209,9 +218,6 @@ header,
 footer {
   display: grid;
   grid-template-columns: minmax(0, 0.25fr) minmax(0, 0.5fr) minmax(0, 0.25fr);
-}
-
-header {
 }
 
 .action-wheel {

@@ -76,6 +76,7 @@ export class Unit extends Entity {
     canBeCardTarget: new Interceptable<boolean>(),
     canBeDestroyed: new Interceptable<boolean>(),
     canSummonUnitsNearby: new Interceptable<boolean>(),
+    canCastSpells: new Interceptable<boolean>(),
 
     attack: new Interceptable<number>(),
     attackTargetingPattern: new Interceptable<TargetingStrategy>(),
@@ -182,6 +183,10 @@ export class Unit extends Entity {
 
   get canSummonUnitsNearby(): boolean {
     return this.interceptors.canSummonUnitsNearby.getValue(this.isGeneral, {});
+  }
+
+  get canCastSpells(): boolean {
+    return this.interceptors.canCastSpells.getValue(this.isGeneral, {});
   }
 
   get canBeAttacked(): boolean {
@@ -395,7 +400,10 @@ export class Unit extends Entity {
 
   getPossibleMoves() {
     if (!this.canMove) return [];
-    return this.movement.getAllPossibleMoves(this.ap.current / this.apCostPerMovement);
+    const moves = this.movement.getAllPossibleMoves(
+      this.ap.current / this.apCostPerMovement
+    );
+    return moves;
   }
 
   getDealtDamage(baseAmount: number, target?: Unit) {

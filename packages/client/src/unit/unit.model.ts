@@ -37,6 +37,7 @@ export type UnitViewModel = {
 };
 
 export const makeUnitViewModel = (game: Game, unit: Unit): UnitViewModel => {
+  const moves = unit.getPossibleMoves();
   return {
     id: unit.id,
     name: unit.name,

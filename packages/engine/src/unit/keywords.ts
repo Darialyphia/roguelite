@@ -27,7 +27,7 @@ export const KEYWORDS = {
   COMMANDER: {
     id: 'commander',
     name: 'Commander',
-    description: 'You can deploy units next to this.',
+    description: 'You can play your unit cards next to this.',
     aliases: []
   },
   FEARSOME: {
@@ -46,6 +46,12 @@ export const KEYWORDS = {
     id: 'rush',
     name: 'Rush',
     description: "This unit doesn't exhaust when deployed.",
+    aliases: []
+  },
+  SPELLCASTER: {
+    id: 'spellcaster',
+    name: 'Spellcaster',
+    description: 'This unit can use spell cards in place of its general',
     aliases: []
   }
 } as const satisfies Record<string, Keyword>;

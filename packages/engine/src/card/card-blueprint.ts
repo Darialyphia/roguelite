@@ -12,8 +12,8 @@ import type { VFXSequence } from '../vfx/vfx-sequencer';
 import { CARD_KINDS, type CardKind, type UnitType } from './card-enums';
 import type { QuestCard } from './quest-card.entity';
 
-type CardBlueprintTarget = {
-  getTargeting(game: Game, card: Card): TargetingStrategy;
+type CardBlueprintTarget<T extends Card> = {
+  getTargeting(game: Game, card: T): TargetingStrategy;
 };
 
 export type CardAiHints = {
@@ -54,7 +54,7 @@ export type UnitCardBlueprint = CardBlueprintBase & {
     destroy(game: Game, card: UnitCard): VFXSequence;
   };
   minTargets: number;
-  targets: [CardBlueprintTarget, ...CardBlueprintTarget[]];
+  targets: [CardBlueprintTarget<UnitCard>, ...CardBlueprintTarget<UnitCard>[]];
   unitType: UnitType;
   getAoe: (game: Game, card: UnitCard, points: Point3D[]) => AOEShape;
   onPlay(game: Game, card: UnitCard, cellTargets: Point3D[], unitTargets: Unit[]): void;
@@ -67,7 +67,7 @@ export type SpellCardBlueprint = CardBlueprintBase & {
     play(game: Game, card: SpellCard): VFXSequence;
   };
   minTargets: number;
-  targets: [CardBlueprintTarget, ...CardBlueprintTarget[]];
+  targets: [CardBlueprintTarget<SpellCard>, ...CardBlueprintTarget<SpellCard>[]];
   getAoe: (game: Game, card: SpellCard, points: Point3D[]) => AOEShape;
   onPlay(game: Game, card: SpellCard, cellTargets: Point3D[], unitTargets: Unit[]): void;
 };
@@ -78,7 +78,7 @@ export type QuestCardBlueprint = CardBlueprintBase & {
     play(game: Game, card: QuestCard): VFXSequence;
   };
   minTargets: number;
-  targets: [CardBlueprintTarget, ...CardBlueprintTarget[]];
+  targets: [CardBlueprintTarget<QuestCard>, ...CardBlueprintTarget<QuestCard>[]];
   onPlay(game: Game, card: QuestCard): void;
   onCompleted(game: Game, card: QuestCard): void;
 };

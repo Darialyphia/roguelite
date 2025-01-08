@@ -20,7 +20,7 @@ There is no need for a back end as this point, and the games will be single play
 - [ ] Add a `Rooted` [keyword](packages/engine/src/unit/keywords.ts) that prevents a unit from moving. Implement the [UnitModifierMixin](packages/engine/src/unit/modifier-mixins/unit-modifier-mixin.ts)implementing the keyword
 - [ ] Add a `Silenced` [keyword](packages/engine/src/unit/keywords.ts) that prevents a unit from using abilities. Implement the [UnitModifierMixin](packages/engine/src/unit/modifier-mixins/unit-modifier-mixin.ts)implementing the keyword
 - [ ] Add a `Slowed` [keyword](packages/engine/src/unit/keywords.ts) that make a unit spend 50% more AP to move one tile. Implement the [UnitModifierMixin](packages/engine/src/unit/modifier-mixins/unit-modifier-mixin.ts)implementing the keyword
-- [ ] add a `Spellcaster` keyword [keyword](packages/engine/src/unit/keywords.ts) that allows spell cards to use the unit position as a base for spell that have a range. Implement the [UnitModifierMixin](packages/engine/src/unit/modifier-mixins/unit-modifier-mixin.ts)implementing the keyword
+
 
 ### UI
 
@@ -85,6 +85,7 @@ Players will be able to
 
 # Change Log
 
+- [x] 08/01/2025: add a `Spellcaster` keyword [keyword](packages/engine/src/unit/keywords.ts) that allows spell cards to use the unit position as a base for spell that have a range. Implement the [UnitModifierMixin](packages/engine/src/unit/modifier-mixins/unit-modifier-mixin.ts)implementing the keyword
 - [x] 07/01/2025: Adds the Comeback mechanic that draws cards for the opponent when you reach see some VP thresholds. See the [General section](docs/DESIGN_DOCUMENT.md#comeback-mechanic) in the design document.
 - [x] 07/01/2025: Rework the way shrine work to match the current design in the [Design document](docs/DESIGN_DOCUMENT.md#shrines)
 - [x] 07/01/2025: The altar mechanic has been replaced by a moving general. See the [General section](docs/DESIGN_DOCUMENT.md#generals) in the design document.

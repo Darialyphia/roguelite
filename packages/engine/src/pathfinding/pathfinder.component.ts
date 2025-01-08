@@ -27,6 +27,8 @@ export class PathfinderComponent {
       maxWeight: maxDistance
     });
 
+    this.strategy.done();
+
     return {
       costs: map.costs,
       get(pt: Point3D) {

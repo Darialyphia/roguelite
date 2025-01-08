@@ -31,19 +31,14 @@ export class SolidBodyPathfindingStrategy implements PathfindingStrategy {
     const cell = this.game.boardSystem.getCellAt(node)!;
 
     const edges = this.game.boardSystem.getNeighbors3D(cell.position);
-
-    this.cache.set(
-      node,
-      edges
-        .filter(isDefined)
-        .filter(cell => this.isEdgeValid(cell))
-        .map(point => {
-          return {
-            node: pointToCellId(point),
-            weight: 1
-          };
-        })
-    );
+    const result: Array<{ node: SerializedCoords; weight: number }> = [];
+    for (let i = 0; i <= edges.length; i++) {
+      const edge = edges[i];
+      if (isDefined(edge) && this.isEdgeValid(edge)) {
+        result.push({ node: pointToCellId(edge), weight: 1 });
+      }
+    }
+    this.cache.set(node, result);
   }
 
   isEdgeValid(cell: Cell) {
