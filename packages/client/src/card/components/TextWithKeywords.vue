@@ -100,7 +100,7 @@ const tokens = computed<Token[]>(() => {
 
 <style scoped lang="postcss">
 :is(.token-keyword, .token-card) {
-  font-weight: var(--font-weight-6);
+  font-weight: var(--font-weight-7);
 }
 
 .token-card {
@@ -113,6 +113,5 @@ const tokens = computed<Token[]>(() => {
   padding: var(--size-3);
   color: var(--text-1);
   background-color: black;
-  font-family: 'Silkscreen';
 }
 </style>

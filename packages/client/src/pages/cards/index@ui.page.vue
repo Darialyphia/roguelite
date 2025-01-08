@@ -7,6 +7,37 @@ import Card from '@/card/components/Card.vue';
 definePage({
   name: 'CardsList'
 });
+
+const cards = computed(() => {
+  const byType = Object.groupBy(
+    Object.values(CARDS_DICTIONARY),
+    card => card.kind
+  );
+
+  return [
+    ...byType.unit!.toSorted((a, b) => {
+      const costDiff = a.cost.gold - b.cost.gold;
+      if (costDiff) return costDiff;
+      return a.name
+        .toLocaleLowerCase()
+        .localeCompare(b.name.toLocaleLowerCase());
+    }),
+    ...byType.spell!.toSorted((a, b) => {
+      const costDiff = a.cost.gold - b.cost.gold;
+      if (costDiff) return costDiff;
+      return a.name
+        .toLocaleLowerCase()
+        .localeCompare(b.name.toLocaleLowerCase());
+    }),
+    ...byType.quest!.toSorted((a, b) => {
+      const costDiff = a.cost.gold - b.cost.gold;
+      if (costDiff) return costDiff;
+      return a.name
+        .toLocaleLowerCase()
+        .localeCompare(b.name.toLocaleLowerCase());
+    })
+  ];
+});
 </script>
 
 <template>
@@ -22,7 +53,7 @@ definePage({
       </ul>
     </nav>
     <ul>
-      <li v-for="card in CARDS_DICTIONARY" :key="card.id">
+      <li v-for="card in cards" :key="card.id">
         <Card
           :card="{
             name: card.name,

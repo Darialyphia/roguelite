@@ -1,4 +1,3 @@
-import { createEntityId } from '../../entity';
 import { Game } from '../../game/game';
 import { IntersectionAoeShape } from '../../targeting/aoe-shapes';
 import { TARGETING_TYPE } from '../../targeting/targeting-strategy';

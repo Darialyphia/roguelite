@@ -11,6 +11,8 @@ import { redCombustion } from './red_combustion';
 import { redGeneralFlameLord } from './red_general_flame-lord';
 import { redExorcist } from './red_exorcist';
 import { redFireElemental } from './red_fire-elemental';
+import { redWarLeader } from './red_warleader';
+import { redWillOWisp } from './red_will-o-wisp';
 
 export const CORE_CARDS = keyBy(
   [
@@ -19,9 +21,11 @@ export const CORE_CARDS = keyBy(
     redArcher,
     redEmperor,
     redBerserk,
+    redWillOWisp,
     redAvenger,
     redFireElemental,
     redExorcist,
+    redWarLeader,
     redFireball,
     redCombustion,
     testQuest

@@ -1,4 +1,3 @@
-import { createEntityId } from '../../entity';
 import { Game } from '../../game/game';
 import { RangedTargetingStrategy } from '../../targeting/ranged-targeting.strategy';
 import { TARGETING_TYPE } from '../../targeting/targeting-strategy';

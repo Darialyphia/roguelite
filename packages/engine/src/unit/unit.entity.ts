@@ -47,7 +47,7 @@ export type UnitEventMap = {
   [UNIT_EVENTS.AFTER_DESTROY]: [{ source: Card }];
 };
 
-type UnitInterceptor = Unit['interceptors'];
+export type UnitInterceptor = Unit['interceptors'];
 
 export class Unit extends Entity {
   private game: Game;
@@ -232,7 +232,7 @@ export class Unit extends Entity {
     );
   }
 
-  get attackTargettingPattern() {
+  get attackTargettingPattern(): TargetingStrategy {
     return this.interceptors.attackTargetingPattern.getValue(this.card.attackPattern, {});
   }
 
@@ -517,7 +517,7 @@ export class Unit extends Entity {
   }
 
   get getModifier() {
-    return this.modifierManager.getById.bind(this.modifierManager);
+    return this.modifierManager.get.bind(this.modifierManager);
   }
 
   get modifierInfos() {

@@ -134,7 +134,9 @@ const runeCosts = computed(() => {
   justify-self: center;
   max-width: calc(1px * v-bind('config.CARD_NAME_TEXTBOX_WIDTH'));
   line-height: 1;
-  filter: contrast(100.00001%);
+  font-weight: var(--font-weight-9);
+  font-family: var(--font-system-ui);
+  text-transform: uppercase;
 }
 
 .description {
@@ -143,10 +145,11 @@ const runeCosts = computed(() => {
   padding: calc(1px * v-bind('config.CARD_DESCRIPTION_TEXTBOX_PADDING'));
   justify-self: center;
   margin-top: 27px;
-  line-height: 1.2;
-  font-size: 14px;
-  filter: contrast(100.00001%);
+  font-size: 15px;
+  text-align: center;
+  font-weight: var(--font-weight-5);
   white-space: pre-line;
+  font-family: var(--font-system-ui);
 }
 
 .hp {
@@ -189,11 +192,13 @@ ul:has(.rune) {
   background: var(--bg);
   display: grid;
   place-content: center;
-  font-family: 'SilkScreen';
   color: black;
   text-align: center;
   font-size: var(--font-size-4);
   text-shadow: 0 3px #d7ad42;
   text-align: center;
+  font-family: var(--font-system-ui);
+  font-weight: var(--font-weight-9);
+  padding-bottom: 8px;
 }
 </style>

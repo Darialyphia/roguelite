@@ -622,6 +622,32 @@
               "m": true
             }
           }
+        },
+        {
+          "alias": [
+            "icon-unit_warleader"
+          ],
+          "src": [
+            "/assets/icons/unit_warleader.png"
+          ],
+          "data": {
+            "tags": {
+              "m": true
+            }
+          }
+        },
+        {
+          "alias": [
+            "icon-unit_will-o-wisp"
+          ],
+          "src": [
+            "/assets/icons/unit_will-o-wisp.png"
+          ],
+          "data": {
+            "tags": {
+              "m": true
+            }
+          }
         }
       ]
     },
@@ -2163,6 +2189,60 @@
           ],
           "src": [
             "/assets/units/footman.png"
+          ],
+          "data": {
+            "tags": {
+              "m": true
+            }
+          }
+        },
+        {
+          "alias": [
+            "warleader"
+          ],
+          "src": [
+            "/assets/units/warleader.json"
+          ],
+          "loadParser": "aseprite_loader",
+          "data": {
+            "tags": {
+              "m": true
+            }
+          }
+        },
+        {
+          "alias": [
+            "warleader.png"
+          ],
+          "src": [
+            "/assets/units/warleader.png"
+          ],
+          "data": {
+            "tags": {
+              "m": true
+            }
+          }
+        },
+        {
+          "alias": [
+            "will-o-wisp"
+          ],
+          "src": [
+            "/assets/units/will-o-wisp.json"
+          ],
+          "loadParser": "aseprite_loader",
+          "data": {
+            "tags": {
+              "m": true
+            }
+          }
+        },
+        {
+          "alias": [
+            "will-o-wisp.png"
+          ],
+          "src": [
+            "/assets/units/will-o-wisp.png"
           ],
           "data": {
             "tags": {

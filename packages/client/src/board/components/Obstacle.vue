@@ -1,85 +1,26 @@
 <script setup lang="ts">
-import { useGameClientState, useUserPlayer } from '@/pages/battle/battle.store';
+import { useUserPlayer } from '@/pages/battle/battle.store';
 import UiAnimatedSprite from '@/ui/components/UiAnimatedSprite.vue';
-import { config } from '@/utils/config';
 import type { CellViewModel } from '../models/cell.model';
 import type { Defined } from '@game/shared';
-import { TextStyle } from 'pixi.js';
-import { useSpritesheet } from '@/shared/composables/useSpritesheet';
-import { createSpritesheetFrameObject } from '@/utils/sprite';
-import { useBattleUiStore } from '@/pages/battle/battle-ui.store';
-import { GAME_PHASES } from '@game/engine/src/game/game-phase.system';
 
 const { obstacle } = defineProps<{
   obstacle: Defined<CellViewModel['obstacle']>;
 }>();
 
 const userPlayer = useUserPlayer();
-const state = useGameClientState();
 
 const tag = computed(() => {
   if (!obstacle.player) return 'idle';
-  if (obstacle.blueprintId === 'altar' && obstacle.meta.isDestoyed)
-    return 'idle';
 
   return userPlayer.value.getPlayer().equals(obstacle.player.getPlayer())
     ? 'ally'
     : 'enemy';
 });
-
-const getTextStyle = (color: number) => {
-  return new TextStyle({
-    fontSize: 18,
-    fill: color,
-    fontFamily: 'SilkScreen',
-    align: 'center'
-  });
-};
-
-const sheet = useSpritesheet<'', 'base'>('altar-stats');
-const textures = computed(() => {
-  if (!sheet.value) return null;
-
-  return createSpritesheetFrameObject('idle', sheet.value.sheets.base.base);
-});
-const ui = useBattleUiStore();
 </script>
 
 <template>
-  <container>
-    <UiAnimatedSprite :assetId="obstacle.spriteId" :y="-26" :tag="tag" />
-
-    <animated-sprite
-      v-if="
-        textures &&
-        obstacle.blueprintId === 'altar' &&
-        !obstacle.meta.isDestroyed &&
-        state.phase !== GAME_PHASES.MULLIGAN
-      "
-      :ref="
-        (obj: any) => {
-          ui.assignLayer(obj, 'ui');
-          if (!obj) return;
-        }
-      "
-      :textures="textures"
-      :anchor="0.5"
-      event-mode="none"
-      playing
-      loop
-      :y="12"
-      :x="-18"
-    >
-      <pixi-text
-        :style="getTextStyle(0x84f200)"
-        :y="-2"
-        :scale="0.5"
-        :anchor="0.5"
-      >
-        {{ obstacle.meta.hp.current }}
-      </pixi-text>
-    </animated-sprite>
-  </container>
+  <UiAnimatedSprite :assetId="obstacle.spriteId" :y="-26" :tag="tag" />
 </template>
 
 <style scoped lang="postcss"></style>

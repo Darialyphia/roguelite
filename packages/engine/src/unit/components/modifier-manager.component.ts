@@ -17,7 +17,7 @@ export class UnitModifierManager {
     }
   }
 
-  getById(id: EntityId) {
+  get(id: EntityId) {
     return this.modifiers.find(mod => mod.id === id);
   }
 
