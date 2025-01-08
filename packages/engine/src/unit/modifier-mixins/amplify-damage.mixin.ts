@@ -1,15 +1,9 @@
-import { createEntityId } from '../../entity';
 import { Game } from '../../game/game';
-import { IntersectionAoeShape } from '../../targeting/aoe-shapes';
-import { TARGETING_TYPE } from '../../targeting/targeting-strategy';
-import { KEYWORDS } from '../keywords';
 import { UnitModifier } from '../unit-modifier.entity';
 import type { Unit } from '../unit.entity';
 import { UnitModifierMixin } from './unit-modifier-mixin';
 
 export class AmplifyDamagedModifierMixin extends UnitModifierMixin {
-  static modifierName = createEntityId('AMPLIFY_DAMAGE');
-
   private modifier!: UnitModifier;
 
   constructor(

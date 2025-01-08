@@ -50,7 +50,7 @@ export class UnitModifier extends Entity {
 
   protected game: Game;
 
-  protected stacks: number;
+  protected _stacks: number;
 
   protected stackable: boolean;
 
@@ -63,7 +63,7 @@ export class UnitModifier extends Entity {
     this.game = game;
     this.mixins = options.mixins;
     this.stackable = options.stackable;
-    this.stacks = options.stackable ? options.initialStacks : -1;
+    this._stacks = options.stackable ? options.initialStacks : -1;
     this.infos = {
       description: options.description,
       name: options.name,
@@ -87,15 +87,19 @@ export class UnitModifier extends Entity {
     return this._target;
   }
 
+  get stacks() {
+    return this._stacks ?? 0;
+  }
+
   addStacks(amount: number) {
     assert(this.stackable, `Modifier ${this.id} is not stackable`);
-    this.stacks += amount;
+    this._stacks += amount;
   }
 
   removeStacks(amount: number) {
     assert(this.stackable, `Modifier ${this.id} is not stackable`);
-    this.stacks -= amount;
-    if (this.stacks === 0) {
+    this._stacks -= amount;
+    if (this._stacks === 0) {
       this._target.removeModifier(this.id);
     }
   }
@@ -112,7 +116,7 @@ export class UnitModifier extends Entity {
   reapplyTo(unit: Unit, newStacks?: number) {
     this.emitter.emit(UNIT_MODIFIER_EVENTS.BEFORE_REAPPLIED);
     if (this.stackable) {
-      this.stacks += newStacks ?? 1;
+      this._stacks += newStacks ?? 1;
     }
 
     this.mixins.forEach(mixin => {

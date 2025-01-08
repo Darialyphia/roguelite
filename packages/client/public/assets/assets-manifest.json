@@ -572,6 +572,19 @@
         },
         {
           "alias": [
+            "icon-unit_fire-elemental"
+          ],
+          "src": [
+            "/assets/icons/unit_fire-elemental.png"
+          ],
+          "data": {
+            "tags": {
+              "m": true
+            }
+          }
+        },
+        {
+          "alias": [
             "icon-unit_flame-lord"
           ],
           "src": [
@@ -1464,6 +1477,58 @@
         },
         {
           "alias": [
+            "rarity-common.png"
+          ],
+          "src": [
+            "/assets/ui/rarity-common.png"
+          ],
+          "data": {
+            "tags": {
+              "m": true
+            }
+          }
+        },
+        {
+          "alias": [
+            "rarity-epic.png"
+          ],
+          "src": [
+            "/assets/ui/rarity-epic.png"
+          ],
+          "data": {
+            "tags": {
+              "m": true
+            }
+          }
+        },
+        {
+          "alias": [
+            "rarity-legendary.png"
+          ],
+          "src": [
+            "/assets/ui/rarity-legendary.png"
+          ],
+          "data": {
+            "tags": {
+              "m": true
+            }
+          }
+        },
+        {
+          "alias": [
+            "rarity-rare.png"
+          ],
+          "src": [
+            "/assets/ui/rarity-rare.png"
+          ],
+          "data": {
+            "tags": {
+              "m": true
+            }
+          }
+        },
+        {
+          "alias": [
             "rune-blue-small.png"
           ],
           "src": [
@@ -2017,6 +2082,33 @@
           ],
           "src": [
             "/assets/units/exorcist.png"
+          ],
+          "data": {
+            "tags": {
+              "m": true
+            }
+          }
+        },
+        {
+          "alias": [
+            "fire-elemental"
+          ],
+          "src": [
+            "/assets/units/fire-elemental.json"
+          ],
+          "loadParser": "aseprite_loader",
+          "data": {
+            "tags": {
+              "m": true
+            }
+          }
+        },
+        {
+          "alias": [
+            "fire-elemental.png"
+          ],
+          "src": [
+            "/assets/units/fire-elemental.png"
           ],
           "data": {
             "tags": {

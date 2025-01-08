@@ -3,6 +3,8 @@ import type { Unit } from '../unit/unit.entity';
 import { Card, CARD_EVENTS } from './card.entity';
 import type { UnitCardBlueprint } from './card-blueprint';
 import { UNIT_TYPES } from './card-enums';
+import { TARGETING_TYPE } from '../targeting/targeting-strategy';
+import { MeleeTargetingStrategy } from '../targeting/melee-targeting.straegy';
 
 export class UnitCard extends Card<UnitCardBlueprint> {
   unit!: Unit;
@@ -47,7 +49,7 @@ export class UnitCard extends Card<UnitCardBlueprint> {
   }
 
   get attackPattern() {
-    return this.blueprint.getAttackPattern(this.game, this.unit);
+    return new MeleeTargetingStrategy(this.game, this.unit, TARGETING_TYPE.ENEMY_UNIT);
   }
 
   play(targets: Point3D[]) {

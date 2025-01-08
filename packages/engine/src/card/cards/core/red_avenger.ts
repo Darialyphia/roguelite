@@ -5,6 +5,8 @@ import { TARGETING_TYPE } from '../../../targeting/targeting-strategy';
 import { UnitSummonTargetingtrategy } from '../../../targeting/unit-summon-targeting.strategy';
 import { FearsomeModifierMixin } from '../../../unit/modifier-mixins/fearsome.mixin';
 import { RushModifierMixin } from '../../../unit/modifier-mixins/rush.mixin';
+import { FearsomeModifier } from '../../../unit/modifiers/fearsome.modifier';
+import { RushModifier } from '../../../unit/modifiers/rush.modifier';
 import { UnitModifier } from '../../../unit/unit-modifier.entity';
 import { JOBS } from '../../../utils/job';
 import { RUNES } from '../../../utils/rune';
@@ -36,9 +38,6 @@ export const redAvenger: UnitCardBlueprint = {
       }
     }
   ],
-  getAttackPattern(game, unit) {
-    return new MeleeTargetingStrategy(game, unit, TARGETING_TYPE.ENEMY_UNIT);
-  },
   getAoe(game) {
     return new PointAOEShape(game);
   },
@@ -56,20 +55,10 @@ export const redAvenger: UnitCardBlueprint = {
     );
   },
   onPlay(game, card) {
-    card.unit.addModifier(
-      new UnitModifier(FearsomeModifierMixin.modifierName, game, {
-        stackable: false,
-        mixins: [new FearsomeModifierMixin(game)]
-      })
-    );
+    card.unit.addModifier(new FearsomeModifier(game));
 
     if (card.player.allyDiedLastTurn) {
-      card.unit.addModifier(
-        new UnitModifier(RushModifierMixin.modifierName, game, {
-          stackable: false,
-          mixins: [new RushModifierMixin(game)]
-        })
-      );
+      card.unit.addModifier(new RushModifier(game));
     }
   }
 };

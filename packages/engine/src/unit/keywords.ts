@@ -18,10 +18,16 @@ export const KEYWORDS = {
     description: 'Can attack any x tiles away, but cannot attack in melee range',
     aliases: [/ranged\([0-9]+\)/]
   },
+  BURN: {
+    id: 'burn',
+    name: 'Burn(x)',
+    description: 'At the beginning of its owner, deal x damage to this unit',
+    aliases: [/burn\([0-9]+\)/]
+  },
   SPLASH_ATTACK: {
     id: 'splash_attack',
     name: 'Splash Attack',
-    description: 'When this card attacks, it also damages the unit text to the target.',
+    description: 'When this card attacks, it also damages the unit next to the target.',
     aliases: []
   },
   COMMANDER: {

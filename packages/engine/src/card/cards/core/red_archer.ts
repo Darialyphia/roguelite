@@ -1,10 +1,7 @@
 import { meleeFighter } from '../../../ai/ai-traits';
 import { PointAOEShape } from '../../../targeting/aoe-shapes';
-import { MeleeTargetingStrategy } from '../../../targeting/melee-targeting.straegy';
-import { TARGETING_TYPE } from '../../../targeting/targeting-strategy';
 import { UnitSummonTargetingtrategy } from '../../../targeting/unit-summon-targeting.strategy';
-import { RangedModifierMixin } from '../../../unit/modifier-mixins/ranged.mixin';
-import { UnitModifier } from '../../../unit/unit-modifier.entity';
+import { RangedModifier } from '../../../unit/modifiers/ranged.modifier';
 import { JOBS } from '../../../utils/job';
 import { RUNES } from '../../../utils/rune';
 import { type UnitCardBlueprint } from '../../card-blueprint';
@@ -34,9 +31,6 @@ export const redArcher: UnitCardBlueprint = {
       }
     }
   ],
-  getAttackPattern(game, unit) {
-    return new MeleeTargetingStrategy(game, unit, TARGETING_TYPE.ENEMY_UNIT);
-  },
   getAoe(game) {
     return new PointAOEShape(game);
   },
@@ -49,11 +43,6 @@ export const redArcher: UnitCardBlueprint = {
     }
   },
   onPlay(game, card) {
-    card.unit.addModifier(
-      new UnitModifier(RangedModifierMixin.modifierName, game, {
-        stackable: false,
-        mixins: [new RangedModifierMixin(game, 2)]
-      })
-    );
+    card.unit.addModifier(new RangedModifier(game, 2));
   }
 };

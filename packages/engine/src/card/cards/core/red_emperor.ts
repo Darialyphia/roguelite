@@ -3,9 +3,7 @@ import { PointAOEShape } from '../../../targeting/aoe-shapes';
 import { MeleeTargetingStrategy } from '../../../targeting/melee-targeting.straegy';
 import { TARGETING_TYPE } from '../../../targeting/targeting-strategy';
 import { UnitSummonTargetingtrategy } from '../../../targeting/unit-summon-targeting.strategy';
-import { CommanderModifierMixin } from '../../../unit/modifier-mixins/commander.mixin';
-import { RangedModifierMixin } from '../../../unit/modifier-mixins/ranged.mixin';
-import { UnitModifier } from '../../../unit/unit-modifier.entity';
+import { CommanderModifier } from '../../../unit/modifiers/commander.modifier';
 import { JOBS } from '../../../utils/job';
 import { RUNES } from '../../../utils/rune';
 import { type UnitCardBlueprint } from '../../card-blueprint';
@@ -35,9 +33,6 @@ export const redEmperor: UnitCardBlueprint = {
       }
     }
   ],
-  getAttackPattern(game, unit) {
-    return new MeleeTargetingStrategy(game, unit, TARGETING_TYPE.ENEMY_UNIT);
-  },
   getAoe(game) {
     return new PointAOEShape(game);
   },
@@ -50,11 +45,6 @@ export const redEmperor: UnitCardBlueprint = {
     }
   },
   onPlay(game, card) {
-    card.unit.addModifier(
-      new UnitModifier(RangedModifierMixin.modifierName, game, {
-        stackable: false,
-        mixins: [new CommanderModifierMixin(game, 2)]
-      })
-    );
+    card.unit.addModifier(new CommanderModifier(game));
   }
 };

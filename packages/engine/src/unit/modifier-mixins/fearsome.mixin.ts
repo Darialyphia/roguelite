@@ -8,8 +8,6 @@ import { UnitModifierMixin } from './unit-modifier-mixin';
 import { KEYWORDS } from '../keywords';
 
 export class FearsomeModifierMixin extends UnitModifierMixin {
-  static modifierName = createEntityId('FEARSOME');
-
   private modifier!: UnitModifier;
 
   constructor(game: Game) {

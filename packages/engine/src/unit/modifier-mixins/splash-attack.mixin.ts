@@ -8,8 +8,6 @@ import type { Unit } from '../unit.entity';
 import { UnitModifierMixin } from './unit-modifier-mixin';
 
 export class SplashAttackdModifierMixin extends UnitModifierMixin {
-  static modifierName = createEntityId('SPLASH_ATTACK');
-
   private modifier!: UnitModifier;
 
   constructor(game: Game) {

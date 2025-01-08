@@ -95,6 +95,7 @@ const ui = useBattleUiStore();
     :x="unit.screenPosition.x"
     :y="unit.screenPosition.y"
     :z-order="unit.screenPosition.y + 1"
+    :z-index="unit.screenPosition.y + 1"
   >
     <container
       :position="offset"

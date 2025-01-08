@@ -8,8 +8,6 @@ import type { Unit } from '../unit.entity';
 import { UnitModifierMixin } from './unit-modifier-mixin';
 
 export class RangedModifierMixin extends UnitModifierMixin {
-  static modifierName = createEntityId('RANGED');
-
   private modifier!: UnitModifier;
 
   constructor(

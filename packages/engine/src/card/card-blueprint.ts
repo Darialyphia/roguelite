@@ -58,7 +58,6 @@ export type UnitCardBlueprint = CardBlueprintBase & {
   unitType: UnitType;
   getAoe: (game: Game, card: UnitCard, points: Point3D[]) => AOEShape;
   onPlay(game: Game, card: UnitCard, cellTargets: Point3D[], unitTargets: Unit[]): void;
-  getAttackPattern: (game: Game, unit: Unit) => TargetingStrategy;
 };
 
 export type SpellCardBlueprint = CardBlueprintBase & {

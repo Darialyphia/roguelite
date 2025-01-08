@@ -1,13 +1,13 @@
 import { meleeFighter } from '../../../ai/ai-traits';
-import { OBSTACLES } from '../../../obstacle/obstacles/_index';
+import { createEntityId } from '../../../entity';
 import { shrine } from '../../../obstacle/obstacles/shrine';
 import { PointAOEShape } from '../../../targeting/aoe-shapes';
-import { MeleeTargetingStrategy } from '../../../targeting/melee-targeting.straegy';
-import { TARGETING_TYPE } from '../../../targeting/targeting-strategy';
 import { UnitSummonTargetingtrategy } from '../../../targeting/unit-summon-targeting.strategy';
 import { AmplifyDamagedModifierMixin } from '../../../unit/modifier-mixins/amplify-damage.mixin';
 import { RangedModifierMixin } from '../../../unit/modifier-mixins/ranged.mixin';
 import { SpellCasterModifierMixin } from '../../../unit/modifier-mixins/spellcaster.mixin';
+import { RangedModifier } from '../../../unit/modifiers/ranged.modifier';
+import { SpellCasterModifier } from '../../../unit/modifiers/spellcaster.modifier';
 import { UnitModifier } from '../../../unit/unit-modifier.entity';
 import { JOBS } from '../../../utils/job';
 import { RUNES } from '../../../utils/rune';
@@ -38,9 +38,6 @@ export const redExorcist: UnitCardBlueprint = {
       }
     }
   ],
-  getAttackPattern(game, unit) {
-    return new MeleeTargetingStrategy(game, unit, TARGETING_TYPE.ENEMY_UNIT);
-  },
   getAoe(game) {
     return new PointAOEShape(game);
   },
@@ -53,22 +50,11 @@ export const redExorcist: UnitCardBlueprint = {
     }
   },
   onPlay(game, card) {
-    card.unit.addModifier(
-      new UnitModifier(RangedModifierMixin.modifierName, game, {
-        stackable: false,
-        mixins: [new RangedModifierMixin(game, 2)]
-      })
-    );
+    card.unit.addModifier(new RangedModifier(game, 2));
+    card.unit.addModifier(new SpellCasterModifier(game));
 
     card.unit.addModifier(
-      new UnitModifier(SpellCasterModifierMixin.modifierName, game, {
-        stackable: false,
-        mixins: [new SpellCasterModifierMixin(game)]
-      })
-    );
-
-    card.unit.addModifier(
-      new UnitModifier(AmplifyDamagedModifierMixin.modifierName, game, {
+      new UnitModifier(createEntityId('exorcist_amplify_damage'), game, {
         stackable: false,
         mixins: [
           new AmplifyDamagedModifierMixin(game, {

@@ -10,6 +10,7 @@ import { redAvenger } from './red_avenger';
 import { redCombustion } from './red_combustion';
 import { redGeneralFlameLord } from './red_general_flame-lord';
 import { redExorcist } from './red_exorcist';
+import { redFireElemental } from './red_fire-elemental';
 
 export const CORE_CARDS = keyBy(
   [
@@ -19,6 +20,7 @@ export const CORE_CARDS = keyBy(
     redEmperor,
     redBerserk,
     redAvenger,
+    redFireElemental,
     redExorcist,
     redFireball,
     redCombustion,

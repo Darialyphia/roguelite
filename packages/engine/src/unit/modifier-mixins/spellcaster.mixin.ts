@@ -5,8 +5,6 @@ import type { Unit } from '../unit.entity';
 import { UnitModifierMixin } from './unit-modifier-mixin';
 
 export class SpellCasterModifierMixin extends UnitModifierMixin {
-  static modifierName = createEntityId('SPELLCASTER');
-
   constructor(game: Game) {
     super(game);
   }
