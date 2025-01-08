@@ -1,8 +1,11 @@
 import { meleeFighter } from '../../../ai/ai-traits';
+import { OBSTACLES } from '../../../obstacle/obstacles/_index';
+import { shrine } from '../../../obstacle/obstacles/shrine';
 import { PointAOEShape } from '../../../targeting/aoe-shapes';
 import { MeleeTargetingStrategy } from '../../../targeting/melee-targeting.straegy';
 import { TARGETING_TYPE } from '../../../targeting/targeting-strategy';
 import { UnitSummonTargetingtrategy } from '../../../targeting/unit-summon-targeting.strategy';
+import { AmplifyDamagedModifierMixin } from '../../../unit/modifier-mixins/amplify-damage.mixin';
 import { RangedModifierMixin } from '../../../unit/modifier-mixins/ranged.mixin';
 import { SpellCasterModifierMixin } from '../../../unit/modifier-mixins/spellcaster.mixin';
 import { UnitModifier } from '../../../unit/unit-modifier.entity';
@@ -16,7 +19,7 @@ export const redExorcist: UnitCardBlueprint = {
   spriteId: 'exorcist',
   iconId: 'unit_exorcist',
   name: 'Exorcist',
-  description: '@Ranged(2)@.\n@Spellcaster@.',
+  description: '@Ranged(2)@.\n@Spellcaster@.\nThis deals +2 damage to units on shrines.',
   kind: CARD_KINDS.UNIT,
   unitType: UNIT_TYPES.MINION,
   aiHints: meleeFighter,
@@ -26,7 +29,7 @@ export const redExorcist: UnitCardBlueprint = {
   },
   jobs: [JOBS.MAGE],
   atk: 1,
-  maxHp: 3,
+  maxHp: 2,
   minTargets: 1,
   targets: [
     {
@@ -61,6 +64,21 @@ export const redExorcist: UnitCardBlueprint = {
       new UnitModifier(SpellCasterModifierMixin.modifierName, game, {
         stackable: false,
         mixins: [new SpellCasterModifierMixin(game)]
+      })
+    );
+
+    card.unit.addModifier(
+      new UnitModifier(AmplifyDamagedModifierMixin.modifierName, game, {
+        stackable: false,
+        mixins: [
+          new AmplifyDamagedModifierMixin(game, {
+            when(attacker, defender) {
+              const cell = game.boardSystem.getCellAt(defender.position)!;
+              return cell.obstacle?.id === shrine.id;
+            },
+            amount: () => 2
+          })
+        ]
       })
     );
   }

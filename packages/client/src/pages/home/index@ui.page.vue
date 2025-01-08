@@ -16,6 +16,9 @@ definePage({
       <li>
         <RouterLink :to="{ name: 'Battle' }">Test Battle</RouterLink>
       </li>
+      <li>
+        <RouterLink :to="{ name: 'CardsList' }">Cards List</RouterLink>
+      </li>
     </ul>
   </nav>
 </template>

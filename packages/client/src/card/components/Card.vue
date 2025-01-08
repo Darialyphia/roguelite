@@ -2,7 +2,7 @@
 import type { CardViewModel } from '../card.model';
 import { config } from '@/utils/config';
 import StatCircle from './StatCircle.vue';
-import { CARD_KINDS } from '@game/engine/src/card/card-enums';
+import { CARD_KINDS, UNIT_TYPES } from '@game/engine/src/card/card-enums';
 import { match } from 'ts-pattern';
 import { RUNES, type Rune } from '@game/engine/src/utils/rune';
 import { useDynamicFontSize } from '@/shared/composables/useDynamicFontSize';
@@ -62,6 +62,11 @@ const runeCosts = computed(() => {
     <header class="grid grid-cols-2">
       <div class="cost">
         <StatCircle
+          v-if="
+            card.kind === CARD_KINDS.UNIT
+              ? card.unitType === UNIT_TYPES.MINION
+              : true
+          "
           :value="card.cost.gold"
           icon="gold"
           :invalid="violations?.gold"
@@ -141,6 +146,7 @@ const runeCosts = computed(() => {
   line-height: 1.2;
   font-size: 14px;
   filter: contrast(100.00001%);
+  white-space: pre-line;
 }
 
 .hp {

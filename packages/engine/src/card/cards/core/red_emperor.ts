@@ -25,7 +25,7 @@ export const redEmperor: UnitCardBlueprint = {
     runes: [RUNES.RED, RUNES.RED]
   },
   jobs: [JOBS.SHOOTER],
-  atk: 4,
+  atk: 3,
   maxHp: 6,
   minTargets: 1,
   targets: [
