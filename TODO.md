@@ -30,7 +30,6 @@ There is no need for a back end as this point, and the games will be single play
 - [ ] Add some visual feedback whenever a player gains gold.
 - [ ] Add some visual feedback whenever a player unlocks a rune.
 - [ ] Add some visual feedback whenever a player fulfills a quest.
-- [ ] Add some visual feedbacks on units to easily know how much AP they have left. Be careful not to clutter the board too much, it could decrease readability when multiple units are packed close to each other.
 - [ ] Add a highlight on a board cell to show the AOE of a unit attack or a spell.
 - [ ] Improve the TextWithKeyword component to be able to display things like rune, AP or gold icons. Then rename it to CardDescription
 
@@ -84,6 +83,7 @@ Players will be able to
 
 # Change Log
 
+- [x] 08/1/2025: Add some visual feedbacks on units to easily know how much AP they have left. Be careful not to clutter the board too much, it could decrease readability when multiple units are packed close to each other.
 - [x] 08/01/2025: - [ ] Add a `Burn` [keyword](packages/engine/src/unit/keywords.ts) that makes a unit take damage at the beginning of its turn equal to the amount of burn stacks it has. Add the [UnitModifierMixin](packages/engine/src/unit/modifier-mixins/unit-modifier-mixin.ts)implementing the keyword.
 - [x] 08/01/2025: add a `Spellcaster` keyword [keyword](packages/engine/src/unit/keywords.ts) that allows spell cards to use the unit position as a base for spell that have a range. Implement the [UnitModifierMixin](packages/engine/src/unit/modifier-mixins/unit-modifier-mixin.ts)implementing the keyword
 - [x] 07/01/2025: Adds the Comeback mechanic that draws cards for the opponent when you reach see some VP thresholds. See the [General section](docs/DESIGN_DOCUMENT.md#comeback-mechanic) in the design document.
