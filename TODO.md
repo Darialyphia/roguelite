@@ -19,11 +19,11 @@ There is no need for a back end as this point, and the games will be single play
 - [ ] Add a `Rooted` [keyword](packages/engine/src/unit/keywords.ts) that prevents a unit from moving. Implement the [UnitModifierMixin](packages/engine/src/unit/modifier-mixins/unit-modifier-mixin.ts)implementing the keyword
 - [ ] Add a `Silenced` [keyword](packages/engine/src/unit/keywords.ts) that prevents a unit from using abilities. Implement the [UnitModifierMixin](packages/engine/src/unit/modifier-mixins/unit-modifier-mixin.ts)implementing the keyword
 - [ ] Add a `Slowed` [keyword](packages/engine/src/unit/keywords.ts) that make a unit spend 50% more AP to move one tile. Implement the [UnitModifierMixin](packages/engine/src/unit/modifier-mixins/unit-modifier-mixin.ts)implementing the keyword
+- [ ] Add a `Swift` [keyword](packages/engine/src/unit/keywords.ts) that make a unit able to move after attacking. Implement the [UnitModifierMixin](packages/engine/src/unit/modifier-mixins/unit-modifier-mixin.ts)implementing the keyword
 
 
 ### UI
 
-- [ ] Display tooltips on the resource actions of the ActionWheel
 - [ ] Display the progress of ongoing quests. What to display will probably need to be setup on a per-card basis in the blueprint.
 - [ ] Add the ability for the user to see what cards are in a player discard pile
 - [ ] Add some visual feedback whenever a player fulfills a quest.
@@ -80,6 +80,7 @@ Players will be able to
 
 # Change Log
 
+- [x] 09/01/2025: Display tooltips on the resource actions of the ActionWheel
 - [x] 09/01/2025: Add some visual feedback whenever a player earns Vicory Points.
 - [x] 09/01/2025: Add some visual feedback whenever a player gains gold.
 - [x] 09/01/2025: Add some visual feedback whenever a player unlocks a rune.

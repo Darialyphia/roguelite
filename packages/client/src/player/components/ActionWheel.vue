@@ -4,6 +4,7 @@ import {
   useGameClientState,
   useUserPlayer
 } from '@/pages/battle/battle.store';
+import UiSimpleTooltip from '@/ui/components/UiSimpleTooltip.vue';
 import { config } from '@/utils/config';
 import { GAME_PHASES } from '@game/engine/src/game/game-phase.system';
 import { RUNES, type Rune } from '@game/engine/src/utils/rune';
@@ -21,132 +22,192 @@ const getRuneCountByType = (rune: Rune) =>
     class="hexagonal-grid action-wheel"
     v-if="state.phase === GAME_PHASES.BATTLE"
   >
-    <div class="hex-wrapper">
-      <button
-        aria-label="add Order rune"
-        style="--bg: url('/assets/ui/rune-yellow.png')"
-        :disabled="!userPlayer.canPerformResourceAction || !userPlayer.isActive"
-        @click="
-          battle.dispatch({
-            type: 'runeResourceAction',
-            payload: {
-              rune: 'YELLOW'
-            }
-          })
-        "
-      />
-      <div class="hex-back" />
-    </div>
+    <UiSimpleTooltip>
+      <template #trigger>
+        <div class="hex-wrapper">
+          <button
+            aria-label="add Order rune"
+            style="--bg: url('/assets/ui/rune-yellow.png')"
+            :disabled="
+              !userPlayer.canPerformResourceAction || !userPlayer.isActive
+            "
+            @click="
+              battle.dispatch({
+                type: 'runeResourceAction',
+                payload: {
+                  rune: 'YELLOW'
+                }
+              })
+            "
+          />
 
-    <div class="hex-wrapper">
-      <button
-        aria-label="add Oblivion rune"
-        style="--bg: url('/assets/ui/rune-purple.png')"
-        :disabled="!userPlayer.canPerformResourceAction || !userPlayer.isActive"
-        @click="
-          battle.dispatch({
-            type: 'runeResourceAction',
-            payload: {
-              rune: 'PURPLE'
-            }
-          })
-        "
-      />
-      <div class="hex-back" />
-    </div>
+          <div class="hex-back" />
+        </div>
+      </template>
+      Gain an {{ RUNES.YELLOW.name }} rune.
+    </UiSimpleTooltip>
 
-    <div class="hex-wrapper">
-      <button
-        aria-label="add Creation rune"
-        style="--bg: url('/assets/ui/rune-green.png')"
-        :disabled="!userPlayer.canPerformResourceAction || !userPlayer.isActive"
-        @click="
-          battle.dispatch({
-            type: 'runeResourceAction',
-            payload: {
-              rune: 'GREEN'
-            }
-          })
-        "
-      />
-      <div class="hex-back" />
-    </div>
-    <div class="hex-wrapper">
-      <button
-        aria-label="add Destruction rune"
-        style="--bg: url('/assets/ui/rune-red.png')"
-        :disabled="!userPlayer.canPerformResourceAction || !userPlayer.isActive"
-        @click="
-          battle.dispatch({
-            type: 'runeResourceAction',
-            payload: {
-              rune: 'RED'
-            }
-          })
-        "
-      />
-      <div class="hex-back" />
-    </div>
-    <div class="hex-wrapper">
-      <button
-        aria-label="add Arcane rune"
-        style="--bg: url('/assets/ui/rune-blue.png')"
-        :disabled="!userPlayer.canPerformResourceAction || !userPlayer.isActive"
-        @click="
-          battle.dispatch({
-            type: 'runeResourceAction',
-            payload: {
-              rune: 'BLUE'
-            }
-          })
-        "
-      />
-      <div class="hex-back" />
-    </div>
-    <div class="hex-wrapper">
-      <button
-        aria-label="gain one additional gold"
-        style="--bg: url('/assets/ui/gold-action.png')"
-        :disabled="!userPlayer.canPerformResourceAction || !userPlayer.isActive"
-        @click="
-          battle.dispatch({
-            type: 'goldResourceAction',
-            payload: {}
-          })
-        "
-      >
-        {{ getRuneCountByType(RUNES.BLUE) || '' }}
-      </button>
-      <div class="hex-back" />
-    </div>
-    <div class="hex-wrapper">
-      <button
-        aria-label="draw an additional card"
-        style="--bg: url('/assets/ui/draw-action.png')"
-        :disabled="!userPlayer.canPerformResourceAction || !userPlayer.isActive"
-        @click="
-          battle.dispatch({
-            type: 'drawResourceAction',
-            payload: {}
-          })
-        "
-      />
-      <div class="hex-back" />
-    </div>
-    <div class="hex-wrapper">
-      <button
-        aria-label="end turn"
-        :disabled="!userPlayer.isActive"
-        style="--bg: url('/assets/ui/end-turn-action.png')"
-        @click="
-          battle.dispatch({
-            type: 'endTurn',
-            payload: {}
-          })
-        "
-      />
-      <div class="hex-back" />
-    </div>
+    <UiSimpleTooltip>
+      <template #trigger>
+        <div class="hex-wrapper">
+          <button
+            aria-label="add Oblivion rune"
+            style="--bg: url('/assets/ui/rune-purple.png')"
+            :disabled="
+              !userPlayer.canPerformResourceAction || !userPlayer.isActive
+            "
+            @click="
+              battle.dispatch({
+                type: 'runeResourceAction',
+                payload: {
+                  rune: 'PURPLE'
+                }
+              })
+            "
+          />
+          <div class="hex-back" />
+        </div>
+      </template>
+      Gain an {{ RUNES.PURPLE.name }} rune.
+    </UiSimpleTooltip>
+
+    <UiSimpleTooltip>
+      <template #trigger>
+        <div class="hex-wrapper">
+          <button
+            aria-label="add Creation rune"
+            style="--bg: url('/assets/ui/rune-green.png')"
+            :disabled="
+              !userPlayer.canPerformResourceAction || !userPlayer.isActive
+            "
+            @click="
+              battle.dispatch({
+                type: 'runeResourceAction',
+                payload: {
+                  rune: 'GREEN'
+                }
+              })
+            "
+          />
+          <div class="hex-back" />
+        </div>
+      </template>
+      Gain an {{ RUNES.GREEN.name }} rune.
+    </UiSimpleTooltip>
+
+    <UiSimpleTooltip>
+      <template #trigger>
+        <div class="hex-wrapper">
+          <button
+            aria-label="add Destruction rune"
+            style="--bg: url('/assets/ui/rune-red.png')"
+            :disabled="
+              !userPlayer.canPerformResourceAction || !userPlayer.isActive
+            "
+            @click="
+              battle.dispatch({
+                type: 'runeResourceAction',
+                payload: {
+                  rune: 'RED'
+                }
+              })
+            "
+          />
+          <div class="hex-back" />
+        </div>
+      </template>
+      Gain an {{ RUNES.RED.name }} rune.
+    </UiSimpleTooltip>
+
+    <UiSimpleTooltip>
+      <template #trigger>
+        <div class="hex-wrapper">
+          <button
+            aria-label="add Arcane rune"
+            style="--bg: url('/assets/ui/rune-blue.png')"
+            :disabled="
+              !userPlayer.canPerformResourceAction || !userPlayer.isActive
+            "
+            @click="
+              battle.dispatch({
+                type: 'runeResourceAction',
+                payload: {
+                  rune: 'BLUE'
+                }
+              })
+            "
+          />
+          <div class="hex-back" />
+        </div>
+      </template>
+      Gain an {{ RUNES.BLUE.name }} rune.
+    </UiSimpleTooltip>
+
+    <UiSimpleTooltip>
+      <template #trigger>
+        <div class="hex-wrapper">
+          <button
+            aria-label="gain one additional gold"
+            style="--bg: url('/assets/ui/gold-action.png')"
+            :disabled="
+              !userPlayer.canPerformResourceAction || !userPlayer.isActive
+            "
+            @click="
+              battle.dispatch({
+                type: 'goldResourceAction',
+                payload: {}
+              })
+            "
+          >
+            {{ getRuneCountByType(RUNES.BLUE) || '' }}
+          </button>
+          <div class="hex-back" />
+        </div>
+      </template>
+      Gain 1 gold.
+    </UiSimpleTooltip>
+
+    <UiSimpleTooltip>
+      <template #trigger>
+        <div class="hex-wrapper">
+          <button
+            aria-label="draw an additional card"
+            style="--bg: url('/assets/ui/draw-action.png')"
+            :disabled="
+              !userPlayer.canPerformResourceAction || !userPlayer.isActive
+            "
+            @click="
+              battle.dispatch({
+                type: 'drawResourceAction',
+                payload: {}
+              })
+            "
+          />
+          <div class="hex-back" />
+        </div>
+      </template>
+      Draw 1 card.
+    </UiSimpleTooltip>
+
+    <UiSimpleTooltip>
+      <template #trigger>
+        <div class="hex-wrapper">
+          <button
+            aria-label="end turn"
+            :disabled="!userPlayer.isActive"
+            style="--bg: url('/assets/ui/end-turn-action.png')"
+            @click="
+              battle.dispatch({
+                type: 'endTurn',
+                payload: {}
+              })
+            "
+          />
+          <div class="hex-back" />
+        </div>
+      </template>
+      End your turn.
+    </UiSimpleTooltip>
   </div>
 </template>
 

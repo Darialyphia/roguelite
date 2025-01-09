@@ -1,5 +1,5 @@
 { "frames": {
-   "shrine__base_idle_0": {
+   "victory-shrine__base_idle_0": {
     "frame": { "x": 0, "y": 0, "w": 128, "h": 128 },
     "rotated": false,
     "trimmed": false,
@@ -7,7 +7,7 @@
     "sourceSize": { "w": 128, "h": 128 },
     "duration": 1
    },
-   "shrine__base_ally_0": {
+   "victory-shrine__base_ally_0": {
     "frame": { "x": 0, "y": 128, "w": 128, "h": 128 },
     "rotated": false,
     "trimmed": false,
@@ -15,7 +15,7 @@
     "sourceSize": { "w": 128, "h": 128 },
     "duration": 1
    },
-   "shrine__base_enemy_0": {
+   "victory-shrine__base_enemy_0": {
     "frame": { "x": 0, "y": 256, "w": 128, "h": 128 },
     "rotated": false,
     "trimmed": false,
@@ -27,7 +27,7 @@
  "meta": {
   "app": "https://www.aseprite.org/",
   "version": "1.3.11-x64",
-  "image": "shrine.png",
+  "image": "victory-shrine.png",
   "format": "RGBA8888",
   "size": { "w": 128, "h": 384 },
   "scale": "1",

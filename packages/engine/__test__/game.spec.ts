@@ -1,14 +1,12 @@
 import { expect, test } from 'vitest';
-import { Game } from '../src/game/game';
-import { ServerRngSystem } from '../src/rng/server-rng.system';
-import { gameBuilder } from './test-utils';
+import { testGameBuilder } from './test-utils';
 import { config } from '../src/config';
 import { Damage } from '../src/combat/damage/damage';
 import { NoScalingStrategy } from '../src/combat/damage/scaling/no-scaling.strategy';
 import { NoMitigationStrategy } from '../src/combat/damage/mitigation/no-mitigation.strategy';
 
 test('Victory Point threshold draws trigger properly', () => {
-  const { team1, player2 } = gameBuilder()
+  const { team1, player2 } = testGameBuilder()
     .withP2Deck({
       general: { blueprintId: 'red-general-flame-lord' },
       cards: Array.from({ length: 10 }, () => ({ blueprintId: 'red-footman' }))
@@ -27,7 +25,7 @@ test('Victory Point threshold draws trigger properly', () => {
 });
 
 test('General damage Victory Point rewards trigger properly', () => {
-  const { player1, player2 } = gameBuilder()
+  const { player1, player2 } = testGameBuilder()
     .withP2Deck({
       general: { blueprintId: 'red-general-flame-lord' },
       cards: Array.from({ length: 10 }, () => ({ blueprintId: 'red-footman' }))

@@ -90,11 +90,16 @@ useBattleEvent(GAME_EVENTS.PLAYER_BEFORE_VP_CHANGE, async e => {
         Unlocked {{ rune.name }} runes.
       </UiSimpleTooltip>
 
-      <li class="gold">
-        <span class="dual-color-text" :data-text="player.gold">
-          {{ player.gold }}
-        </span>
-      </li>
+      <UiSimpleTooltip>
+        <template #trigger>
+          <li class="gold">
+            <span class="dual-color-text" :data-text="player.gold">
+              {{ player.gold }}
+            </span>
+          </li>
+        </template>
+        Available gold.
+      </UiSimpleTooltip>
     </ul>
 
     <div class="bottom-row">

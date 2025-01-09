@@ -49,8 +49,8 @@ const {
   background-color: black;
   color: white;
   padding: var(--size-3);
-  font-family: 'Press Start 2P';
-  font-size: 10px;
+  font-family: var(--font-system-ui);
+  font-size: 14px;
   border: solid 1px #bb8225;
   max-width: 40ch;
 }

@@ -6,6 +6,7 @@ import BoardCellHighlights from './BoardCellHighlights.vue';
 import type { CellViewModel } from '../models/cell.model';
 import {
   useBattleStore,
+  useGameClientState,
   usePathHelpers,
   useUserPlayer
 } from '@/pages/battle/battle.store';
@@ -24,6 +25,7 @@ import {
 import Obstacle from './Obstacle.vue';
 import ObstacleCard from '@/card/components/ObstacleCard.vue';
 import { useCamera } from '../composables/useCamera';
+import { GAME_PHASES } from '@game/engine/src/game/game-phase.system';
 
 const { cell } = defineProps<{ cell: CellViewModel }>();
 const emit = defineEmits<{ ready: [] }>();
@@ -112,7 +114,9 @@ const showCardTimeout = useTimeoutFn(
     immediate: false
   }
 );
+const state = useGameClientState();
 watch(isHovered, hovered => {
+  if (state.value.phase !== GAME_PHASES.BATTLE) return;
   if (!hovered) {
     isCardDisplayed.value = false;
     showCardTimeout.stop();

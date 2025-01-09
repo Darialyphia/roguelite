@@ -23,7 +23,7 @@ export class UnitModifierManager {
 
   add(modifier: UnitModifier) {
     if (this.has(modifier)) {
-      modifier.reapplyTo(this.unit);
+      this.get(modifier.id)!.reapplyTo(this.unit, modifier.stacks);
     } else {
       this.modifiers.push(modifier);
       modifier.applyTo(this.unit);

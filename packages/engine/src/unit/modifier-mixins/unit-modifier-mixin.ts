@@ -11,5 +11,5 @@ export abstract class UnitModifierMixin {
 
   abstract onApplied(unit: Unit, modifier: UnitModifier): void;
   abstract onRemoved(unit: Unit, modifier: UnitModifier): void;
-  abstract onReapplied(unit: Unit, modifier: UnitModifier): void;
+  abstract onReapplied(unit: Unit, modifier: UnitModifier, stacks?: number): void;
 }

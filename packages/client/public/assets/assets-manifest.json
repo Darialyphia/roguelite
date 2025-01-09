@@ -117,19 +117,6 @@
       "assets": [
         {
           "alias": [
-            "icon-arcane-intellect"
-          ],
-          "src": [
-            "/assets/icons/arcane-intellect.png"
-          ],
-          "data": {
-            "tags": {
-              "m": true
-            }
-          }
-        },
-        {
-          "alias": [
             "icon-arcane-servant"
           ],
           "src": [
@@ -182,10 +169,10 @@
         },
         {
           "alias": [
-            "icon-magic-missile"
+            "icon-keyword-frozen"
           ],
           "src": [
-            "/assets/icons/magic-missile.png"
+            "/assets/icons/keyword-frozen.png"
           ],
           "data": {
             "tags": {
@@ -195,23 +182,10 @@
         },
         {
           "alias": [
-            "icon-modifier-frozen"
+            "icon-keyword-stasis"
           ],
           "src": [
-            "/assets/icons/modifier-frozen.png"
-          ],
-          "data": {
-            "tags": {
-              "m": true
-            }
-          }
-        },
-        {
-          "alias": [
-            "icon-modifier-stasis"
-          ],
-          "src": [
-            "/assets/icons/modifier-stasis.png"
+            "/assets/icons/keyword-stasis.png"
           ],
           "data": {
             "tags": {
@@ -342,188 +316,6 @@
           ],
           "src": [
             "/assets/icons/stasis.png"
-          ],
-          "data": {
-            "tags": {
-              "m": true
-            }
-          }
-        },
-        {
-          "alias": [
-            "icon-unit-apprentice"
-          ],
-          "src": [
-            "/assets/icons/unit-apprentice.png"
-          ],
-          "data": {
-            "tags": {
-              "m": true
-            }
-          }
-        },
-        {
-          "alias": [
-            "icon-unit-arcane-servant"
-          ],
-          "src": [
-            "/assets/icons/unit-arcane-servant.png"
-          ],
-          "data": {
-            "tags": {
-              "m": true
-            }
-          }
-        },
-        {
-          "alias": [
-            "icon-unit-berserker"
-          ],
-          "src": [
-            "/assets/icons/unit-berserker.png"
-          ],
-          "data": {
-            "tags": {
-              "m": true
-            }
-          }
-        },
-        {
-          "alias": [
-            "icon-unit-dancer"
-          ],
-          "src": [
-            "/assets/icons/unit-dancer.png"
-          ],
-          "data": {
-            "tags": {
-              "m": true
-            }
-          }
-        },
-        {
-          "alias": [
-            "icon-unit-emperor"
-          ],
-          "src": [
-            "/assets/icons/unit-emperor.png"
-          ],
-          "data": {
-            "tags": {
-              "m": true
-            }
-          }
-        },
-        {
-          "alias": [
-            "icon-unit-flame-lord"
-          ],
-          "src": [
-            "/assets/icons/unit-flame-lord.png"
-          ],
-          "data": {
-            "tags": {
-              "m": true
-            }
-          }
-        },
-        {
-          "alias": [
-            "icon-unit-gladiator"
-          ],
-          "src": [
-            "/assets/icons/unit-gladiator.png"
-          ],
-          "data": {
-            "tags": {
-              "m": true
-            }
-          }
-        },
-        {
-          "alias": [
-            "icon-unit-kings-guard"
-          ],
-          "src": [
-            "/assets/icons/unit-kings-guard.png"
-          ],
-          "data": {
-            "tags": {
-              "m": true
-            }
-          }
-        },
-        {
-          "alias": [
-            "icon-unit-lancer"
-          ],
-          "src": [
-            "/assets/icons/unit-lancer.png"
-          ],
-          "data": {
-            "tags": {
-              "m": true
-            }
-          }
-        },
-        {
-          "alias": [
-            "icon-unit-monk"
-          ],
-          "src": [
-            "/assets/icons/unit-monk.png"
-          ],
-          "data": {
-            "tags": {
-              "m": true
-            }
-          }
-        },
-        {
-          "alias": [
-            "icon-unit-shaman"
-          ],
-          "src": [
-            "/assets/icons/unit-shaman.png"
-          ],
-          "data": {
-            "tags": {
-              "m": true
-            }
-          }
-        },
-        {
-          "alias": [
-            "icon-unit-snake-lady"
-          ],
-          "src": [
-            "/assets/icons/unit-snake-lady.png"
-          ],
-          "data": {
-            "tags": {
-              "m": true
-            }
-          }
-        },
-        {
-          "alias": [
-            "icon-unit-treasure-hunter"
-          ],
-          "src": [
-            "/assets/icons/unit-treasure-hunter.png"
-          ],
-          "data": {
-            "tags": {
-              "m": true
-            }
-          }
-        },
-        {
-          "alias": [
-            "icon-unit-wizard"
-          ],
-          "src": [
-            "/assets/icons/unit-wizard.png"
           ],
           "data": {
             "tags": {

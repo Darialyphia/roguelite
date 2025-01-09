@@ -2,7 +2,7 @@ import { createEntityId } from '../src/entity';
 import { Game, type GameOptions } from '../src/game/game';
 import { ServerRngSystem } from '../src/rng/server-rng.system';
 
-export const gameBuilder = () => {
+export const testGameBuilder = () => {
   const options: Partial<GameOptions> = {};
 
   return {
