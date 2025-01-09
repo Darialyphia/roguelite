@@ -1,7 +1,5 @@
 import { Vec3, type Point3D, type Values } from '@game/shared';
-import type { Game } from '../../game/game';
 import { PathfinderComponent } from '../../pathfinding/pathfinder.component';
-import type { PathfindingStrategy } from '../../pathfinding/strategies/pathinding-strategy';
 import { Position } from '../../utils/position';
 import { TypedEventEmitter } from '../../utils/typed-emitter';
 import { cellIdToPoint } from '../../board/board-utils';

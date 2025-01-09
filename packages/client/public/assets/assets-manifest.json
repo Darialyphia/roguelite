@@ -273,6 +273,19 @@
         },
         {
           "alias": [
+            "icon-spell-burning-blade"
+          ],
+          "src": [
+            "/assets/icons/spell-burning-blade.png"
+          ],
+          "data": {
+            "tags": {
+              "m": true
+            }
+          }
+        },
+        {
+          "alias": [
             "icon-spell-combustion"
           ],
           "src": [

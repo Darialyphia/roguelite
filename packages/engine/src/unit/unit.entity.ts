@@ -54,6 +54,8 @@ export class Unit extends Entity {
 
   readonly player: Player;
 
+  readonly card: UnitCard;
+
   private emitter = new TypedEventEmitter<UnitEventMap>();
 
   private modifierManager: UnitModifierManager;
@@ -68,8 +70,11 @@ export class Unit extends Entity {
 
   private readonly combat: CombatComponent;
 
+  private hasMovedThisTurn = false;
+
   private interceptors = {
     canMove: new Interceptable<boolean>(),
+    canMoveAfterAttacking: new Interceptable<boolean>(),
     canAttack: new Interceptable<boolean>(),
     canCounterAttack: new Interceptable<boolean>(),
     canBeAttackTarget: new Interceptable<boolean>(),
@@ -90,8 +95,6 @@ export class Unit extends Entity {
     damageReceived: new Interceptable<number, { attacker: Unit; defender: Unit }>()
   };
 
-  readonly card: UnitCard;
-
   constructor(game: Game, card: UnitCard, options: UnitOptions) {
     super(createEntityId(options.id));
     this.game = game;
@@ -111,6 +114,9 @@ export class Unit extends Entity {
     });
     this.combat = new CombatComponent(this.game, this);
     this.game.on('turn.turn_start', this.onGameTurnStart.bind(this));
+    this.on(UNIT_EVENTS.AFTER_MOVE, () => {
+      this.hasMovedThisTurn = true;
+    });
     this.forwardEvents();
     if (this.isGeneral) {
       this.handleGeneralRewards();
@@ -246,6 +252,10 @@ export class Unit extends Entity {
 
   get counterAttacksPerformedThisTurn() {
     return this.combat.counterAttacksCount;
+  }
+
+  get canMoveAfterAttacking() {
+    return this.interceptors.canMoveAfterAttacking.getValue(false, {});
   }
 
   get canMove(): boolean {
@@ -506,6 +516,7 @@ export class Unit extends Entity {
   onGameTurnStart() {
     this.ap.refill();
     this.combat.resetAttackCount();
+    this.hasMovedThisTurn = false;
   }
 
   get removeModifier() {

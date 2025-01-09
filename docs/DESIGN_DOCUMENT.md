@@ -64,12 +64,13 @@ While a player has no upper limit to the amount of gold they have, at the end of
 
 ### Runes
 
-Runes serves as a gating mechanism for cards and unit abilities. 
+Runes serves as a gating mechanism for cards and unit abilities.
 
-There are 5 types of runes of different color: 
+There are 5 types of runes of different color:
+
 - Creation (Green)
 - Destruction (Red)
-- Order (Yellow), 
+- Order (Yellow),
 - Oblivion (Purple)
 - Arcane (Blue)
 
@@ -97,11 +98,7 @@ Victory points: generals are high-value targets. Damaging a general awards Victo
 
 Abilties: each general possesses unique abilities, which may include passive effects, activated powers, or buffs.
 
-### Movement and Combat
-
-Mobility: Generals can move on the board like any other unit, spending 1 AP per tile.
-
-Combat: Generals can attack enemy units, providing players with an additional source of damage and interaction on the board..
+Generals can move and attack like any other unit on the board.
 
 ### Spellcasting Anchor
 
@@ -143,13 +140,15 @@ Units have 3 Action Points (called AP) that refreshes every turn. AP are used by
 
 Unit can move on the board by spending one AP per tile.
 
+A unit is no longer able to move during their turn once they have attacked.
+
 ### Attacks
 
 Unit can attack another nearby unit (although a card may have special effects that allows attacking other attack patterns).
 
 The first attack in a turn costs 1 AP.
 
-Subsequent attacks in the same turn will cost one more AP per additional attack (Second attack costs 2 ap, third attack costs 3 AP, etc...).
+Subsequent attacks in the same turn will cost two more AP per additional attack (Second attack costs 2 ap, third attack costs 3 AP, etc...). Hence, under normal circumstances, a unit will only be able to perform one attack per turn.
 
 Attacked units can counterattack. A counterattack means the unit will attack back the attacker, if able to. For example, some units are ranged but cannot attack in melee range, so when attack in melee range, they will not counterattack.
 
@@ -204,7 +203,6 @@ VPs can be earned by
 - Fulfilling quest cards.
 
 - Destroying the enemy general awards 8 VP: 4 VP when it is reduced to half its HP, and an additional 4 VP when it is destroyed completely.
-
 
 ## Comeback Mechanic
 

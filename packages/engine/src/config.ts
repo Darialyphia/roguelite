@@ -7,7 +7,7 @@ export const config = {
   // the ap spent to perform the first attack of a unti each turn
   AP_COST_PER_ATTACK: 1,
   // the additional ap spent for every subsequent attack after the first
-  AP_INCREASE_PER_ATTACK: 1,
+  AP_INCREASE_PER_ATTACK: 2,
   // the amount of cards drawn at the start of the game
   INITIAL_HAND_SIZE: 3,
   // the maximum amount of cards a player can hold at once in their hand
