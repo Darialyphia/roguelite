@@ -243,7 +243,7 @@ export class Player extends Entity {
         this.draw(1);
       })
       .with({ type: 'goldResourceAction' }, () => {
-        this.goldManager.deposit(1);
+        this.addGold(1);
       })
       .with({ type: 'runeResourceAction' }, action => {
         this.addRune(RUNES[action.payload.rune as keyof typeof RUNES]);

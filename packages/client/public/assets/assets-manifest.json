@@ -1318,6 +1318,19 @@
         },
         {
           "alias": [
+            "draw.png"
+          ],
+          "src": [
+            "/assets/ui/draw.png"
+          ],
+          "data": {
+            "tags": {
+              "m": true
+            }
+          }
+        },
+        {
+          "alias": [
             "end-turn-action.png"
           ],
           "src": [
@@ -1481,19 +1494,6 @@
           ],
           "src": [
             "/assets/ui/mulligan-selected.png"
-          ],
-          "data": {
-            "tags": {
-              "m": true
-            }
-          }
-        },
-        {
-          "alias": [
-            "player-battle-info.png"
-          ],
-          "src": [
-            "/assets/ui/player-battle-info.png"
           ],
           "data": {
             "tags": {

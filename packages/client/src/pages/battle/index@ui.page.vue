@@ -180,8 +180,16 @@ const start = () => {
   battleStore.init(clientSession, input => {
     serverSession.dispatch(input);
   });
-  serverSession.subscribe((input, opts) => {
+  serverSession.subscribe(async (input, opts) => {
     clientSession.dispatch(input, opts);
+    if (
+      input.payload.playerId === AI_ID &&
+      (input.type === 'drawResourceAction' ||
+        input.type === 'runeResourceAction' ||
+        input.type === 'goldResourceAction')
+    ) {
+      await waitFor(1000);
+    }
     aiWorker.postMessage({
       type: 'compute',
       payload: { action: JSON.parse(JSON.stringify(input)) }
