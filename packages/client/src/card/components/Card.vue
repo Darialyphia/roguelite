@@ -126,7 +126,6 @@ const runeCosts = computed(() => {
 }
 
 .name {
-  font-weight: bold;
   font-size: v-bind(nameFontSize);
   color: #5d1529;
   display: grid;
@@ -134,7 +133,7 @@ const runeCosts = computed(() => {
   justify-self: center;
   max-width: calc(1px * v-bind('config.CARD_NAME_TEXTBOX_WIDTH'));
   line-height: 1;
-  font-weight: var(--font-weight-9);
+  font-weight: var(--font-weight-7);
   font-family: var(--font-system-ui);
   text-transform: uppercase;
 }
@@ -146,10 +145,12 @@ const runeCosts = computed(() => {
   justify-self: center;
   margin-top: 27px;
   font-size: 15px;
-  text-align: center;
+  /* text-align: center; */
+  line-height: 1.1;
   font-weight: var(--font-weight-5);
   white-space: pre-line;
   font-family: var(--font-system-ui);
+  text-wrap: pretty;
 }
 
 .hp {

@@ -135,7 +135,7 @@ const options: Pick<GameOptions, 'mapId' | 'teams'> = {
     ]
   ]
 };
-const SEED = 'There it is dood';
+const SEED = "I'm wrong ? What did I say that was wrong ?";
 const serverOptions = {
   rngSeed: SEED,
   ...options

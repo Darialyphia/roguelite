@@ -81,5 +81,6 @@ ul {
   gap: var(--size-6);
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(20rem, 1fr));
+  justify-items: center;
 }
 </style>

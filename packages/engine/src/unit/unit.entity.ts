@@ -70,8 +70,6 @@ export class Unit extends Entity {
 
   private readonly combat: CombatComponent;
 
-  private hasMovedThisTurn = false;
-
   private interceptors = {
     canMove: new Interceptable<boolean>(),
     canMoveAfterAttacking: new Interceptable<boolean>(),
@@ -114,9 +112,6 @@ export class Unit extends Entity {
     });
     this.combat = new CombatComponent(this.game, this);
     this.game.on('turn.turn_start', this.onGameTurnStart.bind(this));
-    this.on(UNIT_EVENTS.AFTER_MOVE, () => {
-      this.hasMovedThisTurn = true;
-    });
     this.forwardEvents();
     if (this.isGeneral) {
       this.handleGeneralRewards();
@@ -260,7 +255,8 @@ export class Unit extends Entity {
 
   get canMove(): boolean {
     return this.interceptors.canMove.getValue(
-      this.ap.current >= this.apCostPerMovement,
+      this.ap.current >= this.apCostPerMovement &&
+        (this.attacksPerformedThisTurn > 0 ? this.canMoveAfterAttacking : true),
       {}
     );
   }
@@ -516,7 +512,6 @@ export class Unit extends Entity {
   onGameTurnStart() {
     this.ap.refill();
     this.combat.resetAttackCount();
-    this.hasMovedThisTurn = false;
   }
 
   get removeModifier() {

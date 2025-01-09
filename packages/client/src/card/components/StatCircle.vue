@@ -22,9 +22,9 @@ const iconPath = computed(() => `url(/assets/ui/${icon}.png)`);
   aspect-ratio: 1;
   background: url('/assets/ui/stat-circle.png');
   display: grid;
-  font-family: 'Press Start 2P';
+  font-family: var(--font-system-ui);
   font-weight: bold;
-  font-size: var(--font-size-4);
+  font-size: var(--font-size-5);
   position: relative;
   z-index: 0;
 
