@@ -17,6 +17,7 @@ import { useCamera } from '@/board/composables/useCamera';
 import UnitGeneralIndicator from './UnitGeneralIndicator.vue';
 import GeneralRewardIndicators from './GeneralRewardIndicators.vue';
 import UnitApIndicators from './UnitApIndicators.vue';
+import UnitResourceIndicator from './UnitResourceIndicator.vue';
 
 const { unit } = defineProps<{ unit: UnitViewModel }>();
 
@@ -100,6 +101,7 @@ const spawnAnimation = (container: Container) => {
           :unit="unit"
           v-if="!unit.isGeneral || !unit.isDead"
         />
+        <UnitResourceIndicator v-if="unit.isGeneral" :unit="unit" />
       </container>
     </AlphaTransition>
   </UnitPositioner>

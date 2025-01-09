@@ -1,7 +1,6 @@
 import { Player } from './player.entity';
 import { createEntityId, Entity, type EntityId } from '../entity';
 import type { Game } from '../game/game';
-import type { Unit } from '../unit/unit.entity';
 import type { Point3D } from '@game/shared';
 import { CARDS_DICTIONARY } from '../card/cards/_index';
 import { nanoid } from 'nanoid';
@@ -78,6 +77,9 @@ export class Team extends Entity {
   }
 
   earnVictoryPoints(amount: number) {
+    this.players.forEach(player => {
+      player.onBeforeTeamVPChange(amount);
+    });
     const prev = this._victoryPoints;
     this._victoryPoints += amount;
 
@@ -100,5 +102,9 @@ export class Team extends Entity {
     if (this._victoryPoints >= this.game.config.VP_WIN_THRESHOLD) {
       this.game.gamePhaseSystem.endBattle();
     }
+
+    this.players.forEach(player => {
+      player.onAfterTeamVPChange(amount);
+    });
   }
 }

@@ -6,7 +6,7 @@ import type { Card, CardOptions } from '../card/card.entity';
 import { GoldManagerComponent } from './components/gold-manager.component';
 import { config } from '../config';
 import { DECK_EVENTS } from '../card/deck.entity';
-import { assert, type Point3D, type Values } from '@game/shared';
+import { assert, type Point3D } from '@game/shared';
 import { TypedEventEmitter } from '../utils/typed-emitter';
 import { RuneManager } from './components/rune-manager.component';
 import { match } from 'ts-pattern';
@@ -31,10 +31,12 @@ export type PlayerEventMap = {
   [PLAYER_EVENTS.END_TURN]: [{ id: EntityId }];
   [PLAYER_EVENTS.BEFORE_DRAW]: [{ amount: number }];
   [PLAYER_EVENTS.AFTER_DRAW]: [{ cards: Card[] }];
-  [PLAYER_EVENTS.BEFORE_GAIN_RUNE]: [{ rune: Rune }];
-  [PLAYER_EVENTS.AFTER_GAIN_RUNE]: [{ rune: Rune }];
-  [PLAYER_EVENTS.BEFORE_GAIN_GOLD]: [{ amount: number }];
-  [PLAYER_EVENTS.AFTER_GAIN_GOLD]: [{ amount: number }];
+  [PLAYER_EVENTS.BEFORE_RUNE_CHANGE]: [{ rune: Rune }];
+  [PLAYER_EVENTS.AFTER_RUNE_CHANGE]: [{ rune: Rune }];
+  [PLAYER_EVENTS.BEFORE_VP_CHANGE]: [{ amount: number }];
+  [PLAYER_EVENTS.AFTER_VP_CHANGE]: [{ amount: number }];
+  [PLAYER_EVENTS.BEFORE_GOLD_CHANGE]: [{ amount: number }];
+  [PLAYER_EVENTS.AFTER_GOLD_CHANGE]: [{ amount: number }];
   [PLAYER_EVENTS.BEFORE_PLAY_CARD]: [{ card: Card; targets: Point3D[] }];
   [PLAYER_EVENTS.AFTER_PLAY_CARD]: [{ card: Card; targets: Point3D[] }];
 };
@@ -134,9 +136,9 @@ export class Player extends Entity {
   }
 
   addGold(amount: number) {
-    this.emitter.emit(PLAYER_EVENTS.BEFORE_GAIN_GOLD, { amount });
+    this.emitter.emit(PLAYER_EVENTS.BEFORE_GOLD_CHANGE, { amount });
     this.goldManager.deposit(amount);
-    this.emitter.emit(PLAYER_EVENTS.AFTER_GAIN_GOLD, { amount });
+    this.emitter.emit(PLAYER_EVENTS.AFTER_GOLD_CHANGE, { amount });
   }
 
   get spendGold() {
@@ -148,9 +150,9 @@ export class Player extends Entity {
   }
 
   addRune(rune: Rune) {
-    this.emitter.emit(PLAYER_EVENTS.BEFORE_GAIN_RUNE, { rune });
+    this.emitter.emit(PLAYER_EVENTS.BEFORE_RUNE_CHANGE, { rune });
     this.runeManager.add(rune);
-    this.emitter.emit(PLAYER_EVENTS.AFTER_GAIN_RUNE, { rune });
+    this.emitter.emit(PLAYER_EVENTS.AFTER_RUNE_CHANGE, { rune });
   }
 
   get removeRune() {
@@ -298,5 +300,13 @@ export class Player extends Entity {
 
   endTurn() {
     this.emitter.emit(PLAYER_EVENTS.END_TURN, { id: this.id });
+  }
+
+  onBeforeTeamVPChange(amount: number) {
+    this.emitter.emit(PLAYER_EVENTS.BEFORE_VP_CHANGE, { amount });
+  }
+
+  onAfterTeamVPChange(amount: number) {
+    this.emitter.emit(PLAYER_EVENTS.AFTER_VP_CHANGE, { amount });
   }
 }

@@ -11,9 +11,14 @@ import {
   ProgressIndicator
 } from 'radix-vue';
 import Card from '@/card/components/Card.vue';
-import { useGameClientState } from '@/pages/battle/battle.store';
+import {
+  useBattleEvent,
+  useGameClientState
+} from '@/pages/battle/battle.store';
 import { GAME_PHASES } from '@game/engine/src/game/game-phase.system';
 import UiSimpleTooltip from '@/ui/components/UiSimpleTooltip.vue';
+import { GAME_EVENTS } from '@game/engine/src/game/game';
+import { waitFor } from '@game/shared';
 
 const { player, inverted } = defineProps<{
   player: PlayerViewModel;
@@ -49,6 +54,16 @@ const runes = computed<Array<{ type: string; count: number; name: string }>>(
   ]
 );
 const state = useGameClientState();
+
+const isVpGlowing = ref(false);
+useBattleEvent(GAME_EVENTS.PLAYER_BEFORE_VP_CHANGE, async e => {
+  if (e.player.equals(player.getPlayer())) {
+    isVpGlowing.value = true;
+    setTimeout(() => {
+      isVpGlowing.value = false;
+    }, 1000);
+  }
+});
 </script>
 
 <template>
@@ -126,7 +141,7 @@ const state = useGameClientState();
     <ProgressRoot
       v-model="player.victoryPoints"
       class="vp-progress"
-      :max="engineConfig.VICTORY_POINTS_WIN_THRESHOLD"
+      :max="engineConfig.VP_WIN_THRESHOLD"
     >
       <ProgressIndicator as-child>
         <UiSimpleTooltip>
@@ -147,7 +162,11 @@ const state = useGameClientState();
       </ProgressIndicator>
     </ProgressRoot>
 
-    <div class="vp" :style="{ '--score': player.victoryPoints }">
+    <div
+      class="vp"
+      :style="{ '--score': player.victoryPoints }"
+      :class="isVpGlowing && 'glowing'"
+    >
       <span class="sr-only">{{ player.victoryPoints }}</span>
     </div>
   </section>
@@ -245,6 +264,10 @@ const state = useGameClientState();
 
 .vp {
   grid-area: vp;
+  transition: filter 0.5s var(--ease-2);
+  &.glowing {
+    filter: drop-shadow(0 0 1em cyan) contrast(300%) brightness(200%);
+  }
 }
 
 .rune {
