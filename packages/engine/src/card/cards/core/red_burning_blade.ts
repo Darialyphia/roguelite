@@ -41,7 +41,7 @@ export const redBurningBlade: SpellCardBlueprint = {
   onPlay(game, card, cellTargets, unitTargets) {
     unitTargets.forEach(target => {
       target.addModifier(
-        new UnitModifier(createEntityId('burning_blade'), game, {
+        new UnitModifier(createEntityId('burning_blade'), game, card, {
           stackable: true,
           initialStacks: 1,
           mixins: [

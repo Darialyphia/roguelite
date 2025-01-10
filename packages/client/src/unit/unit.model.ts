@@ -7,6 +7,7 @@ import { config } from '@/utils/config';
 import type { Game } from '@game/engine';
 import type { EntityId } from '@game/engine/src/entity';
 import type { Keyword } from '@game/engine/src/unit/keywords';
+import type { UnitModifier } from '@game/engine/src/unit/unit-modifier.entity';
 import type { Unit } from '@game/engine/src/unit/unit.entity';
 import { Vec3, type Point, type Point3D } from '@game/shared';
 
@@ -21,7 +22,6 @@ export type UnitViewModel = {
   maxAp: number;
   maxHp: number;
   atk: number;
-  modifierInfos: Unit['modifierInfos'];
   player: PlayerViewModel;
   card: CardViewModel;
   screenPosition: Point;
@@ -30,6 +30,7 @@ export type UnitViewModel = {
   isDead: boolean;
   remainingMovement: number;
   possibleMoves: Point3D[];
+  modifiers: UnitModifier[];
   getUnit(): Unit;
   equals(unit: UnitViewModel): boolean;
   canMoveTo: Unit['canMoveTo'];
@@ -50,7 +51,6 @@ export const makeUnitViewModel = (game: Game, unit: Unit): UnitViewModel => {
     maxAp: unit.ap.max,
     maxHp: unit.hp.max,
     atk: unit.atk,
-    modifierInfos: [...unit.modifierInfos],
     player: makePlayerViewModel(game, unit.player),
     card: makeCardViewModel(game, unit.card),
     isDead: unit.isDead,
@@ -63,6 +63,7 @@ export const makeUnitViewModel = (game: Game, unit: Unit): UnitViewModel => {
     keywords: unit.keywords,
     remainingMovement: unit.remainingMovement,
     possibleMoves: unit.getPossibleMoves(),
+    modifiers: unit.modifiers,
     canMoveTo: unit.canMoveTo.bind(unit),
     canAttackAt: unit.canAttackAt.bind(unit),
     getUnit() {

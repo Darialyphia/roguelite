@@ -169,6 +169,71 @@
         },
         {
           "alias": [
+            "icon-keyword-burn"
+          ],
+          "src": [
+            "/assets/icons/keyword-burn.png"
+          ],
+          "data": {
+            "tags": {
+              "m": true
+            }
+          }
+        },
+        {
+          "alias": [
+            "icon-keyword-commander"
+          ],
+          "src": [
+            "/assets/icons/keyword-commander.png"
+          ],
+          "data": {
+            "tags": {
+              "m": true
+            }
+          }
+        },
+        {
+          "alias": [
+            "icon-keyword-fearsome"
+          ],
+          "src": [
+            "/assets/icons/keyword-fearsome.png"
+          ],
+          "data": {
+            "tags": {
+              "m": true
+            }
+          }
+        },
+        {
+          "alias": [
+            "icon-keyword-frame-negative"
+          ],
+          "src": [
+            "/assets/icons/keyword-frame-negative.png"
+          ],
+          "data": {
+            "tags": {
+              "m": true
+            }
+          }
+        },
+        {
+          "alias": [
+            "icon-keyword-frame-positive"
+          ],
+          "src": [
+            "/assets/icons/keyword-frame-positive.png"
+          ],
+          "data": {
+            "tags": {
+              "m": true
+            }
+          }
+        },
+        {
+          "alias": [
             "icon-keyword-frozen"
           ],
           "src": [
@@ -182,10 +247,75 @@
         },
         {
           "alias": [
+            "icon-keyword-ranged"
+          ],
+          "src": [
+            "/assets/icons/keyword-ranged.png"
+          ],
+          "data": {
+            "tags": {
+              "m": true
+            }
+          }
+        },
+        {
+          "alias": [
+            "icon-keyword-rush"
+          ],
+          "src": [
+            "/assets/icons/keyword-rush.png"
+          ],
+          "data": {
+            "tags": {
+              "m": true
+            }
+          }
+        },
+        {
+          "alias": [
+            "icon-keyword-spellcaster"
+          ],
+          "src": [
+            "/assets/icons/keyword-spellcaster.png"
+          ],
+          "data": {
+            "tags": {
+              "m": true
+            }
+          }
+        },
+        {
+          "alias": [
+            "icon-keyword-splash-attack"
+          ],
+          "src": [
+            "/assets/icons/keyword-splash-attack.png"
+          ],
+          "data": {
+            "tags": {
+              "m": true
+            }
+          }
+        },
+        {
+          "alias": [
             "icon-keyword-stasis"
           ],
           "src": [
             "/assets/icons/keyword-stasis.png"
+          ],
+          "data": {
+            "tags": {
+              "m": true
+            }
+          }
+        },
+        {
+          "alias": [
+            "icon-keyword-vigilant"
+          ],
+          "src": [
+            "/assets/icons/keyword-vigilant.png"
           ],
           "data": {
             "tags": {
@@ -501,6 +631,33 @@
         },
         {
           "alias": [
+            "gold-shrine"
+          ],
+          "src": [
+            "/assets/obstacles/gold-shrine.json"
+          ],
+          "loadParser": "aseprite_loader",
+          "data": {
+            "tags": {
+              "m": true
+            }
+          }
+        },
+        {
+          "alias": [
+            "gold-shrine.png"
+          ],
+          "src": [
+            "/assets/obstacles/gold-shrine.png"
+          ],
+          "data": {
+            "tags": {
+              "m": true
+            }
+          }
+        },
+        {
+          "alias": [
             "rock"
           ],
           "src": [
@@ -573,6 +730,33 @@
           ],
           "src": [
             "/assets/obstacles/tree.png"
+          ],
+          "data": {
+            "tags": {
+              "m": true
+            }
+          }
+        },
+        {
+          "alias": [
+            "victory-shrine"
+          ],
+          "src": [
+            "/assets/obstacles/victory-shrine.json"
+          ],
+          "loadParser": "aseprite_loader",
+          "data": {
+            "tags": {
+              "m": true
+            }
+          }
+        },
+        {
+          "alias": [
+            "victory-shrine.png"
+          ],
+          "src": [
+            "/assets/obstacles/victory-shrine.png"
           ],
           "data": {
             "tags": {

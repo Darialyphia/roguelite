@@ -1,7 +1,5 @@
 import { meleeFighter } from '../../../ai/ai-traits';
 import { PointAOEShape } from '../../../targeting/aoe-shapes';
-import { MeleeTargetingStrategy } from '../../../targeting/melee-targeting.straegy';
-import { TARGETING_TYPE } from '../../../targeting/targeting-strategy';
 import { UnitSummonTargetingtrategy } from '../../../targeting/unit-summon-targeting.strategy';
 import { CommanderModifier } from '../../../unit/modifiers/commander.modifier';
 import { JOBS } from '../../../utils/job';
@@ -45,6 +43,6 @@ export const redEmperor: UnitCardBlueprint = {
     }
   },
   onPlay(game, card) {
-    card.unit.addModifier(new CommanderModifier(game));
+    card.unit.addModifier(new CommanderModifier(game, card));
   }
 };

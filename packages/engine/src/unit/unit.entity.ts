@@ -526,8 +526,8 @@ export class Unit extends Entity {
     return this.modifierManager.get.bind(this.modifierManager);
   }
 
-  get modifierInfos() {
-    return this.modifierManager.modifierInfos;
+  get modifiers() {
+    return this.modifierManager.modifiers;
   }
 
   addModifier(modifier: UnitModifier) {

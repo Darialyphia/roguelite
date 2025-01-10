@@ -63,14 +63,14 @@ export const redWillOWisp: UnitCardBlueprint = {
           );
           if (shouldBurn) {
             target.addModifier(
-              new BurnModifier(game, { source: card, initialStacks: 1 })
+              new BurnModifier(game, card, { source: card, initialStacks: 1 })
             );
           }
         });
       }
     });
 
-    const modifier = new UnitModifier(createEntityId('willowisp_on_attack'), game, {
+    const modifier = new UnitModifier(createEntityId('willowisp_on_attack'), game, card, {
       stackable: false,
       mixins: [burnOnDamageMixin]
     });

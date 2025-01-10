@@ -46,9 +46,9 @@ export const redWarLeader: UnitCardBlueprint = {
     }
   },
   onPlay(game, card) {
-    card.unit.addModifier(new SplashAttackModifier(game));
+    card.unit.addModifier(new SplashAttackModifier(game, card));
     card.unit.addModifier(
-      new UnitModifier(createEntityId('warleader_aura'), game, {
+      new UnitModifier(createEntityId('warleader_aura'), game, card, {
         stackable: true,
         initialStacks: 1,
         mixins: [

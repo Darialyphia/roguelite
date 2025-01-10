@@ -7,6 +7,7 @@ There is no need for a back end as this point, and the games will be single play
 
 ### Gameplay
 
+- [ ] Add a Fortune Shrine obstacle that grants 1 gold at the start of the turn when standing on it
 - [ ] Add the ability for units to have activated abilities.
 - [ ] Add a `VigilantModifierMixin` that implements the Vigilant keyword.
 - [ ] Add a `Taunt` [keyword](packages/engine/src/unit/keywords.ts) that makes nearby enemies unable to move and forced to attack the taunter if they attack. Add the [UnitModifierMixin](packages/engine/src/unit/modifier-mixins/unit-modifier-mixin.ts) implementing the keyword
@@ -37,11 +38,10 @@ There is no need for a back end as this point, and the games will be single play
 ### Bugs
 
 - [ ] You can click and drag the camera vertically but that shouldn't be possible. The worldSize in the Camera component is probably wrong. In a last resort, remove the ability to drag the viewport altogether.
-- [ ] Units appear below tiles when they are on some places in the top row.
-- [ ] AI sometimes just oves units to the top of the map withotu any specific reason.
+- [ ] AI sometimes just oves units to the top of the map without any specific reason.
+- [ ] AI will always spend all of it action points, which sometimes maks it step out of shrines for no reason.
 - [ ] The card spacing in the opponent's hand after the first turn is incorrect, resulting in cards being spaced too much.
-- [ ] The [FearsomeModifierMixin](/packages/engine/src/unit/modifier-mixins/fearsome.mixin.ts) seems to not work at all
-
+- [ ] Avoid a shrine
 
 ## Medium Priority (enhancements)
 
@@ -80,6 +80,7 @@ Players will be able to
 
 # Change Log
 
+- [x] 09/01/2025: Units appear below tiles when they are on some places in the top row.
 - [x] 09/01/2025: Display tooltips on the resource actions of the ActionWheel
 - [x] 09/01/2025: Add some visual feedback whenever a player earns Vicory Points.
 - [x] 09/01/2025: Add some visual feedback whenever a player gains gold.

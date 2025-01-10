@@ -186,9 +186,14 @@ Some special tiles on the board are called shrines.
 
 Units can walk on those shrines freely.
 
-At the start of every player's turn, if a unit is standing on a shrine, its owner gains 1 Victory Point.
+At the start of every player's turn, if a non-general unit is standing on a shrine, its effect trigger.
 
-A shrine can only be controlled by one player. While multiple units cannot normally be on the same board tile, IF that case were to happen due to special conditions, the shrine won't award Victory Points to any player.
+A shrine can only be controlled by one player. While multiple units cannot normally be on the same board tile, If that case were to happen due to special conditions, the shrine won't award Victory Points to any player.
+
+The different kind of shrines are:
+
+- Victory Shrine: grants 1 victory point
+- Fortune Shrine: grants 1 gold
 
 ## Victory Condition
 

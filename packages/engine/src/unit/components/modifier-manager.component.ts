@@ -3,42 +3,42 @@ import { UnitModifier } from '../unit-modifier.entity';
 import type { Unit } from '../unit.entity';
 
 export class UnitModifierManager {
-  private modifiers: UnitModifier[] = [];
+  private _modifiers: UnitModifier[] = [];
 
   constructor(private unit: Unit) {}
 
   has(modifierOrId: EntityId | UnitModifier) {
     if (modifierOrId instanceof UnitModifier) {
-      return this.modifiers.some(modifier => modifier.equals(modifierOrId));
+      return this._modifiers.some(modifier => modifier.equals(modifierOrId));
     } else {
-      return this.modifiers.some(modifier =>
+      return this._modifiers.some(modifier =>
         modifier.equals({ id: modifierOrId } as Entity)
       );
     }
   }
 
   get(id: EntityId) {
-    return this.modifiers.find(mod => mod.id === id);
+    return this._modifiers.find(mod => mod.id === id);
   }
 
   add(modifier: UnitModifier) {
     if (this.has(modifier)) {
       this.get(modifier.id)!.reapplyTo(this.unit, modifier.stacks);
     } else {
-      this.modifiers.push(modifier);
+      this._modifiers.push(modifier);
       modifier.applyTo(this.unit);
     }
   }
 
   remove(modifierId: EntityId) {
-    const idx = this.modifiers.findIndex(mod => mod.id === modifierId);
+    const idx = this._modifiers.findIndex(mod => mod.id === modifierId);
     if (idx < 0) return;
 
-    const [modifier] = this.modifiers.splice(idx, 1);
+    const [modifier] = this._modifiers.splice(idx, 1);
     modifier.remove();
   }
 
-  get modifierInfos() {
-    return this.modifiers.map(m => m.infos);
+  get modifiers() {
+    return [...this._modifiers];
   }
 }

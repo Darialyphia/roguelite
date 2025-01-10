@@ -4,8 +4,6 @@ import { shrine } from '../../../obstacle/obstacles/shrine';
 import { PointAOEShape } from '../../../targeting/aoe-shapes';
 import { UnitSummonTargetingtrategy } from '../../../targeting/unit-summon-targeting.strategy';
 import { AmplifyDamagedModifierMixin } from '../../../unit/modifier-mixins/amplify-damage.mixin';
-import { RangedModifierMixin } from '../../../unit/modifier-mixins/ranged.mixin';
-import { SpellCasterModifierMixin } from '../../../unit/modifier-mixins/spellcaster.mixin';
 import { RangedModifier } from '../../../unit/modifiers/ranged.modifier';
 import { SpellCasterModifier } from '../../../unit/modifiers/spellcaster.modifier';
 import { UnitModifier } from '../../../unit/unit-modifier.entity';
@@ -50,11 +48,11 @@ export const redExorcist: UnitCardBlueprint = {
     }
   },
   onPlay(game, card) {
-    card.unit.addModifier(new RangedModifier(game, 2));
-    card.unit.addModifier(new SpellCasterModifier(game));
+    card.unit.addModifier(new RangedModifier(game, card, 2));
+    card.unit.addModifier(new SpellCasterModifier(game, card));
 
     card.unit.addModifier(
-      new UnitModifier(createEntityId('exorcist_amplify_damage'), game, {
+      new UnitModifier(createEntityId('exorcist_amplify_damage'), game, card, {
         stackable: false,
         mixins: [
           new AmplifyDamagedModifierMixin(game, {

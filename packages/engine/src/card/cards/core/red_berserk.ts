@@ -43,6 +43,6 @@ export const redBerserk: UnitCardBlueprint = {
     }
   },
   onPlay(game, card) {
-    card.unit.addModifier(new SplashAttackModifier(game));
+    card.unit.addModifier(new SplashAttackModifier(game, card));
   }
 };

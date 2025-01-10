@@ -4,6 +4,7 @@ import type { Game } from '../game/game';
 import type { UnitModifierMixin } from './modifier-mixins/unit-modifier-mixin';
 import type { Unit } from './unit.entity';
 import { TypedEventEmitter } from '../utils/typed-emitter';
+import type { Card } from '../card/card.entity';
 
 export type UnitModifierInfos = {
   iconId?: string;
@@ -49,6 +50,7 @@ export class UnitModifier extends Entity {
   private mixins: UnitModifierMixin[];
 
   protected game: Game;
+  readonly source: Card;
 
   protected _stacks: number;
 
@@ -58,9 +60,10 @@ export class UnitModifier extends Entity {
 
   readonly infos: UnitModifierInfos;
 
-  constructor(id: EntityId, game: Game, options: UnitModifierOptions) {
+  constructor(id: EntityId, game: Game, source: Card, options: UnitModifierOptions) {
     super(id);
     this.game = game;
+    this.source = source;
     this.mixins = options.mixins;
     this.stackable = options.stackable;
     this._stacks = options.stackable ? options.initialStacks : -1;

@@ -47,7 +47,7 @@ export const redFireElemental: UnitCardBlueprint = {
   },
   onPlay(game, card) {
     card.unit.addModifier(
-      new UnitModifier(createEntityId('fire_elemental_burn_aura'), game, {
+      new UnitModifier(createEntityId('fire_elemental_burn_aura'), game, card, {
         stackable: false,
         mixins: [
           new BurnAuraModifierMixin(game, {

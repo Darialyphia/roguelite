@@ -18,6 +18,7 @@ import UnitGeneralIndicator from './UnitGeneralIndicator.vue';
 import GeneralRewardIndicators from './GeneralRewardIndicators.vue';
 import UnitApIndicators from './UnitApIndicators.vue';
 import UnitResourceIndicator from './UnitResourceIndicator.vue';
+import UnitModifierSprite from './UnitModifierSprite.vue';
 
 const { unit } = defineProps<{ unit: UnitViewModel }>();
 
@@ -96,12 +97,18 @@ const spawnAnimation = (container: Container) => {
       <container>
         <UnitGeneralIndicator v-if="unit.isGeneral" :unit="unit" />
         <UnitApIndicators :unit="unit" />
-        <GeneralRewardIndicators v-if="unit.isGeneral" :unit="unit" />
+        <!-- <GeneralRewardIndicators v-if="unit.isGeneral" :unit="unit" /> -->
         <UnitStatsIndicators
           :unit="unit"
           v-if="!unit.isGeneral || !unit.isDead"
         />
         <UnitResourceIndicator v-if="unit.isGeneral" :unit="unit" />
+        <UnitModifierSprite
+          v-for="(modifier, index) in unit.modifiers"
+          :key="modifier.id"
+          :modifier="modifier"
+          :x="-20 + index * 10"
+        />
       </container>
     </AlphaTransition>
   </UnitPositioner>

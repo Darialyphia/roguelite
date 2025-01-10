@@ -43,6 +43,6 @@ export const redArcher: UnitCardBlueprint = {
     }
   },
   onPlay(game, card) {
-    card.unit.addModifier(new RangedModifier(game, 2));
+    card.unit.addModifier(new RangedModifier(game, card, 2));
   }
 };
