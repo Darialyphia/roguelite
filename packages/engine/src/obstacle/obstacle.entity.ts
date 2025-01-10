@@ -79,7 +79,7 @@ export class Obstacle extends Entity {
   }
 
   attack(unit: Unit) {
-    assert(this.isAttackable, 'obstacle canno be attack');
+    assert(this.isAttackable, 'obstacle cannot be attacked');
 
     this.blueprint.onAttacked?.(this.game, this, unit);
   }

@@ -20,7 +20,7 @@ export const redGeneralFlameLord: UnitCardBlueprint = {
   },
   jobs: [JOBS.FIGHTER],
   atk: 2,
-  maxHp: 16,
+  maxHp: 18,
   minTargets: 1,
   targets: [
     {

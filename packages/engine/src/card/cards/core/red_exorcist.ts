@@ -1,6 +1,7 @@
 import { meleeFighter } from '../../../ai/ai-traits';
 import { createEntityId } from '../../../entity';
-import { shrine } from '../../../obstacle/obstacles/shrine';
+import { fortuneShrine } from '../../../obstacle/obstacles/fortune-shrine';
+import { victoryShrine } from '../../../obstacle/obstacles/victory-shrine';
 import { PointAOEShape } from '../../../targeting/aoe-shapes';
 import { UnitSummonTargetingtrategy } from '../../../targeting/unit-summon-targeting.strategy';
 import { AmplifyDamagedModifierMixin } from '../../../unit/modifier-mixins/amplify-damage.mixin';
@@ -58,7 +59,8 @@ export const redExorcist: UnitCardBlueprint = {
           new AmplifyDamagedModifierMixin(game, {
             when(attacker, defender) {
               const cell = game.boardSystem.getCellAt(defender.position)!;
-              return cell.obstacle?.id === shrine.id;
+              if (!cell.obstacle) return false;
+              return [victoryShrine.id, fortuneShrine.id].includes(cell.obstacle.id);
             },
             amount: () => 2
           })

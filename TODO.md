@@ -7,7 +7,6 @@ There is no need for a back end as this point, and the games will be single play
 
 ### Gameplay
 
-- [ ] Add a Fortune Shrine obstacle that grants 1 gold at the start of the turn when standing on it
 - [ ] Add the ability for units to have activated abilities.
 - [ ] Add a `VigilantModifierMixin` that implements the Vigilant keyword.
 - [ ] Add a `Taunt` [keyword](packages/engine/src/unit/keywords.ts) that makes nearby enemies unable to move and forced to attack the taunter if they attack. Add the [UnitModifierMixin](packages/engine/src/unit/modifier-mixins/unit-modifier-mixin.ts) implementing the keyword
@@ -80,6 +79,9 @@ Players will be able to
 
 # Change Log
 
+- [x] Add a Fortune Shrine obstacle that grants 1 gold at the start of the turn when standing on it
+- [x] 10/01/2025: Removed the reward for bringing a general to half HP. Doubled the reward t bringing them to 0hp.
+- [x] 10/01/2025: Add some visual feedback to shos the modifiers applied to a unit.
 - [x] 09/01/2025: Units appear below tiles when they are on some places in the top row.
 - [x] 09/01/2025: Display tooltips on the resource actions of the ActionWheel
 - [x] 09/01/2025: Add some visual feedback whenever a player earns Vicory Points.

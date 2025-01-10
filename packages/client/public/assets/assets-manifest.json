@@ -338,10 +338,36 @@
         },
         {
           "alias": [
+            "icon-obstacle_fortune-shrine"
+          ],
+          "src": [
+            "/assets/icons/obstacle_fortune-shrine.png"
+          ],
+          "data": {
+            "tags": {
+              "m": true
+            }
+          }
+        },
+        {
+          "alias": [
             "icon-obstacle_shrine"
           ],
           "src": [
             "/assets/icons/obstacle_shrine.png"
+          ],
+          "data": {
+            "tags": {
+              "m": true
+            }
+          }
+        },
+        {
+          "alias": [
+            "icon-obstacle_victory-shrine"
+          ],
+          "src": [
+            "/assets/icons/obstacle_victory-shrine.png"
           ],
           "data": {
             "tags": {
@@ -676,33 +702,6 @@
           ],
           "src": [
             "/assets/obstacles/rock.png"
-          ],
-          "data": {
-            "tags": {
-              "m": true
-            }
-          }
-        },
-        {
-          "alias": [
-            "shrine"
-          ],
-          "src": [
-            "/assets/obstacles/shrine.json"
-          ],
-          "loadParser": "aseprite_loader",
-          "data": {
-            "tags": {
-              "m": true
-            }
-          }
-        },
-        {
-          "alias": [
-            "shrine.png"
-          ],
-          "src": [
-            "/assets/obstacles/shrine.png"
           ],
           "data": {
             "tags": {

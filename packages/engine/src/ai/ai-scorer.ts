@@ -1,6 +1,8 @@
 import type { EntityId } from '../entity';
 import type { Game } from '../game/game';
 import type { InputSimulator } from '../input/input-simulator';
+import { fortuneShrine } from '../obstacle/obstacles/fortune-shrine';
+import { victoryShrine } from '../obstacle/obstacles/victory-shrine';
 import type { Player } from '../player/player.entity';
 import type { Unit } from '../unit/unit.entity';
 import type { AiHeuristics } from './ai-heuristics';
@@ -13,7 +15,8 @@ const WEIGHTS = {
   UNIT: 4,
   CARD_IN_HAND: 2,
   VICTORY_POINT: 20,
-  SHRINE: 10,
+  VICTORY_SHRINE: 10,
+  FORTUNE_SHRINE: 7,
   QUEST: 3,
   NO_RESOURCE_ACTION_DONE: -50
 } as const;
@@ -90,10 +93,14 @@ export class AIScorer {
           score -= this.getClosestDistanceFromEnemy(unit);
         }
 
-        const isOnShrine =
-          this.game.boardSystem.getCellAt(unit.position)!.obstacle?.blueprintId ===
-          'shrine';
-        if (isOnShrine) score += WEIGHTS.SHRINE;
+        if (!unit.isGeneral) {
+          const obstacle = this.game.boardSystem.getCellAt(unit.position)!.obstacle;
+
+          const isOnVictoryShrine = obstacle?.blueprintId === victoryShrine.id;
+          if (isOnVictoryShrine) score += WEIGHTS.VICTORY_SHRINE;
+          const isOnFortuneShrine = obstacle?.blueprintId === fortuneShrine.id;
+          if (isOnFortuneShrine) score += WEIGHTS.FORTUNE_SHRINE;
+        }
 
         if (debug) {
           console.log(unit, score);

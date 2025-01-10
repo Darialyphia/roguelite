@@ -1,24 +1,24 @@
 import { PLAYER_EVENTS } from '../../player/player-enums';
 import type { ObstacleBlueprint } from '../obstacle-blueprint';
 
-export const shrine: ObstacleBlueprint = {
-  id: 'shrine',
-  name: 'Victory Shrine',
+export const fortuneShrine: ObstacleBlueprint = {
+  id: 'fortune-shrine',
+  name: 'Fortune Shrine',
   description:
-    'Grant 1 Victory point to the owner of the minion standing on it at start of their turn.',
-  spriteId: 'shrine',
-  iconId: 'obstacle_shrine',
+    'Grant 1 gold to the owner of the minion standing on it at start of their turn.',
+  spriteId: 'gold-shrine',
+  iconId: 'obstacle_fortune-shrine',
   walkable: true,
   attackable: false,
   onDestroyed(game, obstacle) {
     obstacle.meta.unsub();
   },
   onEnter(game, obstacle) {
-    obstacle.playerId = obstacle.occupant!.player.id;
     if (obstacle.occupant!.isGeneral) return;
+    obstacle.playerId = obstacle.occupant!.player.id;
 
     obstacle.meta.unsub = obstacle.occupant?.player.on(PLAYER_EVENTS.START_TURN, () => {
-      obstacle.occupant!.player.team.earnVictoryPoints(game.config.SHRINE_VP_REWARD);
+      obstacle.occupant!.player.addGold(game.config.GOLD_SHRINE_REWARD);
     });
   },
   onLeave(game, obstacle) {

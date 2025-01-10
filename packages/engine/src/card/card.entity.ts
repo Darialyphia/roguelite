@@ -104,9 +104,12 @@ export abstract class Card<
 
   isWithinRange(point: Point3D, index: number) {
     if (index >= this.blueprint.targets.length) return false;
-    return this.blueprint.targets[index]
-      .getTargeting(this.game, this)
-      .isWithinRange(point);
+    return (
+      this.blueprint.targets[index]
+        // @ts-expect-error
+        .getTargeting(this.game, this)
+        .isWithinRange(point)
+    );
   }
 
   areTargetsValid(targets: Point3D[]) {
@@ -115,6 +118,7 @@ export abstract class Card<
     assert(targets.length <= bp.targets.length, 'Cannot play card: too many targets.');
 
     return targets.every((target, index) => {
+      // @ts-expect-error
       const targeting = bp.targets[index].getTargeting(this.game, this);
       const unit = this.game.unitSystem.getUnitAt(target);
       if (unit && !unit.canBeCardTarget) return false;

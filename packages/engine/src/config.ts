@@ -30,12 +30,12 @@ export const config = {
   VP_SECOND_REWARD_THRESHOLD: 10,
   // The default amount of time a unit can counter attack eveyr turn
   MAX_COUNTERATTACKS_PER_TURN: 1,
-  // The victory point gained at the end of the turn when a shrine is controlled by a player
-  SHRINE_VP_REWARD: 1,
-  // The victory point awarded for bringing a general to 50% HP
-  GENERAL_VP_HALF_REWARD: 4,
-  // The victory point awarded for bringing a general to 0% HP
-  GENERAL_VP_FULL_REWARD: 4,
+  // The victory point gained at the end of the turn when a victory shrine is controlled by a player
+  VICTORY_SHRINE_REWARD: 1,
+  // The gold gained at the end of the turn when a fortune shrine is controlled by a player
+  GOLD_SHRINE_REWARD: 1,
+  // The victory point awarded for destroying the enemy general
+  GENERAL_VP_REWARD: 8,
   // the Altars HP
   ALTAR_HP: 12,
   // How many quest can a player have at the same time

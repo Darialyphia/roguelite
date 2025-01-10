@@ -16,7 +16,7 @@ test('Fearsome', () => {
     z: player2.general.z
   });
 
-  player1.general.addModifier(new FearsomeModifier(game));
+  player1.general.addModifier(new FearsomeModifier(game, player1.general.card));
 
   player1.general.attack(player2.general.position);
   expect(player2.general.counterAttacksPerformedThisTurn).toBe(0);

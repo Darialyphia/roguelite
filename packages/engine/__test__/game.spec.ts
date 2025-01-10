@@ -24,25 +24,13 @@ test('Victory Point threshold draws trigger properly', () => {
   expect(player2.hand.length).toBe(config.INITIAL_HAND_SIZE + 2);
 });
 
-test('General damage Victory Point rewards trigger properly', () => {
+test('General damage Victory Point reward trigger properly', () => {
   const { player1, player2 } = testGameBuilder()
     .withP2Deck({
       general: { blueprintId: 'red-general-flame-lord' },
       cards: Array.from({ length: 10 }, () => ({ blueprintId: 'red-footman' }))
     })
     .build();
-
-  player1.general.dealDamage(
-    [player2.general],
-    new Damage({
-      baseAmount: Math.ceil(player2.general.hp.current / 2),
-      source: player1.general.card,
-      scalings: [new NoScalingStrategy()],
-      mitigations: [new NoMitigationStrategy()]
-    })
-  );
-
-  expect(player1.team.victoryPoints).toBe(config.GENERAL_VP_HALF_REWARD);
 
   player1.general.dealDamage(
     [player2.general],
@@ -54,7 +42,5 @@ test('General damage Victory Point rewards trigger properly', () => {
     })
   );
 
-  expect(player1.team.victoryPoints).toBe(
-    config.GENERAL_VP_HALF_REWARD + config.GENERAL_VP_FULL_REWARD
-  );
+  expect(player1.team.victoryPoints).toBe(config.GENERAL_VP_REWARD);
 });

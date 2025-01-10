@@ -90,11 +90,7 @@ Players get one Resource Action per turn that they can activate during any of th
 
 Each player controls a general, a unique and versatile unit that acts as the focal point of their strategy. Generals differ from regular units in several key ways:
 
-Victory points: generals are high-value targets. Damaging a general awards Victory Points (VP) as follows:
-
-- 3 VP when the general is reduced to half its HP (rounded down).
-
-- An additional 3 VP when the general is destroyed, for a total of 6 VP.
+Victory points: generals are high-value targets. Bringing their HP to zero awards 8 Victory Points.
 
 Abilties: each general possesses unique abilities, which may include passive effects, activated powers, or buffs.
 
@@ -136,7 +132,7 @@ Units cannot act the turn they are summoned (unless specified otherwise on the c
 
 Units have 3 Action Points (called AP) that refreshes every turn. AP are used by the unit to perform actions.
 
-### Movenment
+### Movement
 
 Unit can move on the board by spending one AP per tile.
 
@@ -207,7 +203,7 @@ VPs can be earned by
 
 - Fulfilling quest cards.
 
-- Destroying the enemy general awards 8 VP: 4 VP when it is reduced to half its HP, and an additional 4 VP when it is destroyed completely.
+- Destroying the enemy general awards 8 VP.
 
 ## Comeback Mechanic
 

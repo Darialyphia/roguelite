@@ -537,17 +537,10 @@ export class Unit extends Entity {
   }
 
   private handleGeneralRewards() {
-    const unsubHalf = this.hp.on('CHANGE', () => {
-      if (this.hp.current <= this.hp.max / 2) {
-        this.player.triggerGeneralHalfReward();
-        unsubHalf();
-      }
-    });
-
-    const unsubFull = this.hp.on('CHANGE', () => {
+    const unsub = this.hp.on('CHANGE', () => {
       if (this.hp.current === 0) {
-        this.player.triggerGeneralFullReward();
-        unsubFull();
+        this.player.triggerGeneralReward();
+        unsub();
       }
     });
   }
