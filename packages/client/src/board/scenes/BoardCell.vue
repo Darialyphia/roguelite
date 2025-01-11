@@ -26,13 +26,14 @@ import {
   usePathHelpers,
   useUserPlayer
 } from '@/battle/stores/battle.store';
+import VirtualFloatingCard from '@/ui/scenes/VirtualFloatingCard.vue';
 
 const { cell } = defineProps<{ cell: CellViewModel }>();
 const emit = defineEmits<{ ready: [] }>();
 const ui = useBattleUiStore();
 const battle = useBattleStore();
 const player = useUserPlayer();
-const isHovered = computed(() => ui.hoveredCell?.equals(cell.getCell()));
+const isHovered = computed(() => !!ui.hoveredCell?.equals(cell.getCell()));
 
 const camera = useCamera();
 const pathHelpers = usePathHelpers();
@@ -54,78 +55,14 @@ const spawnAnimation = (container: ContainerInst) => {
   });
 };
 
-const isCardDisplayed = ref(false);
-
-const virtualEl = ref({
-  getBoundingClientRect() {
-    return {
-      x: 0,
-      y: 0,
-      top: 0,
-      left: 0,
-      bottom: 20,
-      right: 20,
-      width: 20,
-      height: 20
-    };
-  }
-});
-const floating = useTemplateRef('floating');
-const { x, y, strategy } = useFloating(virtualEl, floating, {
-  strategy: 'fixed',
-  whileElementsMounted: autoUpdate,
-  middleware: [shift(), autoPlacement()]
-});
-const floatingCardStyle = computed(() => ({
-  left: `${x.value ?? 0}px`,
-  top: `${y.value ?? 0}px`,
-  position: strategy.value
-}));
-const showCardTimeout = useTimeoutFn(
-  () => {
-    isCardDisplayed.value = true;
-    const viewport = camera.viewport.value;
-    if (!viewport) return;
-
-    const position = viewport.toScreen({
-      x: cell.screenPosition.x + camera.offset.value.x,
-      y: cell.screenPosition.y + camera.offset.value.y
-    });
-    const width = config.TILE_SIZE.x;
-    const height = config.TILE_SIZE.y + config.TILE_SIZE.z;
-
-    virtualEl.value = {
-      getBoundingClientRect() {
-        return {
-          x: position.x,
-          y: position.y,
-          top: position.y,
-          left: position.x,
-          bottom: position.y + height,
-          right: position.x + width,
-          width,
-          height
-        };
-      }
-    };
-  },
-  1000,
-  {
-    immediate: false
-  }
+const cardPosition = computed(() =>
+  camera.viewport.value?.toScreen({
+    x: cell.screenPosition.x + camera.offset.value.x,
+    y: cell.screenPosition.y + camera.offset.value.y
+  })
 );
-const state = useGameClientState();
-watch(isHovered, hovered => {
-  if (state.value.phase !== GAME_PHASES.BATTLE) return;
-  if (!hovered) {
-    isCardDisplayed.value = false;
-    showCardTimeout.stop();
-  } else if (cell.unit || cell.obstacle) {
-    showCardTimeout.start();
-  }
-});
 
-const cellUiRoot = document.body;
+const state = useGameClientState();
 </script>
 
 <template>
@@ -211,29 +148,17 @@ const cellUiRoot = document.body;
       </container>
     </PTransition>
   </container>
-  <External
-    :root="cellUiRoot"
-    v-if="(cell.unit || cell.obstacle) && isCardDisplayed"
+  <VirtualFloatingCard
+    :is-opened="
+      (!!cell.unit || !!cell.obstacle) &&
+      !!cardPosition &&
+      isHovered &&
+      state.phase === GAME_PHASES.BATTLE
+    "
+    :timeout="1000"
+    :position="cardPosition!"
   >
-    <Transition appear>
-      <div ref="floating" class="card-wrapper" :style="floatingCardStyle">
-        <Card v-if="cell.unit" :card="cell.unit.card" />
-        <ObstacleCard v-else-if="cell.obstacle" :obstacle="cell.obstacle" />
-      </div>
-    </Transition>
-  </External>
+    <Card v-if="cell.unit" :card="cell.unit.card" />
+    <ObstacleCard v-else-if="cell.obstacle" :obstacle="cell.obstacle" />
+  </VirtualFloatingCard>
 </template>
-
-<style lang="postcss" scoped>
-.card-wrapper {
-  z-index: 999;
-  pointer-events: none;
-  &.v-enter-active {
-    transition: opacity 0.2s var(--ease-2);
-  }
-
-  &.v-enter-from {
-    opacity: 0;
-  }
-}
-</style>

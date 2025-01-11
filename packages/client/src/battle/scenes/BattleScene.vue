@@ -13,10 +13,6 @@ import Camera from '@/board/scenes/Camera.vue';
 import { provideCamera } from '@/board/composables/useCamera';
 import { useBattleStore } from '../stores/battle.store';
 
-definePage({
-  name: 'Battle'
-});
-
 const battleStore = useBattleStore();
 const settingsStore = useSettingsStore();
 const uiStore = useBattleUiStore();

@@ -8,6 +8,8 @@ import UiSimpleTooltip from '@/ui/components/UiSimpleTooltip.vue';
 import { config } from '@/utils/config';
 import { GAME_PHASES } from '@game/engine/src/game/game-phase.system';
 import { RUNES, type Rune } from '@game/engine/src/utils/rune';
+import UiModal from '@/ui/components/UiModal.vue';
+import UiButton from '@/ui/components/UiButton.vue';
 
 const battle = useBattleStore();
 const state = useGameClientState();
@@ -15,6 +17,9 @@ const userPlayer = useUserPlayer();
 
 const getRuneCountByType = (rune: Rune) =>
   userPlayer.value.runes.filter(r => r.equals(rune)).length;
+
+const isWarningModalOpened = ref(false);
+const skipWarning = ref(false);
 </script>
 
 <template>
@@ -197,10 +202,17 @@ const getRuneCountByType = (rune: Rune) =>
             :disabled="!userPlayer.isActive"
             style="--bg: url('/assets/ui/end-turn-action.png')"
             @click="
-              battle.dispatch({
-                type: 'endTurn',
-                payload: {}
-              })
+              () => {
+                if (userPlayer.canPerformResourceAction && !skipWarning) {
+                  isWarningModalOpened = true;
+                  return;
+                }
+
+                battle.dispatch({
+                  type: 'endTurn',
+                  payload: {}
+                });
+              }
             "
           />
           <div class="hex-back" />
@@ -208,6 +220,47 @@ const getRuneCountByType = (rune: Rune) =>
       </template>
       End your turn.
     </UiSimpleTooltip>
+
+    <UiModal
+      v-model:is-opened="isWarningModalOpened"
+      title="You haven't performed your resource action this turn"
+    >
+      <template #title></template>
+
+      <p>Are you sure you want to end your turn ?</p>
+
+      <footer class="flex gap-4 items-center mt-4">
+        <UiButton class="error-button" @click="isWarningModalOpened = false">
+          No
+        </UiButton>
+        <UiButton
+          class="primary-button"
+          @click="
+            isWarningModalOpened = false;
+            battle.dispatch({
+              type: 'endTurn',
+              payload: {}
+            });
+          "
+        >
+          Yes
+        </UiButton>
+        <UiButton
+          class="primary-button"
+          @click="
+            isWarningModalOpened = false;
+            skipWarning = true;
+
+            battle.dispatch({
+              type: 'endTurn',
+              payload: {}
+            });
+          "
+        >
+          Yes, don't ask me again
+        </UiButton>
+      </footer>
+    </UiModal>
   </div>
 </template>
 
@@ -302,7 +355,7 @@ const getRuneCountByType = (rune: Rune) =>
   background-size: cover;
 }
 
-button {
+.action-wheel button {
   background: var(--bg);
   pointer-events: auto;
   backface-visibility: hidden;

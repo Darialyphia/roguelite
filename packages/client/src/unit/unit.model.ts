@@ -36,6 +36,7 @@ export type UnitViewModel = {
     description?: string;
     id: string;
     stacks?: number;
+    sourcePlayer: PlayerViewModel;
   }>;
   getUnit(): Unit;
   equals(unit: UnitViewModel): boolean;
@@ -74,7 +75,8 @@ export const makeUnitViewModel = (game: Game, unit: Unit): UnitViewModel => {
       name: mod.infos.name,
       description: mod.infos.description,
       iconId: mod.infos.iconId,
-      stacks: mod.stacks
+      stacks: mod.stacks,
+      sourcePlayer: makePlayerViewModel(game, mod.source.player)
     })),
     canMoveTo: unit.canMoveTo.bind(unit),
     canAttackAt: unit.canAttackAt.bind(unit),

@@ -52,6 +52,8 @@ export const redWarLeader: UnitCardBlueprint = {
         stackable: true,
         initialStacks: 1,
         iconId: 'keyword-attack-buff',
+        name: 'Warleader buff',
+        description: '+1 / +0',
         mixins: [
           new InterceptorAuraModifierMixin(game, {
             key: 'attack',

@@ -102,6 +102,7 @@ const spawnAnimation = (container: Container) => {
         <UnitResourceIndicator v-if="unit.isGeneral" :unit="unit" />
         <UnitModifierSprite
           v-for="(modifier, index) in unit.modifiers"
+          :unit="unit"
           :key="modifier.id"
           :modifier="modifier"
           :x="-20 + index * 10"
