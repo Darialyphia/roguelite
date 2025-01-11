@@ -10,6 +10,7 @@ import {
   useGameClientState,
   useOpponentPlayer
 } from '@/battle/stores/battle.store';
+import { useTutorialStore } from '@/tutorial/tutorial.store';
 
 const root = useTemplateRef('root');
 const cardSpacing = ref(0);
@@ -54,11 +55,14 @@ useBattleEvent(GAME_EVENTS.PLAYER_AFTER_DRAW, async event => {
     await waitFor(300);
   }
 });
+
+const tutorial = useTutorialStore();
 </script>
 
 <template>
   <ul
     class="opponent-hand"
+    :class="!tutorial.isOpponentHandDisplayed && 'tutorial-hidden'"
     v-if="state.phase === GAME_PHASES.BATTLE"
     ref="root"
   >

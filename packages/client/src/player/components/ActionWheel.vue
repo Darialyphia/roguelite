@@ -10,8 +10,11 @@ import { GAME_PHASES } from '@game/engine/src/game/game-phase.system';
 import { RUNES, type Rune } from '@game/engine/src/utils/rune';
 import UiModal from '@/ui/components/UiModal.vue';
 import UiButton from '@/ui/components/UiButton.vue';
+import { useTutorialStore } from '@/tutorial/tutorial.store';
+import { useBattleUiStore } from '@/battle/stores/battle-ui.store';
 
 const battle = useBattleStore();
+const ui = useBattleUiStore();
 const state = useGameClientState();
 const userPlayer = useUserPlayer();
 
@@ -20,11 +23,14 @@ const getRuneCountByType = (rune: Rune) =>
 
 const isWarningModalOpened = ref(false);
 const skipWarning = ref(false);
+
+const tutorial = useTutorialStore();
 </script>
 
 <template>
   <div
     class="hexagonal-grid action-wheel"
+    :class="!tutorial.isActionWheelDisplayed && 'tutorial-hidden'"
     v-if="state.phase === GAME_PHASES.BATTLE"
   >
     <UiSimpleTooltip>
@@ -34,7 +40,9 @@ const skipWarning = ref(false);
             aria-label="add Order rune"
             style="--bg: url('/assets/ui/rune-yellow.png')"
             :disabled="
-              !userPlayer.canPerformResourceAction || !userPlayer.isActive
+              !userPlayer.canPerformResourceAction ||
+              !userPlayer.isActive ||
+              !tutorial.isRuneActionEnabled
             "
             @click="
               battle.dispatch({
@@ -59,7 +67,9 @@ const skipWarning = ref(false);
             aria-label="add Oblivion rune"
             style="--bg: url('/assets/ui/rune-purple.png')"
             :disabled="
-              !userPlayer.canPerformResourceAction || !userPlayer.isActive
+              !userPlayer.canPerformResourceAction ||
+              !userPlayer.isActive ||
+              !tutorial.isRuneActionEnabled
             "
             @click="
               battle.dispatch({
@@ -83,7 +93,9 @@ const skipWarning = ref(false);
             aria-label="add Creation rune"
             style="--bg: url('/assets/ui/rune-green.png')"
             :disabled="
-              !userPlayer.canPerformResourceAction || !userPlayer.isActive
+              !userPlayer.canPerformResourceAction ||
+              !userPlayer.isActive ||
+              !tutorial.isRuneActionEnabled
             "
             @click="
               battle.dispatch({
@@ -107,7 +119,9 @@ const skipWarning = ref(false);
             aria-label="add Destruction rune"
             style="--bg: url('/assets/ui/rune-red.png')"
             :disabled="
-              !userPlayer.canPerformResourceAction || !userPlayer.isActive
+              !userPlayer.canPerformResourceAction ||
+              !userPlayer.isActive ||
+              !tutorial.isRuneActionEnabled
             "
             @click="
               battle.dispatch({
@@ -131,7 +145,9 @@ const skipWarning = ref(false);
             aria-label="add Arcane rune"
             style="--bg: url('/assets/ui/rune-blue.png')"
             :disabled="
-              !userPlayer.canPerformResourceAction || !userPlayer.isActive
+              !userPlayer.canPerformResourceAction ||
+              !userPlayer.isActive ||
+              !tutorial.isRuneActionEnabled
             "
             @click="
               battle.dispatch({
@@ -155,7 +171,9 @@ const skipWarning = ref(false);
             aria-label="gain one additional gold"
             style="--bg: url('/assets/ui/gold-action.png')"
             :disabled="
-              !userPlayer.canPerformResourceAction || !userPlayer.isActive
+              !userPlayer.canPerformResourceAction ||
+              !userPlayer.isActive ||
+              !tutorial.isGoldActionEnabled
             "
             @click="
               battle.dispatch({
@@ -179,7 +197,9 @@ const skipWarning = ref(false);
             aria-label="draw an additional card"
             style="--bg: url('/assets/ui/draw-action.png')"
             :disabled="
-              !userPlayer.canPerformResourceAction || !userPlayer.isActive
+              !userPlayer.canPerformResourceAction ||
+              !userPlayer.isActive ||
+              !tutorial.isDrawActionEnabled
             "
             @click="
               battle.dispatch({
@@ -198,12 +218,18 @@ const skipWarning = ref(false);
       <template #trigger>
         <div class="hex-wrapper">
           <button
+            id="end-turn-action-button"
             aria-label="end turn"
-            :disabled="!userPlayer.isActive"
+            class="tutorial-highlighted"
+            :disabled="!userPlayer.isActive || !tutorial.isEndTurnDisplayed"
             style="--bg: url('/assets/ui/end-turn-action.png')"
             @click="
               () => {
-                if (userPlayer.canPerformResourceAction && !skipWarning) {
+                if (
+                  userPlayer.canPerformResourceAction &&
+                  !skipWarning &&
+                  tutorial.isResourceWarningEnabled
+                ) {
                   isWarningModalOpened = true;
                   return;
                 }
@@ -212,6 +238,7 @@ const skipWarning = ref(false);
                   type: 'endTurn',
                   payload: {}
                 });
+                ui.unselectUnit();
               }
             "
           />
@@ -255,6 +282,7 @@ const skipWarning = ref(false);
               type: 'endTurn',
               payload: {}
             });
+            ui.unselectUnit();
           "
         >
           Yes, don't ask me again

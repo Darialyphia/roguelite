@@ -123,3 +123,20 @@ button:is(.primary-button, .error-button) {
   --ui-button-hover-color: var(--primary);
   text-decoration: underline;
 }
+
+.tutorial-hidden {
+  visibility: hidden;
+}
+
+@keyframes tutorial-highlight {
+  from {
+    filter: brightness(100%);
+  }
+  to {
+    filter: brightness(300%) contrast(200%);
+  }
+}
+
+.tutorial-highlighted {
+  animation: tutorial-highlight 3s var(--ease-3) infinite alternate;
+}

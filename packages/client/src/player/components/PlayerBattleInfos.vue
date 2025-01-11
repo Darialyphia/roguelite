@@ -18,6 +18,7 @@ import {
   useBattleEvent,
   useGameClientState
 } from '@/battle/stores/battle.store';
+import { useTutorialStore } from '@/tutorial/tutorial.store';
 
 const { player, inverted } = defineProps<{
   player: PlayerViewModel;
@@ -63,6 +64,8 @@ useBattleEvent(GAME_EVENTS.PLAYER_BEFORE_VP_CHANGE, async e => {
     }, 1000);
   }
 });
+
+const tutorial = useTutorialStore();
 </script>
 
 <template>
@@ -74,7 +77,10 @@ useBattleEvent(GAME_EVENTS.PLAYER_BEFORE_VP_CHANGE, async e => {
     <div class="name dual-color-text" :data-text="player.name">
       {{ player.name }}
     </div>
-    <ul class="resources">
+    <ul
+      class="resources"
+      :class="!tutorial.isResourcesDisplayed && 'tutorial-hidden'"
+    >
       <UiSimpleTooltip v-for="rune in runes" :key="rune.type">
         <template #trigger>
           <li
@@ -104,7 +110,10 @@ useBattleEvent(GAME_EVENTS.PLAYER_BEFORE_VP_CHANGE, async e => {
     <div class="bottom-row">
       <UiSimpleTooltip>
         <template #trigger>
-          <div class="deck">
+          <div
+            class="deck"
+            :class="!tutorial.isDeckDisplayed && 'tutorial-hidden'"
+          >
             {{ player.remainingCardsInDeck }}
           </div>
         </template>
@@ -112,7 +121,10 @@ useBattleEvent(GAME_EVENTS.PLAYER_BEFORE_VP_CHANGE, async e => {
       </UiSimpleTooltip>
       <UiSimpleTooltip>
         <template #trigger>
-          <div class="quests">
+          <div
+            class="quests"
+            :class="!tutorial.isQuestsDisplayed && 'tutorial-hidden'"
+          >
             <HoverCardRoot
               v-for="quest in player.quests"
               :key="quest.id"
@@ -145,6 +157,7 @@ useBattleEvent(GAME_EVENTS.PLAYER_BEFORE_VP_CHANGE, async e => {
     <ProgressRoot
       v-model="player.victoryPoints"
       class="vp-progress"
+      :class="!tutorial.isVPDisplayed && 'tutorial-hidden'"
       :max="engineConfig.VP_WIN_THRESHOLD"
     >
       <ProgressIndicator as-child>
@@ -169,7 +182,10 @@ useBattleEvent(GAME_EVENTS.PLAYER_BEFORE_VP_CHANGE, async e => {
     <div
       class="vp"
       :style="{ '--score': player.victoryPoints }"
-      :class="isVpGlowing && 'glowing'"
+      :class="[
+        isVpGlowing && 'glowing',
+        !tutorial.isVPDisplayed && 'tutorial-hidden'
+      ]"
     >
       <span class="sr-only">{{ player.victoryPoints }}</span>
     </div>

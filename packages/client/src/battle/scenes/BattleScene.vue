@@ -20,11 +20,13 @@ const uiStore = useBattleUiStore();
 useKeyboardControl(
   'keydown',
   () => settingsStore.settings.bindings.endTurn.control,
-  () =>
+  () => {
     battleStore.dispatch({
       type: 'endTurn',
       payload: {}
-    })
+    });
+    uiStore.unselectUnit();
+  }
 );
 const ui = useBattleUiStore();
 const camera = provideCamera();

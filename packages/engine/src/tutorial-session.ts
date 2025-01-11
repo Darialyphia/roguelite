@@ -12,10 +12,12 @@ export type TutorialStep = {
   expectedInputs: SerializedInput[];
   tooltips: Array<{
     text: string;
+    canClickNext: boolean;
+    onEnter?: (next: () => void) => MaybePromise<void>;
     onLeave?: () => MaybePromise<void>;
   }>;
-  onEnter?: (session: TutorialSession) => MaybePromise<void>;
-  onLeave?: (session: TutorialSession) => MaybePromise<void>;
+  onEnter?: (session: TutorialSession) => void;
+  onLeave?: (session: TutorialSession) => void;
   meta: AnyObject;
 };
 
@@ -49,26 +51,36 @@ export class TutorialSession extends ClientSession {
       if (this.isFinished) return;
       this.next();
     });
-
-    this.currentStep.onEnter?.(this);
+    // this.currentStep.onEnter?.(this);
   }
 
-  private async next() {
-    await this.currentStep.onLeave?.(this);
+  next() {
     this.currentInputIndex++;
-    if (!this.currentExpectedInput) {
-      this.currentStepIndex++;
-      this.currentInputIndex = 0;
-    }
+    console.log('Session.next', this.currentInputIndex, this.currentExpectedInput);
+    if (this.currentExpectedInput) return;
+
+    this.currentStep.onLeave?.(this);
+    this.currentStepIndex++;
+    this.currentInputIndex = 0;
     if (!this.currentStep) {
       this.isFinished = true;
     } else {
-      await this.currentStep.onEnter?.(this);
+      this.currentStep.onEnter?.(this);
     }
   }
 
   dispatch(input: SerializedInput, meta: ClientDispatchMeta): void {
-    if (!this.isFinished && !deepEqual(input, this.currentExpectedInput)) return;
+    const isValid = this.isFinished || deepEqual(input, this.currentExpectedInput);
+    if (!isValid) {
+      console.error(
+        'Wrong tutorial input received. Expected',
+        this.currentExpectedInput,
+        'received',
+        input
+      );
+      return;
+    }
+
     super.dispatch(input, meta);
   }
 }

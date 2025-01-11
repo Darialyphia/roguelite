@@ -4,7 +4,7 @@ import UiAnimatedSprite from '@/ui/scenes/UiAnimatedSprite.vue';
 import { GAME_PHASES } from '@game/engine/src/game/game-phase.system';
 import type { CellViewModel } from '../models/cell.model';
 import { UI_MODES, useBattleUiStore } from '@/battle/stores/battle-ui.store';
-import { isDefined } from '@game/shared';
+import { isDefined, Vec3 } from '@game/shared';
 import { match } from 'ts-pattern';
 import { useCamera } from '../composables/useCamera';
 import { useIsKeyboardControlPressed } from '@/shared/composables/useKeyboardControl';
@@ -15,6 +15,9 @@ import {
   usePathHelpers,
   useUserPlayer
 } from '@/battle/stores/battle.store';
+import { useTutorialStore } from '@/tutorial/tutorial.store';
+import { useSpritesheet } from '@/shared/composables/useSpritesheet';
+import UiLayerContainer from '@/ui/scenes/UiLayerContainer.vue';
 
 const { cell } = defineProps<{ cell: CellViewModel }>();
 
@@ -81,12 +84,21 @@ const isInCardAoe = computed(() => {
 });
 const userPlayer = useUserPlayer();
 
+const tutorial = useTutorialStore();
 const tag = computed(() => {
   if (
     battleStore.state.phase !== GAME_PHASES.BATTLE ||
     battleStore.isPlayingFx
   ) {
     return null;
+  }
+
+  if (
+    tutorial.highlightedCell?.x === cell.x &&
+    tutorial.highlightedCell?.y === cell.y &&
+    tutorial.highlightedCell?.z === cell.z
+  ) {
+    return 'tutorial';
   }
 
   if (!ui.mode) return null;
@@ -140,4 +152,7 @@ const tag = computed(() => {
       :anchor="0.5"
     />
   </PTransition>
+  <UiLayerContainer v-if="tag === 'tutorial'">
+    <sprite texture="/assets/ui/tutorial-arrow.png" :anchor="0.5" :y="-60" />
+  </UiLayerContainer>
 </template>

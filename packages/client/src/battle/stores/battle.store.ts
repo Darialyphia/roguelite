@@ -49,9 +49,6 @@ const useInternalBattleStore = defineStore('battle-internal', () => {
   };
 });
 
-export const PLAYER_ID = 'player';
-export const AI_ID = 'ai';
-
 export const useBattleStore = defineStore('battle', () => {
   const internal = useInternalBattleStore();
 
@@ -107,8 +104,10 @@ export const useBattleStore = defineStore('battle', () => {
     units.value.push(makeUnitViewModel(game, e.unit));
   });
 
+  const playerId = ref<string>();
   return {
-    init(session: ClientSession, dispatcher: InputDispatcher) {
+    init(session: ClientSession, dispatcher: InputDispatcher, id: string) {
+      playerId.value = id;
       internal.session = session;
       dispatch = dispatcher;
 
@@ -144,12 +143,15 @@ export const useBattleStore = defineStore('battle', () => {
     isPlayingFx: readonly(isPlayingFx),
     isReady: computed(() => isDefined(internal.session)),
     session: computed(() => internal.session),
+    playerId,
     state: {
       phase,
       cells,
       players,
       units,
-      userPlayer: computed(() => players.value.find(p => p.id === PLAYER_ID)!),
+      userPlayer: computed(
+        () => players.value.find(p => p.id === playerId.value)!
+      ),
       turn
     },
 
@@ -212,13 +214,15 @@ export const useVFXEvent = <T extends keyof VFXEventMap>(
 export const useUserPlayer = () => {
   const store = useBattleStore();
 
-  return computed(() => store.state.players.find(p => p.id === PLAYER_ID)!);
+  return computed(() => store.state.userPlayer);
 };
 
 export const useOpponentPlayer = () => {
   const store = useBattleStore();
 
-  return computed(() => store.state.players.find(p => p.id !== PLAYER_ID)!);
+  return computed(
+    () => store.state.players.find(p => p.id !== store.playerId)!
+  );
 };
 
 export const useGame = () => {

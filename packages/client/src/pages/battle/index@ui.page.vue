@@ -8,7 +8,7 @@ import { waitFor } from '@game/shared';
 import type { SerializedInput } from '@game/engine/src/input/input-system';
 import { until } from '@vueuse/core';
 import AIWorker from '@/ai.worker?worker';
-import { AI_ID, PLAYER_ID, useBattleStore } from '@/battle/stores/battle.store';
+import { useBattleStore } from '@/battle/stores/battle.store';
 import BattleUi from '@/battle/components/BattleUi.vue';
 
 definePage({
@@ -20,7 +20,7 @@ const options: Pick<GameOptions, 'mapId' | 'teams'> = {
   teams: [
     [
       {
-        id: PLAYER_ID,
+        id: 'player',
         name: 'Daria',
         deck: {
           general: { blueprintId: 'red-general-flame-lord' },
@@ -70,7 +70,7 @@ const options: Pick<GameOptions, 'mapId' | 'teams'> = {
     ],
     [
       {
-        id: AI_ID,
+        id: 'ai',
         name: 'AI',
         deck: {
           general: { blueprintId: 'red-general-flame-lord' },
@@ -134,12 +134,12 @@ const battleStore = useBattleStore();
 const start = () => {
   serverSession.initialize();
   clientSession.initialize([...serverSession.game.rngSystem.values]);
-  const ai = new AI(serverSession, AI_ID as EntityId);
+  const ai = new AI(serverSession, 'ai' as EntityId);
 
   const aiWorker = new AIWorker();
   aiWorker.postMessage({
     type: 'init',
-    payload: { options: serverOptions, playerId: AI_ID }
+    payload: { options: serverOptions, playerId: 'ai' }
   });
 
   aiWorker.addEventListener('message', async event => {
@@ -156,13 +156,17 @@ const start = () => {
     serverSession.dispatch(aiAction);
   });
 
-  battleStore.init(clientSession, input => {
-    serverSession.dispatch(input);
-  });
+  battleStore.init(
+    clientSession,
+    input => {
+      serverSession.dispatch(input);
+    },
+    'player'
+  );
   serverSession.subscribe(async (input, opts) => {
     clientSession.dispatch(input, opts);
     if (
-      input.payload.playerId === AI_ID &&
+      input.payload.playerId === 'ai' &&
       (input.type === 'drawResourceAction' ||
         input.type === 'runeResourceAction' ||
         input.type === 'goldResourceAction')
