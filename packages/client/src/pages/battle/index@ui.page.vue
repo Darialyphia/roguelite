@@ -20,7 +20,6 @@ import type { SerializedInput } from '@game/engine/src/input/input-system';
 import { until } from '@vueuse/core';
 import MulliganOverlay from '@/card/components/MulliganOverlay.vue';
 import PlayerBattleInfos from '@/player/components/PlayerBattleInfos.vue';
-import PlayerBattleInfosV2 from '@/player/components/PlayerBattleInfosV2.vue';
 import { makePlayerViewModel } from '@/player/player.model';
 import OpponentHand from '@/card/components/OpponentHand.vue';
 import TurnIndicator from '@/player/components/TurnIndicator.vue';
@@ -219,9 +218,9 @@ start();
     </ul>
 
     <header>
-      <PlayerBattleInfosV2 :player="userPlayer" class="player-battle-infos" />
+      <PlayerBattleInfos :player="userPlayer" class="player-battle-infos" />
       <OpponentHand class="opponent-hand" />
-      <PlayerBattleInfosV2
+      <PlayerBattleInfos
         :player="opponent"
         class="opponent-battle-infos"
         inverted

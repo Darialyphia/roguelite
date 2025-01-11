@@ -1,23 +1,24 @@
 <script setup lang="ts">
-import type { PlayerViewModel } from '../player.model';
-import { config } from '@/utils/config';
 import { config as engineConfig } from '@game/engine/src/config';
-import { type Rune, RUNES } from '@game/engine/src/utils/rune';
-import { GAME_PHASES } from '@game/engine/src/game/game-phase.system';
-import {
-  useBattleEvent,
-  useGameClientState,
-  useUserPlayer
-} from '@/pages/battle/battle.store';
-import { waitFor } from '@game/shared';
-import { GAME_EVENTS } from '@game/engine/src/game/game';
-import Card from '@/card/components/Card.vue';
+import { Rune, RUNES } from '@game/engine/src/utils/rune';
+import type { PlayerViewModel } from '../player.model';
 import {
   HoverCardRoot,
   HoverCardTrigger,
   HoverCardContent,
-  HoverCardPortal
+  HoverCardPortal,
+  ProgressRoot,
+  ProgressIndicator
 } from 'radix-vue';
+import Card from '@/card/components/Card.vue';
+import {
+  useBattleEvent,
+  useGameClientState
+} from '@/pages/battle/battle.store';
+import { GAME_PHASES } from '@game/engine/src/game/game-phase.system';
+import UiSimpleTooltip from '@/ui/components/UiSimpleTooltip.vue';
+import { GAME_EVENTS } from '@game/engine/src/game/game';
+import { waitFor } from '@game/shared';
 
 const { player, inverted } = defineProps<{
   player: PlayerViewModel;
@@ -26,280 +27,158 @@ const { player, inverted } = defineProps<{
 
 const getRuneCountByType = (rune: Rune) =>
   player.runes.filter(r => r.equals(rune)).length;
+
+const runes = computed<Array<{ type: string; count: number; name: string }>>(
+  () => [
+    { type: 'red', name: RUNES.RED.name, count: getRuneCountByType(RUNES.RED) },
+    {
+      type: 'green',
+      name: RUNES.GREEN.name,
+      count: getRuneCountByType(RUNES.GREEN)
+    },
+    {
+      type: 'purple',
+      name: RUNES.PURPLE.name,
+      count: getRuneCountByType(RUNES.PURPLE)
+    },
+    {
+      type: 'yellow',
+      name: RUNES.YELLOW.name,
+      count: getRuneCountByType(RUNES.YELLOW)
+    },
+    {
+      type: 'blue',
+      name: RUNES.BLUE.name,
+      count: getRuneCountByType(RUNES.BLUE)
+    }
+  ]
+);
 const state = useGameClientState();
 
-const userPlayer = useUserPlayer();
-
-const latestRune = ref<string | null>(null);
-useBattleEvent(GAME_EVENTS.PLAYER_AFTER_GAIN_RUNE, async e => {
-  if (!player.getPlayer().equals(e.player)) return;
-  latestRune.value = e.rune.id;
-
-  // only wait asynchronously if it's the opponent who added a rune
-  if (userPlayer.value.equals(player)) {
+const isVpGlowing = ref(false);
+useBattleEvent(GAME_EVENTS.PLAYER_BEFORE_VP_CHANGE, async e => {
+  if (e.player.equals(player.getPlayer())) {
+    isVpGlowing.value = true;
     setTimeout(() => {
-      latestRune.value = null;
+      isVpGlowing.value = false;
     }, 1000);
-  } else {
-    await waitFor(1000);
-    latestRune.value = null;
   }
 });
 </script>
 
 <template>
-  <div
-    class="player-battle-infos"
-    :class="inverted && 'is-inverted'"
+  <section
     v-if="state.phase === GAME_PHASES.BATTLE"
+    class="player-infos"
+    :class="inverted && 'is-inverted'"
   >
-    <div>
-      <div class="name" :data-text="player.name">{{ player.name }}</div>
-      <div class="avatar runes circle-layout">
-        <div
-          class="rune circle-layout-item"
-          :class="{ glowing: latestRune === RUNES.BLUE.id }"
-          :style="{
-            '--bg': 'url(\'/assets/ui/rune-blue-small.png\')',
-            '--rune-glow-radius': latestRune === RUNES.BLUE.id ? '20px' : 0,
-            '--glow-color': '#32a4e0'
-          }"
-        >
-          {{ getRuneCountByType(RUNES.BLUE) }}
-        </div>
-        <div
-          class="rune circle-layout-item"
-          :class="{ glowing: latestRune === RUNES.RED.id }"
-          :style="{
-            '--bg': 'url(\'/assets/ui/rune-red-small.png\')',
-            '--rune-glow-radius': latestRune === RUNES.RED.id ? '20px' : 0,
-            '--glow-color': '#ff4f00'
-          }"
-        >
-          {{ getRuneCountByType(RUNES.RED) }}
-        </div>
-        <div
-          class="rune circle-layout-item"
-          :class="{ glowing: latestRune === RUNES.GREEN.id }"
-          :style="{
-            '--bg': 'url(\'/assets/ui/rune-green-small.png\')',
-            '--rune-glow-radius': latestRune === RUNES.GREEN.id ? '20px' : 0,
-            '--glow-color': '#4ac510'
-          }"
-        >
-          {{ getRuneCountByType(RUNES.GREEN) }}
-        </div>
-        <div
-          class="rune circle-layout-item"
-          :class="{ glowing: latestRune === RUNES.YELLOW.id }"
-          :style="{
-            '--bg': 'url(\'/assets/ui/rune-yellow-small.png\')',
-            '--rune-glow-radius': latestRune === RUNES.YELLOW.id ? '20px' : 0,
-            '--glow-color': '#efcb3a'
-          }"
-        >
-          {{ getRuneCountByType(RUNES.YELLOW) }}
-        </div>
-        <div
-          class="rune circle-layout-item"
-          :class="{ glowing: latestRune === RUNES.PURPLE.id }"
-          :style="{
-            '--bg': 'url(\'/assets/ui/rune-purple-small.png\')',
-            '--rune-glow-radius': latestRune === RUNES.PURPLE.id ? '20px' : 0,
-            '--glow-color': '#b63dbb'
-          }"
-        >
-          {{ getRuneCountByType(RUNES.PURPLE) }}
-        </div>
-      </div>
+    <div class="name dual-color-text" :data-text="player.name">
+      {{ player.name }}
+    </div>
+    <ul class="resources">
+      <UiSimpleTooltip v-for="rune in runes" :key="rune.type">
+        <template #trigger>
+          <li
+            class="rune"
+            :style="{
+              '--bg': `url('/assets/ui/rune-${rune.type}-small.png')`
+            }"
+          >
+            {{ rune.count }}
+          </li>
+        </template>
+        Unlocked {{ rune.name }} runes.
+      </UiSimpleTooltip>
+
+      <UiSimpleTooltip>
+        <template #trigger>
+          <li class="gold">
+            <span class="dual-color-text" :data-text="player.gold">
+              {{ player.gold }}
+            </span>
+          </li>
+        </template>
+        Available gold.
+      </UiSimpleTooltip>
+    </ul>
+
+    <div class="bottom-row">
+      <UiSimpleTooltip>
+        <template #trigger>
+          <div class="deck">
+            {{ player.remainingCardsInDeck }}
+          </div>
+        </template>
+        Remaining card in the deck.
+      </UiSimpleTooltip>
+      <UiSimpleTooltip>
+        <template #trigger>
+          <div class="quests">
+            <HoverCardRoot
+              v-for="quest in player.quests"
+              :key="quest.id"
+              :close-delay="0"
+              :open-delay="300"
+            >
+              <HoverCardTrigger as-child>
+                <div />
+              </HoverCardTrigger>
+              <HoverCardPortal>
+                <HoverCardContent :side-offset="15">
+                  <Card :card="quest" />
+                </HoverCardContent>
+              </HoverCardPortal>
+            </HoverCardRoot>
+
+            <div
+              v-for="i in engineConfig.MAX_ONGOING_QUESTS -
+              player.quests.length"
+              :key="i"
+              class="empty"
+            />
+          </div>
+        </template>
+
+        Ongoing quests.
+      </UiSimpleTooltip>
     </div>
 
-    <div class="stats">
-      <div class="quests">
-        <HoverCardRoot
-          v-for="(quest, index) in player.quests"
-          :key="index"
-          :close-delay="0"
-          :open-delay="300"
-        >
-          <HoverCardTrigger as-child>
-            <div />
-          </HoverCardTrigger>
-          <HoverCardPortal>
-            <HoverCardContent :side-offset="15">
-              <Card :card="quest" />
-            </HoverCardContent>
-          </HoverCardPortal>
-        </HoverCardRoot>
-        <div
-          v-for="i in engineConfig.MAX_ONGOING_QUESTS - player.quests.length"
-          :key="i"
-          class="empty"
-        />
-      </div>
-      <div class="large" style="--bg: url('/assets/ui/vp-large.png')">
-        <span :data-text="player.victoryPoints">
-          <span>{{ player.victoryPoints }}</span>
-          <span class="text-00">
-            /{{ engineConfig.VICTORY_POINTS_WIN_THRESHOLD }}
-          </span>
-        </span>
-      </div>
-      <div style="--bg: url('/assets/ui/gold.png')">
-        <span :data-text="player.gold">
-          {{ player.gold }}
-        </span>
-      </div>
+    <ProgressRoot
+      v-model="player.victoryPoints"
+      class="vp-progress"
+      :max="engineConfig.VP_WIN_THRESHOLD"
+    >
+      <ProgressIndicator as-child>
+        <UiSimpleTooltip>
+          <template #trigger>
+            <div
+              class="indicator"
+              :style="{ '--score': player.victoryPoints }"
+            />
+          </template>
+          <div>
+            <div>Collect VP to win the game.</div>
+            <br />
+            <div>- When you reach 5 VP, your opponent draws 1 card.</div>
+            <br />
+            <div>- When you reach 10 VP, your opponent draws 1 more card.</div>
+          </div>
+        </UiSimpleTooltip>
+      </ProgressIndicator>
+    </ProgressRoot>
 
-      <div style="--bg: url('/assets/ui/deck.png')">
-        <span :data-text="player.remainingCardsInDeck">
-          {{ player.remainingCardsInDeck }}
-        </span>
-      </div>
+    <div
+      class="vp"
+      :style="{ '--score': player.victoryPoints }"
+      :class="isVpGlowing && 'glowing'"
+    >
+      <span class="sr-only">{{ player.victoryPoints }}</span>
     </div>
-  </div>
+  </section>
 </template>
 
 <style scoped lang="postcss">
-.player-battle-infos {
-  z-index: 0;
-  position: relative;
-  display: flex;
-  align-items: flex-end;
-  gap: var(--size-4);
-  font-family: 'Silkscreen';
-  font-weight: var(--font-weight-6);
-
-  &.is-inverted {
-    flex-direction: row-reverse;
-  }
-}
-
-.avatar {
-  aspect-ratio: 1;
-  background: url('/assets/ui/avatar-frame.png');
-  filter: drop-shadow(0 10px 0 #32021b);
-}
-
-.circle-layout {
-  display: grid;
-  place-content: center;
-  > * {
-    grid-column: 1;
-    grid-row: 1;
-  }
-  > .circle-layout-item {
-    --angle: calc(
-      (
-        var(--offset, 0) +
-          (1turn * (var(--child-index) - 1) / var(--total-items))
-      )
-    );
-    transform: rotateZ(var(--angle)) translateY(calc(-1 * var(--radius)))
-      rotateZ(calc(-1 * var(--angle)));
-  }
-}
-
-.vp {
-  --offset: 0turn;
-  --radius: calc(13rem / 2);
-  --total-items: v-bind('engineConfig.VICTORY_POINTS_WIN_THRESHOLD');
-  width: calc(var(--radius) * 2);
-  aspect-ratio: 1;
-  border-radius: var(--radius-round);
-
-  > div {
-    background: var(--bg);
-    width: 30px;
-    aspect-ratio: 1;
-  }
-}
-
-@property --rune-glow-radius {
-  syntax: '<length>';
-  inherits: false;
-  initial-value: 0;
-}
-.runes {
-  --radius: calc(36 * 3px);
-  --total-items: 12;
-  --offset: calc(1turn / 3);
-  place-self: center;
-  width: calc(var(--radius) * 2);
-  aspect-ratio: 1;
-
-  position: relative;
-  z-index: 0;
-
-  > .rune {
-    --rune-glow-radius: 0;
-    background: var(--bg);
-    width: calc(1px * v-bind('config.RUNE_SMALL_SIZE'));
-    aspect-ratio: 1;
-    display: grid;
-    place-content: center;
-    color: black;
-    font-size: var(--font-size-4);
-    padding-bottom: 3px;
-    text-shadow: 0 2px #fffe00;
-    transition:
-      --rune-glow-radius 0.5s var(--ease-2),
-      filter 0.3s,
-      transform 0.3s;
-    --glow: drop-shadow(0 0 var(--rune-glow-radius) var(--glow-color));
-    filter: var(--glow) brightness(100%);
-    &.glowing {
-      filter: var(--glow) brightness(150%) contrast(200%);
-      transform: scale(200%);
-    }
-  }
-
-  .gold {
-    position: relative;
-
-    display: grid;
-    place-content: center;
-    > span {
-      font-size: var(--font-size-5);
-      line-height: 1;
-      text-align: center;
-      position: relative;
-      place-self: center;
-      background: linear-gradient(
-        #fffe00,
-        #fffe00 calc(50% + 3px),
-        #feb900 calc(50% + 3px)
-      );
-      background-clip: text;
-      color: transparent;
-      position: relative;
-      &:after {
-        background: none;
-        content: attr(data-text);
-        position: absolute;
-        text-shadow: 0 3px #5d1529;
-        inset: 0;
-        z-index: -1;
-      }
-    }
-    &::before {
-      content: '';
-      background: url('/assets/ui/gold.png');
-      width: 30px;
-      aspect-ratio: 1;
-      position: absolute;
-      bottom: 0;
-      right: 0;
-      transform: translate(60%, 60%);
-    }
-  }
-}
-
-.name {
-  margin-inline: auto;
-  width: fit-content;
-  font-family: 'Silkscreen';
-  font-size: var(--font-size-5);
+.dual-color-text {
   background: linear-gradient(
     #fffe00,
     #fffe00 calc(50% + 3px),
@@ -308,87 +187,160 @@ useBattleEvent(GAME_EVENTS.PLAYER_AFTER_GAIN_RUNE, async e => {
   background-clip: text;
   color: transparent;
   position: relative;
-  letter-spacing: 2px;
+
+  :has(> &) {
+    position: relative;
+    z-index: 0;
+  }
   &:after {
     background: none;
     content: attr(data-text);
     position: absolute;
-    text-shadow: 0 3px #5d1529;
+    text-shadow: 0 3px black;
     inset: 0;
     z-index: -1;
   }
 }
 
-.stats {
+.player-infos {
+  height: calc(var(--pixel-art-scale) * 68px);
+  display: grid;
+  grid-template-columns: auto calc(var(--pixel-art-scale) * 12px) calc(
+      var(--pixel-art-scale) * 40px
+    );
+  grid-template-rows:
+    auto calc(var(--pixel-art-scale) * 13px)
+    calc(var(--pixel-art-scale) * 34px);
+  row-gap: calc(var(--pixel-art-scale) * 3px);
+  column-gap: calc(var(--pixel-art-scale) * 3px);
+  font-family: 'Silkscreen';
+  grid-template-areas:
+    'name progress vp'
+    'resources progress vp'
+    'bottom progress vp';
+  &.is-inverted {
+    grid-template-columns:
+      calc(var(--pixel-art-scale) * 40px)
+      calc(var(--pixel-art-scale) * 12px) auto;
+    grid-template-areas:
+      'vp progress name'
+      'vp progress resources'
+      'vp progress bottom';
+  }
+  filter: drop-shadow(0 0 5px hsl(0 0 0 / 0.7));
+  /* background-color: #32021b; */
+}
+
+.name {
+  grid-area: name;
+  font-size: var(--font-size-5);
+  text-align: right;
+
+  .is-inverted & {
+    text-align: left;
+  }
+}
+
+.resources {
+  grid-area: resources;
   display: flex;
-  flex-direction: column;
+  justify-content: space-between;
   gap: var(--size-2);
-  filter: drop-shadow(0 6px 0 #32021b);
 
+  .is-inverted & {
+    flex-direction: row-reverse;
+  }
+}
+
+.bottom-row {
+  grid-area: bottom;
+  gap: var(--size-4);
+  justify-content: flex-end;
+  display: flex;
+
+  .is-inverted & {
+    flex-direction: row-reverse;
+  }
+}
+
+.vp-progress {
+  grid-area: progress;
+}
+
+.vp {
+  grid-area: vp;
+  transition: filter 0.5s var(--ease-2);
+  &.glowing {
+    filter: drop-shadow(0 0 1em cyan) contrast(300%) brightness(200%);
+  }
+}
+
+.rune {
+  width: calc(var(--pixel-art-scale) * 13px);
+  aspect-ratio: 1;
+  background-image: var(--bg);
+  display: grid;
+  place-content: center;
+  font-size: var(--font-size-4);
+  color: black;
+  text-shadow: 0 0 9px #d7ad42;
+  pointer-events: auto;
+}
+
+.gold {
+  padding-left: calc(var(--pixel-art-scale) * 15px);
+  aspect-ratio: 1;
+  background-image: url('/assets/ui/gold.png');
+  background-repeat: no-repeat;
+  background-position: 0 0;
+  font-size: var(--font-size-6);
+  display: flex;
+  align-items: center;
+  pointer-events: auto;
+}
+
+.deck {
+  background: url('/assets/ui/deck-big.png');
+  background-repeat: no-repeat;
+  background-position: left bottom;
+  width: calc(var(--pixel-art-scale) * 26px);
+  text-align: center;
+  color: #d7ad42;
+  pointer-events: auto;
+  font-size: var(--font-size-4);
+}
+
+.quests {
+  --size: 0px;
+  pointer-events: auto;
+  display: flex;
+  gap: var(--size-4);
+  height: 100%;
   > div {
-    --size: 30px;
-    background: var(--bg);
-    background-position: center left;
-    background-repeat: no-repeat;
-    height: var(--size);
-    padding-left: calc(var(--size) + var(--size-2));
-    font-size: var(--size-4);
-    display: flex;
-    align-items: center;
-    position: relative;
-    z-index: 0;
-    font-family: 'Press Start 2P';
-
-    .is-inverted & {
-      background-position: center right;
-      padding-left: 0;
-      padding-right: calc(var(--size) + var(--size-2));
-      display: flex;
-      justify-content: flex-end;
-    }
-    &.large {
-      --size: 60px;
-      font-size: var(--size-7);
-    }
-    &.quests {
-      --size: 0px;
-      pointer-events: auto;
-      display: flex;
-      gap: var(--size-3);
-      height: 102px;
-      margin-left: -5px;
-      > div {
-        width: 66px;
-        height: 102px;
-        background-image: url('/assets/ui/quest-icon-filled.png');
-        &.empty {
-          background-image: url('/assets/ui/quest-icon-empty.png');
-        }
-      }
-    }
-    > span {
-      line-height: 1;
-      text-align: center;
-      position: relative;
-      place-self: center;
-      background: linear-gradient(
-        #fffe00,
-        #fffe00 calc(50% + 3px),
-        #feb900 calc(50% + 3px)
-      );
-      background-clip: text;
-      color: transparent;
-      position: relative;
-      &:after {
-        background: none;
-        content: attr(data-text);
-        position: absolute;
-        text-shadow: 0 3px #5d1529;
-        inset: 0;
-        z-index: -1;
-        text-align: left;
-      }
+    width: 66px;
+    height: 100%;
+    background-image: url('/assets/ui/quest-icon-filled.png');
+    &.empty {
+      background-image: url('/assets/ui/quest-icon-empty.png');
     }
   }
+}
+
+.indicator {
+  height: 100%;
+  background: url('/assets/ui/vp-progress-bar.png');
+  background-size: cover;
+  --frame-height: calc(var(--pixel-art-scale) * 68px);
+  --bg-offset: calc(-1 * var(--score) * var(--frame-height));
+  background-position: 0 var(--bg-offset);
+  pointer-events: auto;
+}
+.vp {
+  height: 100%;
+  background: url('/assets/ui/vp-counter.png');
+  background-size: cover;
+  --frame-height: calc(var(--pixel-art-scale) * 68px);
+  --bg-offset: calc(-1 * var(--score) * var(--frame-height));
+  background-position: 0 var(--bg-offset);
 }
 </style>

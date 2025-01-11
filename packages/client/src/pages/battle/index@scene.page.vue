@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { useBattleStore } from './battle.store';
-import Board from '@/board/components/Board.vue';
+import Board from '@/board/scenes/Board.vue';
 import { config } from '@/utils/config';
 import { useKeyboardControl } from '@/shared/composables/useKeyboardControl';
 import { useSettingsStore } from '@/shared/composables/useSettings';
@@ -8,7 +8,7 @@ import { UI_MODES, useBattleUiStore } from './battle-ui.store';
 import type { Layer } from '@pixi/layers';
 import { until } from '@vueuse/core';
 import { GAME_PHASES } from '@game/engine/src/game/game-phase.system';
-import Camera from '@/board/components/Camera.vue';
+import Camera from '@/board/scenes/Camera.vue';
 import { provideCamera } from '@/board/composables/useCamera';
 
 definePage({

@@ -3,8 +3,7 @@ import { PTransition } from 'vue3-pixi';
 import type { UnitViewModel } from '../unit.model';
 import { useBattleEvent } from '@/pages/battle/battle.store';
 import { GAME_EVENTS } from '@game/engine/src/game/game';
-import { waitFor } from '@game/shared';
-import UiLayerContainer from '@/ui/components/UiLayerContainer.vue';
+import UiLayerContainer from '@/ui/scenes/UiLayerContainer.vue';
 import type { Rune } from '@game/engine/src/utils/rune';
 
 const { unit } = defineProps<{ unit: UnitViewModel }>();

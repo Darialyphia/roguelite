@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { UI_MODES, useBattleUiStore } from '@/pages/battle/battle-ui.store';
 import BoardCellSprite from './BoardCellSprite.vue';
-import UiAnimatedSprite from '@/ui/components/UiAnimatedSprite.vue';
+import UiAnimatedSprite from '@/ui/scenes/UiAnimatedSprite.vue';
 import BoardCellHighlights from './BoardCellHighlights.vue';
 import type { CellViewModel } from '../models/cell.model';
 import {

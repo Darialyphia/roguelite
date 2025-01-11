@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { useUserPlayer } from '@/pages/battle/battle.store';
-import UiAnimatedSprite from '@/ui/components/UiAnimatedSprite.vue';
+import UiAnimatedSprite from '@/ui/scenes/UiAnimatedSprite.vue';
 import type { CellViewModel } from '../models/cell.model';
 import type { Defined } from '@game/shared';
 

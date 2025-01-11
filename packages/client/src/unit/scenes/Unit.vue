@@ -10,7 +10,7 @@ import UnitVFX from './vfx/UnitVFX.vue';
 import { useBattleEvent } from '@/pages/battle/battle.store';
 import { PTransition } from 'vue3-pixi';
 import type { Container } from 'pixi.js';
-import AlphaTransition from '@/ui/components/AlphaTransition.vue';
+import AlphaTransition from '@/ui/scenes/AlphaTransition.vue';
 import { waitFor } from '@game/shared';
 import { GAME_EVENTS } from '@game/engine/src/game/game';
 import { useCamera } from '@/board/composables/useCamera';
