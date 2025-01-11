@@ -455,6 +455,19 @@
         },
         {
           "alias": [
+            "icon-spell-lightning-bolt"
+          ],
+          "src": [
+            "/assets/icons/spell-lightning-bolt.png"
+          ],
+          "data": {
+            "tags": {
+              "m": true
+            }
+          }
+        },
+        {
+          "alias": [
             "icon-spell-spark"
           ],
           "src": [

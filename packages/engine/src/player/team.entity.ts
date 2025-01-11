@@ -4,6 +4,7 @@ import type { Game } from '../game/game';
 import type { Point3D } from '@game/shared';
 import { CARDS_DICTIONARY } from '../card/cards/_index';
 import { nanoid } from 'nanoid';
+import { GAME_PHASES } from '../game/game-phase.system';
 
 export type TeamOptions = {
   id: string;
@@ -99,7 +100,10 @@ export class Team extends Entity {
         opponent.draw(1);
       });
     }
-    if (this._victoryPoints >= this.game.config.VP_WIN_THRESHOLD) {
+    if (
+      this._victoryPoints >= this.game.config.VP_WIN_THRESHOLD &&
+      this.game.gamePhaseSystem.phase === GAME_PHASES.BATTLE
+    ) {
       this.game.gamePhaseSystem.endBattle();
     }
 
