@@ -11,14 +11,13 @@ import {
   ProgressIndicator
 } from 'radix-vue';
 import Card from '@/card/components/Card.vue';
-import {
-  useBattleEvent,
-  useGameClientState
-} from '@/pages/battle/battle.store';
 import { GAME_PHASES } from '@game/engine/src/game/game-phase.system';
 import UiSimpleTooltip from '@/ui/components/UiSimpleTooltip.vue';
 import { GAME_EVENTS } from '@game/engine/src/game/game';
-import { waitFor } from '@game/shared';
+import {
+  useBattleEvent,
+  useGameClientState
+} from '@/battle/stores/battle.store';
 
 const { player, inverted } = defineProps<{
   player: PlayerViewModel;

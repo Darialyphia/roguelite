@@ -1,14 +1,14 @@
 <script setup lang="ts">
 import { config } from '@/utils/config';
 import type { UnitViewModel } from '../unit.model';
+import { clamp, type Point3D } from '@game/shared';
+import { useBattleUiStore } from '@/battle/stores/battle-ui.store';
+import type { Unit } from '@game/engine/src/unit/unit.entity';
+import { GAME_EVENTS } from '@game/engine/src/game/game';
 import {
   useBattleEvent,
   useGameClientState
-} from '@/pages/battle/battle.store';
-import { clamp, type Point3D } from '@game/shared';
-import { useBattleUiStore } from '@/pages/battle/battle-ui.store';
-import type { Unit } from '@game/engine/src/unit/unit.entity';
-import { GAME_EVENTS } from '@game/engine/src/game/game';
+} from '@/battle/stores/battle.store';
 
 const { unit, bounce } = defineProps<{
   unit: UnitViewModel;

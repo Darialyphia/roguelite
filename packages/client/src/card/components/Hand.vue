@@ -1,10 +1,4 @@
 <script setup lang="ts">
-import {
-  useBattleEvent,
-  useGame,
-  useGameClientState,
-  useUserPlayer
-} from '@/pages/battle/battle.store';
 import { waitFor } from '@game/shared';
 import { config } from '@/utils/config';
 import { makeCardViewModel } from '../card.model';
@@ -12,6 +6,12 @@ import DraggedCard from './DraggedCard.vue';
 import HandCard from './HandCard.vue';
 import { GAME_PHASES } from '@game/engine/src/game/game-phase.system';
 import { GAME_EVENTS } from '@game/engine/src/game/game';
+import {
+  useBattleEvent,
+  useGame,
+  useGameClientState,
+  useUserPlayer
+} from '@/battle/stores/battle.store';
 
 const root = useTemplateRef('root');
 const cardSpacing = ref(0);

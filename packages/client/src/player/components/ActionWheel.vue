@@ -3,7 +3,7 @@ import {
   useBattleStore,
   useGameClientState,
   useUserPlayer
-} from '@/pages/battle/battle.store';
+} from '@/battle/stores/battle.store';
 import UiSimpleTooltip from '@/ui/components/UiSimpleTooltip.vue';
 import { config } from '@/utils/config';
 import { GAME_PHASES } from '@game/engine/src/game/game-phase.system';

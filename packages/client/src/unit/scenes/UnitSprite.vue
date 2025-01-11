@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { useSpritesheet } from '@/shared/composables/useSpritesheet';
-import { useBattleUiStore } from '@/pages/battle/battle-ui.store';
+import { useBattleUiStore } from '@/battle/stores/battle-ui.store';
 import { OutlineFilter } from '@pixi/filter-outline';
 import { type Filter } from 'pixi.js';
 import type { UnitViewModel } from '../unit.model';

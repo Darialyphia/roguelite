@@ -1,14 +1,14 @@
 <script setup lang="ts">
 import { PTransitionGroup } from 'vue3-pixi';
 import { DropShadowFilter } from '@pixi/filter-drop-shadow';
-import {
-  useGame,
-  useGameClientState,
-  usePathHelpers,
-  useUserPlayer
-} from '@/pages/battle/battle.store';
-import { useBattleUiStore } from '@/pages/battle/battle-ui.store';
+import { useBattleUiStore } from '@/battle/stores/battle-ui.store';
 import { config } from '@/utils/config';
+import {
+  useGameClientState,
+  useUserPlayer,
+  usePathHelpers,
+  useGame
+} from '@/battle/stores/battle.store';
 
 const state = useGameClientState();
 const userPlayer = useUserPlayer();

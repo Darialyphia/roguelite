@@ -1,10 +1,10 @@
 <script setup lang="ts">
 import { PTransition } from 'vue3-pixi';
 import type { UnitViewModel } from '../unit.model';
-import { useBattleEvent } from '@/pages/battle/battle.store';
 import { GAME_EVENTS } from '@game/engine/src/game/game';
 import UiLayerContainer from '@/ui/scenes/UiLayerContainer.vue';
 import type { Rune } from '@game/engine/src/utils/rune';
+import { useBattleEvent } from '@/battle/stores/battle.store';
 
 const { unit } = defineProps<{ unit: UnitViewModel }>();
 

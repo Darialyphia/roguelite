@@ -7,7 +7,6 @@ import UnitPositioner from './UnitPositioner.vue';
 import type { UnitViewModel } from '../unit.model';
 import UnitVFX from './vfx/UnitVFX.vue';
 
-import { useBattleEvent } from '@/pages/battle/battle.store';
 import { PTransition } from 'vue3-pixi';
 import type { Container } from 'pixi.js';
 import AlphaTransition from '@/ui/scenes/AlphaTransition.vue';
@@ -17,6 +16,7 @@ import { useCamera } from '@/board/composables/useCamera';
 import UnitApIndicators from './UnitApIndicators.vue';
 import UnitResourceIndicator from './UnitResourceIndicator.vue';
 import UnitModifierSprite from './UnitModifierSprite.vue';
+import { useBattleEvent } from '@/battle/stores/battle.store';
 
 const { unit } = defineProps<{ unit: UnitViewModel }>();
 

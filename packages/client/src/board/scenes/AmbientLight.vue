@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import { useVFXEvent } from '@/pages/battle/battle.store';
 import { config } from '@/utils/config';
-import { useBattleUiStore } from '@/pages/battle/battle-ui.store';
+import { useBattleUiStore } from '@/battle/stores/battle-ui.store';
 import { BLEND_MODES, Graphics as PixiGraphics, Matrix } from 'pixi.js';
 import { waitFor } from '@game/shared';
 import { useCamera } from '../composables/useCamera';
+import { useVFXEvent } from '@/battle/stores/battle.store';
 
 const { worldSize } = defineProps<{
   worldSize: { width: number; height: number };

@@ -1,15 +1,9 @@
 <script setup lang="ts">
-import { UI_MODES, useBattleUiStore } from '@/pages/battle/battle-ui.store';
+import { UI_MODES, useBattleUiStore } from '@/battle/stores/battle-ui.store';
 import BoardCellSprite from './BoardCellSprite.vue';
 import UiAnimatedSprite from '@/ui/scenes/UiAnimatedSprite.vue';
 import BoardCellHighlights from './BoardCellHighlights.vue';
 import type { CellViewModel } from '../models/cell.model';
-import {
-  useBattleStore,
-  useGameClientState,
-  usePathHelpers,
-  useUserPlayer
-} from '@/pages/battle/battle.store';
 import { match } from 'ts-pattern';
 import { PTransition, External, type ContainerInst } from 'vue3-pixi';
 import BoardCellLightVFX from './BoardCellLightVFX.vue';
@@ -26,6 +20,12 @@ import Obstacle from './Obstacle.vue';
 import ObstacleCard from '@/card/components/ObstacleCard.vue';
 import { useCamera } from '../composables/useCamera';
 import { GAME_PHASES } from '@game/engine/src/game/game-phase.system';
+import {
+  useBattleStore,
+  useGameClientState,
+  usePathHelpers,
+  useUserPlayer
+} from '@/battle/stores/battle.store';
 
 const { cell } = defineProps<{ cell: CellViewModel }>();
 const emit = defineEmits<{ ready: [] }>();

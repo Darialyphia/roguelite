@@ -1,14 +1,14 @@
 <script setup lang="ts">
-import {
-  useBattleEvent,
-  useBattleStore,
-  useVFXEvent
-} from '@/pages/battle/battle.store';
 import type { UnitViewModel } from '../unit.model';
 import { useShaker } from '@/shared/composables/vfx/useShaker';
 import type { Container } from 'pixi.js';
 import { waitFor } from '@game/shared';
 import { GAME_EVENTS } from '@game/engine/src/game/game';
+import {
+  useBattleEvent,
+  useBattleStore,
+  useVFXEvent
+} from '@/battle/stores/battle.store';
 
 const { unit } = defineProps<{ unit: UnitViewModel }>();
 

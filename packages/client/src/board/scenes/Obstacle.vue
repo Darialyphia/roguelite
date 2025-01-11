@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import { useUserPlayer } from '@/pages/battle/battle.store';
 import UiAnimatedSprite from '@/ui/scenes/UiAnimatedSprite.vue';
 import type { CellViewModel } from '../models/cell.model';
 import type { Defined } from '@game/shared';
+import { useUserPlayer } from '@/battle/stores/battle.store';
 
 const { obstacle } = defineProps<{
   obstacle: Defined<CellViewModel['obstacle']>;

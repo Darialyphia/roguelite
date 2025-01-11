@@ -5,7 +5,7 @@ import {
   Container as PixiContainer
 } from 'pixi.js';
 import { radialGradient } from '@/utils/sprite';
-import { useBattleUiStore } from '@/pages/battle/battle-ui.store';
+import { useBattleUiStore } from '@/battle/stores/battle-ui.store';
 import { usePointLights, type PointLightConfig } from './usePointLight';
 import { until } from '@vueuse/core';
 import { useCamera } from '@/board/composables/useCamera';

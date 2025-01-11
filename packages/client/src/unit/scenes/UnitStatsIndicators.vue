@@ -3,10 +3,10 @@ import { clamp } from '@game/shared';
 import { useSpritesheet } from '@/shared/composables/useSpritesheet';
 import { createSpritesheetFrameObject } from '@/utils/sprite';
 import type { UnitViewModel } from '../unit.model';
-import { useBattleEvent } from '@/pages/battle/battle.store';
 import { TextStyle, type AnimatedSprite } from 'pixi.js';
-import { useBattleUiStore } from '@/pages/battle/battle-ui.store';
+import { useBattleUiStore } from '@/battle/stores/battle-ui.store';
 import { GAME_EVENTS } from '@game/engine/src/game/game';
+import { useBattleEvent } from '@/battle/stores/battle.store';
 
 const { unit } = defineProps<{ unit: UnitViewModel }>();
 

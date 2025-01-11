@@ -1,13 +1,13 @@
 <script lang="ts" setup>
 import BoardCell from '@/board/scenes/BoardCell.vue';
 import Unit from '@/unit/scenes/Unit.vue';
-import { useBattleStore } from '@/pages/battle/battle.store';
 import { until } from '@vueuse/core';
-import { useBattleUiStore } from '@/pages/battle/battle-ui.store';
+import { useBattleUiStore } from '@/battle/stores/battle-ui.store';
 import AmbientLight from '@/board/scenes/AmbientLight.vue';
 import { providePointLights } from '@/vfx/usePointLight';
 // import DangerArrows from '@/unit/components/DangerArrows.vue';
 import { useCamera } from '../composables/useCamera';
+import { useBattleStore } from '@/battle/stores/battle.store';
 
 const { worldSize } = defineProps<{
   worldSize: { width: number; height: number };

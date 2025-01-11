@@ -1,6 +1,5 @@
 <script setup lang="ts">
-import { useCamera } from '@/board/composables/useCamera';
-import { useBattleEvent } from '@/pages/battle/battle.store';
+import { useBattleEvent } from '@/battle/stores/battle.store';
 import type { UnitViewModel } from '@/unit/unit.model';
 import { GAME_EVENTS } from '@game/engine/src/game/game';
 import { randomInt } from '@game/shared';

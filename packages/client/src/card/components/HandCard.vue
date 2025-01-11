@@ -1,15 +1,14 @@
 <script setup lang="ts">
 import { Teleport } from 'vue';
-import { useUserPlayer } from '@/pages/battle/battle.store';
 import Card from './Card.vue';
-import { type Point } from '@game/shared';
-import { useMouse, usePageLeave } from '@vueuse/core';
-import { UI_MODES, useBattleUiStore } from '@/pages/battle/battle-ui.store';
+import { usePageLeave } from '@vueuse/core';
+import { UI_MODES, useBattleUiStore } from '@/battle/stores/battle-ui.store';
 import { config } from '@/utils/config';
 import { useApplication } from 'vue3-pixi';
 import { type CardViewModel } from '../card.model';
 import { match } from 'ts-pattern';
 import { CARD_KINDS } from '@game/engine/src/card/card-enums';
+import { useUserPlayer } from '@/battle/stores/battle.store';
 
 const { card } = defineProps<{ card: CardViewModel }>();
 

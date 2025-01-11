@@ -3,8 +3,8 @@ import { useApplication } from 'vue3-pixi';
 import { Container } from 'pixi.js';
 import { until, useEventListener } from '@vueuse/core';
 import { config } from '@/utils/config';
-import { useGame } from '@/pages/battle/battle.store';
 import { useCamera } from '../composables/useCamera';
+import { useGame } from '@/battle/stores/battle.store';
 
 const app = useApplication();
 const game = useGame();

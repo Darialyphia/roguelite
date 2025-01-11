@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import PointLight from '@/vfx/PointLight.vue';
 import type { PointLightConfig } from '@/vfx/usePointLight';
-import { useVFXEvent } from '@/pages/battle/battle.store';
 import type { CellViewModel } from '../models/cell.model';
 import { BLEND_MODES } from 'pixi.js';
+import { useVFXEvent } from '@/battle/stores/battle.store';
 
 const { cell } = defineProps<{ cell: CellViewModel }>();
 type BoardLight = PointLightConfig & { alpha: number; id: number };

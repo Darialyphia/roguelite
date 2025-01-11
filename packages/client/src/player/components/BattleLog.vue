@@ -1,9 +1,4 @@
 <script setup lang="ts">
-import {
-  useBattleEvent,
-  useGame,
-  useGameClientState
-} from '@/pages/battle/battle.store';
 import type { Card } from '@game/engine/src/card/card.entity';
 import type { SerializedInput } from '@game/engine/src/input/input-system';
 import type { Unit } from '@game/engine/src/unit/unit.entity';
@@ -15,6 +10,11 @@ import type { EntityId } from '@game/engine/src/entity';
 import type { Player } from '@game/engine/src/player/player.entity';
 import { GAME_PHASES } from '@game/engine/src/game/game-phase.system';
 import { GAME_EVENTS } from '@game/engine/src/game/game';
+import {
+  useBattleEvent,
+  useGame,
+  useGameClientState
+} from '@/battle/stores/battle.store';
 
 const state = useGameClientState();
 const game = useGame();

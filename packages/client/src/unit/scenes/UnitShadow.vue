@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { useBattleEvent, useBattleStore } from '@/pages/battle/battle.store';
 import { useSpritesheet } from '@/shared/composables/useSpritesheet';
 import { type Filter, BlurFilter } from 'pixi.js';
 import { config } from '@/utils/config';
@@ -7,6 +6,7 @@ import { useMultiLayerTexture } from '@/shared/composables/useMultiLayerTexture'
 import type { UnitViewModel } from '../unit.model';
 import { GAME_EVENTS } from '@game/engine/src/game/game';
 import { useCamera } from '@/board/composables/useCamera';
+import { useBattleEvent, useBattleStore } from '@/battle/stores/battle.store';
 
 const { unit } = defineProps<{ unit: UnitViewModel }>();
 

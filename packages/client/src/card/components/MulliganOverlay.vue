@@ -1,14 +1,14 @@
 <script setup lang="ts">
 import { GAME_PHASES } from '@game/engine/src/game/game-phase.system';
+import Card from './Card.vue';
+import UiButton from '@/ui/components/UiButton.vue';
+import { useBattleUiStore } from '@/battle/stores/battle-ui.store';
+import { GAME_EVENTS } from '@game/engine/src/game/game';
 import {
   useBattleEvent,
   useBattleStore,
   useUserPlayer
-} from '@/pages/battle/battle.store';
-import Card from './Card.vue';
-import UiButton from '@/ui/components/UiButton.vue';
-import { useBattleUiStore } from '@/pages/battle/battle-ui.store';
-import { GAME_EVENTS } from '@game/engine/src/game/game';
+} from '@/battle/stores/battle.store';
 
 const indices = ref<number[]>([]);
 

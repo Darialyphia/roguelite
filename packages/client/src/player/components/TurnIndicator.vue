@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { useBattleEvent, useUserPlayer } from '@/pages/battle/battle.store';
+import { useBattleEvent, useUserPlayer } from '@/battle/stores/battle.store';
 import { GAME_EVENTS } from '@game/engine/src/game/game';
 import { waitFor } from '@game/shared';
 

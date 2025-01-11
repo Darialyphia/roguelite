@@ -1,21 +1,20 @@
 <script setup lang="ts">
 import { PTransition } from 'vue3-pixi';
-import {
-  useBattleStore,
-  useGameClientState,
-  usePathHelpers,
-  useUserPlayer
-} from '@/pages/battle/battle.store';
 import UiAnimatedSprite from '@/ui/scenes/UiAnimatedSprite.vue';
 import { GAME_PHASES } from '@game/engine/src/game/game-phase.system';
 import type { CellViewModel } from '../models/cell.model';
-import { UI_MODES, useBattleUiStore } from '@/pages/battle/battle-ui.store';
+import { UI_MODES, useBattleUiStore } from '@/battle/stores/battle-ui.store';
 import { isDefined } from '@game/shared';
 import { match } from 'ts-pattern';
 import { useCamera } from '../composables/useCamera';
 import { useIsKeyboardControlPressed } from '@/shared/composables/useKeyboardControl';
 import { useSettingsStore } from '@/shared/composables/useSettings';
 import { CARD_KINDS } from '@game/engine/src/card/card-enums';
+import {
+  useBattleStore,
+  usePathHelpers,
+  useUserPlayer
+} from '@/battle/stores/battle.store';
 
 const { cell } = defineProps<{ cell: CellViewModel }>();
 

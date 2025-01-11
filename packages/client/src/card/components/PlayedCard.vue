@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import { waitFor, type Nullable } from '@game/shared';
 import { makeCardViewModel, type CardViewModel } from '../card.model';
-import { useBattleEvent, useGame } from '@/pages/battle/battle.store';
 import Card from './Card.vue';
 import { GAME_EVENTS } from '@game/engine/src/game/game';
+import { useGame, useBattleEvent } from '@/battle/stores/battle.store';
 
 const card = ref<Nullable<CardViewModel>>();
 

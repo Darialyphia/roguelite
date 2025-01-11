@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { useBattleUiStore } from '@/pages/battle/battle-ui.store';
+import { useBattleUiStore } from '@/battle/stores/battle-ui.store';
 
 const ui = useBattleUiStore();
 </script>

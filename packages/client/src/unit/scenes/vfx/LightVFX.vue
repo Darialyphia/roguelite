@@ -4,7 +4,7 @@ import { onTick } from 'vue3-pixi';
 import type { UnitViewModel } from '@/unit/unit.model';
 import PointLight from '@/vfx/PointLight.vue';
 import type { PointLightConfig } from '@/vfx/usePointLight';
-import { useVFXEvent } from '@/pages/battle/battle.store';
+import { useVFXEvent } from '@/battle/stores/battle.store';
 
 const { unit } = defineProps<{ unit: UnitViewModel }>();
 
