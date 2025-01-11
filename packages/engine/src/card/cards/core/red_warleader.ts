@@ -51,6 +51,7 @@ export const redWarLeader: UnitCardBlueprint = {
       new UnitModifier(createEntityId('warleader_aura'), game, card, {
         stackable: true,
         initialStacks: 1,
+        iconId: 'keyword-attack-buff',
         mixins: [
           new InterceptorAuraModifierMixin(game, {
             key: 'attack',

@@ -79,7 +79,8 @@ Players will be able to
 
 # Change Log
 
-- [x] Add a Fortune Shrine obstacle that grants 1 gold at the start of the turn when standing on it
+- [x] 11/01/2025: Fixed auras persisting after the unit was destroyed
+- [x] 10/01/2025: Add a Fortune Shrine obstacle that grants 1 gold at the start of the turn when standing on it
 - [x] 10/01/2025: Removed the reward for bringing a general to half HP. Doubled the reward t bringing them to 0hp.
 - [x] 10/01/2025: Add some visual feedback to shos the modifiers applied to a unit.
 - [x] 09/01/2025: Units appear below tiles when they are on some places in the top row.

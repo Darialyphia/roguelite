@@ -505,6 +505,9 @@ export class Unit extends Entity {
     if (!this.canBeDestroyed) return;
 
     this.emitter.emit(UNIT_EVENTS.BEFORE_DESTROY, { source });
+    for (const modifier of this.modifiers) {
+      this.removeModifier(modifier.id);
+    }
     this.game.unitSystem.removeUnit(this);
     this.emitter.emit(UNIT_EVENTS.AFTER_DESTROY, { source });
   }

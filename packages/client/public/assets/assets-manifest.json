@@ -169,6 +169,32 @@
         },
         {
           "alias": [
+            "icon-keyword-attack-buff"
+          ],
+          "src": [
+            "/assets/icons/keyword-attack-buff.png"
+          ],
+          "data": {
+            "tags": {
+              "m": true
+            }
+          }
+        },
+        {
+          "alias": [
+            "icon-keyword-attack-debuff"
+          ],
+          "src": [
+            "/assets/icons/keyword-attack-debuff.png"
+          ],
+          "data": {
+            "tags": {
+              "m": true
+            }
+          }
+        },
+        {
+          "alias": [
             "icon-keyword-burn"
           ],
           "src": [
@@ -238,6 +264,32 @@
           ],
           "src": [
             "/assets/icons/keyword-frozen.png"
+          ],
+          "data": {
+            "tags": {
+              "m": true
+            }
+          }
+        },
+        {
+          "alias": [
+            "icon-keyword-hp-buff"
+          ],
+          "src": [
+            "/assets/icons/keyword-hp-buff.png"
+          ],
+          "data": {
+            "tags": {
+              "m": true
+            }
+          }
+        },
+        {
+          "alias": [
+            "icon-keyword-hp-debuff"
+          ],
+          "src": [
+            "/assets/icons/keyword-hp-debuff.png"
           ],
           "data": {
             "tags": {
@@ -394,6 +446,19 @@
           ],
           "src": [
             "/assets/icons/spell-arcane-intellect.png"
+          ],
+          "data": {
+            "tags": {
+              "m": true
+            }
+          }
+        },
+        {
+          "alias": [
+            "icon-spell-bloodlust"
+          ],
+          "src": [
+            "/assets/icons/spell-bloodlust.png"
           ],
           "data": {
             "tags": {

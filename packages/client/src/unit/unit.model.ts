@@ -30,7 +30,13 @@ export type UnitViewModel = {
   isDead: boolean;
   remainingMovement: number;
   possibleMoves: Point3D[];
-  modifiers: UnitModifier[];
+  modifiers: Array<{
+    iconId?: string;
+    name?: string;
+    description?: string;
+    id: string;
+    stacks?: number;
+  }>;
   getUnit(): Unit;
   equals(unit: UnitViewModel): boolean;
   canMoveTo: Unit['canMoveTo'];
@@ -63,7 +69,13 @@ export const makeUnitViewModel = (game: Game, unit: Unit): UnitViewModel => {
     keywords: unit.keywords,
     remainingMovement: unit.remainingMovement,
     possibleMoves: unit.getPossibleMoves(),
-    modifiers: unit.modifiers,
+    modifiers: unit.modifiers.map(mod => ({
+      id: mod.id,
+      name: mod.infos.name,
+      description: mod.infos.description,
+      iconId: mod.infos.iconId,
+      stacks: mod.stacks
+    })),
     canMoveTo: unit.canMoveTo.bind(unit),
     canAttackAt: unit.canAttackAt.bind(unit),
     getUnit() {

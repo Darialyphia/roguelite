@@ -48,8 +48,8 @@ const ui = useBattleUiStore();
       event-mode="none"
       playing
       loop
-      :x="-28 + i * 6"
-      :y="-12"
+      :x="-35 + i * 8"
+      :y="18"
     />
   </container>
 </template>
