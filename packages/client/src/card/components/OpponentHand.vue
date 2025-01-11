@@ -70,6 +70,7 @@ useBattleEvent(GAME_EVENTS.PLAYER_AFTER_DRAW, async event => {
 .opponent-hand {
   display: flex;
   --hand-size: v-bind('player.hand.length');
+  pointer-events: none;
 
   > li {
     width: calc(1px * v-bind('config.CARD_WIDTH'));

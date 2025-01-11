@@ -287,6 +287,10 @@ export class Player extends Entity {
   }
 
   endTurn() {
+    if (this.gold > this.game.config.MAX_GOLD_STOCKPILED) {
+      this.goldManager.spend(this.gold - this.game.config.MAX_GOLD_STOCKPILED);
+    }
+
     this.emitter.emit(PLAYER_EVENTS.END_TURN, { id: this.id });
   }
 

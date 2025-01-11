@@ -18,6 +18,8 @@ export const config = {
   INITIAL_GOLD: 0,
   // gold gained per turn
   GOLD_PER_TURN: 3,
+  // The maxi amount of unspent gold kept at the end of a turn
+  MAX_GOLD_STOCKPILED: 10,
   // the standard amount of AP a unit has
   UNIT_BASE_AP: 3,
   // how many times a player can draw / gain gold / add a rune every turn
@@ -36,8 +38,6 @@ export const config = {
   GOLD_SHRINE_REWARD: 1,
   // The victory point awarded for destroying the enemy general
   GENERAL_VP_REWARD: 8,
-  // the Altars HP
-  ALTAR_HP: 12,
   // How many quest can a player have at the same time
   MAX_ONGOING_QUESTS: 2
 } as const;

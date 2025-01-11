@@ -105,7 +105,7 @@ const spawnAnimation = (container: Container) => {
           :unit="unit"
           :key="modifier.id"
           :modifier="modifier"
-          :x="-20 + index * 10"
+          :index="index"
         />
       </container>
     </AlphaTransition>

@@ -44,6 +44,9 @@ export const redBurningBlade: SpellCardBlueprint = {
         new UnitModifier(createEntityId('burning_blade'), game, card, {
           stackable: true,
           initialStacks: 1,
+          iconId: 'keyword-attack-buff',
+          name: 'Burning Blade buff',
+          description: '+1 / +0',
           mixins: [
             new InterceptorModifierMixin(game, {
               key: 'attack',
