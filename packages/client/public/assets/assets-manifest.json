@@ -2155,6 +2155,33 @@
         },
         {
           "alias": [
+            "crazed-warlord"
+          ],
+          "src": [
+            "/assets/units/crazed-warlord.json"
+          ],
+          "loadParser": "aseprite_loader",
+          "data": {
+            "tags": {
+              "m": true
+            }
+          }
+        },
+        {
+          "alias": [
+            "crazed-warlord.png"
+          ],
+          "src": [
+            "/assets/units/crazed-warlord.png"
+          ],
+          "data": {
+            "tags": {
+              "m": true
+            }
+          }
+        },
+        {
+          "alias": [
             "emperor"
           ],
           "src": [

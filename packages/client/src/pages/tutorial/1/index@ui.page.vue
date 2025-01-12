@@ -195,7 +195,7 @@ const options: BetterOmit<TutorialSessionOptions, 'history'> = {
       meta: {},
       tooltips: [
         {
-          text: 'It is now my turn to play. I also have my own general that I can move.',
+          text: 'It is now my turn to play. will move my general closer so you can try to attack him.',
           canClickNext: true,
           async onLeave() {
             await waitFor(500);
@@ -222,10 +222,6 @@ const options: BetterOmit<TutorialSessionOptions, 'history'> = {
       ],
       meta: {},
       tooltips: [
-        {
-          text: 'I moved my general closer. You should be able to attack him now.',
-          canClickNext: true
-        },
         {
           text: 'Select your general, and click on the enemy unit.',
           canClickNext: false,
@@ -265,11 +261,7 @@ const options: BetterOmit<TutorialSessionOptions, 'history'> = {
           canClickNext: true
         },
         {
-          text: 'You can notice that both generals took damage. That is because in this game, units can counterattack.',
-          canClickNext: true
-        },
-        {
-          text: 'Most units can counterattack once per turn.',
+          text: 'You can notice that both generals took damage. That is because in this game, units can counterattack once per turn.',
           canClickNext: true
         },
         {
@@ -292,11 +284,7 @@ const options: BetterOmit<TutorialSessionOptions, 'history'> = {
           }
         },
         {
-          text: "Units cannot act on the turn the're summoned.",
-          canClickNext: true
-        },
-        {
-          text: "You can't do anything else for now, so let's end your turn.",
+          text: "Units cannot act on the turn the're summoned, so let's end your turn'.",
           canClickNext: false,
           onEnter() {
             tutorial.highlightedElementId = 'end-turn-action-button';
@@ -347,7 +335,7 @@ const options: BetterOmit<TutorialSessionOptions, 'history'> = {
           canClickNext: true
         },
         {
-          text: 'To avoid this, attack him with your general, then your footman',
+          text: 'To avoid this, attack him with your general, then your footman.',
           canClickNext: false
         }
       ]
@@ -369,21 +357,16 @@ const options: BetterOmit<TutorialSessionOptions, 'history'> = {
           }
         },
         {
-          text: 'The cards in your hand appear on the bottom of the screen',
+          text: 'The cards in your hand appear on the bottom of the screen, while mine are at the top, face down.',
           canClickNext: true,
           onLeave() {
             tutorial.isOpponentHandDisplayed = true;
           }
         },
         {
-          text: 'My cards are at the top of the screen, face down.',
+          text: 'To play cards, you need to have enough gold.',
           canClickNext: true
         },
-        {
-          text: 'You can hover your cards with your mouse to see their details',
-          canClickNext: true
-        },
-        { text: 'To play cards, you need runes and gold.', canClickNext: true },
         {
           text: 'The gold cost of a unit it displayed on the top left of the card.',
           canClickNext: true
@@ -400,7 +383,7 @@ const options: BetterOmit<TutorialSessionOptions, 'history'> = {
           }
         },
         {
-          text: 'When playing a card, you spend gold equal to its cost. Try to play the highlighted card in your hand by dragging it on the field.',
+          text: 'Try to play the highlighted card in your hand by dragging it on the board.',
           canClickNext: false,
           onEnter(next) {
             tutorial.highlightedElementId = 'hand_card_4';
@@ -422,14 +405,14 @@ const options: BetterOmit<TutorialSessionOptions, 'history'> = {
           canClickNext: true
         },
         {
-          text: 'There are five types of runes that you can gain to play cards. Once acquired, you will never lose them, even when playing cards.',
+          text: 'There are five types of runes that you can gain over the course of the game to play cards.',
           canClickNext: true,
           onEnter() {
             tutorial.isRuneResourcesDisplayed = true;
           }
         },
         {
-          text: 'You can add a rune of your choice once per turn.',
+          text: 'You can add a rune of your choice once per turn. Unlike gold, runes are not spent when playing cards: they are unlocked for the rest of the game.',
           canClickNext: true,
           onEnter() {
             tutorial.isRuneActionEnabled = true;
@@ -505,7 +488,29 @@ const options: BetterOmit<TutorialSessionOptions, 'history'> = {
           onEnter() {
             tutorial.highlightedElementId = 'hand_card_3';
             tutorial.highlightedCell = { x: 3, y: 2, z: 0 };
+          },
+          onLeave() {
+            tutorial.highlightedElementId = null;
+            tutorial.highlightedCell = null;
           }
+        }
+      ]
+    },
+    {
+      expectedInputs: [],
+      meta: {},
+      tooltips: [
+        {
+          text: "My general's HP are getting low ! I should be careful or you will gain a lot of VICORY POINTS !",
+          canClickNext: true
+        },
+        {
+          text: 'Victory Points (VP) are how you win a game or Worselyst. The first player to reach 12 VP wins the game !',
+          canClickNext: true
+        },
+        {
+          text: 'Victory points can be acquired in three different ways : Destroying the enemy general, Vicory Shrines and Quest Cards.',
+          canClickNext: true
         }
       ]
     }
