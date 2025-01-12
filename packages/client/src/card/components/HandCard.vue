@@ -95,6 +95,7 @@ const violations = computed<{ gold?: boolean; runes?: boolean }>(() =>
       hoverable: !ui.selectedCard,
       'is-shaking': isShaking
     }"
+    :id="`hand_card_${index}`"
     class="pointer-events-auto"
     @animationend="isShaking = false"
     @mousedown="onMouseDown($event)"

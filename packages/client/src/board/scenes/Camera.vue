@@ -9,10 +9,7 @@ import { useGame } from '@/battle/stores/battle.store';
 const app = useApplication();
 const game = useGame();
 const camera = useCamera();
-const WORLD_PADDING = {
-  x: -240,
-  y: -50
-};
+const WORLD_PADDING = game.value.boardSystem.padding;
 
 const boardSize = computed(() => ({
   width: (game.value.boardSystem.width + 1) * config.TILE_SIZE.x,

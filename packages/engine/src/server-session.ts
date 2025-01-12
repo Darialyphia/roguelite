@@ -1,4 +1,10 @@
-import { randomInt, type BetterOmit, type Nullable, type Point3D } from '@game/shared';
+import {
+  randomInt,
+  type BetterOmit,
+  type Nullable,
+  type PartialBy,
+  type Point3D
+} from '@game/shared';
 import { Game, type GameOptions } from './game/game';
 import { ServerRngSystem } from './rng/server-rng.system';
 import type { Input } from './input/input';
@@ -6,7 +12,10 @@ import type { SerializedInput } from './input/input-system';
 import { InputSimulator } from './input/input-simulator';
 import type { EntityId } from './entity';
 
-export type ServerSessionOptions = BetterOmit<GameOptions, 'rngCtor' | 'id'> & {
+export type ServerSessionOptions = BetterOmit<
+  PartialBy<GameOptions, 'configOverrides'>,
+  'rngCtor' | 'id'
+> & {
   id?: string;
 };
 
@@ -30,7 +39,8 @@ export class ServerSession {
       rngSeed: options.rngSeed,
       rngCtor: ServerRngSystem,
       mapId: options.mapId,
-      teams: options.teams
+      teams: options.teams,
+      configOverrides: options.configOverrides ?? {}
     });
   }
 

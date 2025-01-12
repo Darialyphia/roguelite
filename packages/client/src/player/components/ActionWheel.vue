@@ -37,6 +37,7 @@ const tutorial = useTutorialStore();
       <template #trigger>
         <div class="hex-wrapper">
           <button
+            id="rune_action_yellow"
             aria-label="add Order rune"
             style="--bg: url('/assets/ui/rune-yellow.png')"
             :disabled="
@@ -64,6 +65,7 @@ const tutorial = useTutorialStore();
       <template #trigger>
         <div class="hex-wrapper">
           <button
+            id="rune_action_purple"
             aria-label="add Oblivion rune"
             style="--bg: url('/assets/ui/rune-purple.png')"
             :disabled="
@@ -90,6 +92,7 @@ const tutorial = useTutorialStore();
       <template #trigger>
         <div class="hex-wrapper">
           <button
+            id="rune_action_green"
             aria-label="add Creation rune"
             style="--bg: url('/assets/ui/rune-green.png')"
             :disabled="
@@ -116,6 +119,7 @@ const tutorial = useTutorialStore();
       <template #trigger>
         <div class="hex-wrapper">
           <button
+            id="rune_action_red"
             aria-label="add Destruction rune"
             style="--bg: url('/assets/ui/rune-red.png')"
             :disabled="
@@ -142,6 +146,7 @@ const tutorial = useTutorialStore();
       <template #trigger>
         <div class="hex-wrapper">
           <button
+            id="rune_action_blue"
             aria-label="add Arcane rune"
             style="--bg: url('/assets/ui/rune-blue.png')"
             :disabled="

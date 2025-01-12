@@ -1,10 +1,13 @@
-import type { BetterOmit, Nullable } from '@game/shared';
+import type { BetterOmit, Nullable, PartialBy } from '@game/shared';
 import { Game, type GameOptions, type StarEvent } from './game/game';
 import type { Input } from './input/input';
 import { ClientRngSystem } from './rng/client-rng.system';
 import type { SerializedInput } from './input/input-system';
 
-export type ClientSessionOptions = BetterOmit<GameOptions, 'rngCtor' | 'rngSeed' | 'id'>;
+export type ClientSessionOptions = BetterOmit<
+  PartialBy<GameOptions, 'configOverrides'>,
+  'rngCtor' | 'rngSeed' | 'id'
+>;
 
 export type ClientDispatchMeta = { rngValues: number[] };
 
@@ -18,7 +21,8 @@ export class ClientSession {
       rngSeed: '',
       rngCtor: ClientRngSystem,
       mapId: options.mapId,
-      teams: options.teams
+      teams: options.teams,
+      configOverrides: options.configOverrides ?? {}
     });
   }
 

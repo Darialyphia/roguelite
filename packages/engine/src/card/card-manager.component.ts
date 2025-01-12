@@ -7,6 +7,8 @@ import { createCard } from './card-factory';
 
 export type CardManagerComponentOptions = {
   deck: CardOptions[];
+  maxHandSize: number;
+  shouldShuffleDeck: boolean;
 };
 
 export class CardManagerComponent {
@@ -18,17 +20,23 @@ export class CardManagerComponent {
 
   readonly discardPile = new Set<Card>();
 
-  constructor(game: Game, player: Player, options: CardManagerComponentOptions) {
+  constructor(
+    game: Game,
+    player: Player,
+    private options: CardManagerComponentOptions
+  ) {
     this.game = game;
     this.deck = new Deck(
       this.game,
       options.deck.map(card => createCard(this.game, player, card))
     );
-    this.deck.shuffle();
+    if (options.shouldShuffleDeck) {
+      this.deck.shuffle();
+    }
   }
 
   get isHandFull() {
-    return this.hand.length === this.game.config.MAX_HAND_SIZE;
+    return this.hand.length === this.options.maxHandSize;
   }
 
   get remainingCardsInDeck() {
@@ -47,7 +55,7 @@ export class CardManagerComponent {
     if (this.isHandFull) return;
 
     const cards = this.deck.draw(
-      Math.min(amount, this.game.config.MAX_HAND_SIZE - this.hand.length)
+      Math.min(amount, this.options.maxHandSize - this.hand.length)
     );
 
     cards.forEach(card => {

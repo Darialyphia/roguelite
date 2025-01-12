@@ -4,7 +4,7 @@ import { pointToCellId } from './board-utils';
 import { System } from '../system';
 import type { GameMap } from './map';
 import { defineHex, Grid, Orientation, rectangle, spiral } from 'honeycomb-grid';
-import { config } from '../config';
+import { defaultConfig } from '../config';
 
 export type BoardSystemOptions = {
   map: GameMap;
@@ -12,8 +12,8 @@ export type BoardSystemOptions = {
 
 export const BoardHex = defineHex({
   dimensions: {
-    width: config.TILE_WIDTH,
-    height: config.TILE_HEIGHT
+    width: defaultConfig.TILE_WIDTH,
+    height: defaultConfig.TILE_HEIGHT
   },
   orientation: Orientation.POINTY
 });
@@ -32,6 +32,8 @@ export class BoardSystem extends System<BoardSystemOptions> {
   floors!: Array<HexFloor>;
 
   dimensions!: { width: number; height: number };
+
+  padding!: { x: number; y: number };
 
   initialize(options: BoardSystemOptions) {
     this.map = options.map;
@@ -60,6 +62,7 @@ export class BoardSystem extends System<BoardSystemOptions> {
       width: options.map.cols,
       height: options.map.rows
     };
+    this.padding = options.map.padding;
   }
 
   // eslint-disable-next-line @typescript-eslint/no-empty-function

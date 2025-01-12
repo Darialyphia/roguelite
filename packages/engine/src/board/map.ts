@@ -25,6 +25,7 @@ export type GameMap = {
   cols: number;
   floors: GameMapFloor[];
   generalPositions: Point3D[][];
+  padding: { x: number; y: number };
 };
 
 export const TERRAINS = {

@@ -9,7 +9,7 @@ import {
   type TurnEventMap
 } from './turn-system';
 import { Unit, type UnitEventMap } from '../unit/unit.entity';
-import { config } from '../config';
+import { defaultConfig, type Config } from '../config';
 import { PlayerSystem } from '../player/player-system';
 import { InputSystem, type SerializedInput } from '../input/input-system';
 import type { RngSystem } from '../rng/rng-system';
@@ -128,6 +128,7 @@ export type GameOptions = {
   mapId: string;
   teams: BetterOmit<TeamOptions['players'][number], 'generalPosition'>[][]; // player start positions are originally on the map data
   history?: SerializedInput[];
+  configOverrides: Partial<Config>;
 };
 
 export class Game {
@@ -147,12 +148,13 @@ export class Game {
 
   readonly inputSystem = new InputSystem(this, 'INPUT', 'blue');
 
-  readonly config = config;
+  readonly config: Config;
 
   readonly id: string;
 
   constructor(readonly options: GameOptions) {
     this.id = options.id;
+    this.config = Object.assign({}, defaultConfig, options.configOverrides);
     this.rngSystem = new options.rngCtor(this, 'RNG', 'lime');
     this.setupStarEvents();
   }

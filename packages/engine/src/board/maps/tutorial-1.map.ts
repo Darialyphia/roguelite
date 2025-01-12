@@ -6,6 +6,7 @@ export const mapTutorial1: GameMap = {
   id: 'tutorial-1',
   cols: 6,
   rows: 6,
+  padding: { x: 0, y: 0 },
   floors: [
     [
       [

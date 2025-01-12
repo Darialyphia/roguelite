@@ -4,7 +4,7 @@ import { GAME_EVENTS, type Game } from '../game/game';
 import { CardManagerComponent } from '../card/card-manager.component';
 import type { Card, CardOptions } from '../card/card.entity';
 import { GoldManagerComponent } from './components/gold-manager.component';
-import { config } from '../config';
+import { defaultConfig } from '../config';
 import { DECK_EVENTS } from '../card/deck.entity';
 import { assert, type Point3D } from '@game/shared';
 import { TypedEventEmitter } from '../utils/typed-emitter';
@@ -90,11 +90,13 @@ export class Player extends Entity {
     this.eventTracker = new EventTrackerComponent(this.game, this);
     this.runeManager = new RuneManager();
     this.cardManager = new CardManagerComponent(this.game, this, {
-      deck: options.deck.cards
+      deck: options.deck.cards,
+      maxHandSize: this.game.config.MAX_HAND_SIZE,
+      shouldShuffleDeck: this.game.config.SHUFFLE_DECK_ON_GAME_START
     });
-    this.goldManager = new GoldManagerComponent(config.INITIAL_GOLD);
+    this.goldManager = new GoldManagerComponent(this.game.config.INITIAL_GOLD);
     this.forwardEvents();
-    this.draw(config.INITIAL_HAND_SIZE);
+    this.draw(this.game.config.INITIAL_HAND_SIZE);
     this.game.on(GAME_EVENTS.START_BATTLE, this.onBattleStart.bind(this));
     this.placeGeneral(options.deck.general);
   }
@@ -164,7 +166,7 @@ export class Player extends Entity {
   }
 
   get canPerformResourceAction(): boolean {
-    return this.resourceActionsTaken < config.MAX_RESOURCE_ACTION_PER_TURN;
+    return this.resourceActionsTaken < this.game.config.MAX_RESOURCE_ACTION_PER_TURN;
   }
 
   get hasUnlockedRunes() {
@@ -278,8 +280,8 @@ export class Player extends Entity {
 
   startTurn() {
     this.resourceActionsTaken = 0;
-    this.draw(config.CARDS_DRAWN_PER_TURN);
-    this.addGold(config.GOLD_PER_TURN);
+    this.draw(this.game.config.CARDS_DRAWN_PER_TURN);
+    this.addGold(this.game.config.GOLD_PER_TURN);
     this.emitter.emit(PLAYER_EVENTS.START_TURN, { id: this.id });
   }
 

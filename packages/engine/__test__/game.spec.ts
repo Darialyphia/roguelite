@@ -1,12 +1,12 @@
 import { expect, test } from 'vitest';
 import { testGameBuilder } from './test-utils';
-import { config } from '../src/config';
+import { defaultConfig } from '../src/config';
 import { Damage } from '../src/combat/damage/damage';
 import { NoScalingStrategy } from '../src/combat/damage/scaling/no-scaling.strategy';
 import { NoMitigationStrategy } from '../src/combat/damage/mitigation/no-mitigation.strategy';
 
 test('General damage Victory Point reward trigger properly', () => {
-  const { player1, player2 } = testGameBuilder()
+  const { game, player1, player2 } = testGameBuilder()
     .withP2Deck({
       general: { blueprintId: 'red-general-flame-lord' },
       cards: Array.from({ length: 10 }, () => ({ blueprintId: 'red-footman' }))
@@ -23,5 +23,5 @@ test('General damage Victory Point reward trigger properly', () => {
     })
   );
 
-  expect(player1.team.victoryPoints).toBe(config.GENERAL_VP_REWARD);
+  expect(player1.team.victoryPoints).toBe(game.config.GENERAL_VP_REWARD);
 });

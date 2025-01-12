@@ -20,7 +20,8 @@ export const useTutorialStore = defineStore('tutorial', () => {
   const isGoldActionEnabled = ref(true);
   const isDrawActionEnabled = ref(true);
   const isVPDisplayed = ref(true);
-  const isResourcesDisplayed = ref(true);
+  const isGoldResourcesDisplayed = ref(true);
+  const isRuneResourcesDisplayed = ref(true);
   const isOpponentHandDisplayed = ref(true);
   const isHandDisplayed = ref(true);
   const isQuestsDisplayed = ref(true);
@@ -31,11 +32,12 @@ export const useTutorialStore = defineStore('tutorial', () => {
 
   const reset = () => {
     isResourceWarningEnabled.value = false;
-    isResourcesDisplayed.value = true;
+    isGoldResourcesDisplayed.value = true;
     isGoldActionEnabled.value = true;
     isDrawActionEnabled.value = true;
     isVPDisplayed.value = true;
-    isResourcesDisplayed.value = true;
+    isGoldResourcesDisplayed.value = true;
+    isRuneResourcesDisplayed.value = true;
     isOpponentHandDisplayed.value = true;
     isQuestsDisplayed.value = true;
     isDeckDisplayed.value = true;
@@ -51,7 +53,8 @@ export const useTutorialStore = defineStore('tutorial', () => {
     isGoldActionEnabled,
     isRuneActionEnabled,
     isVPDisplayed,
-    isResourcesDisplayed,
+    isGoldResourcesDisplayed,
+    isRuneResourcesDisplayed,
     isOpponentHandDisplayed,
     isQuestsDisplayed,
     isDeckDisplayed,

@@ -7,7 +7,7 @@ import { useBattleUiStore } from '@/battle/stores/battle-ui.store';
 import { until, useEventListener } from '@vueuse/core';
 import { useBattleStore } from '@/battle/stores/battle.store';
 import { RUNES } from '@game/engine/src/utils/rune';
-import type { EntityId } from '@game/engine/src/entity';
+import { waitFor, type BetterOmit } from '@game/shared';
 
 definePage({
   name: 'Tutorial1'
@@ -17,8 +17,11 @@ const tutorial = useTutorialStore();
 const ui = useBattleUiStore();
 const battle = useBattleStore();
 
-const options: Pick<TutorialSessionOptions, 'mapId' | 'teams' | 'steps'> = {
+const options: BetterOmit<TutorialSessionOptions, 'history'> = {
   mapId: 'tutorial-1',
+  configOverrides: {
+    SHUFFLE_DECK_ON_GAME_START: false
+  },
   teams: [
     [
       {
@@ -31,9 +34,9 @@ const options: Pick<TutorialSessionOptions, 'mapId' | 'teams' | 'steps'> = {
             { blueprintId: 'red-footman' },
             { blueprintId: 'red-footman' },
             { blueprintId: 'red-footman' },
-            { blueprintId: 'red-footman' },
-            { blueprintId: 'red-footman' },
-            { blueprintId: 'red-footman' },
+            { blueprintId: 'red-fireball' },
+            { blueprintId: 'red-berserk' },
+            { blueprintId: 'red-fireball' },
             { blueprintId: 'red-footman' },
             { blueprintId: 'red-footman' },
             { blueprintId: 'red-footman' }
@@ -77,11 +80,11 @@ const options: Pick<TutorialSessionOptions, 'mapId' | 'teams' | 'steps'> = {
         tutorial.isDrawActionEnabled = false;
         tutorial.isGoldActionEnabled = false;
         tutorial.isRuneActionEnabled = false;
-        tutorial.isResourcesDisplayed = false;
+        tutorial.isGoldResourcesDisplayed = false;
+        tutorial.isRuneResourcesDisplayed = false;
         tutorial.isDeckDisplayed = false;
         tutorial.isVPDisplayed = false;
         tutorial.isQuestsDisplayed = false;
-        tutorial.isResourcesDisplayed = false;
         tutorial.isHandDisplayed = false;
         tutorial.isOpponentHandDisplayed = false;
         tutorial.isEndTurnDisplayed = false;
@@ -90,7 +93,7 @@ const options: Pick<TutorialSessionOptions, 'mapId' | 'teams' | 'steps'> = {
       expectedInputs: [
         {
           type: 'move',
-          payload: { unitId: 'unit_1', playerId: 'player', x: 3, y: 2, z: 0 }
+          payload: { unitId: 'unit_1', playerId: 'player', x: 2, y: 2, z: 0 }
         }
       ],
       meta: {},
@@ -130,7 +133,7 @@ const options: Pick<TutorialSessionOptions, 'mapId' | 'teams' | 'steps'> = {
           text: 'Click on the highlighted tile to move.',
           canClickNext: false,
           onEnter() {
-            tutorial.highlightedCell = { x: 3, y: 2, z: 0 };
+            tutorial.highlightedCell = { x: 2, y: 2, z: 0 };
           },
           onLeave() {
             tutorial.highlightedCell = null;
@@ -182,7 +185,7 @@ const options: Pick<TutorialSessionOptions, 'mapId' | 'teams' | 'steps'> = {
       expectedInputs: [
         {
           type: 'move',
-          payload: { playerId: 'ai', unitId: 'unit_2', x: 4, y: 2, z: 0 }
+          payload: { playerId: 'ai', unitId: 'unit_2', x: 3, y: 2, z: 0 }
         },
         {
           type: 'endTurn',
@@ -194,11 +197,14 @@ const options: Pick<TutorialSessionOptions, 'mapId' | 'teams' | 'steps'> = {
         {
           text: 'It is now my turn to play. I also have my own general that I can move.',
           canClickNext: true,
-          onLeave() {
+          async onLeave() {
+            await waitFor(500);
             battle.dispatch({
               type: 'move',
-              payload: { playerId: 'ai', unitId: 'unit_2', x: 4, y: 2, z: 0 }
+              payload: { playerId: 'ai', unitId: 'unit_2', x: 3, y: 2, z: 0 }
             });
+
+            await waitFor(1000);
             battle.dispatch({
               type: 'endTurn',
               payload: { playerId: 'ai' }
@@ -211,7 +217,7 @@ const options: Pick<TutorialSessionOptions, 'mapId' | 'teams' | 'steps'> = {
       expectedInputs: [
         {
           type: 'attack',
-          payload: { playerId: 'player', unitId: 'unit_1', x: 4, y: 2, z: 0 }
+          payload: { playerId: 'player', unitId: 'unit_1', x: 3, y: 2, z: 0 }
         }
       ],
       meta: {},
@@ -224,7 +230,7 @@ const options: Pick<TutorialSessionOptions, 'mapId' | 'teams' | 'steps'> = {
           text: 'Select your general, and click on the enemy unit.',
           canClickNext: false,
           onEnter() {
-            tutorial.highlightedCell = { x: 4, y: 2, z: 0 };
+            tutorial.highlightedCell = { x: 3, y: 2, z: 0 };
           },
           onLeave() {
             tutorial.highlightedCell = null;
@@ -243,7 +249,7 @@ const options: Pick<TutorialSessionOptions, 'mapId' | 'teams' | 'steps'> = {
           payload: {
             playerId: 'player',
             index: 0,
-            targets: [{ x: 2, y: 2, z: 0 }]
+            targets: [{ x: 2, y: 3, z: 0 }]
           }
         },
         { type: 'endTurn', payload: { playerId: 'player' } }
@@ -251,7 +257,7 @@ const options: Pick<TutorialSessionOptions, 'mapId' | 'teams' | 'steps'> = {
       meta: {},
       tooltips: [
         {
-          text: 'You can see the damage done by checking the HP indicator on the bottom right of an unit. When it reaches 0, the unit is estroyed !',
+          text: 'You can see the damage done by checking the HP indicator on the bottom right of an unit. When it reaches 0, the unit is destroyed !',
           canClickNext: true
         },
         {
@@ -269,17 +275,18 @@ const options: Pick<TutorialSessionOptions, 'mapId' | 'teams' | 'steps'> = {
         {
           text: 'I will now summon another unit on the board for you.',
           canClickNext: true,
-          onLeave() {
+          async onLeave() {
             battle.dispatch({
               type: 'runeResourceAction',
               payload: { playerId: 'player', rune: RUNES.RED.id as any }
             });
+            await waitFor(500);
             battle.dispatch({
               type: 'playCard',
               payload: {
                 playerId: 'player',
                 index: 0,
-                targets: [{ x: 2, y: 2, z: 0 }]
+                targets: [{ x: 2, y: 3, z: 0 }]
               }
             });
           }
@@ -303,34 +310,21 @@ const options: Pick<TutorialSessionOptions, 'mapId' | 'teams' | 'steps'> = {
     {
       expectedInputs: [
         {
-          type: 'move',
-          payload: { playerId: 'ai', unitId: 'unit_2', x: 2, y: 3, z: 0 }
-        },
-        {
           type: 'attack',
-          payload: { playerId: 'ai', unitId: 'unit_2', x: 2, y: 2, z: 0 }
+          payload: { playerId: 'ai', unitId: 'unit_2', x: 2, y: 3, z: 0 }
         },
         { type: 'endTurn', payload: { playerId: 'ai' } }
       ],
       onEnter() {
         setTimeout(() => {
-          console.log('dispatch move');
           battle.dispatch({
-            type: 'move',
+            type: 'attack',
             payload: { playerId: 'ai', unitId: 'unit_2', x: 2, y: 3, z: 0 }
           });
           setTimeout(() => {
-            console.log('dispatch attack');
-            battle.dispatch({
-              type: 'attack',
-              payload: { playerId: 'ai', unitId: 'unit_2', x: 2, y: 2, z: 0 }
-            });
-            setTimeout(() => {
-              console.log('dispatch end turn');
-              battle.dispatch({ type: 'endTurn', payload: { playerId: 'ai' } });
-            }, 2000);
-          }, 2000);
-        }, 1000);
+            battle.dispatch({ type: 'endTurn', payload: { playerId: 'ai' } });
+          }, 1000);
+        }, 1500);
       },
       meta: {},
       tooltips: []
@@ -339,11 +333,11 @@ const options: Pick<TutorialSessionOptions, 'mapId' | 'teams' | 'steps'> = {
       expectedInputs: [
         {
           type: 'attack',
-          payload: { playerId: 'player', unitId: 'unit_1', x: 2, y: 3, z: 0 }
+          payload: { playerId: 'player', unitId: 'unit_1', x: 3, y: 2, z: 0 }
         },
         {
           type: 'attack',
-          payload: { playerId: 'player', unitId: 'unit_3', x: 2, y: 3, z: 0 }
+          payload: { playerId: 'player', unitId: 'unit_3', x: 3, y: 2, z: 0 }
         }
       ],
       meta: {},
@@ -359,9 +353,161 @@ const options: Pick<TutorialSessionOptions, 'mapId' | 'teams' | 'steps'> = {
       ]
     },
     {
-      expectedInputs: [],
+      expectedInputs: [
+        {
+          type: 'runeResourceAction',
+          payload: { playerId: 'player', rune: RUNES.RED.id as any }
+        }
+      ],
       meta: {},
-      tooltips: [{ text: 'Tutorial complete', canClickNext: false }]
+      tooltips: [
+        {
+          text: "Good job ! Now, let's learn how to play cards.",
+          canClickNext: true,
+          onLeave() {
+            tutorial.isHandDisplayed = true;
+          }
+        },
+        {
+          text: 'The cards in your hand appear on the bottom of the screen',
+          canClickNext: true,
+          onLeave() {
+            tutorial.isOpponentHandDisplayed = true;
+          }
+        },
+        {
+          text: 'My cards are at the top of the screen, face down.',
+          canClickNext: true
+        },
+        {
+          text: 'You can hover your cards with your mouse to see their details',
+          canClickNext: true
+        },
+        { text: 'To play cards, you need runes and gold.', canClickNext: true },
+        {
+          text: 'The gold cost of a unit it displayed on the top left of the card.',
+          canClickNext: true
+        },
+        {
+          text: 'The amount of gold you currently have is dislayed on the top left of the screen',
+          canClickNext: true,
+          onEnter() {
+            tutorial.isGoldResourcesDisplayed = true;
+            tutorial.highlightedElementId = 'player_player_gold';
+          },
+          onLeave() {
+            tutorial.highlightedElementId = null;
+          }
+        },
+        {
+          text: 'When playing a card, you spend gold equal to its cost. Try to play the highlighted card in your hand by dragging it on the field.',
+          canClickNext: false,
+          onEnter(next) {
+            tutorial.highlightedElementId = 'hand_card_4';
+            const onClick = () => {
+              next();
+              tutorial.highlightedElement?.removeEventListener(
+                'click',
+                onClick
+              );
+            };
+            tutorial.highlightedElement?.addEventListener('click', onClick);
+          },
+          onLeave() {
+            tutorial.highlightedElementId = null;
+          }
+        },
+        {
+          text: "It didn't work ! That is because you are missing some RUNES.",
+          canClickNext: true
+        },
+        {
+          text: 'There are five types of runes that you can gain to play cards. Once acquired, you will never lose them, even when playing cards.',
+          canClickNext: true,
+          onEnter() {
+            tutorial.isRuneResourcesDisplayed = true;
+          }
+        },
+        {
+          text: 'You can add a rune of your choice once per turn.',
+          canClickNext: true,
+          onEnter() {
+            tutorial.isRuneActionEnabled = true;
+          }
+        },
+        {
+          text: 'The card you were trying to play required one red rune, and a second of any color. Try to gain a second red rune.',
+          canClickNext: false,
+          onEnter() {
+            tutorial.highlightedElementId = 'rune_action_red';
+          },
+          onLeave() {
+            tutorial.highlightedElementId = null;
+          }
+        }
+      ]
+    },
+    {
+      expectedInputs: [
+        {
+          type: 'playCard',
+          payload: {
+            playerId: 'player',
+            index: 4,
+            targets: [{ x: 2, y: 1, z: 0 }]
+          }
+        }
+      ],
+      meta: {},
+      tooltips: [
+        {
+          text: 'Nice, you should now be able to play your Berserk.',
+          canClickNext: true
+        },
+        {
+          text: 'Drag the card to the highlighted tile to play it',
+          canClickNext: false,
+          onEnter() {
+            tutorial.highlightedCell = { x: 2, y: 1, z: 0 };
+            tutorial.highlightedElementId = 'hand_card_4';
+          },
+          onLeave() {
+            tutorial.highlightedCell = null;
+            tutorial.highlightedElementId = null;
+          }
+        }
+      ]
+    },
+    {
+      expectedInputs: [
+        {
+          type: 'playCard',
+          payload: {
+            playerId: 'player',
+            index: 3,
+            targets: [{ x: 3, y: 2, z: 0 }]
+          }
+        }
+      ],
+      meta: {},
+      tooltips: [
+        {
+          text: 'The position of your general on the board is very important. You can only play other units nearby him.',
+          canClickNext: true
+        },
+        {
+          text: 'The same reasoning goes for the next type of card: Spell Cards. Most of range have a range based on your general position.',
+          canClickNext: true
+        },
+        {
+          text: '"Fireball" is a card that deals damage to a unit on the board. try to use it on the enemy general',
+          canClickNext: true,
+          onEnter() {
+            tutorial.highlightedElementId = 'hand_card_3';
+            tutorial.highlightedCell = { x: 3, y: 2, z: 0 };
+          }
+        }
+      ]
     }
   ]
 };

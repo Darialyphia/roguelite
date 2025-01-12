@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { config as engineConfig } from '@game/engine/src/config';
 import { Rune, RUNES } from '@game/engine/src/utils/rune';
 import type { PlayerViewModel } from '../player.model';
 import {
@@ -16,6 +15,7 @@ import UiSimpleTooltip from '@/ui/components/UiSimpleTooltip.vue';
 import { GAME_EVENTS } from '@game/engine/src/game/game';
 import {
   useBattleEvent,
+  useGame,
   useGameClientState
 } from '@/battle/stores/battle.store';
 import { useTutorialStore } from '@/tutorial/tutorial.store';
@@ -24,6 +24,8 @@ const { player, inverted } = defineProps<{
   player: PlayerViewModel;
   inverted?: boolean;
 }>();
+
+const game = useGame();
 
 const getRuneCountByType = (rune: Rune) =>
   player.runes.filter(r => r.equals(rune)).length;
@@ -77,14 +79,12 @@ const tutorial = useTutorialStore();
     <div class="name dual-color-text" :data-text="player.name">
       {{ player.name }}
     </div>
-    <ul
-      class="resources"
-      :class="!tutorial.isResourcesDisplayed && 'tutorial-hidden'"
-    >
+    <ul class="resources">
       <UiSimpleTooltip v-for="rune in runes" :key="rune.type">
         <template #trigger>
           <li
             class="rune"
+            :class="!tutorial.isRuneResourcesDisplayed && 'tutorial-hidden'"
             :style="{
               '--bg': `url('/assets/ui/rune-${rune.type}-small.png')`
             }"
@@ -97,7 +97,11 @@ const tutorial = useTutorialStore();
 
       <UiSimpleTooltip>
         <template #trigger>
-          <li class="gold">
+          <li
+            :id="`player_${player.id}_gold`"
+            class="gold"
+            :class="!tutorial.isGoldResourcesDisplayed && 'tutorial-hidden'"
+          >
             <span class="dual-color-text" :data-text="player.gold">
               {{ player.gold }}
             </span>
@@ -142,8 +146,7 @@ const tutorial = useTutorialStore();
             </HoverCardRoot>
 
             <div
-              v-for="i in engineConfig.MAX_ONGOING_QUESTS -
-              player.quests.length"
+              v-for="i in game.config.MAX_ONGOING_QUESTS - player.quests.length"
               :key="i"
               class="empty"
             />
@@ -153,31 +156,6 @@ const tutorial = useTutorialStore();
         Ongoing quests.
       </UiSimpleTooltip>
     </div>
-
-    <!-- <ProgressRoot
-      v-model="player.victoryPoints"
-      class="vp-progress"
-      :class="!tutorial.isVPDisplayed && 'tutorial-hidden'"
-      :max="engineConfig.VP_WIN_THRESHOLD"
-    >
-      <ProgressIndicator as-child>
-        <UiSimpleTooltip>
-          <template #trigger>
-            <div
-              class="indicator"
-              :style="{ '--score': player.victoryPoints }"
-            />
-          </template>
-          <div>
-            <div>Collect VP to win the game.</div>
-            <br />
-            <div>- When you reach 5 VP, your opponent draws 1 card.</div>
-            <br />
-            <div>- When you reach 10 VP, your opponent draws 1 more card.</div>
-          </div>
-        </UiSimpleTooltip>
-      </ProgressIndicator>
-    </ProgressRoot> -->
 
     <div
       class="vp"
