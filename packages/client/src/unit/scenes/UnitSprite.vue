@@ -72,7 +72,7 @@ const filters = computed(() => {
     result.push(inAoeFilter);
   }
 
-  if (unit.currentAp === 0) {
+  if (unit.isExhausted) {
     result.push(exhaustedFilter);
   }
 

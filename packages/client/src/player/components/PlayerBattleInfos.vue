@@ -154,7 +154,7 @@ const tutorial = useTutorialStore();
       </UiSimpleTooltip>
     </div>
 
-    <ProgressRoot
+    <!-- <ProgressRoot
       v-model="player.victoryPoints"
       class="vp-progress"
       :class="!tutorial.isVPDisplayed && 'tutorial-hidden'"
@@ -177,7 +177,7 @@ const tutorial = useTutorialStore();
           </div>
         </UiSimpleTooltip>
       </ProgressIndicator>
-    </ProgressRoot>
+    </ProgressRoot> -->
 
     <div
       class="vp"
@@ -220,9 +220,7 @@ const tutorial = useTutorialStore();
 .player-infos {
   height: calc(var(--pixel-art-scale) * 68px);
   display: grid;
-  grid-template-columns: auto calc(var(--pixel-art-scale) * 12px) calc(
-      var(--pixel-art-scale) * 40px
-    );
+  grid-template-columns: auto calc(var(--pixel-art-scale) * 40px);
   grid-template-rows:
     auto calc(var(--pixel-art-scale) * 13px)
     calc(var(--pixel-art-scale) * 34px);
@@ -230,17 +228,17 @@ const tutorial = useTutorialStore();
   column-gap: calc(var(--pixel-art-scale) * 3px);
   font-family: 'Silkscreen';
   grid-template-areas:
-    'name progress vp'
-    'resources progress vp'
-    'bottom progress vp';
+    'name vp'
+    'resources vp'
+    'bottom vp';
   &.is-inverted {
     grid-template-columns:
       calc(var(--pixel-art-scale) * 40px)
-      calc(var(--pixel-art-scale) * 12px) auto;
+      auto;
     grid-template-areas:
-      'vp progress name'
-      'vp progress resources'
-      'vp progress bottom';
+      'vp name'
+      'vp resources'
+      'vp bottom';
   }
   filter: drop-shadow(0 0 5px hsl(0 0 0 / 0.7));
   /* background-color: #32021b; */

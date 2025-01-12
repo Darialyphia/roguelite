@@ -1,5 +1,5 @@
 import type { Point3D, Values } from '@game/shared';
-import { config } from '../config';
+import {} from '../config';
 import type { Game } from '../game/game';
 import type { Unit } from '../unit/unit.entity';
 import { Damage } from './damage/damage';
@@ -23,8 +23,8 @@ export const COMBAT_EVENTS = {
 export type CombatEvent = Values<typeof COMBAT_EVENTS>;
 
 export type CombatEventMap = {
-  [COMBAT_EVENTS.BEFORE_ATTACK]: [{ target: Point3D; cost: number }];
-  [COMBAT_EVENTS.AFTER_ATTACK]: [{ target: Point3D; cost: number }];
+  [COMBAT_EVENTS.BEFORE_ATTACK]: [{ target: Point3D }];
+  [COMBAT_EVENTS.AFTER_ATTACK]: [{ target: Point3D }];
   [COMBAT_EVENTS.BEFORE_COUNTERATTACK]: [{ target: Point3D }];
   [COMBAT_EVENTS.AFTER_COUNTERATTACK]: [{ target: Point3D }];
   [COMBAT_EVENTS.BEFORE_DEAL_DAMAGE]: [{ targets: Unit[]; damage: Damage }];
@@ -51,10 +51,6 @@ export class CombatComponent {
     return this._attacksCount;
   }
 
-  get nextAttackApCost() {
-    return this.unit.apCostPerAttack + config.AP_INCREASE_PER_ATTACK * this._attacksCount;
-  }
-
   get on() {
     return this.emitter.on.bind(this.emitter);
   }
@@ -65,6 +61,10 @@ export class CombatComponent {
 
   get off() {
     return this.emitter.off.bind(this.emitter);
+  }
+
+  setAttackCount(count: number) {
+    this._attacksCount = count;
   }
 
   resetAttackCount() {
@@ -97,10 +97,8 @@ export class CombatComponent {
   }
 
   attack(target: Point3D) {
-    const cost = this.nextAttackApCost;
     this.emitter.emit(COMBAT_EVENTS.BEFORE_ATTACK, {
-      target,
-      cost
+      target
     });
     const targets = this.unit.attackAOEShape.getUnits([target]);
 
@@ -121,8 +119,7 @@ export class CombatComponent {
     const shouldCounterAttack = unit.canCounterAttackAt(this.unit.position);
 
     this.emitter.emit(COMBAT_EVENTS.AFTER_ATTACK, {
-      target,
-      cost
+      target
     });
 
     if (shouldCounterAttack) {

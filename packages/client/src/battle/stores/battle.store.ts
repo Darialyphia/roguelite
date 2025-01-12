@@ -308,14 +308,8 @@ export const usePathHelpers = () => {
         }
 
         const path = getPath(unit, cell, unit.remainingMovement);
-        if (!path) {
-          return false;
-        }
-        const totalCost =
-          path.distance * unit.getUnit().apCostPerMovement +
-          unit.getUnit().apCostPerAttack;
 
-        return totalCost <= unit.currentAp;
+        return !!path;
       });
     }
   };

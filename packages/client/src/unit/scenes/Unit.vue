@@ -13,7 +13,6 @@ import AlphaTransition from '@/ui/scenes/AlphaTransition.vue';
 import { waitFor } from '@game/shared';
 import { GAME_EVENTS } from '@game/engine/src/game/game';
 import { useCamera } from '@/board/composables/useCamera';
-import UnitApIndicators from './UnitApIndicators.vue';
 import UnitResourceIndicator from './UnitResourceIndicator.vue';
 import UnitModifierSprite from './UnitModifierSprite.vue';
 import { useBattleEvent } from '@/battle/stores/battle.store';
@@ -96,7 +95,6 @@ const spawnAnimation = (container: Container) => {
     >
       <container>
         <!-- <UnitGeneralIndicator v-if="unit.isGeneral" :unit="unit" /> -->
-        <UnitApIndicators :unit="unit" />
         <UnitStatsIndicators
           :unit="unit"
           v-if="!unit.isGeneral || !unit.isDead"

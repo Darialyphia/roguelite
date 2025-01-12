@@ -81,25 +81,8 @@ export class Team extends Entity {
     this.players.forEach(player => {
       player.onBeforeTeamVPChange(amount);
     });
-    const prev = this._victoryPoints;
     this._victoryPoints += amount;
 
-    if (
-      prev < this.game.config.VP_SECOND_REWARD_THRESHOLD &&
-      this.victoryPoints >= this.game.config.VP_SECOND_REWARD_THRESHOLD
-    ) {
-      this.opponents.forEach(opponent => {
-        opponent.draw(1);
-      });
-    }
-    if (
-      prev < this.game.config.VP_FIRST_REWARD_THRESHOLD &&
-      this.victoryPoints >= this.game.config.VP_FIRST_REWARD_THRESHOLD
-    ) {
-      this.opponents.forEach(opponent => {
-        opponent.draw(1);
-      });
-    }
     if (
       this._victoryPoints >= this.game.config.VP_WIN_THRESHOLD &&
       this.game.gamePhaseSystem.phase === GAME_PHASES.BATTLE

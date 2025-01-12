@@ -25,6 +25,8 @@ export type MoveEventMap = {
 export class MovementComponent {
   position: Position;
 
+  private _movementsCount = 0;
+
   private pathfinding: PathfinderComponent;
 
   private emitter = new TypedEventEmitter<MoveEventMap>();
@@ -46,6 +48,10 @@ export class MovementComponent {
     return this.emitter.off.bind(this.emitter);
   }
 
+  get movementsCount() {
+    return this._movementsCount;
+  }
+
   get x() {
     return this.position.x;
   }
@@ -60,6 +66,14 @@ export class MovementComponent {
 
   isAt(point: Point3D) {
     return this.position.equals(point);
+  }
+
+  resetMovementsCount() {
+    this._movementsCount = 0;
+  }
+
+  setMovementCount(count: number) {
+    this._movementsCount = count;
   }
 
   getAllPossibleMoves(maxDistance: number) {
@@ -91,6 +105,7 @@ export class MovementComponent {
         destination: Vec3.fromPoint3D(point)
       });
       this.position = Position.fromPoint3D(point);
+      this._movementsCount++;
       this.emitter.emit(MOVE_EVENTS.AFTER_MOVE, {
         position: this.position,
         previousPosition: currentPosition

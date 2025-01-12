@@ -80,6 +80,10 @@ export class UnitCard extends Card<UnitCardBlueprint> {
       aoeShape.getUnits(targets)
     );
 
+    if (this.unit.shouldDeactivateWhenSummoned) {
+      this.unit.deactivate();
+    }
+
     this.emitter.emit(CARD_EVENTS.AFTER_PLAY, {
       targets,
       vfx: this.blueprint.vfx.play(this.game, this)

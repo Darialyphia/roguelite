@@ -175,6 +175,10 @@ export class Player extends Entity {
     return this.runeManager.getMissing.bind(this.runeManager);
   }
 
+  get isActive() {
+    return this.game.turnSystem.activePlayer.equals(this);
+  }
+
   get hand() {
     return [...this.cardManager.hand];
   }

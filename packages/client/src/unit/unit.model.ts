@@ -17,9 +17,7 @@ export type UnitViewModel = {
   spriteId: string;
   iconId: string;
   position: Vec3;
-  currentAp: number;
   currentHp: number;
-  maxAp: number;
   maxHp: number;
   atk: number;
   player: PlayerViewModel;
@@ -28,6 +26,7 @@ export type UnitViewModel = {
   keywords: Keyword[];
   isGeneral: boolean;
   isDead: boolean;
+  isExhausted: boolean;
   remainingMovement: number;
   possibleMoves: Point3D[];
   modifiers: Array<{
@@ -45,7 +44,6 @@ export type UnitViewModel = {
 };
 
 export const makeUnitViewModel = (game: Game, unit: Unit): UnitViewModel => {
-  const moves = unit.getPossibleMoves();
   return {
     id: unit.id,
     name: unit.name,
@@ -53,14 +51,13 @@ export const makeUnitViewModel = (game: Game, unit: Unit): UnitViewModel => {
     spriteId: unit.spriteId,
     iconId: unit.iconId,
     position: Vec3.fromPoint3D(unit.position),
-    currentAp: unit.ap.current,
     currentHp: unit.hp.current,
-    maxAp: unit.ap.max,
     maxHp: unit.hp.max,
     atk: unit.atk,
     player: makePlayerViewModel(game, unit.player),
     card: makeCardViewModel(game, unit.card),
     isDead: unit.isDead,
+    isExhausted: unit.isExhausted,
     screenPosition: {
       x: game.boardSystem.getCellAt(unit.position)!.hex.x,
       y:

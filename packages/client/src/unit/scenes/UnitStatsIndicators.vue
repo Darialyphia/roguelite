@@ -17,23 +17,6 @@ const textures = computed(() => {
   return createSpritesheetFrameObject('idle', sheet.value.sheets.base.base);
 });
 
-useBattleEvent(GAME_EVENTS.UNIT_AFTER_MOVE, e => {
-  return new Promise(resolve => {
-    if (!e.unit.equals(unit.getUnit())) return resolve();
-    // eslint-disable-next-line vue/no-mutating-props
-    unit.currentAp -= e.cost;
-    resolve();
-  });
-});
-useBattleEvent(GAME_EVENTS.UNIT_AFTER_ATTACK, e => {
-  return new Promise(resolve => {
-    if (!e.unit.equals(unit.getUnit())) return resolve();
-    // eslint-disable-next-line vue/no-mutating-props
-    unit.currentAp -= e.cost;
-    resolve();
-  });
-});
-
 const sprite = ref<AnimatedSprite>();
 useBattleEvent('unit.before_destroy', async e => {
   if (!e.unit.equals(unit.getUnit())) return Promise.resolve();

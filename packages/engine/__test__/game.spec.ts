@@ -5,25 +5,6 @@ import { Damage } from '../src/combat/damage/damage';
 import { NoScalingStrategy } from '../src/combat/damage/scaling/no-scaling.strategy';
 import { NoMitigationStrategy } from '../src/combat/damage/mitigation/no-mitigation.strategy';
 
-test('Victory Point threshold draws trigger properly', () => {
-  const { team1, player2 } = testGameBuilder()
-    .withP2Deck({
-      general: { blueprintId: 'red-general-flame-lord' },
-      cards: Array.from({ length: 10 }, () => ({ blueprintId: 'red-footman' }))
-    })
-    .build();
-  expect(player2.hand.length).toBe(config.INITIAL_HAND_SIZE);
-
-  team1.earnVictoryPoints(config.VP_FIRST_REWARD_THRESHOLD);
-
-  expect(player2.hand.length).toBe(config.INITIAL_HAND_SIZE + 1);
-
-  team1.earnVictoryPoints(
-    config.VP_SECOND_REWARD_THRESHOLD - config.VP_FIRST_REWARD_THRESHOLD
-  );
-  expect(player2.hand.length).toBe(config.INITIAL_HAND_SIZE + 2);
-});
-
 test('General damage Victory Point reward trigger properly', () => {
   const { player1, player2 } = testGameBuilder()
     .withP2Deck({

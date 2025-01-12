@@ -8,15 +8,20 @@ export class RushModifierMixin extends UnitModifierMixin {
     super(game);
   }
 
-  onApplied(unit: Unit): void {
-    unit.ap.add(unit.ap.max);
+  interceptor() {
+    return false;
+  }
 
+  onApplied(unit: Unit): void {
+    unit.addInterceptor('shouldDeactivateWhenSummoned', this.interceptor.bind(this));
     unit.addKeyword(KEYWORDS.RUSH);
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
-  onRemoved() {}
+  onRemoved(unit: Unit): void {
+    unit.removeInterceptor('shouldDeactivateWhenSummoned', this.interceptor);
+    unit.removeKeyword(KEYWORDS.RUSH);
+  }
 
   // eslint-disable-next-line @typescript-eslint/no-empty-function
-  onReapplied() {}
+  onReapplied(): void {}
 }
