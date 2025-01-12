@@ -220,7 +220,6 @@ const tutorial = useTutorialStore();
           <button
             id="end-turn-action-button"
             aria-label="end turn"
-            class="tutorial-highlighted"
             :disabled="!userPlayer.isActive || !tutorial.isEndTurnDisplayed"
             style="--bg: url('/assets/ui/end-turn-action.png')"
             @click="

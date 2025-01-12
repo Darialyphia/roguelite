@@ -14,6 +14,7 @@
     cursor: url('/assets/ui/cursor.png'), auto;
     image-rendering: pixelated;
     font-smooth: never;
+    user-select: none;
     -webkit-font-smoothing: none;
     text-size-adjust: none;
     -webkit-text-size-adjust: none;

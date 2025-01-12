@@ -66,7 +66,7 @@ useBattleEvent(GAME_EVENTS.UNIT_BEFORE_DESTROY, async e => {
 </script>
 
 <template>
-  <container :scale-x="scaleX" ref="container">
+  <container :scale-x="scaleX" ref="container" :y="-8">
     <slot />
   </container>
 </template>

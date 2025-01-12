@@ -73,7 +73,7 @@ const getTextStyle = (color: number) => {
     event-mode="none"
     playing
     loop
-    :y="35"
+    :y="25"
   >
     <pixi-text
       :style="getTextStyle(0xff0000)"

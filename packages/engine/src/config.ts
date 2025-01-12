@@ -1,6 +1,6 @@
 export const config = {
-  TILE_WIDTH: 64,
-  TILE_HEIGHT: 44,
+  TILE_WIDTH: 96,
+  TILE_HEIGHT: 54,
 
   // the ap spent to move one tile
   AP_COST_PER_MOVEMENT: 1,

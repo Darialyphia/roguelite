@@ -68,7 +68,6 @@ onUnmounted(() => {
 });
 
 const nextText = async () => {
-  console.log('next text leave', currentTextIndex.value);
   const isLastTooltip =
     currentTextIndex.value === currentStep.value!.tooltips.length - 1;
   await currentTooltip.value?.onLeave?.();
@@ -76,7 +75,6 @@ const nextText = async () => {
     currentTextIndex.value++;
   }
   await currentTooltip.value?.onEnter?.(nextText);
-  console.log('next text enter', currentTextIndex.value);
 };
 </script>
 

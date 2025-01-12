@@ -82,8 +82,10 @@ const spawnAnimation = (container: Container) => {
       @enter="spawnAnimation"
     >
       <UnitOrientation :unit="unit">
+        <!-- <container :scale="0.5" :y="10"> -->
         <UnitShadow :unit="unit" />
         <UnitSprite :unit="unit" />
+        <!-- </container> -->
       </UnitOrientation>
     </PTransition>
     <UnitVFX :unit="unit" />

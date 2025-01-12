@@ -17,7 +17,7 @@ const { w, h } = {
 };
 const { offsetW, offsetH } = {
   offsetW: -config.TILE_SIZE.x / 2,
-  offsetH: -config.TILE_SIZE.z * 3.5
+  offsetH: -config.TILE_SIZE.z * 2.5
 };
 const hitArea = Hitbox.from(
   [
@@ -55,5 +55,17 @@ const hitArea = Hitbox.from(
     :anchor="0.5"
     :hitArea="hitArea"
     :textures="sheet.sheets.base.tile.animations[0]"
-  />
+  >
+    <!-- <graphics
+      @render="
+        g => {
+          g.clear();
+          g.lineStyle({ color: 'red', width: 3 });
+          hitArea.shape.forEach(polygon => {
+            g.drawPolygon(polygon);
+          });
+        }
+      "
+    /> -->
+  </animated-sprite>
 </template>

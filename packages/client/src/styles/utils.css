@@ -133,10 +133,10 @@ button:is(.primary-button, .error-button) {
     filter: brightness(100%);
   }
   to {
-    filter: brightness(300%) contrast(200%);
+    filter: brightness(300%) contrast(250%);
   }
 }
 
 .tutorial-highlighted {
-  animation: tutorial-highlight 3s var(--ease-3) infinite alternate;
+  animation: tutorial-highlight 2s var(--ease-3) infinite alternate;
 }

@@ -56,7 +56,6 @@ export class TutorialSession extends ClientSession {
 
   next() {
     this.currentInputIndex++;
-    console.log('Session.next', this.currentInputIndex, this.currentExpectedInput);
     if (this.currentExpectedInput) return;
 
     this.currentStep.onLeave?.(this);

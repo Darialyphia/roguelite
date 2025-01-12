@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { useSpritesheet } from '@/shared/composables/useSpritesheet';
-import { useBattleUiStore } from '@/battle/stores/battle-ui.store';
+import { UI_MODES, useBattleUiStore } from '@/battle/stores/battle-ui.store';
 import { OutlineFilter } from '@pixi/filter-outline';
 import { type Filter } from 'pixi.js';
 import type { UnitViewModel } from '../unit.model';
@@ -8,6 +8,7 @@ import { ColorOverlayFilter } from '@pixi/filter-color-overlay';
 import { AdjustmentFilter } from '@pixi/filter-adjustment';
 import { createSpritesheetFrameObject } from '@/utils/sprite';
 import { useCamera } from '@/board/composables/useCamera';
+import { usePathHelpers } from '@/battle/stores/battle.store';
 
 const { unit } = defineProps<{ unit: UnitViewModel }>();
 
@@ -46,6 +47,20 @@ const isInCardAoe = computed(() => {
   return aoe?.getUnits(targets).some(u => u.equals(unit.getUnit()));
 });
 
+const isInAttackAoe = computed(() => {
+  if (ui.mode !== UI_MODES.BASIC) return false;
+  if (!ui.selectedUnit) return false;
+  if (!ui.hoveredCell) return false;
+
+  return (
+    ui.selectedUnit.canAttackAt(ui.hoveredCell) &&
+    ui.selectedUnit
+      .getUnit()
+      .attackAOEShape.getUnits([ui.hoveredCell])
+      .some(u => u.equals(unit.getUnit()))
+  );
+});
+
 const filters = computed(() => {
   const result: Filter[] = [];
 
@@ -53,7 +68,7 @@ const filters = computed(() => {
     result.push(selectedFilter);
   }
 
-  if (isInCardAoe.value) {
+  if (isInCardAoe.value || isInAttackAoe.value) {
     result.push(inAoeFilter);
   }
 

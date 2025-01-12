@@ -12,10 +12,12 @@ export class MeleeTargetingStrategy implements TargetingStrategy {
   constructor(
     private game: Game,
     private unit: Unit,
-    private type: TargetingType
+    private type: TargetingType,
+    private allowCenter = true
   ) {}
 
   isWithinRange(point: Point3D) {
+    if (!this.allowCenter && this.unit.position.equals(point)) return false;
     if (!this.unit.position.isNearby(point, this.game)) return false;
 
     return true;

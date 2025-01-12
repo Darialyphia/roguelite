@@ -66,7 +66,7 @@ const transitionProps = {
   appear: true,
   duration: { enter: 300, leave: 300 },
   beforeEnter: { alpha: 0, y: -10 },
-  enter: { alpha: 1, y: -45 },
+  enter: { alpha: 1, y: -40 },
   leave: { alpha: 0 }
 };
 </script>

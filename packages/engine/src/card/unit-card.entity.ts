@@ -49,7 +49,12 @@ export class UnitCard extends Card<UnitCardBlueprint> {
   }
 
   get attackPattern() {
-    return new MeleeTargetingStrategy(this.game, this.unit, TARGETING_TYPE.ENEMY_UNIT);
+    return new MeleeTargetingStrategy(
+      this.game,
+      this.unit,
+      TARGETING_TYPE.ENEMY_UNIT,
+      false
+    );
   }
 
   play(targets: Point3D[]) {

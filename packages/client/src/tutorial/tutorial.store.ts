@@ -5,6 +5,17 @@ export const useTutorialStore = defineStore('tutorial', () => {
   const highlightedCell = ref<Nullable<Point3D>>(null);
   const highlightedElementId = ref<Nullable<string>>(null);
 
+  const highlightedElement = computed(() =>
+    highlightedElementId.value
+      ? (document.getElementById(highlightedElementId.value) as HTMLElement)
+      : null
+  );
+
+  watch(highlightedElement, (el, prevEl) => {
+    prevEl?.classList.remove('tutorial-highlighted');
+    el?.classList.add('tutorial-highlighted');
+  });
+
   const isRuneActionEnabled = ref(true);
   const isGoldActionEnabled = ref(true);
   const isDrawActionEnabled = ref(true);
@@ -35,6 +46,7 @@ export const useTutorialStore = defineStore('tutorial', () => {
     isResourceWarningEnabled,
     highlightedCell,
     highlightedElementId,
+    highlightedElement,
     isDrawActionEnabled,
     isGoldActionEnabled,
     isRuneActionEnabled,

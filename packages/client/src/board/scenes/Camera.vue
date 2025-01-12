@@ -10,8 +10,8 @@ const app = useApplication();
 const game = useGame();
 const camera = useCamera();
 const WORLD_PADDING = {
-  x: 100,
-  y: 50
+  x: -240,
+  y: -50
 };
 
 const boardSize = computed(() => ({
@@ -20,11 +20,8 @@ const boardSize = computed(() => ({
 }));
 
 const worldSize = computed(() => ({
-  width: Math.min(
-    boardSize.value.width + WORLD_PADDING.x,
-    window.innerWidth / 2
-  ),
-  height: boardSize.value.height + WORLD_PADDING.y
+  width: boardSize.value.width + Math.abs(WORLD_PADDING.x) * 2,
+  height: boardSize.value.height + Math.abs(WORLD_PADDING.y)
 }));
 
 until(camera.viewport)
@@ -35,14 +32,14 @@ until(camera.viewport)
         mouseButtons: 'left'
       })
       .decelerate({ friction: 0.88 })
-      // .wheel({ smooth: 20, percent: 0.25 })
+      .wheel({ smooth: 20, percent: 0.25 })
       .clamp({
         direction: 'all'
       })
       .clampZoom({ minScale: config.MIN_ZOOM, maxScale: config.MAX_ZOOM })
       .setZoom(config.INITIAL_ZOOM, false)
       .pinch({ noDrag: true })
-      .moveCenter({ x: 0, y: WORLD_PADDING.y * 6 });
+      .moveCenter({ x: 0, y: 0 });
   });
 
 useEventListener('resize', () => {
