@@ -501,7 +501,7 @@ const options: BetterOmit<TutorialSessionOptions, 'history'> = {
       meta: {},
       tooltips: [
         {
-          text: "My general's HP are getting low ! I should be careful or you will gain a lot of VICORY POINTS !",
+          text: "My general's HP are getting low ! I should be careful or you will gain a lot of VICTORY POINTS !",
           canClickNext: true
         },
         {
@@ -509,7 +509,14 @@ const options: BetterOmit<TutorialSessionOptions, 'history'> = {
           canClickNext: true
         },
         {
-          text: 'Victory points can be acquired in three different ways : Destroying the enemy general, Vicory Shrines and Quest Cards.',
+          text: 'The current VP score of both players is displayed on the top of the screen',
+          canClickNext: true,
+          onEnter() {
+            tutorial.isVPDisplayed = true;
+          }
+        },
+        {
+          text: 'Victory points can be acquired in three different ways : Destroying the enemy general, Victory Shrines and Quest Cards.',
           canClickNext: true
         }
       ]
