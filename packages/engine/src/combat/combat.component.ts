@@ -69,6 +69,7 @@ export class CombatComponent {
 
   resetAttackCount() {
     this._attacksCount = 0;
+    this._counterAttacksCount = 0;
   }
 
   resetCounterAttackCount() {
