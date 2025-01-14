@@ -7,6 +7,8 @@ import { match } from 'ts-pattern';
 import { RUNES, type Rune } from '@game/engine/src/utils/rune';
 import { useDynamicFontSize } from '@/shared/composables/useDynamicFontSize';
 import TextWithKeywords from './TextWithKeywords.vue';
+import { useElementHover, useMouse } from '@vueuse/core';
+import { clamp } from '@game/shared';
 
 const { card, violations } = defineProps<{
   card: Pick<
@@ -55,10 +57,22 @@ const runeCosts = computed(() => {
     { rune: RUNES.COLORLESS, count: getCostByRune(RUNES.COLORLESS) }
   ];
 });
+
+const root = useTemplateRef('card');
+const { x, y } = useMouse();
+
+const pointerStyle = computed(() => {
+  if (!root.value) return;
+  const rect = root.value.getBoundingClientRect();
+  return {
+    x: clamp(x.value - rect.left, 0, rect.width),
+    y: clamp(y.value - rect.top, 0, rect.height)
+  };
+});
 </script>
 
 <template>
-  <div class="card">
+  <div class="card" ref="card">
     <header class="grid grid-cols-2">
       <div class="cost">
         <StatCircle
@@ -101,13 +115,20 @@ const runeCosts = computed(() => {
     <div class="hp" v-if="card.kind === CARD_KINDS.UNIT">
       <StatCircle :value="card.maxHp!" icon="hp" />
     </div>
+
+    <div class="glare" />
   </div>
 </template>
 
 <style scoped lang="postcss">
 .card {
-  width: calc(1px * v-bind('config.CARD_WIDTH'));
-  height: calc(1px * v-bind('config.CARD_HEIGHT'));
+  --width: calc(1px * v-bind('config.CARD_WIDTH'));
+  --height: calc(1px * v-bind('config.CARD_HEIGHT'));
+  --pointer-x: calc(1px * v-bind('pointerStyle?.x'));
+  --pointer-y: calc(1px * v-bind('pointerStyle?.y'));
+
+  width: var(--width);
+  height: var(--height);
   background: url('/assets/ui/card-front.png'), v-bind(imagePath),
     url('/assets/ui/card-image-background.png');
   background-repeat: no-repeat, no-repeat, no-repeat;
@@ -201,5 +222,27 @@ ul:has(.rune) {
   font-family: var(--font-system-ui);
   font-weight: var(--font-weight-9);
   padding-bottom: 8px;
+}
+
+.glare {
+  position: absolute;
+  pointer-events: none;
+  inset: 0;
+  overflow: hidden;
+  opacity: 0;
+  transition: opacity 0.3s;
+  background-image: radial-gradient(
+    circle at var(--pointer-x) var(--pointer-y),
+    hsla(0, 0%, 100%, 0.8) 10%,
+    hsla(0, 0%, 100%, 0.65) 20%,
+    hsla(0, 0%, 0%, 0.5) 90%
+  );
+
+  /* opacity: var(--card-opacity); */
+  mix-blend-mode: overlay;
+
+  .card:hover & {
+    opacity: 0.8;
+  }
 }
 </style>
