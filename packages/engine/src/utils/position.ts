@@ -1,4 +1,4 @@
-import { isNumber, Vec3, type Point3D } from '@game/shared';
+import { Vec3, type Point3D } from '@game/shared';
 import type { Game } from '../game/game';
 
 export class Position extends Vec3 {

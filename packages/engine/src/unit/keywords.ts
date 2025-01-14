@@ -67,6 +67,14 @@ export const KEYWORDS = {
     name: 'Spellcaster',
     description: 'This unit can use spell cards in place of its general',
     aliases: []
+  },
+  RAGE: {
+    id: 'rage',
+    spriteId: 'keyword-rage',
+    name: 'Rage',
+    description:
+      'At the beginning of its turn, this unit walks towards the nearest me and attacks it if possible',
+    aliases: []
   }
 } as const satisfies Record<string, Keyword>;
 

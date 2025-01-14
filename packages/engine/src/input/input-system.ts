@@ -103,7 +103,7 @@ export class InputSystem extends System<SerializedInput[]> {
   }
 
   dispatch(input: SerializedInput) {
-    this.log(input);
+    // this.log(input);
     if (!this.isActionType(input.type)) return;
     return this.schedule(() => this.handleInput(input));
   }

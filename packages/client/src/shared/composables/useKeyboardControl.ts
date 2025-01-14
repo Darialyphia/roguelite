@@ -65,6 +65,8 @@ export const useKeyboardControl = <TControl extends Control>(
   return useEventListener(eventName, e => {
     const _control = toValue(control);
     if (!isMatch(e, _control)) return;
+    e.preventDefault();
+
     cb(e);
   });
 };
@@ -78,6 +80,7 @@ export const useIsKeyboardControlPressed = <TControl extends Control>(
     if (e.repeat) return;
     const _control = toValue(control);
     if (!isMatch(e, _control)) return;
+    e.preventDefault();
     isPressed.value = true;
   });
   useEventListener('keyup', e => {

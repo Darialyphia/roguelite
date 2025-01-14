@@ -25,6 +25,9 @@ const options: Pick<GameOptions, 'mapId' | 'teams'> = {
         deck: {
           general: { blueprintId: 'red-general-flame-lord' },
           cards: [
+            { blueprintId: 'red-crazed-blood-cultist' },
+            { blueprintId: 'red-crazed-blood-cultist' },
+            { blueprintId: 'red-crazed-blood-cultist' },
             { blueprintId: 'red-burning-blade' },
             { blueprintId: 'red-burning-blade' },
             { blueprintId: 'red-burning-blade' },
@@ -75,6 +78,9 @@ const options: Pick<GameOptions, 'mapId' | 'teams'> = {
         deck: {
           general: { blueprintId: 'red-general-flame-lord' },
           cards: [
+            { blueprintId: 'red-crazed-blood-cultist' },
+            { blueprintId: 'red-crazed-blood-cultist' },
+            { blueprintId: 'red-crazed-blood-cultist' },
             { blueprintId: 'red-burning-blade' },
             { blueprintId: 'red-burning-blade' },
             { blueprintId: 'red-burning-blade' },
@@ -90,30 +96,30 @@ const options: Pick<GameOptions, 'mapId' | 'teams'> = {
             { blueprintId: 'red-warleader' },
             { blueprintId: 'red-warleader' },
             { blueprintId: 'red-warleader' },
-            { blueprintId: 'red-fire-elemental' },
-            { blueprintId: 'red-fire-elemental' },
-            { blueprintId: 'red-fire-elemental' },
             { blueprintId: 'red-berserk' },
             { blueprintId: 'red-berserk' },
             { blueprintId: 'red-berserk' },
+            { blueprintId: 'red-fire-elemental' },
+            { blueprintId: 'red-fire-elemental' },
+            { blueprintId: 'red-fire-elemental' },
             { blueprintId: 'red-avenger' },
             { blueprintId: 'red-avenger' },
             { blueprintId: 'red-avenger' },
             { blueprintId: 'red-exorcist' },
             { blueprintId: 'red-exorcist' },
             { blueprintId: 'red-exorcist' },
-            { blueprintId: 'red-archer' },
-            { blueprintId: 'red-archer' },
-            { blueprintId: 'red-archer' },
-            { blueprintId: 'red-emperor' },
-            { blueprintId: 'red-emperor' },
-            { blueprintId: 'red-emperor' },
-            { blueprintId: 'red-fireball' },
-            { blueprintId: 'red-fireball' },
-            { blueprintId: 'red-fireball' },
             { blueprintId: 'test-quest' },
             { blueprintId: 'test-quest' },
-            { blueprintId: 'test-quest' }
+            { blueprintId: 'test-quest' },
+            { blueprintId: 'red-archer' },
+            { blueprintId: 'red-archer' },
+            { blueprintId: 'red-archer' },
+            { blueprintId: 'red-emperor' },
+            { blueprintId: 'red-emperor' },
+            { blueprintId: 'red-emperor' },
+            { blueprintId: 'red-fireball' },
+            { blueprintId: 'red-fireball' },
+            { blueprintId: 'red-fireball' }
           ]
         }
       }

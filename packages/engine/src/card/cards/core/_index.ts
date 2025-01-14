@@ -16,6 +16,7 @@ import { redWillOWisp } from './red_will-o-wisp';
 import { redBurningBlade } from './red_burning_blade';
 import { tutorialSpell } from './tutorial_spell';
 import { tutorialQuest } from './tutorial_quest';
+import { redCrazedBloodCultist } from './red_crazed_blood_cultist';
 
 export const CORE_CARDS = keyBy(
   [
@@ -32,6 +33,7 @@ export const CORE_CARDS = keyBy(
     redFireball,
     redCombustion,
     redBurningBlade,
+    redCrazedBloodCultist,
     testQuest,
     tutorialSpell,
     tutorialQuest

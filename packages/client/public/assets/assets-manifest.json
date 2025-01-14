@@ -299,6 +299,19 @@
         },
         {
           "alias": [
+            "icon-keyword-rage"
+          ],
+          "src": [
+            "/assets/icons/keyword-rage.png"
+          ],
+          "data": {
+            "tags": {
+              "m": true
+            }
+          }
+        },
+        {
+          "alias": [
             "icon-keyword-ranged"
           ],
           "src": [
@@ -589,6 +602,19 @@
           ],
           "src": [
             "/assets/icons/unit_berserk.png"
+          ],
+          "data": {
+            "tags": {
+              "m": true
+            }
+          }
+        },
+        {
+          "alias": [
+            "icon-unit_crazed-blood-cultist"
+          ],
+          "src": [
+            "/assets/icons/unit_crazed-blood-cultist.png"
           ],
           "data": {
             "tags": {
