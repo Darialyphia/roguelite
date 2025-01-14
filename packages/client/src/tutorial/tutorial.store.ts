@@ -29,6 +29,7 @@ export const useTutorialStore = defineStore('tutorial', () => {
   const isActionWheelDisplayed = ref(true);
   const isEndTurnDisplayed = ref(true);
   const isResourceWarningEnabled = ref(false);
+  const areObstaclesDisplayed = ref(false);
 
   const reset = () => {
     isResourceWarningEnabled.value = false;
@@ -42,6 +43,7 @@ export const useTutorialStore = defineStore('tutorial', () => {
     isQuestsDisplayed.value = true;
     isDeckDisplayed.value = true;
     isEndTurnDisplayed.value = true;
+    areObstaclesDisplayed.value = true;
   };
 
   return {
@@ -61,6 +63,7 @@ export const useTutorialStore = defineStore('tutorial', () => {
     isHandDisplayed,
     isActionWheelDisplayed,
     isEndTurnDisplayed,
+    areObstaclesDisplayed,
     reset
   };
 });

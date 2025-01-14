@@ -173,6 +173,7 @@ const tutorial = useTutorialStore();
       <template #trigger>
         <div class="hex-wrapper">
           <button
+            id="gold-action-button"
             aria-label="gain one additional gold"
             style="--bg: url('/assets/ui/gold-action.png')"
             :disabled="
@@ -199,6 +200,7 @@ const tutorial = useTutorialStore();
       <template #trigger>
         <div class="hex-wrapper">
           <button
+            id="draw-action-button"
             aria-label="draw an additional card"
             style="--bg: url('/assets/ui/draw-action.png')"
             :disabled="
