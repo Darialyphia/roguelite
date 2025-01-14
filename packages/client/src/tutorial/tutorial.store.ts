@@ -28,8 +28,8 @@ export const useTutorialStore = defineStore('tutorial', () => {
   const isDeckDisplayed = ref(true);
   const isActionWheelDisplayed = ref(true);
   const isEndTurnDisplayed = ref(true);
-  const isResourceWarningEnabled = ref(false);
-  const areObstaclesDisplayed = ref(false);
+  const isResourceWarningEnabled = ref(true);
+  const areObstaclesDisplayed = ref(true);
 
   const reset = () => {
     isResourceWarningEnabled.value = false;

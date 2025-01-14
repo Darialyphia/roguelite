@@ -89,6 +89,7 @@ const options: BetterOmit<TutorialSessionOptions, 'history'> = {
         tutorial.isHandDisplayed = false;
         tutorial.isOpponentHandDisplayed = false;
         tutorial.isEndTurnDisplayed = false;
+        tutorial.areObstaclesDisplayed = false;
         tutorial.isResourceWarningEnabled = false;
       },
       expectedInputs: [
