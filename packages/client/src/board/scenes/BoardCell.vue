@@ -27,6 +27,7 @@ import {
   useUserPlayer
 } from '@/battle/stores/battle.store';
 import VirtualFloatingCard from '@/ui/scenes/VirtualFloatingCard.vue';
+import { useTutorialStore } from '@/tutorial/tutorial.store';
 
 const { cell } = defineProps<{ cell: CellViewModel }>();
 const emit = defineEmits<{ ready: [] }>();
@@ -63,6 +64,7 @@ const cardPosition = computed(() =>
 );
 
 const state = useGameClientState();
+const tutorial = useTutorialStore();
 </script>
 
 <template>
@@ -143,7 +145,10 @@ const state = useGameClientState();
         <BoardCellSprite :cell="cell" />
         <BoardCellHighlights :cell="cell" />
         <UiAnimatedSprite assetId="hovered-cell" v-if="isHovered" />
-        <Obstacle v-if="cell.obstacle" :obstacle="cell.obstacle" />
+        <Obstacle
+          v-if="tutorial.areObstaclesDisplayed && cell.obstacle"
+          :obstacle="cell.obstacle"
+        />
         <BoardCellLightVFX :cell="cell" />
       </container>
     </PTransition>
@@ -159,6 +164,9 @@ const state = useGameClientState();
     :position="cardPosition!"
   >
     <Card v-if="cell.unit" :card="cell.unit.card" />
-    <ObstacleCard v-else-if="cell.obstacle" :obstacle="cell.obstacle" />
+    <ObstacleCard
+      v-else-if="cell.obstacle && tutorial.areObstaclesDisplayed"
+      :obstacle="cell.obstacle"
+    />
   </VirtualFloatingCard>
 </template>

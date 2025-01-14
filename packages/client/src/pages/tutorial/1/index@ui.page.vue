@@ -8,6 +8,7 @@ import { until, useEventListener } from '@vueuse/core';
 import { useBattleStore } from '@/battle/stores/battle.store';
 import { RUNES } from '@game/engine/src/utils/rune';
 import { waitFor, type BetterOmit } from '@game/shared';
+import { RouterLink } from 'vue-router';
 
 definePage({
   name: 'Tutorial1'
@@ -16,7 +17,7 @@ definePage({
 const tutorial = useTutorialStore();
 const ui = useBattleUiStore();
 const battle = useBattleStore();
-
+const isFinished = ref(false);
 const options: BetterOmit<TutorialSessionOptions, 'history'> = {
   mapId: 'tutorial-1',
   configOverrides: {
@@ -36,8 +37,8 @@ const options: BetterOmit<TutorialSessionOptions, 'history'> = {
             { blueprintId: 'red-footman' },
             { blueprintId: 'red-fireball' },
             { blueprintId: 'red-berserk' },
-            { blueprintId: 'red-fireball' },
-            { blueprintId: 'red-footman' },
+            { blueprintId: 'tutorial-spell' },
+            { blueprintId: 'tutorial-quest' },
             { blueprintId: 'red-footman' },
             { blueprintId: 'red-footman' }
           ]
@@ -103,7 +104,7 @@ const options: BetterOmit<TutorialSessionOptions, 'history'> = {
           canClickNext: true
         },
         {
-          text: 'Here, you will learn the basics of movement and combat.',
+          text: 'Here, you will learn the basics of the game. I promise to try and make it short !',
           canClickNext: true
         },
         {
@@ -284,7 +285,7 @@ const options: BetterOmit<TutorialSessionOptions, 'history'> = {
           }
         },
         {
-          text: "Units cannot act on the turn the're summoned, so let's end your turn'.",
+          text: "Units cannot act on the turn the're summoned, so let's end your turn.",
           canClickNext: false,
           onEnter() {
             tutorial.highlightedElementId = 'end-turn-action-button';
@@ -351,15 +352,13 @@ const options: BetterOmit<TutorialSessionOptions, 'history'> = {
       tooltips: [
         {
           text: "Good job ! Now, let's learn how to play cards.",
-          canClickNext: true,
-          onLeave() {
-            tutorial.isHandDisplayed = true;
-          }
+          canClickNext: true
         },
         {
           text: 'The cards in your hand appear on the bottom of the screen, while mine are at the top, face down.',
           canClickNext: true,
-          onLeave() {
+          onEnter() {
+            tutorial.isHandDisplayed = true;
             tutorial.isOpponentHandDisplayed = true;
           }
         },
@@ -479,7 +478,7 @@ const options: BetterOmit<TutorialSessionOptions, 'history'> = {
           canClickNext: true
         },
         {
-          text: 'The same reasoning goes for the next type of card: Spell Cards. Most of range have a range based on your general position.',
+          text: 'The same reasoning goes for the next type of card: Spell Cards. Most of them have a range based on your general position.',
           canClickNext: true
         },
         {
@@ -497,12 +496,16 @@ const options: BetterOmit<TutorialSessionOptions, 'history'> = {
       ]
     },
     {
-      expectedInputs: [],
+      expectedInputs: [{ type: 'endTurn', payload: { playerId: 'player' } }],
       meta: {},
       tooltips: [
         {
           text: "My general's HP are getting low ! I should be careful or you will gain a lot of VICTORY POINTS !",
-          canClickNext: true
+          canClickNext: true,
+          onLeave() {
+            tutorial.highlightedElementId = null;
+            tutorial.highlightedCell = null;
+          }
         },
         {
           text: 'Victory Points (VP) are how you win a game or Worselyst. The first player to reach 12 VP wins the game !',
@@ -518,8 +521,207 @@ const options: BetterOmit<TutorialSessionOptions, 'history'> = {
         {
           text: 'Victory points can be acquired in three different ways : Destroying the enemy general, Victory Shrines and Quest Cards.',
           canClickNext: true
+        },
+        {
+          text: "Let's explore that on the next turn. Plase and your turn for now.",
+          canClickNext: false,
+          onEnter() {
+            tutorial.highlightedElementId = 'end-turn-action-button';
+          },
+          onLeave() {
+            tutorial.highlightedElementId = null;
+          }
         }
       ]
+    },
+    {
+      expectedInputs: [
+        { type: 'endTurn', payload: { playerId: 'ai' } },
+        {
+          type: 'goldResourceAction',
+          payload: { playerId: 'player' }
+        }
+      ],
+      meta: {},
+      tooltips: [
+        { text: 'Let me end my turn as well', canClickNext: true },
+        {
+          text: 'It seems that you draw a powerful card ! It deals 8 damage to a general!',
+          canClickNext: true,
+          async onEnter() {
+            await waitFor(100);
+            battle.dispatch({
+              type: 'endTurn',
+              payload: { playerId: 'ai' }
+            });
+            await waitFor(500);
+          }
+        },
+        {
+          text: "You don't have enough gold to play it tough. But all hope is not lost !",
+          canClickNext: true
+        },
+        {
+          text: "If you don't need to gain any more rune, you have 2 other resource actions available each turn: getting one additional goal, or drawing an additional card.",
+          canClickNext: true,
+          onEnter() {
+            tutorial.isGoldActionEnabled = true;
+            tutorial.isDrawActionEnabled = true;
+          }
+        },
+        {
+          text: 'Use your resource action to gain enough gold to play your freshly drawn card.',
+          canClickNext: false,
+          onEnter() {
+            tutorial.highlightedElementId = 'gold-action-button';
+          },
+          onLeave() {
+            tutorial.highlightedElementId = null;
+          }
+        }
+      ]
+    },
+    {
+      expectedInputs: [
+        {
+          type: 'playCard',
+          payload: {
+            playerId: 'player',
+            index: 3,
+            targets: [{ x: 3, y: 2, z: 0 }]
+          }
+        }
+      ],
+      meta: {},
+      tooltips: [
+        {
+          text: 'Now play the card and get rid of my general for some juicy Victory points !',
+          canClickNext: false,
+          onEnter() {
+            tutorial.highlightedElementId = 'hand_card_3';
+          },
+          onLeave() {
+            tutorial.highlightedElementId = null;
+          }
+        }
+      ]
+    },
+    {
+      expectedInputs: [
+        {
+          type: 'move',
+          payload: { playerId: 'player', unitId: 'unit_4', x: 1, y: 1, z: 0 }
+        },
+        {
+          type: 'endTurn',
+          payload: { playerId: 'player' }
+        }
+      ],
+      meta: {},
+      tooltips: [
+        {
+          text: 'You destroyed my general and gained 6 VP !...but wait, why is it still on the board ?',
+          canClickNext: true
+        },
+        {
+          text: 'That is because when general are destroyed, they enter SPIRIT FORM.',
+          canClickNext: true
+        },
+        {
+          text: 'While in spirit form, generals can still play cards and move, but they cannot attack or be attacked anymore.',
+          canClickNext: true
+        },
+        {
+          text: "You are 6 VP away from victory. Now let's learn about shrines.",
+          canClickNext: true,
+          onLeave() {
+            tutorial.areObstaclesDisplayed = true;
+          }
+        },
+        {
+          text: 'Victory shrines are a special kind of tile that will grant 1 VP to the owner of the unit standing on it at the start of their turn.',
+          canClickNext: true
+        },
+        {
+          text: "It's important to note that it will not work if the unit standing on a shrine is a general !",
+          canClickNext: true
+        },
+        {
+          text: 'Move your berserk unit on the Victory Shrine and end your turn.',
+          canClickNext: false,
+          onEnter() {
+            tutorial.highlightedCell = { x: 1, y: 1, z: 0 };
+            until(() => ui.selectedUnit?.id === 'unit_4')
+              .toBeTruthy()
+              .then(() => {
+                tutorial.highlightedCell = { x: 1, y: 1, z: 0 };
+              });
+          }
+        }
+      ]
+    },
+    {
+      expectedInputs: [
+        { type: 'endTurn', payload: { playerId: 'ai' } },
+        {
+          type: 'playCard',
+          payload: {
+            playerId: 'player',
+            index: 3,
+            targets: [{ x: 2, y: 2, z: 0 }]
+          }
+        },
+        { type: 'endTurn', payload: { playerId: 'player' } }
+      ],
+      meta: {},
+      tooltips: [
+        {
+          text: 'Let me end my turn as well',
+          canClickNext: true
+        },
+        {
+          text: 'It is your turn again, and you gain one more VP thanks to the shrine, only  5 points away from victory !',
+          canClickNext: true,
+          async onEnter() {
+            await waitFor(100);
+            battle.dispatch({
+              type: 'endTurn',
+              payload: { playerId: 'ai' }
+            });
+            await waitFor(500);
+          }
+        },
+        {
+          text: 'You draw a card that will allow you to win this turn: a QUEST CARD',
+          canClickNext: true
+        },
+        {
+          text: 'Quest card allow you to fulfill some objectives to earn rewards such a VP.',
+          canClickNext: true,
+          onEnter() {
+            tutorial.isQuestsDisplayed = true;
+          }
+        },
+        {
+          text: 'You can have up to 2 ongoing quests at once.',
+          canClickNext: true
+        },
+        {
+          text: "The quest you drew requires you to simply end your turn. Don't expect quest cards to be that easy in real games !",
+          canClickNext: true
+        },
+        {
+          text: 'Play your quest card to reach 12VP, then end your turn to win the game !',
+          canClickNext: false,
+          onEnter() {
+            tutorial.highlightedElementId = 'hand_card_3';
+            tutorial.highlightedCell = { x: 2, y: 2, z: 0 };
+          }
+        }
+      ],
+      onLeave() {
+        isFinished.value = true;
+      }
     }
   ]
 };
@@ -538,14 +740,49 @@ const onReady = (server: ServerSession) => {
 </script>
 
 <template>
-  <TutorialUi
-    :options="options"
-    :rng-seed="rngSeed"
-    player-id="player"
-    @ready="
-      ({ server }) => {
-        onReady(server);
-      }
-    "
-  />
+  <div>
+    <TutorialUi
+      :options="options"
+      :rng-seed="rngSeed"
+      player-id="player"
+      @ready="
+        ({ server }) => {
+          onReady(server);
+        }
+      "
+    />
+    <div v-if="isFinished" class="finished-message">
+      <div>
+        <h1>Tutorial Completed ! Congratulations !</h1>
+        <RouterLink :to="{ name: 'Home' }">Back to Home</RouterLink>
+      </div>
+    </div>
+  </div>
 </template>
+
+<style scoped lang="postcss">
+.finished-message {
+  position: fixed;
+  pointer-events: auto;
+  inset: 0;
+  display: grid;
+  place-content: center;
+  z-index: 99;
+  background-color: hsl(0 0 0 / 0.5);
+  backdrop-filter: blur(5px);
+
+  > div {
+    font-size: var(--font-size-5);
+    color: #efef9f;
+    background-color: #32021b;
+    padding: var(--size-5);
+    border: solid 6px #efef9f;
+    border-right-color: #d7ad42;
+    border-bottom-color: #d7ad42;
+
+    a {
+      text-decoration: underline;
+    }
+  }
+}
+</style>
