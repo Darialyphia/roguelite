@@ -8,7 +8,7 @@ export const map1v1: GameMap = {
   id: '1v1',
   cols: 11,
   rows: 12,
-  padding: { x: -240, y: -50 },
+  padding: { x: -240, y: -25 },
   floors: [
     [
       [

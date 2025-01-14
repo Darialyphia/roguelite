@@ -23,6 +23,7 @@ export type TutorialStep = {
 
 export type TutorialSessionOptions = ClientSessionOptions & {
   steps: TutorialStep[];
+  onInvalidInput: (input: SerializedInput, expected: SerializedInput) => void;
 };
 
 export class TutorialSession extends ClientSession {
@@ -30,6 +31,7 @@ export class TutorialSession extends ClientSession {
 
   private currentStepIndex = 0;
   private currentInputIndex = 0;
+  private onInvalidInput: (input: SerializedInput, expected: SerializedInput) => void;
   isFinished = false;
 
   get currentStep() {
@@ -43,6 +45,7 @@ export class TutorialSession extends ClientSession {
   constructor(options: TutorialSessionOptions) {
     super(options);
     this.steps = options.steps;
+    this.onInvalidInput = options.onInvalidInput;
   }
 
   initialize(rngValues: number[]): void {
@@ -68,8 +71,15 @@ export class TutorialSession extends ClientSession {
     }
   }
 
-  dispatch(input: SerializedInput, meta: ClientDispatchMeta): void {
+  validate(input: SerializedInput) {
     const isValid = this.isFinished || deepEqual(input, this.currentExpectedInput);
+    if (!isValid) this.onInvalidInput(input, this.currentExpectedInput);
+
+    return isValid;
+  }
+
+  dispatch(input: SerializedInput, meta: ClientDispatchMeta): void {
+    const isValid = this.validate(input);
     if (!isValid) {
       console.error(
         'Wrong tutorial input received. Expected',

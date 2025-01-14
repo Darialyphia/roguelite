@@ -18,7 +18,10 @@ const tutorial = useTutorialStore();
 const ui = useBattleUiStore();
 const battle = useBattleStore();
 const isFinished = ref(false);
-const options: BetterOmit<TutorialSessionOptions, 'history'> = {
+const options: BetterOmit<
+  TutorialSessionOptions,
+  'history' | 'onInvalidInput'
+> = {
   mapId: 'tutorial-1',
   configOverrides: {
     SHUFFLE_DECK_ON_GAME_START: false
@@ -155,15 +158,12 @@ const options: BetterOmit<TutorialSessionOptions, 'history'> = {
           text: 'You can hold the Shift key to see your attack range.',
           canClickNext: false,
           onEnter(next) {
-            useEventListener(
-              'keydown',
-              e => {
-                if (e.code === 'ShiftLeft') {
-                  next();
-                }
-              },
-              { once: true }
-            );
+            const unsub = useEventListener('keydown', e => {
+              if (e.code === 'ShiftLeft') {
+                unsub();
+                next();
+              }
+            });
           }
         },
         {
@@ -197,7 +197,7 @@ const options: BetterOmit<TutorialSessionOptions, 'history'> = {
       meta: {},
       tooltips: [
         {
-          text: 'It is now my turn to play. will move my general closer so you can try to attack him.',
+          text: 'It is now my turn to play. I will move my general closer so you can try to attack him.',
           canClickNext: true,
           async onLeave() {
             await waitFor(500);

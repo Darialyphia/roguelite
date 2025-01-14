@@ -25,9 +25,17 @@ const serverOptions = {
   ...options
 };
 
+const isInvalidInput = ref(false);
+
 const clientOptions = {
   ...options,
-  steps
+  steps,
+  onInvalidInput() {
+    isInvalidInput.value = true;
+    setTimeout(() => {
+      isInvalidInput.value = false;
+    }, 1000);
+  }
 };
 
 const serverSession = new ServerSession(serverOptions);
@@ -42,6 +50,8 @@ const start = () => {
   battleStore.init(
     clientSession,
     input => {
+      const isValid = clientSession.validate(input);
+      if (!isValid) return;
       serverSession.dispatch(input);
     },
     playerId
@@ -83,7 +93,20 @@ const nextText = async () => {
   <TextBox
     v-if="currentTooltip"
     :text="currentTooltip.text"
-    :can-next="currentTooltip.canClickNext"
+    :can-next="!battleStore.isPlayingFx && currentTooltip.canClickNext"
+    :class="isInvalidInput && 'is-invalid'"
     @next="nextText"
   />
 </template>
+
+<style lang="postcss" scoped>
+.text-box {
+  transition: box-shadow 0.2s var(--ease-2);
+}
+
+.is-invalid {
+  animation: var(--animation-shake-x);
+  animation-duration: 0.5s;
+  box-shadow: 0 0 3rem red;
+}
+</style>

@@ -4,22 +4,29 @@ import UiButton from '@/ui/components/UiButton.vue';
 const { text, canNext } = defineProps<{ text: string; canNext: boolean }>();
 const emit = defineEmits<{ next: [] }>();
 
-const splitText = computed(() => text.split(''));
+let nextId = 0;
+const splitText = computed(() =>
+  text.split('').map(char => ({ char, id: ++nextId }))
+);
 </script>
 
 <template>
   <div class="text-box pointer-events-auto">
     <p>
       <span
-        v-for="(char, index) in splitText"
-        :key="Math.random()"
+        v-for="(letter, index) in splitText"
+        :key="letter.id"
         :style="{ '--index': index }"
       >
-        {{ char }}
+        {{ letter.char }}
       </span>
     </p>
     <footer class="flex justify-end mt-3">
-      <UiButton v-if="canNext" class="primary-button" @click="emit('next')">
+      <UiButton
+        :disabled="!canNext"
+        class="primary-button"
+        @click="emit('next')"
+      >
         Next
       </UiButton>
     </footer>
@@ -58,5 +65,12 @@ const splitText = computed(() => text.split(''));
       animation-delay: calc(0.01s * var(--index));
     }
   }
+}
+
+button:disabled {
+  opacity: 0;
+  cursor: inherit;
+  transform: translateY(var(--size-2));
+  transition: all 0.2s var(--ease-1);
 }
 </style>
