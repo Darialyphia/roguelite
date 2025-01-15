@@ -11,6 +11,7 @@ export class InputSimulator {
       id: `simulation_${id}`,
       history: game.inputSystem.serialize()
     });
+    this.game.isSimulation = true;
     this.inputs = inputs;
   }
 

@@ -12,6 +12,7 @@ export class DurationModifierMixin extends UnitModifierMixin {
     private duration = 1
   ) {
     super(game);
+    this.onTurnStart = this.onTurnStart.bind(this);
   }
 
   onTurnStart() {
@@ -23,7 +24,7 @@ export class DurationModifierMixin extends UnitModifierMixin {
 
   onApplied(unit: Unit, modifier: UnitModifier): void {
     this.modifier = modifier;
-    unit.player.on(PLAYER_EVENTS.START_TURN, this.onTurnStart.bind(this));
+    unit.player.on(PLAYER_EVENTS.START_TURN, this.onTurnStart);
   }
 
   // eslint-disable-next-line @typescript-eslint/no-empty-function, @typescript-eslint/no-unused-vars

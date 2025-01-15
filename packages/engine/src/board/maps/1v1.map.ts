@@ -11,48 +11,49 @@ export const map1v1: GameMap = {
   padding: { x: -240, y: -25 },
   floors: [
     [
+      [null, null, null, null, null, null, null, null, null, null, null],
       [
-        plainTileset.WATER,
-        plainTileset.WATER,
-        plainTileset.WATER,
-        plainTileset.WATER,
-        plainTileset.WATER,
-        plainTileset.WATER,
-        plainTileset.WATER,
-        plainTileset.WATER,
-        plainTileset.WATER,
-        plainTileset.WATER,
-        plainTileset.WATER
+        null,
+        null,
+        null,
+        plainTileset.GRASS,
+        plainTileset.GRASS,
+        plainTileset.GRASS,
+        plainTileset.GRASS,
+        plainTileset.GRASS,
+        null,
+        null,
+        null
       ],
       [
-        plainTileset.WATER,
-        plainTileset.WATER,
-        plainTileset.WATER,
+        null,
+        null,
+        null,
         plainTileset.GRASS,
         plainTileset.GRASS,
         plainTileset.GRASS,
         plainTileset.GRASS,
         plainTileset.GRASS,
-        plainTileset.WATER,
-        plainTileset.WATER,
-        plainTileset.WATER
+        plainTileset.GRASS,
+        null,
+        null
       ],
       [
-        plainTileset.WATER,
-        plainTileset.WATER,
-        plainTileset.WATER,
+        null,
+        null,
         plainTileset.GRASS,
         plainTileset.GRASS,
         plainTileset.GRASS,
         plainTileset.GRASS,
         plainTileset.GRASS,
         plainTileset.GRASS,
-        plainTileset.WATER,
-        plainTileset.WATER
+        plainTileset.GRASS,
+        null,
+        null
       ],
       [
-        plainTileset.WATER,
-        plainTileset.WATER,
+        null,
+        null,
         plainTileset.GRASS,
         plainTileset.GRASS,
         plainTileset.GRASS,
@@ -60,12 +61,11 @@ export const map1v1: GameMap = {
         plainTileset.GRASS,
         plainTileset.GRASS,
         plainTileset.GRASS,
-        plainTileset.WATER,
-        plainTileset.WATER
+        plainTileset.GRASS,
+        null
       ],
       [
-        plainTileset.WATER,
-        plainTileset.WATER,
+        null,
         plainTileset.GRASS,
         plainTileset.GRASS,
         plainTileset.GRASS,
@@ -74,10 +74,12 @@ export const map1v1: GameMap = {
         plainTileset.GRASS,
         plainTileset.GRASS,
         plainTileset.GRASS,
-        plainTileset.WATER
+        plainTileset.GRASS,
+        null
       ],
       [
-        plainTileset.WATER,
+        null,
+        null,
         plainTileset.GRASS,
         plainTileset.GRASS,
         plainTileset.GRASS,
@@ -86,12 +88,11 @@ export const map1v1: GameMap = {
         plainTileset.GRASS,
         plainTileset.GRASS,
         plainTileset.GRASS,
-        plainTileset.GRASS,
-        plainTileset.WATER
+        null
       ],
       [
-        plainTileset.WATER,
-        plainTileset.WATER,
+        null,
+        null,
         plainTileset.GRASS,
         plainTileset.GRASS,
         plainTileset.GRASS,
@@ -99,61 +100,36 @@ export const map1v1: GameMap = {
         plainTileset.GRASS,
         plainTileset.GRASS,
         plainTileset.GRASS,
-        plainTileset.GRASS,
-        plainTileset.WATER
+        null,
+        null
       ],
       [
-        plainTileset.WATER,
-        plainTileset.WATER,
+        null,
+        null,
+        null,
         plainTileset.GRASS,
         plainTileset.GRASS,
         plainTileset.GRASS,
         plainTileset.GRASS,
         plainTileset.GRASS,
         plainTileset.GRASS,
-        plainTileset.GRASS,
-        plainTileset.WATER,
-        plainTileset.WATER
+        null,
+        null
       ],
       [
-        plainTileset.WATER,
-        plainTileset.WATER,
-        plainTileset.WATER,
+        null,
+        null,
+        null,
         plainTileset.GRASS,
         plainTileset.GRASS,
         plainTileset.GRASS,
         plainTileset.GRASS,
         plainTileset.GRASS,
-        plainTileset.GRASS,
-        plainTileset.WATER,
-        plainTileset.WATER
+        null,
+        null,
+        null
       ],
-      [
-        plainTileset.WATER,
-        plainTileset.WATER,
-        plainTileset.WATER,
-        plainTileset.GRASS,
-        plainTileset.GRASS,
-        plainTileset.GRASS,
-        plainTileset.GRASS,
-        plainTileset.GRASS,
-        plainTileset.WATER,
-        plainTileset.WATER,
-        plainTileset.WATER
-      ],
-      [
-        plainTileset.WATER,
-        plainTileset.WATER,
-        plainTileset.WATER,
-        plainTileset.WATER,
-        plainTileset.WATER,
-        plainTileset.WATER,
-        plainTileset.WATER,
-        plainTileset.WATER,
-        plainTileset.WATER,
-        plainTileset.WATER,
-        plainTileset.WATER
-      ]
+      [null, null, null, null, null, null, null, null, null, null, null]
     ],
     [
       [null, null, null, null, null, null, null, null, null, null, null],

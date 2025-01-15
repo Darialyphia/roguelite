@@ -18,6 +18,8 @@ export abstract class AuraModifierMixin extends UnitModifierMixin {
 
   constructor(game: Game) {
     super(game);
+    this.checkAura = this.checkAura.bind(this);
+    this.cleanup = this.cleanup.bind(this);
   }
 
   abstract isElligible(unit: Unit): boolean;
@@ -26,6 +28,7 @@ export abstract class AuraModifierMixin extends UnitModifierMixin {
 
   private checkAura() {
     if (!this.isApplied) return;
+
     this.game.unitSystem.units.forEach(unit => {
       if (unit.equals(this.modifier.target)) return;
       const shouldGetAura = this.isElligible(unit);
@@ -62,8 +65,8 @@ export abstract class AuraModifierMixin extends UnitModifierMixin {
     this.modifier = modifier;
     this.isApplied = true;
 
-    this.game.on('*', this.checkAura.bind(this));
-    unit.once(UNIT_EVENTS.BEFORE_DESTROY, this.cleanup.bind(this));
+    this.game.on('*', this.checkAura);
+    unit.once(UNIT_EVENTS.BEFORE_DESTROY, this.cleanup);
   }
 
   onRemoved() {

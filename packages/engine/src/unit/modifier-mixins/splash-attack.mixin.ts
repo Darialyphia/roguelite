@@ -11,6 +11,7 @@ export class SplashAttackdModifierMixin extends UnitModifierMixin {
 
   constructor(game: Game) {
     super(game);
+    this.interceptor = this.interceptor.bind(this);
   }
 
   interceptor() {
@@ -22,12 +23,12 @@ export class SplashAttackdModifierMixin extends UnitModifierMixin {
 
   onApplied(unit: Unit, modifier: UnitModifier): void {
     this.modifier = modifier;
-    unit.addInterceptor('attackAOEShape', this.interceptor.bind(this));
+    unit.addInterceptor('attackAOEShape', this.interceptor);
     unit.addKeyword(KEYWORDS.SPLASH_ATTACK);
   }
 
   onRemoved(unit: Unit): void {
-    unit.removeInterceptor('attackAOEShape', this.interceptor.bind(this));
+    unit.removeInterceptor('attackAOEShape', this.interceptor);
     unit.removeKeyword(KEYWORDS.SPLASH_ATTACK);
   }
 

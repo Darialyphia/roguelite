@@ -6,6 +6,7 @@ import { UnitModifierMixin } from './unit-modifier-mixin';
 export class RushModifierMixin extends UnitModifierMixin {
   constructor(game: Game) {
     super(game);
+    this.interceptor = this.interceptor.bind(this);
   }
 
   interceptor() {
@@ -13,7 +14,7 @@ export class RushModifierMixin extends UnitModifierMixin {
   }
 
   onApplied(unit: Unit): void {
-    unit.addInterceptor('shouldDeactivateWhenSummoned', this.interceptor.bind(this));
+    unit.addInterceptor('shouldDeactivateWhenSummoned', this.interceptor);
     unit.addKeyword(KEYWORDS.RUSH);
   }
 

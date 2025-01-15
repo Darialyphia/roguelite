@@ -14,6 +14,7 @@ export class AmplifyDamagedModifierMixin extends UnitModifierMixin {
     }
   ) {
     super(game);
+    this.interceptor = this.interceptor.bind(this);
   }
 
   interceptor(
@@ -30,11 +31,11 @@ export class AmplifyDamagedModifierMixin extends UnitModifierMixin {
 
   onApplied(unit: Unit, modifier: UnitModifier): void {
     this.modifier = modifier;
-    unit.addInterceptor('damageDealt', this.interceptor.bind(this));
+    unit.addInterceptor('damageDealt', this.interceptor);
   }
 
   onRemoved(unit: Unit): void {
-    unit.removeInterceptor('damageDealt', this.interceptor.bind(this));
+    unit.removeInterceptor('damageDealt', this.interceptor);
   }
 
   // eslint-disable-next-line @typescript-eslint/no-empty-function

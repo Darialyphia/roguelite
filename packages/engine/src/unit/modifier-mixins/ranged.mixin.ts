@@ -14,6 +14,7 @@ export class RangedModifierMixin extends UnitModifierMixin {
     private maxRange: number
   ) {
     super(game);
+    this.interceptor = this.interceptor.bind(this);
   }
 
   interceptor() {
@@ -27,12 +28,12 @@ export class RangedModifierMixin extends UnitModifierMixin {
 
   onApplied(unit: Unit, modifier: UnitModifier): void {
     this.modifier = modifier;
-    unit.addInterceptor('attackTargetingPattern', this.interceptor.bind(this));
+    unit.addInterceptor('attackTargetingPattern', this.interceptor);
     unit.addKeyword(KEYWORDS.RANGED);
   }
 
   onRemoved(unit: Unit): void {
-    unit.removeInterceptor('attackTargetingPattern', this.interceptor.bind(this));
+    unit.removeInterceptor('attackTargetingPattern', this.interceptor);
     unit.removeKeyword(KEYWORDS.RANGED);
   }
 

@@ -20,6 +20,7 @@ export class InterceptorModifierMixin<
     }
   ) {
     super(game);
+    this.interceptor = this.interceptor.bind(this);
   }
 
   interceptor(value: inferInterceptorValue<UnitInterceptor[TKey]>) {
@@ -28,7 +29,7 @@ export class InterceptorModifierMixin<
 
   onApplied(unit: Unit, modifier: UnitModifier): void {
     this.modifier = modifier;
-    unit.addInterceptor(this.options.key, this.interceptor.bind(this) as any);
+    unit.addInterceptor(this.options.key, this.interceptor as any);
   }
 
   onRemoved(unit: Unit): void {

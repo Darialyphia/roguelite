@@ -151,7 +151,7 @@ export class Game {
   readonly config: Config;
 
   readonly id: string;
-
+  isSimulation = false;
   constructor(readonly options: GameOptions) {
     this.id = options.id;
     this.config = Object.assign({}, defaultConfig, options.configOverrides);

@@ -109,7 +109,8 @@ export class Unit extends Entity {
       )
     });
     this.combat = new CombatComponent(this.game, this);
-    this.player.on(PLAYER_EVENTS.START_TURN, this.onTurnStart.bind(this));
+    this.onTurnStart = this.onTurnStart.bind(this);
+    this.player.on(PLAYER_EVENTS.START_TURN, this.onTurnStart);
     this.forwardEvents();
     if (this.isGeneral) {
       this.handleGeneralRewards();

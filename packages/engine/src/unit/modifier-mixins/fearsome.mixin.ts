@@ -12,6 +12,7 @@ export class FearsomeModifierMixin extends UnitModifierMixin {
 
   constructor(game: Game) {
     super(game);
+    this.onBeforeAttack = this.onBeforeAttack.bind(this);
   }
 
   onBeforeAttack({ target }: { target: Point3D }) {
@@ -28,12 +29,12 @@ export class FearsomeModifierMixin extends UnitModifierMixin {
 
   onApplied(unit: Unit, modifier: UnitModifier): void {
     this.modifier = modifier;
-    unit.on(UNIT_EVENTS.BEFORE_ATTACK, this.onBeforeAttack.bind(this));
+    unit.on(UNIT_EVENTS.BEFORE_ATTACK, this.onBeforeAttack);
     unit.addKeyword(KEYWORDS.FEARSOME);
   }
 
   onRemoved(unit: Unit) {
-    unit.off(UNIT_EVENTS.BEFORE_ATTACK, this.onBeforeAttack.bind(this));
+    unit.off(UNIT_EVENTS.BEFORE_ATTACK, this.onBeforeAttack);
   }
 
   // eslint-disable-next-line @typescript-eslint/no-empty-function

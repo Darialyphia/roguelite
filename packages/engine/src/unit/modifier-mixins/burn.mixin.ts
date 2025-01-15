@@ -16,6 +16,7 @@ export class BurnModifierMixin extends UnitModifierMixin {
     private source: Card
   ) {
     super(game);
+    this.onTurnStart = this.onTurnStart.bind(this);
   }
 
   onTurnStart() {
@@ -32,7 +33,7 @@ export class BurnModifierMixin extends UnitModifierMixin {
 
   onApplied(unit: Unit, modifier: UnitModifier): void {
     this.modifier = modifier;
-    unit.player.on(PLAYER_EVENTS.START_TURN, this.onTurnStart.bind(this));
+    unit.player.on(PLAYER_EVENTS.START_TURN, this.onTurnStart);
   }
 
   onRemoved(unit: Unit) {

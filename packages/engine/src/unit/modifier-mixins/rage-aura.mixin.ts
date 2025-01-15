@@ -1,12 +1,6 @@
 import { createEntityId } from '../../entity';
-import type { Game } from '../../game/game';
-import {
-  isValidTargetingType,
-  type TargetingType
-} from '../../targeting/targeting-strategy';
 import { KEYWORDS } from '../keywords';
 import { RageModifier } from '../modifiers/rage.modifier';
-import type { UnitModifier } from '../unit-modifier.entity';
 import type { Unit } from '../unit.entity';
 import { AuraModifierMixin } from './aura.mixin';
 

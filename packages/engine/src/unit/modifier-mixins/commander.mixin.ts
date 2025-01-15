@@ -6,6 +6,7 @@ import { UnitModifierMixin } from './unit-modifier-mixin';
 export class CommanderModifierMixin extends UnitModifierMixin {
   constructor(game: Game) {
     super(game);
+    this.interceptor = this.interceptor.bind(this);
   }
 
   interceptor() {
@@ -13,7 +14,7 @@ export class CommanderModifierMixin extends UnitModifierMixin {
   }
 
   onApplied(unit: Unit): void {
-    unit.addInterceptor('canSummonUnitsNearby', this.interceptor.bind(this));
+    unit.addInterceptor('canSummonUnitsNearby', this.interceptor);
     unit.addKeyword(KEYWORDS.COMMANDER);
   }
 
