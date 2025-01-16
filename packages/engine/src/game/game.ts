@@ -14,7 +14,7 @@ import { PlayerSystem } from '../player/player-system';
 import { InputSystem, type SerializedInput } from '../input/input-system';
 import type { RngSystem } from '../rng/rng-system';
 import { mapValues, mapKeys } from 'lodash-es';
-import { GamePhaseSystem } from './game-phase.system';
+import { GAME_PHASES, GamePhaseSystem } from './game-phase.system';
 import { type Player, type PlayerEventMap } from '../player/player.entity';
 import { MAPS_DICTIONARY } from '../board/maps/_index';
 import type { TeamOptions } from '../player/team.entity';
@@ -219,6 +219,11 @@ export class Game {
     return this.gamePhaseSystem.phase;
   }
 
+  get winner() {
+    if (this.gamePhaseSystem.phase !== GAME_PHASES.END) return null;
+
+    return this.playerSystem.teams.find(team => team.isWinner)!;
+  }
   dispatch(input: SerializedInput) {
     return this.inputSystem.dispatch(input);
   }

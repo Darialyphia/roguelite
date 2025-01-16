@@ -13,6 +13,6 @@
     "zod": "^3.21.4"
   },
   "scripts": {
-    "dev": "echo 1"
+    "dev": "echo 'no dev script'"
   }
 }

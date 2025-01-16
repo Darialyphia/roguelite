@@ -12,7 +12,8 @@ export const PLAYER_EVENTS = {
   BEFORE_PLAY_CARD: 'before_play_card',
   AFTER_PLAY_CARD: 'after_play_card',
   BEFORE_VP_CHANGE: 'before_vp_change',
-  AFTER_VP_CHANGE: 'after_vp_change'
+  AFTER_VP_CHANGE: 'after_vp_change',
+  MULLIGAN: 'mulligan'
 } as const;
 
 export type PlayerEvent = Values<typeof PLAYER_EVENTS>;

@@ -23,6 +23,8 @@ export class Team extends Entity {
 
   private game: Game;
 
+  isWinner = false;
+
   constructor(game: Game, options: TeamOptions) {
     super(createEntityId(options.id));
     this.game = game;
@@ -87,6 +89,7 @@ export class Team extends Entity {
       this._victoryPoints >= this.game.config.VP_WIN_THRESHOLD &&
       this.game.gamePhaseSystem.phase === GAME_PHASES.BATTLE
     ) {
+      this.isWinner = true;
       this.game.gamePhaseSystem.endBattle();
     }
 

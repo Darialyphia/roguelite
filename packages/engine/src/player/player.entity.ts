@@ -4,7 +4,6 @@ import { GAME_EVENTS, type Game } from '../game/game';
 import { CardManagerComponent } from '../card/card-manager.component';
 import type { Card, CardOptions } from '../card/card.entity';
 import { GoldManagerComponent } from './components/gold-manager.component';
-import { defaultConfig } from '../config';
 import { DECK_EVENTS } from '../card/deck.entity';
 import { assert, type Point3D } from '@game/shared';
 import { TypedEventEmitter } from '../utils/typed-emitter';
@@ -39,6 +38,7 @@ export type PlayerEventMap = {
   [PLAYER_EVENTS.AFTER_GOLD_CHANGE]: [{ amount: number }];
   [PLAYER_EVENTS.BEFORE_PLAY_CARD]: [{ card: Card; targets: Point3D[] }];
   [PLAYER_EVENTS.AFTER_PLAY_CARD]: [{ card: Card; targets: Point3D[] }];
+  [PLAYER_EVENTS.MULLIGAN]: [{ id: EntityId }];
 };
 
 type ResourceAction = SerializedInput & {
@@ -255,6 +255,12 @@ export class Player extends Entity {
         this.addRune(RUNES[action.payload.rune as keyof typeof RUNES]);
       })
       .exhaustive();
+  }
+
+  commitMulliganIndices(indices: number[]) {
+    this.mulliganIndices = indices;
+    this.hasMulliganed = true;
+    this.emitter.emit(PLAYER_EVENTS.MULLIGAN, { id: this.id });
   }
 
   mulligan() {

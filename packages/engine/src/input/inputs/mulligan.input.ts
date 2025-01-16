@@ -14,8 +14,7 @@ export class MulliganInput extends Input<typeof schema> {
   protected payloadSchema = schema;
 
   impl() {
-    this.player.mulliganIndices = this.payload.indices;
-    this.player.hasMulliganed = true;
+    this.player.commitMulliganIndices(this.payload.indices);
 
     if (this.game.playerSystem.players.every(p => p.hasMulliganed)) {
       this.game.gamePhaseSystem.startBattle();

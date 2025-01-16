@@ -12,7 +12,7 @@ import { useBattleStore } from '@/battle/stores/battle.store';
 import BattleUi from '@/battle/components/BattleUi.vue';
 
 definePage({
-  name: 'Battle'
+  name: 'SinglePlayer'
 });
 
 const options: Pick<GameOptions, 'mapId' | 'teams'> = {

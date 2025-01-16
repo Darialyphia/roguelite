@@ -48,7 +48,7 @@ const cards = computed(() => {
           <RouterLink :to="{ name: 'Home' }">Home</RouterLink>
         </li>
         <li>
-          <RouterLink :to="{ name: 'Battle' }">Test Battle</RouterLink>
+          <RouterLink :to="{ name: 'SinglePlayer' }">Vs AI</RouterLink>
         </li>
       </ul>
     </nav>

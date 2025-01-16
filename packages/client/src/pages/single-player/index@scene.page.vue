@@ -2,7 +2,7 @@
 import BattleScene from '@/battle/scenes/BattleScene.vue';
 
 definePage({
-  name: 'Battle'
+  name: 'SinglePlayer'
 });
 </script>
 

@@ -156,6 +156,19 @@
         },
         {
           "alias": [
+            "icon-fire-pillar"
+          ],
+          "src": [
+            "/assets/icons/fire-pillar.png"
+          ],
+          "data": {
+            "tags": {
+              "m": true
+            }
+          }
+        },
+        {
+          "alias": [
             "icon-frost-nova"
           ],
           "src": [
@@ -507,6 +520,19 @@
         },
         {
           "alias": [
+            "icon-spell-fire-pillar"
+          ],
+          "src": [
+            "/assets/icons/spell-fire-pillar.png"
+          ],
+          "data": {
+            "tags": {
+              "m": true
+            }
+          }
+        },
+        {
+          "alias": [
             "icon-spell-fireball"
           ],
           "src": [
@@ -537,6 +563,19 @@
           ],
           "src": [
             "/assets/icons/spell-lightning-bolt.png"
+          ],
+          "data": {
+            "tags": {
+              "m": true
+            }
+          }
+        },
+        {
+          "alias": [
+            "icon-spell-nature-blast"
+          ],
+          "src": [
+            "/assets/icons/spell-nature-blast.png"
           ],
           "data": {
             "tags": {
