@@ -40,7 +40,7 @@ const game = useGame();
 
     <BattleLog class="pointer-events-auto" />
 
-    <footer class="bottom-row">
+    <footer>
       <ActionWheel />
       <Hand class="hand" />
       <div />

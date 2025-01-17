@@ -15,7 +15,7 @@ There is no need for a back end as this point, and the games will be single play
 - [ ] Add a `Barrier` [keyword](packages/engine/src/unit/keywords.ts) that blocks the next damage instance a unit receives. Add the [UnitModifierMixin](packages/engine/src/unit/modifier-mixins/unit-modifier-mixin.ts)implementing the keyword.
 - [ ] Add a 'Blast' [keyword](packages/engine/src/unit/keywords.ts) that makes the unit deal damage to ALL units nearby the target. Damage to those units should be halved (rounded up). Add the [UnitModifierMixin](packages/engine/src/unit/modifier-mixins/unit-modifier-mixin.ts)implementing the keyword
 - [ ] Add a `Magic Guard` [keyword](packages/engine/src/unit/keywords.ts) that prevent a unit from receiving damage from spell cards, or be targeted by spell cards. Implement the [UnitModifierMixin](packages/engine/src/unit/modifier-mixins/unit-modifier-mixin.ts)implementing the keyword
-- [ ] Add a `Disarmed` [keyword](packages/engine/src/unit/keywords.ts) that prevents a unit from attacking. Implement the [UnitModifierMixin](packages/engine/src/unit/modifier-mixins/unit-modifier-mixin.ts)implementing the keyword
+- [ ] Add a `General Guard` [keyword](packages/engine/src/unit/keywords.ts) that prevent a unit from receiving damage from generals attacks and effects, or be targeted by general effects. Implement the [UnitModifierMixin](packages/engine/src/unit/modifier-mixins/unit-modifier-mixin.ts)implementing the keyword
 - [ ] Add a `Rooted` [keyword](packages/engine/src/unit/keywords.ts) that prevents a unit from moving. Implement the [UnitModifierMixin](packages/engine/src/unit/modifier-mixins/unit-modifier-mixin.ts)implementing the keyword
 - [ ] Add a `Silenced` [keyword](packages/engine/src/unit/keywords.ts) that prevents a unit from using abilities. Implement the [UnitModifierMixin](packages/engine/src/unit/modifier-mixins/unit-modifier-mixin.ts)implementing the keyword
 - [ ] Add a `Slowed` [keyword](packages/engine/src/unit/keywords.ts) that make a unit spend 50% more AP to move one tile. Implement the [UnitModifierMixin](packages/engine/src/unit/modifier-mixins/unit-modifier-mixin.ts)implementing the keyword
@@ -33,7 +33,7 @@ There is no need for a back end as this point, and the games will be single play
 
 ### Refactoring
 
-- [ ] Maybe we don't need al lthe bells and whistles with scaling and mitigations for the Damage class, inerceptors on `dealtDamage` and `receivedDamage` should be enough. Let's keep the Damage class though, it might still be useful down the line.
+- [ ] Maybe we don't need all the bells and whistles with scaling and mitigations for the Damage class, inerceptors on `dealtDamage` and `receivedDamage` should be enough. Let's keep the Damage class though, it might still be useful down the line.
 
 ### Bugs
 - [ ] In sandbox mode, the player informations keep swapping position along with the active player.

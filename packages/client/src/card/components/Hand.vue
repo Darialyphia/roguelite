@@ -81,9 +81,14 @@ const tutorial = useTutorialStore();
 .hand {
   display: flex;
   --hand-size: v-bind('player.hand.length');
+  --card-spacing-scale: 1px;
+
+  &:hover {
+    --card-spacing-scale: 0.8px;
+  }
 
   > li:not(:last-child) {
-    margin-right: calc(1px * v-bind(cardSpacing));
+    margin-right: calc(var(--card-spacing-scale) * v-bind(cardSpacing));
   }
 }
 </style>

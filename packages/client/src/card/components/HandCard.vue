@@ -127,7 +127,7 @@ li {
   width: calc(1px * v-bind('config.CARD_WIDTH'));
   position: relative;
   z-index: var(--child-index);
-  transform-origin: bottom right;
+  transform-origin: bottom center;
   transition:
     margin 0.3s var(--ease-out-2),
     filter 0.2s var(--ease-out-2),
