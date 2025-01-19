@@ -75,7 +75,6 @@ export class Unit extends Entity {
     canBeAttackTarget: new Interceptable<boolean>(),
     canBeCardTarget: new Interceptable<boolean>(),
     canBeDestroyed: new Interceptable<boolean>(),
-    canSummonUnitsNearby: new Interceptable<boolean>(),
     canCastSpells: new Interceptable<boolean>(),
 
     shouldDeactivateWhenSummoned: new Interceptable<boolean>(),
@@ -179,10 +178,6 @@ export class Unit extends Entity {
 
   get isGeneral() {
     return this.card.unitType === UNIT_TYPES.GENERAL;
-  }
-
-  get canSummonUnitsNearby(): boolean {
-    return this.interceptors.canSummonUnitsNearby.getValue(this.isGeneral, {});
   }
 
   get canCastSpells(): boolean {

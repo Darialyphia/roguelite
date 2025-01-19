@@ -13,7 +13,7 @@ import { CARD_KINDS, type CardKind, type UnitType } from './card-enums';
 import type { QuestCard } from './quest-card.entity';
 
 type CardBlueprintTarget<T extends Card> = {
-  getTargeting(game: Game, card: T): TargetingStrategy;
+  getTargeting(game: Game, card: T, points: Point3D[]): TargetingStrategy;
 };
 
 export type CardAiHints = {

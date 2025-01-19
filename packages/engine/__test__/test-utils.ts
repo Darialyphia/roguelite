@@ -39,6 +39,7 @@ export const testGameBuilder = () => {
     build() {
       const game = new Game({
         id: 'test',
+        configOverrides: {},
         mapId: options.mapId ?? '1v1',
         rngCtor: ServerRngSystem,
         rngSeed: options.rngSeed ?? 'test',

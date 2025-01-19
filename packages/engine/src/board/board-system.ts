@@ -1,10 +1,20 @@
-import { isDefined, isString, type Point, type Point3D } from '@game/shared';
+import {
+  isDefined,
+  isString,
+  type Point,
+  type Point3D,
+  type RequiredBy
+} from '@game/shared';
 import { Cell } from './cell';
 import { pointToCellId } from './board-utils';
 import { System } from '../system';
 import type { GameMap } from './map';
 import { defineHex, Grid, Orientation, rectangle, spiral } from 'honeycomb-grid';
 import { defaultConfig } from '../config';
+import { victoryShrine } from '../obstacle/obstacles/victory-shrine';
+import { fortuneShrine } from '../obstacle/obstacles/fortune-shrine';
+import { Obstacle } from '../obstacle/obstacle.entity';
+import { makeObstacleId } from '../obstacle/obstacle.utils';
 
 export type BoardSystemOptions = {
   map: GameMap;
@@ -78,6 +88,35 @@ export class BoardSystem extends System<BoardSystemOptions> {
 
   get cells() {
     return [...this.cellsMap.values()];
+  }
+
+  addObstacleAt(blueprintId: string, point: Point3D) {
+    const cell = this.getCellAt(point);
+    if (!cell) return;
+    cell.obstacle?.destroy();
+    cell.obstacle = new Obstacle(this.game, {
+      blueprintId,
+      id: makeObstacleId(cell),
+      position: cell.position
+    });
+  }
+
+  getVictoryShrines() {
+    return this.cells
+      .filter(
+        (cell): cell is RequiredBy<Cell, 'obstacle'> =>
+          cell.obstacle?.id === victoryShrine.id
+      )
+      .map(cell => cell.obstacle);
+  }
+
+  getFortuneShrines() {
+    return this.cells
+      .filter(
+        (cell): cell is RequiredBy<Cell, 'obstacle'> =>
+          cell.obstacle?.id === fortuneShrine.id
+      )
+      .map(cell => cell.obstacle);
   }
 
   getCellAt(posOrKey: string | Point3D) {

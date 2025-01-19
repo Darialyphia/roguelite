@@ -22,8 +22,8 @@ export class QuestCard extends Card<QuestCardBlueprint> {
 
   meta: AnyObject = {};
 
-  play(targets: Point3D[]) {
-    if (!this.canPlayAt(targets)) return;
+  play(targets: Point3D[], ignoreRequirements?: boolean) {
+    if (!this.canPlayAt(targets) && !ignoreRequirements) return;
 
     this.emitter.emit(CARD_EVENTS.BEFORE_PLAY, {
       targets,

@@ -1,9 +1,15 @@
 import type { Game } from '../game/game';
 import { isDefined, type Point3D } from '@game/shared';
 import type { Cell } from '../board/cell';
-import { TARGETING_TYPE, type NonEmptyTargetingType } from './targeting-strategy';
+import {
+  isValidTargetingType,
+  TARGETING_TYPE,
+  type NonEmptyTargetingType,
+  type TargetingType
+} from './targeting-strategy';
 import { match } from 'ts-pattern';
 import type { Unit } from '../unit/unit.entity';
+import type { Player } from '../player/player.entity';
 
 export type AOEShape = {
   getCells(points: Point3D[]): Cell[];
@@ -24,7 +30,7 @@ export class PointAOEShape implements AOEShape {
   constructor(private game: Game) {}
 
   getCells(points: Point3D[]) {
-    return [this.game.boardSystem.getCellAt(points[0])].filter(isDefined);
+    return points.map(point => this.game.boardSystem.getCellAt(point)).filter(isDefined);
   }
 
   getUnits(points: Point3D[]): Unit[] {
@@ -163,5 +169,36 @@ export class CompositeAOEShape implements AOEShape {
     });
 
     return [...units];
+  }
+}
+
+export class ShrineAoeShape implements AOEShape {
+  constructor(
+    private game: Game,
+    private player: Player,
+    private options: { targetingType: TargetingType }
+  ) {}
+
+  getCells(): Cell[] {
+    const shrines = [
+      ...this.game.boardSystem.getFortuneShrines(),
+      ...this.game.boardSystem.getFortuneShrines()
+    ];
+
+    return shrines.map(shrine => this.game.boardSystem.getCellAt(shrine.position)!);
+  }
+
+  getUnits(): Unit[] {
+    return this.getCells()
+      .filter(cell => {
+        return isValidTargetingType(
+          this.game,
+          cell,
+          this.player,
+          this.options.targetingType
+        );
+      })
+      .map(cell => cell.unit)
+      .filter(isDefined);
   }
 }

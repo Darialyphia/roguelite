@@ -1,6 +1,5 @@
 import { meleeFighter } from '../../../ai/ai-traits';
 import { createEntityId } from '../../../entity';
-import { fortuneShrine } from '../../../obstacle/obstacles/fortune-shrine';
 import { victoryShrine } from '../../../obstacle/obstacles/victory-shrine';
 import { PointAOEShape } from '../../../targeting/aoe-shapes';
 import { UnitSummonTargetingtrategy } from '../../../targeting/unit-summon-targeting.strategy';
@@ -18,7 +17,7 @@ export const redExorcist: UnitCardBlueprint = {
   spriteId: 'exorcist',
   iconId: 'unit_exorcist',
   name: 'Exorcist',
-  description: '@Ranged(2)@.\n@Spellcaster@.\nThis deals +2 damage to units on shrines.',
+  description: '@Ranged(3)@.\n@Spellcaster@.\nThis deals +2 damage to units on shrines.',
   kind: CARD_KINDS.UNIT,
   unitType: UNIT_TYPES.MINION,
   aiHints: meleeFighter,
@@ -49,7 +48,7 @@ export const redExorcist: UnitCardBlueprint = {
     }
   },
   onPlay(game, card) {
-    card.unit.addModifier(new RangedModifier(game, card, 2));
+    card.unit.addModifier(new RangedModifier(game, card, 3));
     card.unit.addModifier(new SpellCasterModifier(game, card));
 
     card.unit.addModifier(
@@ -60,7 +59,7 @@ export const redExorcist: UnitCardBlueprint = {
             when(attacker, defender) {
               const cell = game.boardSystem.getCellAt(defender.position)!;
               if (!cell.obstacle) return false;
-              return [victoryShrine.id, fortuneShrine.id].includes(cell.obstacle.id);
+              return [victoryShrine.id].includes(cell.obstacle.blueprintId);
             },
             amount: () => 2
           })

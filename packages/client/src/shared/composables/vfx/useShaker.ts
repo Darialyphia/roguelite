@@ -20,7 +20,7 @@ export const useShaker = (container: Ref<Container | undefined>) => {
 
   const trigger = (shakeProps?: ShakeProps): void => {
     if (!container.value) return;
-
+    const originalPos = { x: container.value.x, y: container.value.y };
     if (shakeProps) {
       state.shakeCountMax = shakeProps.shakeCountMax;
       state.shakeAmount = shakeProps.shakeAmount;
@@ -34,7 +34,7 @@ export const useShaker = (container: Ref<Container | undefined>) => {
     }
     state.shakeCount++;
     if (state.shakeCount > state.shakeCountMax) {
-      container.value.position.set(0, 0);
+      container.value.position.set(originalPos.x, originalPos.y);
       state.shakeCount = 0;
       state.isShaking = false;
     } else {

@@ -6,20 +6,15 @@ import { waitFor } from '@game/shared';
 import { GAME_EVENTS } from '@game/engine/src/game/game';
 import {
   useBattleEvent,
-  useBattleStore,
+  useGameClientState,
   useVFXEvent
 } from '@/battle/stores/battle.store';
 
 const { unit } = defineProps<{ unit: UnitViewModel }>();
 
-const battleStore = useBattleStore();
-
+const state = useGameClientState();
 const scaleX = computed(() => {
-  let value = unit
-    .getUnit()
-    .player.isEnemy(battleStore.state.userPlayer.getPlayer())
-    ? -1
-    : 1;
+  let value = unit.player.equals(state.value.players[1]) ? -1 : 1;
 
   return value;
 });
@@ -66,7 +61,7 @@ useBattleEvent(GAME_EVENTS.UNIT_BEFORE_DESTROY, async e => {
 </script>
 
 <template>
-  <container :scale-x="scaleX" ref="container" :y="-8">
+  <container :scale-x="scaleX" ref="container" :y="-12">
     <slot />
   </container>
 </template>

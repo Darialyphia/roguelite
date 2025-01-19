@@ -15,11 +15,11 @@ export class SpellCasterModifierMixin extends UnitModifierMixin {
 
   onApplied(unit: Unit): void {
     unit.addInterceptor('canCastSpells', this.interceptor);
-    unit.addKeyword(KEYWORDS.COMMANDER);
+    unit.addKeyword(KEYWORDS.SPELLCASTER);
   }
 
   onRemoved(unit: Unit): void {
-    unit.removeKeyword(KEYWORDS.COMMANDER);
+    unit.removeKeyword(KEYWORDS.SPELLCASTER);
     unit.removeInterceptor('canCastSpells', this.interceptor);
   }
 

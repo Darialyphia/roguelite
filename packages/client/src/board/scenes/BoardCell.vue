@@ -5,17 +5,9 @@ import UiAnimatedSprite from '@/ui/scenes/UiAnimatedSprite.vue';
 import BoardCellHighlights from './BoardCellHighlights.vue';
 import type { CellViewModel } from '../models/cell.model';
 import { match } from 'ts-pattern';
-import { PTransition, External, type ContainerInst } from 'vue3-pixi';
+import { PTransition, type ContainerInst } from 'vue3-pixi';
 import BoardCellLightVFX from './BoardCellLightVFX.vue';
 import Card from '@/card/components/Card.vue';
-import { useTimeoutFn } from '@vueuse/core';
-import { config } from '@/utils/config';
-import {
-  autoPlacement,
-  autoUpdate,
-  shift,
-  useFloating
-} from '@floating-ui/vue';
 import Obstacle from './Obstacle.vue';
 import ObstacleCard from '@/card/components/ObstacleCard.vue';
 import { useCamera } from '../composables/useCamera';
@@ -76,12 +68,14 @@ const tutorial = useTutorialStore();
     @pointerleave="ui.unHover()"
     @pointerup="
       () => {
+        console.log('click');
         if (camera.isDragging.value) return;
         if (!ui.mode) return;
 
         match(ui.mode)
           .with(UI_MODES.BASIC, () => {
             const canSelect = cell.unit && cell.unit.player.equals(player);
+            console.log(canSelect);
             if (canSelect) {
               ui.selectUnit(cell.unit!);
               return;

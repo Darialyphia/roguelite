@@ -2,9 +2,11 @@ import { assert, type Point3D } from '@game/shared';
 import type { Unit } from '../unit/unit.entity';
 import { Card, CARD_EVENTS } from './card.entity';
 import type { UnitCardBlueprint } from './card-blueprint';
-import { UNIT_TYPES } from './card-enums';
+import { CARD_KINDS, UNIT_TYPES } from './card-enums';
 import { TARGETING_TYPE } from '../targeting/targeting-strategy';
 import { MeleeTargetingStrategy } from '../targeting/melee-targeting.straegy';
+
+export const isUnitCard = (card: Card): card is UnitCard => card.kind === CARD_KINDS.UNIT;
 
 export class UnitCard extends Card<UnitCardBlueprint> {
   unit!: Unit;
@@ -57,11 +59,10 @@ export class UnitCard extends Card<UnitCardBlueprint> {
     );
   }
 
-  play(targets: Point3D[]) {
-    if (this.unitType !== UNIT_TYPES.GENERAL) {
+  play(targets: Point3D[], ignoreRequirements?: boolean) {
+    if (this.unitType !== UNIT_TYPES.GENERAL && !ignoreRequirements) {
       assert(this.canPlayAt(targets), 'cannot play card at this position.');
     }
-
     const [summonPosition] = targets;
     this.unit = this.game.unitSystem.addUnit(this, summonPosition);
 
@@ -69,8 +70,6 @@ export class UnitCard extends Card<UnitCardBlueprint> {
       targets,
       vfx: this.blueprint.vfx.play(this.game, this)
     });
-
-    this.player.spendGold(this.blueprint.cost.gold);
 
     const aoeShape = this.blueprint.getAoe(this.game, this, targets);
     this.blueprint.onPlay(

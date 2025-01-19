@@ -5,6 +5,7 @@ import type { Point3D } from '@game/shared';
 import { CARDS_DICTIONARY } from '../card/cards/_index';
 import { nanoid } from 'nanoid';
 import { GAME_PHASES } from '../game/game-phase.system';
+import { makeCardId } from '../card/card.utils';
 
 export type TeamOptions = {
   id: string;
@@ -53,7 +54,7 @@ export class Team extends Entity {
               throw new Error(`blueprint not found: ${card.blueprintId}`);
             }
             return {
-              id: `${player.id}_card_${card.blueprintId}_${nanoid(4)}`,
+              id: makeCardId(card.blueprintId, player.id),
               blueprint
             };
           })

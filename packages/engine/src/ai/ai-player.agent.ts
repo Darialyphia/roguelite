@@ -217,9 +217,8 @@ export class AIPlayerAgent implements AIAgent {
     acc: Point3D[][] = [],
     index = 0
   ): Point3D[][] {
-    const targeting = card.targetsDefinition[index].getTargeting(game, card as any);
-
     if (index === 0) {
+      const targeting = card.targetsDefinition[index].getTargeting(game, card as any, []);
       const candidates = cells.filter(
         cell =>
           targeting.canTargetAt(cell) &&

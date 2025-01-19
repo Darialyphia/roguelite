@@ -63,10 +63,7 @@ const options: Pick<GameOptions, 'mapId' | 'teams'> = {
             { blueprintId: 'red-emperor' },
             { blueprintId: 'red-fireball' },
             { blueprintId: 'red-fireball' },
-            { blueprintId: 'red-fireball' },
-            { blueprintId: 'test-quest' },
-            { blueprintId: 'test-quest' },
-            { blueprintId: 'test-quest' }
+            { blueprintId: 'red-fireball' }
           ]
         }
       }
@@ -108,9 +105,6 @@ const options: Pick<GameOptions, 'mapId' | 'teams'> = {
             { blueprintId: 'red-exorcist' },
             { blueprintId: 'red-exorcist' },
             { blueprintId: 'red-exorcist' },
-            { blueprintId: 'test-quest' },
-            { blueprintId: 'test-quest' },
-            { blueprintId: 'test-quest' },
             { blueprintId: 'red-archer' },
             { blueprintId: 'red-archer' },
             { blueprintId: 'red-archer' },

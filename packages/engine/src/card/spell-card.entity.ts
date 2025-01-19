@@ -1,6 +1,10 @@
 import { type Point3D } from '@game/shared';
 import { Card, CARD_EVENTS } from './card.entity';
 import type { SpellCardBlueprint } from './card-blueprint';
+import { CARD_KINDS } from './card-enums';
+
+export const isSpellCard = (card: Card): card is SpellCard =>
+  card.kind === CARD_KINDS.SPELL;
 
 export class SpellCard extends Card<SpellCardBlueprint> {
   get isGoldValid() {
@@ -19,14 +23,13 @@ export class SpellCard extends Card<SpellCardBlueprint> {
     );
   }
 
-  play(targets: Point3D[]) {
-    if (!this.canPlayAt(targets)) return;
+  play(targets: Point3D[], ignoreRequirements?: boolean) {
+    if (!this.canPlayAt(targets) && !ignoreRequirements) return;
 
     this.emitter.emit(CARD_EVENTS.BEFORE_PLAY, {
       targets,
       vfx: this.blueprint.vfx.play(this.game, this)
     });
-    this.player.spendGold(this.blueprint.cost.gold);
 
     const aoeShape = this.blueprint.getAoe(this.game, this, targets);
     this.blueprint.onPlay(

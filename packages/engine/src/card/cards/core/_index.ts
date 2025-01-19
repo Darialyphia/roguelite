@@ -2,7 +2,7 @@ import { redFireball } from './red-fireball';
 import type { CardBlueprint } from '../../card-blueprint';
 import { redFootman } from './red_footman';
 import { keyBy } from 'lodash-es';
-import { testQuest } from './test-quest';
+import { questWarPath } from './quest-war-path';
 import { redArcher } from './red_archer';
 import { redEmperor } from './red_emperor';
 import { redBerserk } from './red_berserk';
@@ -17,6 +17,8 @@ import { redBurningBlade } from './red_burning_blade';
 import { tutorialSpell } from './tutorial_spell';
 import { tutorialQuest } from './tutorial_quest';
 import { redCrazedBloodCultist } from './red_crazed_blood_cultist';
+import { redFirePillar } from './red_fire-pillar';
+import { questBloodThirst } from './quest-blood-thirst';
 
 export const CORE_CARDS = keyBy(
   [
@@ -34,7 +36,9 @@ export const CORE_CARDS = keyBy(
     redCombustion,
     redBurningBlade,
     redCrazedBloodCultist,
-    testQuest,
+    redFirePillar,
+    questWarPath,
+    questBloodThirst,
     tutorialSpell,
     tutorialQuest
   ],

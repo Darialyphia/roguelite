@@ -15,7 +15,7 @@ import { GAME_EVENTS } from '@game/engine/src/game/game';
 import { useCamera } from '@/board/composables/useCamera';
 import UnitResourceIndicator from './UnitResourceIndicator.vue';
 import UnitModifierSprite from './UnitModifierSprite.vue';
-import { useBattleEvent } from '@/battle/stores/battle.store';
+import { useBattleEvent, useUserPlayer } from '@/battle/stores/battle.store';
 
 const { unit } = defineProps<{ unit: UnitViewModel }>();
 
@@ -63,7 +63,7 @@ const spawnAnimation = (container: Container) => {
   container.alpha = 0;
   gsap.to(container, { alpha: 1, duration: 0.3 });
   gsap.to(container, {
-    y: 0,
+    y: -12,
     duration: 1,
     ease: Bounce.easeOut,
     onComplete() {
@@ -71,6 +71,8 @@ const spawnAnimation = (container: Container) => {
     }
   });
 };
+
+const player = useUserPlayer();
 </script>
 
 <template>
@@ -81,10 +83,18 @@ const spawnAnimation = (container: Container) => {
       @enter="spawnAnimation"
     >
       <UnitOrientation :unit="unit">
-        <!-- <container :scale="0.5" :y="10"> -->
+        <sprite
+          event-mode="none"
+          :anchor="0.5"
+          :y="28"
+          :texture="
+            player.equals(unit.player)
+              ? '/assets/ui/ally-indicator.png'
+              : '/assets/ui/enemy-indicator.png'
+          "
+        />
         <UnitShadow :unit="unit" />
         <UnitSprite :unit="unit" />
-        <!-- </container> -->
       </UnitOrientation>
     </PTransition>
     <UnitVFX :unit="unit" />
@@ -94,7 +104,6 @@ const spawnAnimation = (container: Container) => {
       v-if="isSpawnAnimationDone"
     >
       <container>
-        <!-- <UnitGeneralIndicator v-if="unit.isGeneral" :unit="unit" /> -->
         <UnitStatsIndicators
           :unit="unit"
           v-if="!unit.isGeneral || !unit.isDead"

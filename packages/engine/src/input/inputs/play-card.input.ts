@@ -31,6 +31,6 @@ export class PlayCardInput extends Input<typeof schema> {
       throw new Error(`Cannot play card at index ${this.payload.index}`);
     }
 
-    this.player.playCard(this.payload.index, this.payload.targets);
+    this.player.playCardAtIndex(this.payload.index, this.payload.targets);
   }
 }

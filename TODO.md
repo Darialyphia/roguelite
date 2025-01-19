@@ -36,12 +36,9 @@ There is no need for a back end as this point, and the games will be single play
 - [ ] Maybe we don't need all the bells and whistles with scaling and mitigations for the Damage class, inerceptors on `dealtDamage` and `receivedDamage` should be enough. Let's keep the Damage class though, it might still be useful down the line.
 
 ### Bugs
-- [ ] In sandbox mode, the player informations keep swapping position along with the active player.
-- [ ] [Red Exorcist](packages/engine//src/card/cards/core/red_exorcist.ts) Damage amplification on shrines seems to not be working.
 - [ ] Server session crashes as soon as an error occurs during an input. It needs error handling, at least for recoverable errors
 - [ ] AI or automatic attacks (for exemple because of [RageModifierMixin](packages/engine/src/unit//modifier-mixins/rage.mixin.ts)) sometimes fire from range but the attacker should be melee.
-- [ ] You can click and drag the camera too much vertically but that shouldn't be possible. The worldSize in the Camera component is probably wrong. In a last resort, remove the ability to drag the viewport altogether.
-- [ ] AI sometimes just oves units to the top of the map without any specific reason.
+- [ ] AI sometimes just moves units to the top of the map without any specific reason.
 - [ ] AI will always spend all of it action points, which sometimes maks it step out of shrines for no reason.
 - [ ] The card spacing in the opponent's hand after the first turn is incorrect, resulting in cards being spaced too much.
 - [ ] Avoid a shrine
@@ -83,6 +80,8 @@ Players will be able to
 
 # Change Log
 
+- [x] 19/01/2025: In sandbox mode, the player informations keep swapping position along with the active player.
+- [x] 19/01/2025: - [Red Exorcist](packages/engine//src/card/cards/core/red_exorcist.ts) Damage amplification on shrines seems to not be working.
 - [x] 17/01/2025: Sandbox first draft
 - [x] 14/01/2025: Tutorial first draft
 - [x] 11/01/2025: Fixed auras persisting after the unit was destroyed

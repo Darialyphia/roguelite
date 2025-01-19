@@ -25,7 +25,7 @@ export const redFireElemental: UnitCardBlueprint = {
   },
   jobs: [JOBS.FIGHTER],
   atk: 4,
-  maxHp: 5,
+  maxHp: 4,
   minTargets: 1,
   targets: [
     {

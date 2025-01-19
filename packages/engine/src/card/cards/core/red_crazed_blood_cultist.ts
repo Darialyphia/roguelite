@@ -20,12 +20,12 @@ export const redCrazedBloodCultist: UnitCardBlueprint = {
   unitType: UNIT_TYPES.MINION,
   aiHints: meleeFighter,
   cost: {
-    gold: 5,
-    runes: [RUNES.RED, RUNES.RED, RUNES.RED, RUNES.RED]
+    gold: 4,
+    runes: [RUNES.RED, RUNES.RED, RUNES.RED]
   },
   jobs: [JOBS.FIGHTER],
   atk: 3,
-  maxHp: 2,
+  maxHp: 1,
   minTargets: 1,
   targets: [
     {

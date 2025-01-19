@@ -742,6 +742,19 @@
         },
         {
           "alias": [
+            "icon-unit_master-at-arms"
+          ],
+          "src": [
+            "/assets/icons/unit_master-at-arms.png"
+          ],
+          "data": {
+            "tags": {
+              "m": true
+            }
+          }
+        },
+        {
+          "alias": [
             "icon-unit_warleader"
           ],
           "src": [
@@ -1174,6 +1187,19 @@
         },
         {
           "alias": [
+            "ally-indicator.png"
+          ],
+          "src": [
+            "/assets/ui/ally-indicator.png"
+          ],
+          "data": {
+            "tags": {
+              "m": true
+            }
+          }
+        },
+        {
+          "alias": [
             "altar-stats"
           ],
           "src": [
@@ -1453,6 +1479,19 @@
           ],
           "src": [
             "/assets/ui/end-turn-action.png"
+          ],
+          "data": {
+            "tags": {
+              "m": true
+            }
+          }
+        },
+        {
+          "alias": [
+            "enemy-indicator.png"
+          ],
+          "src": [
+            "/assets/ui/enemy-indicator.png"
           ],
           "data": {
             "tags": {
@@ -2373,6 +2412,60 @@
           ],
           "src": [
             "/assets/units/footman.png"
+          ],
+          "data": {
+            "tags": {
+              "m": true
+            }
+          }
+        },
+        {
+          "alias": [
+            "master-at-arms"
+          ],
+          "src": [
+            "/assets/units/master-at-arms.json"
+          ],
+          "loadParser": "aseprite_loader",
+          "data": {
+            "tags": {
+              "m": true
+            }
+          }
+        },
+        {
+          "alias": [
+            "master-at-arms.png"
+          ],
+          "src": [
+            "/assets/units/master-at-arms.png"
+          ],
+          "data": {
+            "tags": {
+              "m": true
+            }
+          }
+        },
+        {
+          "alias": [
+            "master-or-arms"
+          ],
+          "src": [
+            "/assets/units/master-or-arms.json"
+          ],
+          "loadParser": "aseprite_loader",
+          "data": {
+            "tags": {
+              "m": true
+            }
+          }
+        },
+        {
+          "alias": [
+            "master-or-arms.png"
+          ],
+          "src": [
+            "/assets/units/master-or-arms.png"
           ],
           "data": {
             "tags": {

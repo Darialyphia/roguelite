@@ -84,7 +84,7 @@ const tutorial = useTutorialStore();
   --card-spacing-scale: 1px;
 
   &:hover {
-    --card-spacing-scale: 0.8px;
+    --card-spacing-scale: 0.75px;
   }
 
   > li:not(:last-child) {

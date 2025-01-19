@@ -3,6 +3,7 @@ import { createEntityId } from '../../../entity';
 import { PointAOEShape } from '../../../targeting/aoe-shapes';
 import { UnitSummonTargetingtrategy } from '../../../targeting/unit-summon-targeting.strategy';
 import { InterceptorAuraModifierMixin } from '../../../unit/modifier-mixins/interceptor-aura.mixin';
+import { RushModifier } from '../../../unit/modifiers/rush.modifier';
 import { SplashAttackModifier } from '../../../unit/modifiers/splash-attack.modifier';
 import { UnitModifier } from '../../../unit/unit-modifier.entity';
 import { JOBS } from '../../../utils/job';
@@ -15,7 +16,7 @@ export const redWarLeader: UnitCardBlueprint = {
   spriteId: 'warleader',
   iconId: 'unit_warleader',
   name: 'Warleader',
-  description: '@Splash Attack@.\nAllies nearby this unit have +1 / +0.',
+  description: '@Rush@.\n@Splash Attack@.\nAllies nearby this unit have +1 / +0.',
   kind: CARD_KINDS.UNIT,
   unitType: UNIT_TYPES.MINION,
   aiHints: meleeFighter,
@@ -47,12 +48,13 @@ export const redWarLeader: UnitCardBlueprint = {
   },
   onPlay(game, card) {
     card.unit.addModifier(new SplashAttackModifier(game, card));
+    card.unit.addModifier(new RushModifier(game, card));
     card.unit.addModifier(
       new UnitModifier(createEntityId('warleader_aura'), game, card, {
         stackable: true,
         initialStacks: 1,
         iconId: 'keyword-attack-buff',
-        name: 'Warleader buff',
+        name: 'Warleader aura',
         description: '+1 / +0',
         mixins: [
           new InterceptorAuraModifierMixin(game, {

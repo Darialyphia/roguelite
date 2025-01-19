@@ -17,6 +17,9 @@ import type { UnitCard } from '../card/unit-card.entity';
 import { createCard } from '../card/card-factory';
 import type { Unit } from '../unit/unit.entity';
 import { PLAYER_EVENTS } from './player-enums';
+import type { CardBlueprint } from '../card/card-blueprint';
+import { makeCardId } from '../card/card.utils';
+import { CARDS_DICTIONARY } from '../card/cards/_index';
 
 export type PlayerOptions = {
   id: string;
@@ -276,12 +279,34 @@ export class Player extends Entity {
     return card.canPlay;
   }
 
-  playCard(index: number, targets: Point3D[]) {
+  playCardAtIndex(index: number, targets: Point3D[]) {
     const card = this.cardManager.getCardAt(index);
     if (!card) return;
+
+    this.playCard(card, targets);
+  }
+
+  playCard(card: Card, targets: Point3D[]) {
     this.emitter.emit(PLAYER_EVENTS.BEFORE_PLAY_CARD, { card, targets });
+    this.spendGold(card.cost.gold);
     this.cardManager.play(card, targets);
     this.emitter.emit(PLAYER_EVENTS.AFTER_PLAY_CARD, { card, targets });
+  }
+
+  generateCard(blueprintId: string) {
+    const blueprint = CARDS_DICTIONARY[blueprintId];
+    const card = createCard(this.game, this, {
+      id: makeCardId(blueprint.id, this.id),
+      blueprint: blueprint
+    });
+
+    return card;
+  }
+
+  generateUnit(blueprintId: string, position: Point3D) {
+    const card = this.generateCard(blueprintId) as UnitCard;
+    card.play([position], true);
+    return card.unit;
   }
 
   startTurn() {

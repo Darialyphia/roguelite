@@ -33,11 +33,10 @@ export const KEYWORDS = {
     description: 'When this card attacks, it also damages the unit next to the target.',
     aliases: []
   },
-  COMMANDER: {
-    id: 'commander',
-    name: 'Commander',
-    spriteId: 'keyword-commander',
-    description: 'You can play your unit cards next to this.',
+  SUMMON: {
+    id: 'summon',
+    name: 'Summon',
+    description: 'Triggers when this unit is played from your hand.',
     aliases: []
   },
   FEARSOME: {

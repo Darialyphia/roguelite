@@ -1,7 +1,6 @@
 import { isDefined, type Point3D } from '@game/shared';
 import {
   isValidTargetingType,
-  TARGETING_TYPE,
   type TargetingStrategy,
   type TargetingType
 } from './targeting-strategy';

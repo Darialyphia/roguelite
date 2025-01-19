@@ -2,6 +2,9 @@ export type Nullable<T> = T | null | undefined;
 export type NonNullable<T> = Exclude<T, undefined | null>;
 export type PartialBy<T, K extends keyof T = never> = Omit<T, K> &
   Partial<Pick<T, K>>;
+export type RequiredBy<T, K extends keyof T> = T & {
+  [P in K]-?: Defined<T[P]>;
+};
 export type Boundaries<T = number> = { min: T; max: T };
 export type Range = Boundaries<number>;
 export type Entries<T> = Array<

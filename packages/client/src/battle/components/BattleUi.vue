@@ -9,15 +9,9 @@ import MulliganOverlay from '@/card/components/MulliganOverlay.vue';
 import PlayerBattleInfos from '@/player/components/PlayerBattleInfos.vue';
 import OpponentHand from '@/card/components/OpponentHand.vue';
 import TurnIndicator from '@/player/components/TurnIndicator.vue';
-import { useGame, useUserPlayer } from '../stores/battle.store';
-import { makePlayerViewModel } from '@/player/player.model';
+import { useGame, useGameClientState } from '../stores/battle.store';
 
-const userPlayer = useUserPlayer();
-
-const opponent = computed(() =>
-  makePlayerViewModel(game.value, userPlayer.value.getPlayer().opponents[0])
-);
-
+const state = useGameClientState();
 const game = useGame();
 </script>
 
@@ -29,10 +23,13 @@ const game = useGame();
     <TurnIndicator />
 
     <header>
-      <PlayerBattleInfos :player="userPlayer" class="player-battle-infos" />
+      <PlayerBattleInfos
+        :player="state.players[0]"
+        class="player-battle-infos"
+      />
       <OpponentHand class="opponent-hand" />
       <PlayerBattleInfos
-        :player="opponent"
+        :player="state.players[1]"
         class="opponent-battle-infos"
         inverted
       />

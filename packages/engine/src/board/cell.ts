@@ -7,6 +7,7 @@ import type { CellLight } from './map';
 import { Obstacle } from '../obstacle/obstacle.entity';
 import { nanoid } from 'nanoid';
 import type { BoardHex } from './board-system';
+import { makeObstacleId } from '../obstacle/obstacle.utils';
 
 export type SerializedCoords = `${string}:${string}:${string}`;
 
@@ -46,7 +47,7 @@ export class Cell extends Entity {
     this.obstacle = options.obstacle
       ? new Obstacle(this.game, {
           blueprintId: options.obstacle,
-          id: `obstacle_${this.position.x}.${this.position.y}.${this.position.z}_${nanoid(4)}` as EntityId,
+          id: makeObstacleId(this),
           position: this.position
         })
       : null;
