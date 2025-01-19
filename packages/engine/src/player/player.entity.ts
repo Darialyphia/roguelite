@@ -2,7 +2,7 @@ import { createEntityId, Entity, type EntityId } from '../entity';
 import type { Team } from './team.entity';
 import { GAME_EVENTS, type Game } from '../game/game';
 import { CardManagerComponent } from '../card/card-manager.component';
-import type { Card, CardOptions } from '../card/card.entity';
+import { CARD_EVENTS, type Card, type CardOptions } from '../card/card.entity';
 import { GoldManagerComponent } from './components/gold-manager.component';
 import { DECK_EVENTS } from '../card/deck.entity';
 import { assert, type Point3D } from '@game/shared';
@@ -288,7 +288,9 @@ export class Player extends Entity {
 
   playCard(card: Card, targets: Point3D[]) {
     this.emitter.emit(PLAYER_EVENTS.BEFORE_PLAY_CARD, { card, targets });
-    this.spendGold(card.cost.gold);
+    card.once(CARD_EVENTS.BEFORE_PLAY, () => {
+      this.spendGold(card.cost.gold);
+    });
     this.cardManager.play(card, targets);
     this.emitter.emit(PLAYER_EVENTS.AFTER_PLAY_CARD, { card, targets });
   }

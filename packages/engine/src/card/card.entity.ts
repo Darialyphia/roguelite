@@ -138,6 +138,7 @@ export abstract class Card<
 
   canPlayAt(targets: Point3D[]) {
     if (targets.length < this.minTargets) {
+      console.log('not enough targets');
       return false;
     }
     return this.canPlay && this.areTargetsValid(targets);
