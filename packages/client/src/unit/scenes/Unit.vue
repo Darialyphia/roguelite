@@ -84,6 +84,7 @@ const player = useUserPlayer();
     >
       <UnitOrientation :unit="unit">
         <sprite
+          v-if="isSpawnAnimationDone"
           event-mode="none"
           :anchor="0.5"
           :y="28"

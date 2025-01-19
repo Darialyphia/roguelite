@@ -39,9 +39,10 @@ const isWithinCardRange = computed(() => {
   return isTargetable;
 });
 
+const isHovered = computed(() => ui.hoveredCell?.equals(cell.getCell()));
 const canTarget = computed(() => {
   if (!ui.selectedCard) return;
-  if (ui.hoveredCell?.equals(cell.getCell())) return ui.isTargetValid(cell);
+  return ui.isTargetValid(cell);
 });
 
 const canMove = computed(() => {
@@ -80,7 +81,17 @@ const isInCardAoe = computed(() => {
   const aoe = ui.selectedCard.getAoe(targets);
   if (!aoe) return false;
 
-  return aoe?.getCells(targets).some(c => c.equals(cell.getCell()));
+  const aoeTargets = aoe?.getCells(targets);
+  // a unit's first target is always the place where it'll be summoned
+  if (
+    ui.selectedCard.kind === CARD_KINDS.UNIT &&
+    ui.cardTargets.length &&
+    aoeTargets.some(c => c.position.equals(ui.cardTargets[0]))
+  ) {
+    return false;
+  }
+
+  return aoeTargets.some(c => c.equals(cell.getCell()));
 });
 const userPlayer = useUserPlayer();
 
@@ -122,10 +133,10 @@ const tag = computed(() => {
     })
     .with(UI_MODES.PLAY_CARD, () => {
       if (canTarget.value) {
-        return 'targeting-valid';
+        return isHovered.value ? 'targeting-valid-hover' : 'targeting-valid';
       }
       if (isWithinCardRange.value) {
-        return 'targeting';
+        return 'targeting-range';
       }
       if (isInCardAoe.value) {
         return 'danger';

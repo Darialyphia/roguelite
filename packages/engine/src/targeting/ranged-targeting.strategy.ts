@@ -2,11 +2,14 @@ import { isDefined, type Point3D } from '@game/shared';
 import type { Game } from '../game/game';
 import type { Unit } from '../unit/unit.entity';
 import {
+  isValidTargetingType,
   TARGETING_TYPE,
   type TargetingStrategy,
   type TargetingType
 } from './targeting-strategy';
 import { match } from 'ts-pattern';
+import type { Card } from '../card/card.entity';
+import { Position } from '../utils/position';
 
 export type RangedTargetingStrategyOptions = {
   minRange: number;
@@ -16,15 +19,20 @@ export type RangedTargetingStrategyOptions = {
 export class RangedTargetingStrategy implements TargetingStrategy {
   constructor(
     private game: Game,
-    private unit: Unit,
+    private card: Card,
+    private origin: Point3D,
     private type: TargetingType,
     public readonly options: RangedTargetingStrategyOptions
   ) {}
 
+  get position() {
+    return Position.fromPoint3D(this.origin);
+  }
+
   isWithinRange(point: Point3D) {
-    if (this.unit.position.isWithinCells(point, this.options.minRange, this.game))
+    if (this.position.isWithinCells(point, this.options.minRange, this.game))
       return false;
-    if (!this.unit.position.isWithinCells(point, this.options.maxRange, this.game))
+    if (!this.position.isWithinCells(point, this.options.maxRange, this.game))
       return false;
 
     return true;
@@ -33,32 +41,6 @@ export class RangedTargetingStrategy implements TargetingStrategy {
   canTargetAt(point: Point3D) {
     if (!this.isWithinRange(point)) return false;
 
-    const unit = this.game.unitSystem.getUnitAt(point);
-
-    return match(this.type)
-      .with(TARGETING_TYPE.ANYWHERE, () => true)
-      .with(TARGETING_TYPE.EMPTY, () => !unit)
-      .with(TARGETING_TYPE.ALLY_UNIT, () => !!unit?.isAlly(this.unit))
-      .with(
-        TARGETING_TYPE.ALLY_GENERAL,
-        () => !!unit?.isAlly(this.unit) && unit.isGeneral
-      )
-      .with(
-        TARGETING_TYPE.ALLY_MINION,
-        () => !!unit?.isAlly(this.unit) && !unit.isGeneral
-      )
-      .with(TARGETING_TYPE.ENEMY_UNIT, () => !!unit?.isEnemy(this.unit))
-      .with(
-        TARGETING_TYPE.ENEMY_GENERAL,
-        () => !!unit?.isEnemy(this.unit) && unit.isGeneral
-      )
-      .with(
-        TARGETING_TYPE.ENEMY_MINION,
-        () => !!unit?.isEnemy(this.unit) && !unit.isGeneral
-      )
-      .with(TARGETING_TYPE.UNIT, () => isDefined(unit))
-      .with(TARGETING_TYPE.GENERAL, () => isDefined(unit) && unit?.isGeneral)
-      .with(TARGETING_TYPE.MINION, () => isDefined(unit) && !unit.isGeneral)
-      .exhaustive();
+    return isValidTargetingType(this.game, point, this.card.player, this.type);
   }
 }

@@ -10,6 +10,7 @@ import PlayerBattleInfos from '@/player/components/PlayerBattleInfos.vue';
 import OpponentHand from '@/card/components/OpponentHand.vue';
 import TurnIndicator from '@/player/components/TurnIndicator.vue';
 import { useGame, useGameClientState } from '../stores/battle.store';
+import TargetingUi from './TargetingUi.vue';
 
 const state = useGameClientState();
 const game = useGame();
@@ -21,6 +22,7 @@ const game = useGame();
     <MulliganOverlay />
     <PlayedCard />
     <TurnIndicator />
+    <TargetingUi />
 
     <header>
       <PlayerBattleInfos

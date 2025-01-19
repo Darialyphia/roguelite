@@ -24,7 +24,7 @@ const cardPosition = computed(() =>
   <container
     v-if="modifier.iconId"
     :scale="0.5"
-    :y="-20"
+    :y="-32"
     :x="-20 + index * 10"
     event-mode="static"
     @pointerenter="isHovered = true"

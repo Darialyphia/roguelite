@@ -68,14 +68,11 @@ const tutorial = useTutorialStore();
     @pointerleave="ui.unHover()"
     @pointerup="
       () => {
-        console.log('click');
         if (camera.isDragging.value) return;
         if (!ui.mode) return;
-
         match(ui.mode)
           .with(UI_MODES.BASIC, () => {
             const canSelect = cell.unit && cell.unit.player.equals(player);
-            console.log(canSelect);
             if (canSelect) {
               ui.selectUnit(cell.unit!);
               return;
@@ -112,19 +109,8 @@ const tutorial = useTutorialStore();
           .with(UI_MODES.PLAY_CARD, () => {
             if (ui.isTargetValid(cell)) {
               ui.addCardTarget({ x: cell.x, y: cell.y, z: cell.z });
-
-              if (!ui.canPlayCard()) return;
-              battle.dispatch({
-                type: 'playCard',
-                payload: {
-                  index: ui.selectedCardIndex!,
-                  targets: ui.cardTargets
-                }
-              });
+              return;
             }
-
-            ui.unselectCard();
-            ui.unselectUnit();
           })
           .exhaustive();
       }

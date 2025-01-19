@@ -20,6 +20,7 @@ export class RangedModifierMixin extends UnitModifierMixin {
   interceptor() {
     return new RangedTargetingStrategy(
       this.game,
+      this.modifier.source,
       this.modifier.target,
       TARGETING_TYPE.ENEMY_UNIT,
       { minRange: 1, maxRange: this.maxRange }

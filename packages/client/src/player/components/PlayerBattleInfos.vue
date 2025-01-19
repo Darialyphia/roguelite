@@ -74,9 +74,10 @@ const tutorial = useTutorialStore();
   <section
     v-if="state.phase === GAME_PHASES.BATTLE"
     class="player-infos"
-    :class="inverted && 'is-inverted'"
+    :class="{ 'is-inverted': inverted, 'is-active': player.isActive }"
   >
     <div class="name dual-color-text" :data-text="player.name">
+      <div class="pointer-events-auto" />
       {{ player.name }}
     </div>
     <ul class="resources">
@@ -225,10 +226,25 @@ const tutorial = useTutorialStore();
 .name {
   grid-area: name;
   font-size: var(--font-size-5);
-  text-align: right;
-
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--size-2);
+  > div {
+    width: var(--size-5);
+    aspect-ratio: 1;
+    border-radius: var(--radius-round);
+    background: linear-gradient(
+      #fffe00,
+      #fffe00 calc(50% + 3px),
+      #feb900 calc(50% + 3px)
+    );
+    align-self: center;
+    .player-infos:not(.is-active) & {
+      display: none;
+    }
+  }
   .is-inverted & {
-    text-align: left;
+    flex-direction: row-reverse;
   }
 }
 

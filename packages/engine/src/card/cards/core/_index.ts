@@ -1,4 +1,4 @@
-import { redFireball } from './red-fireball';
+import { redFireball } from './red_fireball';
 import type { CardBlueprint } from '../../card-blueprint';
 import { redFootman } from './red_footman';
 import { keyBy } from 'lodash-es';

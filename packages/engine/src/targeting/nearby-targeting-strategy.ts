@@ -5,9 +5,7 @@ import {
   type TargetingStrategy,
   type TargetingType
 } from './targeting-strategy';
-import type { Unit } from '../unit/unit.entity';
 import type { Game } from '../game/game';
-import { match } from 'ts-pattern';
 import type { Card } from '../card/card.entity';
 import { Position } from '../utils/position';
 

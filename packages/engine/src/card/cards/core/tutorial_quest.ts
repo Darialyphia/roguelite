@@ -9,7 +9,7 @@ export const tutorialQuest: QuestCardBlueprint = {
   id: 'tutorial-quest',
   iconId: 'placeholder',
   name: 'Tutorial Quest',
-  description: 'End your turn. Reward: 5 VP.',
+  description: 'End your turn. Reward: 12 VP.',
   kind: CARD_KINDS.QUEST,
   aiHints: mergeTraits(irrelevantTarget()),
   cost: {
@@ -31,7 +31,7 @@ export const tutorialQuest: QuestCardBlueprint = {
   },
   onPlay(game, card) {
     card.player.on(PLAYER_EVENTS.END_TURN, () => {
-      card.player.team.earnVictoryPoints(5);
+      card.player.team.earnVictoryPoints(12);
     });
   },
   onCompleted(game, card) {

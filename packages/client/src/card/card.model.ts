@@ -23,6 +23,8 @@ type CardViewModelBase = {
   description: string;
   cost?: CardBlueprint['cost'];
   shouldHighlightInHand: boolean;
+  minTargetCount: number;
+  maxTargetCount: number;
   equals(card: CardViewModel): boolean;
   canPlayAt(points: Point3D[]): boolean;
   areTargetsValid(points: Point3D[]): boolean;
@@ -75,6 +77,8 @@ const makeCardViewModelBase = (game: Game, card: Card): CardViewModelBase => {
     name: card.name,
     description: card.description,
     shouldHighlightInHand: card.shouldHighlightInHand,
+    minTargetCount: card.minTargets,
+    maxTargetCount: card.maxTargets,
     equals(otherCard) {
       return otherCard.getCard().equals(card);
     },
