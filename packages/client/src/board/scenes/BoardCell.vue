@@ -111,6 +111,8 @@ const tutorial = useTutorialStore();
               ui.addCardTarget({ x: cell.x, y: cell.y, z: cell.z });
               return;
             }
+            ui.unselectCard();
+            ui.unselectCard();
           })
           .exhaustive();
       }

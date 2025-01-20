@@ -24,8 +24,8 @@ export const redFireElemental: UnitCardBlueprint = {
     runes: [RUNES.RED, RUNES.RED, RUNES.RED]
   },
   jobs: [JOBS.FIGHTER],
-  atk: 4,
-  maxHp: 4,
+  atk: 3,
+  maxHp: 5,
   minTargets: 1,
   targets: [
     {

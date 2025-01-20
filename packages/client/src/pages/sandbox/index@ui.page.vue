@@ -58,9 +58,9 @@ const options: Pick<GameOptions, 'mapId' | 'teams'> = {
             { blueprintId: 'red-archer' },
             { blueprintId: 'red-archer' },
             { blueprintId: 'red-archer' },
-            { blueprintId: 'red-emperor' },
-            { blueprintId: 'red-emperor' },
-            { blueprintId: 'red-emperor' },
+            { blueprintId: 'red-blood-cultist-devotee' },
+            { blueprintId: 'red-blood-cultist-devotee' },
+            { blueprintId: 'red-blood-cultist-devotee' },
             { blueprintId: 'red-fireball' },
             { blueprintId: 'red-fireball' },
             { blueprintId: 'red-fireball' }
