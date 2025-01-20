@@ -29,7 +29,7 @@ export const redCombustion: SpellCardBlueprint = {
     {
       getTargeting(game, card) {
         return new SpellTargetingtrategy(game, card, {
-          maxRange: 3,
+          maxRange: 2,
           targetingType: TARGETING_TYPE.ENEMY_UNIT
         });
       }

@@ -650,6 +650,19 @@
         },
         {
           "alias": [
+            "icon-unit_blood-cultist-devotee"
+          ],
+          "src": [
+            "/assets/icons/unit_blood-cultist-devotee.png"
+          ],
+          "data": {
+            "tags": {
+              "m": true
+            }
+          }
+        },
+        {
+          "alias": [
             "icon-unit_crazed-blood-cultist"
           ],
           "src": [
@@ -2250,6 +2263,33 @@
           ],
           "src": [
             "/assets/units/berserk.png"
+          ],
+          "data": {
+            "tags": {
+              "m": true
+            }
+          }
+        },
+        {
+          "alias": [
+            "blood-cultist-devotee"
+          ],
+          "src": [
+            "/assets/units/blood-cultist-devotee.json"
+          ],
+          "loadParser": "aseprite_loader",
+          "data": {
+            "tags": {
+              "m": true
+            }
+          }
+        },
+        {
+          "alias": [
+            "blood-cultist-devotee.png"
+          ],
+          "src": [
+            "/assets/units/blood-cultist-devotee.png"
           ],
           "data": {
             "tags": {

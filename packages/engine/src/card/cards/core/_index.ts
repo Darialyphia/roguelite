@@ -19,6 +19,9 @@ import { tutorialQuest } from './tutorial_quest';
 import { redCrazedBloodCultist } from './red_crazed_blood_cultist';
 import { redFirePillar } from './red_fire-pillar';
 import { questBloodThirst } from './quest-blood-thirst';
+import { redBloodlust } from './red-bloodlust';
+import { redMasterAtArms } from './red-master-at-arms';
+import { redBloodCultistDevotee } from './red_blood_cultist_devotee';
 
 export const CORE_CARDS = keyBy(
   [
@@ -37,6 +40,9 @@ export const CORE_CARDS = keyBy(
     redBurningBlade,
     redCrazedBloodCultist,
     redFirePillar,
+    redBloodlust,
+    redMasterAtArms,
+    redBloodCultistDevotee,
     questWarPath,
     questBloodThirst,
     tutorialSpell,

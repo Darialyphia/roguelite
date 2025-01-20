@@ -12,7 +12,7 @@ export const redBurningBlade: SpellCardBlueprint = {
   id: 'red-burning-blade',
   iconId: 'spell-burning-blade',
   name: 'Burning Blade',
-  description: 'Give an ally minion +2 / +0.',
+  description: 'Give an ally minion +2/+0.',
   kind: CARD_KINDS.SPELL,
   aiHints: {},
   cost: {
@@ -46,7 +46,7 @@ export const redBurningBlade: SpellCardBlueprint = {
           initialStacks: 1,
           iconId: 'keyword-attack-buff',
           name: 'Burning Blade buff',
-          description: '+1 / +0',
+          description: '+2/+0',
           mixins: [
             new InterceptorModifierMixin(game, {
               key: 'attack',

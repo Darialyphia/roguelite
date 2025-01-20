@@ -23,7 +23,6 @@ const cancel = () => {
 };
 
 const commitPlay = () => {
-  console.log('commit');
   game.dispatch({
     type: 'playCard',
     payload: {

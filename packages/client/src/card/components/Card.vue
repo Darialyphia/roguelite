@@ -116,6 +116,7 @@ const pointerStyle = computed(() => {
       <StatCircle :value="card.maxHp!" icon="hp" />
     </div>
 
+    <div class="shine" />
     <div class="glare" />
   </div>
 </template>

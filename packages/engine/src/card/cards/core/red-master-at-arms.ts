@@ -2,31 +2,31 @@ import { meleeFighter } from '../../../ai/ai-traits';
 import { createEntityId } from '../../../entity';
 import { PointAOEShape } from '../../../targeting/aoe-shapes';
 import { UnitSummonTargetingtrategy } from '../../../targeting/unit-summon-targeting.strategy';
-import { InterceptorAuraModifierMixin } from '../../../unit/modifier-mixins/interceptor-aura.mixin';
-import { RushModifier } from '../../../unit/modifiers/rush.modifier';
-import { SplashAttackModifier } from '../../../unit/modifiers/splash-attack.modifier';
+import { InterceptorModifierMixin } from '../../../unit/modifier-mixins/interceptor.mixin';
+import { SelfEventModifierMixin } from '../../../unit/modifier-mixins/self-event.mixin';
+import { UNIT_EVENTS } from '../../../unit/unit-enums';
 import { UnitModifier } from '../../../unit/unit-modifier.entity';
 import { JOBS } from '../../../utils/job';
 import { RUNES } from '../../../utils/rune';
 import { type UnitCardBlueprint } from '../../card-blueprint';
 import { CARD_KINDS, UNIT_TYPES } from '../../card-enums';
 
-export const redWarLeader: UnitCardBlueprint = {
-  id: 'red-warleader',
-  spriteId: 'warleader',
-  iconId: 'unit_warleader',
-  name: 'Warleader',
-  description: '@Rush@.\n@Splash Attack@.\nAllies nearby this unit have +1/+0.',
+export const redMasterAtArms: UnitCardBlueprint = {
+  id: 'red-master-at-arms',
+  spriteId: 'master-at-arms',
+  iconId: 'unit_master-at-arms',
+  name: 'MAster at Arms',
+  description: 'Before this unit attacks, give it +1/+0.',
   kind: CARD_KINDS.UNIT,
   unitType: UNIT_TYPES.MINION,
   aiHints: meleeFighter,
   cost: {
-    gold: 6,
-    runes: [RUNES.RED, RUNES.RED, RUNES.RED]
+    gold: 4,
+    runes: [RUNES.RED, RUNES.RED]
   },
   jobs: [JOBS.FIGHTER],
-  atk: 4,
-  maxHp: 8,
+  atk: 1,
+  maxHp: 6,
   minTargets: 1,
   targets: [
     {
@@ -47,26 +47,32 @@ export const redWarLeader: UnitCardBlueprint = {
     }
   },
   onPlay(game, card) {
-    card.unit.addModifier(new SplashAttackModifier(game, card));
-    card.unit.addModifier(new RushModifier(game, card));
-    card.unit.addModifier(
-      new UnitModifier(createEntityId('warleader_aura'), game, card, {
+    const atkModifier = new UnitModifier(
+      createEntityId('master_at_arms_buff'),
+      game,
+      card,
+      {
         stackable: true,
         initialStacks: 1,
         iconId: 'keyword-attack-buff',
-        name: 'Warleader aura',
-        description: '+1 / +0',
+        name: 'Master at Arms buff',
+        description: '+1/+0',
         mixins: [
-          new InterceptorAuraModifierMixin(game, {
+          new InterceptorModifierMixin(game, {
             key: 'attack',
-            isElligible(unit, modifier) {
-              return (
-                unit.isAlly(modifier.target) &&
-                unit.position.isNearby(modifier.target, game)
-              );
-            },
-            interceptor(attack) {
-              return attack + 1;
+            interceptor: (attack, modifier) => attack + modifier.stacks
+          })
+        ]
+      }
+    );
+    card.unit.addModifier(
+      new UnitModifier(createEntityId('master-at-arms-listener'), game, card, {
+        stackable: false,
+        mixins: [
+          new SelfEventModifierMixin(game, {
+            eventName: UNIT_EVENTS.BEFORE_ATTACK,
+            handler() {
+              card.unit.addModifier(atkModifier);
             }
           })
         ]

@@ -17,7 +17,7 @@ export const redEmperor: UnitCardBlueprint = {
   spriteId: 'emperor',
   iconId: 'unit_emperor',
   name: 'Emperor',
-  description: '@Summon@: give a nearby ally +2 / +0 this turn.',
+  description: '@Summon@: give a nearby ally +2/+0 this turn.',
   kind: CARD_KINDS.UNIT,
   unitType: UNIT_TYPES.MINION,
   aiHints: meleeFighter,
@@ -28,7 +28,7 @@ export const redEmperor: UnitCardBlueprint = {
   jobs: [JOBS.SHOOTER],
   atk: 3,
   maxHp: 4,
-  minTargets: 2,
+  minTargets: 1,
   targets: [
     {
       getTargeting(game, card) {
@@ -58,7 +58,9 @@ export const redEmperor: UnitCardBlueprint = {
     }
   },
   onPlay(game, card, cells, unitTargets) {
-    unitTargets[1].addModifier(
+    const target = unitTargets[1];
+    if (!target) return;
+    target.addModifier(
       new UnitModifier(createEntityId('red_emperor'), game, card, {
         stackable: true,
         initialStacks: 1,
