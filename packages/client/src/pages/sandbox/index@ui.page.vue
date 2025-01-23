@@ -2,12 +2,6 @@
 import Fps from '@/shared/components/Fps.vue';
 import { ClientSession, ServerSession } from '@game/engine';
 import { GAME_EVENTS, type GameOptions } from '@game/engine/src/game/game';
-import { AI } from '@game/engine/src/ai/ai';
-import type { EntityId } from '@game/engine/src/entity';
-import { waitFor } from '@game/shared';
-import type { SerializedInput } from '@game/engine/src/input/input-system';
-import { until } from '@vueuse/core';
-import AIWorker from '@/ai.worker?worker';
 import { useBattleEvent, useBattleStore } from '@/battle/stores/battle.store';
 import BattleUi from '@/battle/components/BattleUi.vue';
 
@@ -23,7 +17,7 @@ const options: Pick<GameOptions, 'mapId' | 'teams'> = {
         id: 'player1',
         name: 'Daria',
         deck: {
-          general: { blueprintId: 'red-general-flame-lord' },
+          altar: { blueprintId: 'altar' },
           cards: [
             { blueprintId: 'red-master-at-arms' },
             { blueprintId: 'red-master-at-arms' },
@@ -73,7 +67,7 @@ const options: Pick<GameOptions, 'mapId' | 'teams'> = {
         id: 'player2',
         name: 'Jane',
         deck: {
-          general: { blueprintId: 'red-general-flame-lord' },
+          altar: { blueprintId: 'altar' },
           cards: [
             { blueprintId: 'red-master-at-arms' },
             { blueprintId: 'red-master-at-arms' },

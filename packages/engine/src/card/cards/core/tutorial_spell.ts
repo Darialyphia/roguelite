@@ -1,8 +1,8 @@
 import { Damage } from '../../../combat/damage/damage';
 import { NoMitigationStrategy } from '../../../combat/damage/mitigation/no-mitigation.strategy';
 import { NoScalingStrategy } from '../../../combat/damage/scaling/no-scaling.strategy';
+import { AnywhereTargetingStrategy } from '../../../targeting/anywhere-targeting-strategy';
 import { PointAOEShape } from '../../../targeting/aoe-shapes';
-import { SpellTargetingtrategy } from '../../../targeting/spell-targeting.strategy';
 import { TARGETING_TYPE } from '../../../targeting/targeting-strategy';
 import { type SpellCardBlueprint } from '../../card-blueprint';
 import { CARD_KINDS } from '../../card-enums';
@@ -11,7 +11,7 @@ export const tutorialSpell: SpellCardBlueprint = {
   id: 'tutorial-spell',
   iconId: 'placeholder',
   name: 'Tutorial Spell',
-  description: 'Deal 8 damage to a general.',
+  description: 'Deal 8 damage to the enemy altar.',
   kind: CARD_KINDS.SPELL,
   aiHints: {},
   cost: {
@@ -22,10 +22,11 @@ export const tutorialSpell: SpellCardBlueprint = {
   targets: [
     {
       getTargeting(game, card) {
-        return new SpellTargetingtrategy(game, card, {
-          maxRange: 3,
-          targetingType: TARGETING_TYPE.ENEMY_UNIT
-        });
+        return new AnywhereTargetingStrategy(
+          game,
+          card.player,
+          TARGETING_TYPE.ENEMY_UNIT
+        );
       }
     }
   ],

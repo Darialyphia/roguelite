@@ -32,7 +32,7 @@ const options: BetterOmit<
         id: 'player',
         name: 'Daria',
         deck: {
-          general: { blueprintId: 'red-general-flame-lord' },
+          altar: { blueprintId: 'altar' },
           cards: [
             { blueprintId: 'red-footman' },
             { blueprintId: 'red-footman' },
@@ -53,7 +53,7 @@ const options: BetterOmit<
         id: 'ai',
         name: 'AI',
         deck: {
-          general: { blueprintId: 'red-general-flame-lord' },
+          altar: { blueprintId: 'altar' },
           cards: [
             { blueprintId: 'red-footman' },
             { blueprintId: 'red-footman' },

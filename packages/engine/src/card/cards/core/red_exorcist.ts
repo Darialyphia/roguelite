@@ -2,12 +2,11 @@ import { meleeFighter } from '../../../ai/ai-traits';
 import { Damage } from '../../../combat/damage/damage';
 import { NoMitigationStrategy } from '../../../combat/damage/mitigation/no-mitigation.strategy';
 import { NoScalingStrategy } from '../../../combat/damage/scaling/no-scaling.strategy';
+import { AnywhereTargetingStrategy } from '../../../targeting/anywhere-targeting-strategy';
 import { PointAOEShape } from '../../../targeting/aoe-shapes';
-import { RangedTargetingStrategy } from '../../../targeting/ranged-targeting.strategy';
 import { TARGETING_TYPE } from '../../../targeting/targeting-strategy';
 import { UnitSummonTargetingtrategy } from '../../../targeting/unit-summon-targeting.strategy';
 import { RangedModifier } from '../../../unit/modifiers/ranged.modifier';
-import { SpellCasterModifier } from '../../../unit/modifiers/spellcaster.modifier';
 import { JOBS } from '../../../utils/job';
 import { RUNES } from '../../../utils/rune';
 import { type UnitCardBlueprint } from '../../card-blueprint';
@@ -37,16 +36,11 @@ export const redExorcist: UnitCardBlueprint = {
       }
     },
     {
-      getTargeting(game, card, points) {
-        return new RangedTargetingStrategy(
+      getTargeting(game, card) {
+        return new AnywhereTargetingStrategy(
           game,
-          card,
-          points[0],
-          TARGETING_TYPE.ENEMY_UNIT,
-          {
-            maxRange: 3,
-            minRange: 0
-          }
+          card.player,
+          TARGETING_TYPE.ENEMY_UNIT
         );
       }
     }
@@ -64,7 +58,6 @@ export const redExorcist: UnitCardBlueprint = {
   },
   onPlay(game, card, cells, units) {
     card.unit.addModifier(new RangedModifier(game, card, 2));
-    card.unit.addModifier(new SpellCasterModifier(game, card));
     const target = units[1];
     if (target) {
       card.unit.dealDamage(

@@ -1,14 +1,9 @@
 import { meleeFighter } from '../../../ai/ai-traits';
-import { Damage } from '../../../combat/damage/damage';
-import { NoMitigationStrategy } from '../../../combat/damage/mitigation/no-mitigation.strategy';
-import { NoScalingStrategy } from '../../../combat/damage/scaling/no-scaling.strategy';
 import { PointAOEShape } from '../../../targeting/aoe-shapes';
 import { RangedTargetingStrategy } from '../../../targeting/ranged-targeting.strategy';
 import { TARGETING_TYPE } from '../../../targeting/targeting-strategy';
 import { UnitSummonTargetingtrategy } from '../../../targeting/unit-summon-targeting.strategy';
 import { RageModifier } from '../../../unit/modifiers/rage.modifier';
-import { RangedModifier } from '../../../unit/modifiers/ranged.modifier';
-import { SpellCasterModifier } from '../../../unit/modifiers/spellcaster.modifier';
 import { JOBS } from '../../../utils/job';
 import { RUNES } from '../../../utils/rune';
 import { type UnitCardBlueprint } from '../../card-blueprint';
@@ -19,7 +14,7 @@ export const redBloodCultistDevotee: UnitCardBlueprint = {
   spriteId: 'blood-cultist-devotee',
   iconId: 'unit_blood-cultist-devotee',
   name: 'Blood Cultist Devotee',
-  description: '@Summon@: Give @Rage@ to a minion.',
+  description: '@Summon@: Give @Rage@ to a minion within 3 cells.',
   kind: CARD_KINDS.UNIT,
   unitType: UNIT_TYPES.MINION,
   aiHints: meleeFighter,
@@ -39,16 +34,10 @@ export const redBloodCultistDevotee: UnitCardBlueprint = {
     },
     {
       getTargeting(game, card, points) {
-        return new RangedTargetingStrategy(
-          game,
-          card,
-          points[0],
-          TARGETING_TYPE.ENEMY_UNIT,
-          {
-            maxRange: 3,
-            minRange: 0
-          }
-        );
+        return new RangedTargetingStrategy(game, card, points[0], TARGETING_TYPE.MINION, {
+          maxRange: 3,
+          minRange: 0
+        });
       }
     }
   ],

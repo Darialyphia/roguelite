@@ -1,6 +1,7 @@
 import type { Values } from '@game/shared';
 import type { Game } from '../game/game';
 import type { Unit } from './unit.entity';
+import { defaultConfig } from '../config';
 
 export type Keyword = {
   id: string;
@@ -12,6 +13,20 @@ export type Keyword = {
 };
 
 export const KEYWORDS = {
+  ALTAR: {
+    id: 'altar',
+    name: 'Altar',
+    description: `Cannot move, attack, or counterattack. When destroyed, remain on the board and your opponent gains ${defaultConfig.ALTAR_VP_REWARD} VP.`,
+    spriteId: 'keyword-altar',
+    aliases: []
+  },
+  COMMANDER: {
+    id: 'commander',
+    name: 'Commander',
+    description: 'You can summon units nearby this.',
+    spriteId: 'commander',
+    aliases: []
+  },
   RANGED: {
     id: 'ranged',
     name: 'Ranged(x)',
@@ -60,13 +75,7 @@ export const KEYWORDS = {
     description: "This unit doesn't exhaust when deployed.",
     aliases: []
   },
-  SPELLCASTER: {
-    id: 'spellcaster',
-    spriteId: 'keyword-spellcaster',
-    name: 'Spellcaster',
-    description: 'This unit can use spell cards in place of its general',
-    aliases: []
-  },
+
   RAGE: {
     id: 'rage',
     spriteId: 'keyword-rage',

@@ -28,15 +28,15 @@ export type Config = {
   VICTORY_SHRINE_REWARD: number;
   // The gold gained at the end of the turn when a fortune shrine is controlled by a player
   GOLD_SHRINE_REWARD: number;
-  // The victory point awarded for destroying the enemy general
-  GENERAL_VP_REWARD: number;
+  // The victory point awarded for destroying the enemy altar
+  ALTAR_VP_REWARD: number;
   // How many quest can a player have at the same time
   MAX_ONGOING_QUESTS: number;
   // should the players decks be shuffled at the start of the game
   SHUFFLE_DECK_ON_GAME_START: boolean;
 };
 
-export const defaultConfig = {
+export const defaultConfig: Config = {
   TILE_WIDTH: 96,
   TILE_HEIGHT: 54,
   INITIAL_HAND_SIZE: 3,
@@ -52,7 +52,7 @@ export const defaultConfig = {
   MAX_COUNTERATTACKS_PER_TURN: 1,
   VICTORY_SHRINE_REWARD: 1,
   GOLD_SHRINE_REWARD: 1,
-  GENERAL_VP_REWARD: 4,
+  ALTAR_VP_REWARD: 4,
   MAX_ONGOING_QUESTS: 2,
   SHUFFLE_DECK_ON_GAME_START: true
-} as const;
+};

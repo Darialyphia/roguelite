@@ -107,9 +107,9 @@ const player = useUserPlayer();
       <container>
         <UnitStatsIndicators
           :unit="unit"
-          v-if="!unit.isGeneral || !unit.isDead"
+          v-if="!unit.isAltar || !unit.isDead"
         />
-        <UnitResourceIndicator v-if="unit.isGeneral" :unit="unit" />
+        <UnitResourceIndicator v-if="unit.isAltar" :unit="unit" />
         <UnitModifierSprite
           v-for="(modifier, index) in unit.modifiers"
           :unit="unit"

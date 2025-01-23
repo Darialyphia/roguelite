@@ -22,7 +22,7 @@ export const redWarLeader: UnitCardBlueprint = {
   aiHints: meleeFighter,
   cost: {
     gold: 6,
-    runes: [RUNES.RED, RUNES.RED, RUNES.RED]
+    runes: [RUNES.RED, RUNES.RED, RUNES.RED, RUNES.RED]
   },
   jobs: [JOBS.FIGHTER],
   atk: 4,

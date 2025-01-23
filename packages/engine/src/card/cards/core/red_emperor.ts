@@ -6,6 +6,7 @@ import { TARGETING_TYPE } from '../../../targeting/targeting-strategy';
 import { UnitSummonTargetingtrategy } from '../../../targeting/unit-summon-targeting.strategy';
 import { InterceptorModifierMixin } from '../../../unit/modifier-mixins/interceptor.mixin';
 import { UntilEndOfTurnModifierMixin } from '../../../unit/modifier-mixins/until-end-of-turn.mixin';
+import { CommanderModifier } from '../../../unit/modifiers/commander.modifier';
 import { UnitModifier } from '../../../unit/unit-modifier.entity';
 import { JOBS } from '../../../utils/job';
 import { RUNES } from '../../../utils/rune';
@@ -17,7 +18,7 @@ export const redEmperor: UnitCardBlueprint = {
   spriteId: 'emperor',
   iconId: 'unit_emperor',
   name: 'Emperor',
-  description: '@Summon@: give a nearby ally +2/+0 this turn.',
+  description: '@Commander@.',
   kind: CARD_KINDS.UNIT,
   unitType: UNIT_TYPES.MINION,
   aiHints: meleeFighter,
@@ -34,16 +35,6 @@ export const redEmperor: UnitCardBlueprint = {
       getTargeting(game, card) {
         return new UnitSummonTargetingtrategy(game, card);
       }
-    },
-    {
-      getTargeting(game, card, points) {
-        return new NearbyTargetingStrategy(
-          game,
-          card,
-          points[0],
-          TARGETING_TYPE.ALLY_UNIT
-        );
-      }
     }
   ],
   getAoe(game) {
@@ -57,24 +48,7 @@ export const redEmperor: UnitCardBlueprint = {
       return { tracks: [] };
     }
   },
-  onPlay(game, card, cells, unitTargets) {
-    const target = unitTargets[1];
-    if (!target) return;
-    target.addModifier(
-      new UnitModifier(createEntityId('red_emperor'), game, card, {
-        stackable: true,
-        initialStacks: 1,
-        iconId: 'keyword-attack-buff',
-        name: 'Emperor buff',
-        description: '+1 / +0 this turn',
-        mixins: [
-          new InterceptorModifierMixin(game, {
-            key: 'attack',
-            interceptor: (value, modifier) => value + modifier.stacks * 2
-          }),
-          new UntilEndOfTurnModifierMixin(game)
-        ]
-      })
-    );
+  onPlay(game, card) {
+    card.unit.addModifier(new CommanderModifier(game, card));
   }
 };

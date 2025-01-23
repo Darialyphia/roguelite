@@ -41,7 +41,7 @@ export class UnitCard extends Card<UnitCardBlueprint> {
 
   get canPlay() {
     // probably not the cleaest way to bypass card playing contraints for general
-    if (this.unitType === UNIT_TYPES.GENERAL) return true;
+    if (this.unitType === UNIT_TYPES.ALTAR) return true;
 
     return (
       this.game.turnSystem.activePlayer.equals(this.player) &&
@@ -60,7 +60,7 @@ export class UnitCard extends Card<UnitCardBlueprint> {
   }
 
   play(targets: Point3D[], ignoreRequirements?: boolean) {
-    if (this.unitType !== UNIT_TYPES.GENERAL && !ignoreRequirements) {
+    if (this.unitType !== UNIT_TYPES.ALTAR && !ignoreRequirements) {
       assert(this.canPlayAt(targets), 'cannot play card at this position.');
     }
     const [summonPosition] = targets;

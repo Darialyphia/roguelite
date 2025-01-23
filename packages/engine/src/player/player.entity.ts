@@ -17,15 +17,14 @@ import type { UnitCard } from '../card/unit-card.entity';
 import { createCard } from '../card/card-factory';
 import type { Unit } from '../unit/unit.entity';
 import { PLAYER_EVENTS } from './player-enums';
-import type { CardBlueprint } from '../card/card-blueprint';
 import { makeCardId } from '../card/card.utils';
 import { CARDS_DICTIONARY } from '../card/cards/_index';
 
 export type PlayerOptions = {
   id: string;
   name: string;
-  deck: { general: CardOptions; cards: CardOptions[] };
-  generalPosition: Point3D;
+  deck: { altar: CardOptions; cards: CardOptions[] };
+  altarPosition: Point3D;
 };
 
 export type PlayerEventMap = {
@@ -63,7 +62,7 @@ export class Player extends Entity {
 
   private readonly runeManager: RuneManager;
 
-  readonly generalPosition: Point3D;
+  readonly altarPosition: Point3D;
 
   private emitter = new TypedEventEmitter<PlayerEventMap>();
 
@@ -77,19 +76,14 @@ export class Player extends Entity {
 
   readonly quests = new Set<QuestCard>();
 
-  general!: Unit;
-
-  acquiredGeneralRewards = {
-    half: false,
-    full: false
-  };
+  altar!: Unit;
 
   constructor(game: Game, team: Team, options: PlayerOptions) {
     super(createEntityId(options.id));
     this.game = game;
     this.team = team;
     this.name = options.name;
-    this.generalPosition = options.generalPosition;
+    this.altarPosition = options.altarPosition;
     this.eventTracker = new EventTrackerComponent(this.game, this);
     this.runeManager = new RuneManager();
     this.cardManager = new CardManagerComponent(this.game, this, {
@@ -101,7 +95,7 @@ export class Player extends Entity {
     this.forwardEvents();
     this.draw(this.game.config.INITIAL_HAND_SIZE);
     this.game.on(GAME_EVENTS.START_BATTLE, this.onBattleStart.bind(this));
-    this.placeGeneral(options.deck.general);
+    this.placeAltar(options.deck.altar);
   }
 
   shutdown() {
@@ -133,11 +127,10 @@ export class Player extends Entity {
     return this.goldManager.amount;
   }
 
-  private placeGeneral(options: CardOptions) {
-    const generalCard = createCard(this.game, this, options) as UnitCard;
-    generalCard.play([this.generalPosition]);
-    this.general = generalCard.unit;
-    assert(this.general.isGeneral, 'General unit type needs to be a general');
+  private placeAltar(options: CardOptions) {
+    const altarCard = createCard(this.game, this, options) as UnitCard;
+    altarCard.play([this.altarPosition]);
+    this.altar = altarCard.unit;
   }
 
   addGold(amount: number) {
@@ -231,7 +224,7 @@ export class Player extends Entity {
   get enemiesPositions(): Point3D[] {
     return [
       ...this.enemyUnits.map(e => e.position),
-      ...this.opponents.map(o => o.generalPosition)
+      ...this.opponents.map(o => o.altarPosition)
     ];
   }
 
@@ -321,8 +314,8 @@ export class Player extends Entity {
   // eslint-disable-next-line @typescript-eslint/no-empty-function
   onBattleStart() {}
 
-  triggerGeneralReward() {
-    this.opponents[0].team.earnVictoryPoints(this.game.config.GENERAL_VP_REWARD);
+  triggerAltarReward() {
+    this.opponents[0].team.earnVictoryPoints(this.game.config.ALTAR_VP_REWARD);
   }
 
   endTurn() {

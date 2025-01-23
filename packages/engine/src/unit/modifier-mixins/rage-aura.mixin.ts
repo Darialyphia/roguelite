@@ -6,7 +6,7 @@ import { AuraModifierMixin } from './aura.mixin';
 
 export class RageAuraModifierMixin extends AuraModifierMixin {
   isElligible(unit: Unit): boolean {
-    return !unit.isGeneral;
+    return !unit.isAltar;
   }
 
   onGainAura(unit: Unit): void {

@@ -60,5 +60,5 @@ export const mapTutorial1: GameMap = {
       ]
     ]
   ],
-  generalPositions: [[new Vec3(0, 2, 0)], [new Vec3(5, 2, 0)]]
+  altarPositions: [[new Vec3(0, 2, 0)], [new Vec3(5, 2, 0)]]
 };

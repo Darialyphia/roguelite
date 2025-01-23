@@ -1,6 +1,6 @@
 import { createEntityId } from '../../../entity';
+import { AnywhereTargetingStrategy } from '../../../targeting/anywhere-targeting-strategy';
 import { PointAOEShape } from '../../../targeting/aoe-shapes';
-import { SpellTargetingtrategy } from '../../../targeting/spell-targeting.strategy';
 import { TARGETING_TYPE } from '../../../targeting/targeting-strategy';
 import { InterceptorModifierMixin } from '../../../unit/modifier-mixins/interceptor.mixin';
 import { UnitModifier } from '../../../unit/unit-modifier.entity';
@@ -23,10 +23,11 @@ export const redBurningBlade: SpellCardBlueprint = {
   targets: [
     {
       getTargeting(game, card) {
-        return new SpellTargetingtrategy(game, card, {
-          maxRange: 3,
-          targetingType: TARGETING_TYPE.ALLY_MINION
-        });
+        return new AnywhereTargetingStrategy(
+          game,
+          card.player,
+          TARGETING_TYPE.ALLY_MINION
+        );
       }
     }
   ],

@@ -1,5 +1,4 @@
 import type { Point3D } from '@game/shared';
-import { createEntityId } from '../../entity';
 import { Game } from '../../game/game';
 import { UNIT_EVENTS } from '../unit-enums';
 import { UnitModifier } from '../unit-modifier.entity';

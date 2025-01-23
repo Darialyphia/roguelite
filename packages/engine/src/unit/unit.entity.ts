@@ -21,6 +21,7 @@ import { PathfinderComponent } from '../pathfinding/pathfinder.component';
 import type { Obstacle } from '../obstacle/obstacle.entity';
 import { KeywordManagerComponent } from './components/keyword-manager.component';
 import { PLAYER_EVENTS } from '../player/player-enums';
+import { KEYWORDS } from './keywords';
 
 export type UnitOptions = {
   id: string;
@@ -75,7 +76,7 @@ export class Unit extends Entity {
     canBeAttackTarget: new Interceptable<boolean>(),
     canBeCardTarget: new Interceptable<boolean>(),
     canBeDestroyed: new Interceptable<boolean>(),
-    canCastSpells: new Interceptable<boolean>(),
+    canSummonNearby: new Interceptable<boolean>(),
 
     shouldDeactivateWhenSummoned: new Interceptable<boolean>(),
 
@@ -111,9 +112,6 @@ export class Unit extends Entity {
     this.onTurnStart = this.onTurnStart.bind(this);
     this.player.on(PLAYER_EVENTS.START_TURN, this.onTurnStart);
     this.forwardEvents();
-    if (this.isGeneral) {
-      this.handleGeneralRewards();
-    }
   }
 
   get spriteId() {
@@ -176,30 +174,27 @@ export class Unit extends Entity {
     return this.card.description;
   }
 
-  get isGeneral() {
-    return this.card.unitType === UNIT_TYPES.GENERAL;
+  get isAltar() {
+    return this.hasModifier(createEntityId(KEYWORDS.ALTAR.id));
   }
 
-  get canCastSpells(): boolean {
-    return this.interceptors.canCastSpells.getValue(this.isGeneral, {});
+  get canSummonNearby(): boolean {
+    return this.interceptors.canSummonNearby.getValue(false, {});
   }
 
   get canBeAttacked(): boolean {
     return this.interceptors.canBeAttackTarget.getValue(
-      this.isGeneral ? !this.isDead : true,
+      this.isAltar ? !this.isDead : true,
       {}
     );
   }
 
   get canBeCardTarget(): boolean {
-    return this.interceptors.canBeCardTarget.getValue(
-      this.isGeneral ? !this.isDead : true,
-      {}
-    );
+    return this.interceptors.canBeCardTarget.getValue(!this.isDead, {});
   }
 
   get shouldDeactivateWhenSummoned(): boolean {
-    return this.interceptors.shouldDeactivateWhenSummoned.getValue(!this.isGeneral, {});
+    return this.interceptors.shouldDeactivateWhenSummoned.getValue(!this.isAltar, {});
   }
 
   get enemiesInRange() {
@@ -282,13 +277,13 @@ export class Unit extends Entity {
   }
 
   get canBeDestroyed(): boolean {
-    return this.interceptors.canBeDestroyed.getValue(!this.isGeneral, {});
+    return this.interceptors.canBeDestroyed.getValue(true, {});
   }
 
   get canAttack(): boolean {
     const base = this.attacksPerformedThisTurn < this.maxAttacksPerTurn;
     return this.interceptors.canAttack.getValue(
-      this.isGeneral ? base && !this.isDead : base,
+      this.isAltar ? base && !this.isDead : base,
       {}
     );
   }
@@ -498,9 +493,8 @@ export class Unit extends Entity {
   }
 
   destroy(source: Card) {
-    if (!this.canBeDestroyed) return;
-
     this.emitter.emit(UNIT_EVENTS.BEFORE_DESTROY, { source });
+    if (!this.canBeDestroyed) return;
     for (const modifier of this.modifiers) {
       this.removeModifier(modifier.id);
     }
@@ -542,14 +536,5 @@ export class Unit extends Entity {
     this.modifierManager.add(modifier);
 
     return () => this.removeModifier(modifier.id);
-  }
-
-  private handleGeneralRewards() {
-    const unsub = this.hp.on('CHANGE', () => {
-      if (this.hp.current === 0) {
-        this.player.triggerGeneralReward();
-        unsub();
-      }
-    });
   }
 }

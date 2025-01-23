@@ -24,7 +24,7 @@ export type UnitViewModel = {
   card: CardViewModel;
   screenPosition: Point;
   keywords: Keyword[];
-  isGeneral: boolean;
+  isAltar: boolean;
   isDead: boolean;
   isExhausted: boolean;
   remainingMovement: number;
@@ -47,7 +47,7 @@ export const makeUnitViewModel = (game: Game, unit: Unit): UnitViewModel => {
   return {
     id: unit.id,
     name: unit.name,
-    isGeneral: unit.isGeneral,
+    isAltar: unit.isAltar,
     spriteId: unit.spriteId,
     iconId: unit.iconId,
     position: Vec3.fromPoint3D(unit.position),

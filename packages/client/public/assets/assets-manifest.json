@@ -182,6 +182,19 @@
         },
         {
           "alias": [
+            "icon-keyword-altar"
+          ],
+          "src": [
+            "/assets/icons/keyword-altar.png"
+          ],
+          "data": {
+            "tags": {
+              "m": true
+            }
+          }
+        },
+        {
+          "alias": [
             "icon-keyword-attack-buff"
           ],
           "src": [
@@ -611,6 +624,19 @@
         },
         {
           "alias": [
+            "icon-unit_altar"
+          ],
+          "src": [
+            "/assets/icons/unit_altar.png"
+          ],
+          "data": {
+            "tags": {
+              "m": true
+            }
+          }
+        },
+        {
+          "alias": [
             "icon-unit_archer"
           ],
           "src": [
@@ -641,6 +667,19 @@
           ],
           "src": [
             "/assets/icons/unit_berserk.png"
+          ],
+          "data": {
+            "tags": {
+              "m": true
+            }
+          }
+        },
+        {
+          "alias": [
+            "icon-unit_blood-cultist-brute"
+          ],
+          "src": [
+            "/assets/icons/unit_blood-cultist-brute.png"
           ],
           "data": {
             "tags": {
@@ -797,33 +836,6 @@
     {
       "name": "obstacles",
       "assets": [
-        {
-          "alias": [
-            "altar"
-          ],
-          "src": [
-            "/assets/obstacles/altar.json"
-          ],
-          "loadParser": "aseprite_loader",
-          "data": {
-            "tags": {
-              "m": true
-            }
-          }
-        },
-        {
-          "alias": [
-            "altar.png"
-          ],
-          "src": [
-            "/assets/obstacles/altar.png"
-          ],
-          "data": {
-            "tags": {
-              "m": true
-            }
-          }
-        },
         {
           "alias": [
             "gold-shrine"
@@ -1514,60 +1526,6 @@
         },
         {
           "alias": [
-            "general-indicator"
-          ],
-          "src": [
-            "/assets/ui/general-indicator.json"
-          ],
-          "loadParser": "aseprite_loader",
-          "data": {
-            "tags": {
-              "m": true
-            }
-          }
-        },
-        {
-          "alias": [
-            "general-indicator.png"
-          ],
-          "src": [
-            "/assets/ui/general-indicator.png"
-          ],
-          "data": {
-            "tags": {
-              "m": true
-            }
-          }
-        },
-        {
-          "alias": [
-            "general-vp-threshold-indicator"
-          ],
-          "src": [
-            "/assets/ui/general-vp-threshold-indicator.json"
-          ],
-          "loadParser": "aseprite_loader",
-          "data": {
-            "tags": {
-              "m": true
-            }
-          }
-        },
-        {
-          "alias": [
-            "general-vp-threshold-indicator.png"
-          ],
-          "src": [
-            "/assets/ui/general-vp-threshold-indicator.png"
-          ],
-          "data": {
-            "tags": {
-              "m": true
-            }
-          }
-        },
-        {
-          "alias": [
             "gold-action.png"
           ],
           "src": [
@@ -2191,6 +2149,33 @@
       "assets": [
         {
           "alias": [
+            "altar"
+          ],
+          "src": [
+            "/assets/units/altar.json"
+          ],
+          "loadParser": "aseprite_loader",
+          "data": {
+            "tags": {
+              "m": true
+            }
+          }
+        },
+        {
+          "alias": [
+            "altar.png"
+          ],
+          "src": [
+            "/assets/units/altar.png"
+          ],
+          "data": {
+            "tags": {
+              "m": true
+            }
+          }
+        },
+        {
+          "alias": [
             "archer"
           ],
           "src": [
@@ -2263,6 +2248,33 @@
           ],
           "src": [
             "/assets/units/berserk.png"
+          ],
+          "data": {
+            "tags": {
+              "m": true
+            }
+          }
+        },
+        {
+          "alias": [
+            "blood-cultist-brute"
+          ],
+          "src": [
+            "/assets/units/blood-cultist-brute.json"
+          ],
+          "loadParser": "aseprite_loader",
+          "data": {
+            "tags": {
+              "m": true
+            }
+          }
+        },
+        {
+          "alias": [
+            "blood-cultist-brute.png"
+          ],
+          "src": [
+            "/assets/units/blood-cultist-brute.png"
           ],
           "data": {
             "tags": {

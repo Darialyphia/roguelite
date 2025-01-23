@@ -18,7 +18,7 @@ export const redBerserk: UnitCardBlueprint = {
   aiHints: meleeFighter,
   cost: {
     gold: 4,
-    runes: [RUNES.RED, RUNES.COLORLESS]
+    runes: [RUNES.RED, RUNES.RED, RUNES.COLORLESS]
   },
   jobs: [JOBS.FIGHTER],
   atk: 4,

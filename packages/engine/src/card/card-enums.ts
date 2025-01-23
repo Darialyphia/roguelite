@@ -10,7 +10,7 @@ export type CardKind = Values<typeof CARD_KINDS>;
 
 export const UNIT_TYPES = {
   MINION: 'minion',
-  GENERAL: 'general'
+  ALTAR: 'altar'
 } as const;
 
 export type UnitType = Values<typeof UNIT_TYPES>;

@@ -1,9 +1,6 @@
-import { Damage } from '../../../combat/damage/damage';
-import { NoMitigationStrategy } from '../../../combat/damage/mitigation/no-mitigation.strategy';
-import { NoScalingStrategy } from '../../../combat/damage/scaling/no-scaling.strategy';
 import { createEntityId } from '../../../entity';
+import { AnywhereTargetingStrategy } from '../../../targeting/anywhere-targeting-strategy';
 import { PointAOEShape } from '../../../targeting/aoe-shapes';
-import { SpellTargetingtrategy } from '../../../targeting/spell-targeting.strategy';
 import { TARGETING_TYPE } from '../../../targeting/targeting-strategy';
 import { InterceptorModifierMixin } from '../../../unit/modifier-mixins/interceptor.mixin';
 import { RageModifier } from '../../../unit/modifiers/rage.modifier';
@@ -27,10 +24,7 @@ export const redBloodlust: SpellCardBlueprint = {
   targets: [
     {
       getTargeting(game, card) {
-        return new SpellTargetingtrategy(game, card, {
-          maxRange: 3,
-          targetingType: TARGETING_TYPE.ENEMY_UNIT
-        });
+        return new AnywhereTargetingStrategy(game, card.player, TARGETING_TYPE.MINION);
       }
     }
   ],

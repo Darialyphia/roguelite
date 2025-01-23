@@ -14,7 +14,7 @@ export const fortuneShrine: ObstacleBlueprint = {
     obstacle.meta.unsub();
   },
   onEnter(game, obstacle) {
-    if (obstacle.occupant!.isGeneral) return;
+    if (obstacle.occupant!.isAltar) return;
     obstacle.playerId = obstacle.occupant!.player.id;
 
     obstacle.meta.unsub = obstacle.occupant?.player.on(PLAYER_EVENTS.START_TURN, () => {

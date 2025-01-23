@@ -93,7 +93,7 @@ export class AIScorer {
           score -= this.getClosestDistanceFromEnemy(unit);
         }
 
-        if (!unit.isGeneral) {
+        if (!unit.isAltar) {
           const obstacle = this.game.boardSystem.getCellAt(unit.position)!.obstacle;
 
           const isOnVictoryShrine = obstacle?.blueprintId === victoryShrine.id;

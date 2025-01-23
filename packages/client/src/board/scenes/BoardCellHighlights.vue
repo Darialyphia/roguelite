@@ -135,9 +135,9 @@ const tag = computed(() => {
       if (canTarget.value) {
         return isHovered.value ? 'targeting-valid-hover' : 'targeting-valid';
       }
-      if (isWithinCardRange.value) {
-        return 'targeting-range';
-      }
+      // if (isWithinCardRange.value) {
+      //   return 'targeting-range';
+      // }
       if (isInCardAoe.value) {
         return 'danger';
       }

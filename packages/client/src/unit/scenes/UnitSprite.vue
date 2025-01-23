@@ -12,13 +12,13 @@ import { usePathHelpers } from '@/battle/stores/battle.store';
 
 const { unit } = defineProps<{ unit: UnitViewModel }>();
 
-const sheet = useSpritesheet<'', 'base' | 'ghost'>(() => unit.spriteId);
+const sheet = useSpritesheet<'', 'base' | 'destroyed'>(() => unit.spriteId);
 const textures = computed(() => {
   if (!sheet.value) return null;
   return createSpritesheetFrameObject(
     'idle',
-    unit.isGeneral && unit.isDead
-      ? sheet.value.sheets.base.ghost
+    unit.isAltar && unit.isDead
+      ? sheet.value.sheets.base.destroyed
       : sheet.value.sheets.base.base
   );
 });

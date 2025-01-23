@@ -8,20 +8,20 @@ import { NoMitigationStrategy } from '../src/combat/damage/mitigation/no-mitigat
 test('General damage Victory Point reward trigger properly', () => {
   const { game, player1, player2 } = testGameBuilder()
     .withP2Deck({
-      general: { blueprintId: 'red-general-flame-lord' },
+      altar: { blueprintId: 'red-general-flame-lord' },
       cards: Array.from({ length: 10 }, () => ({ blueprintId: 'red-footman' }))
     })
     .build();
 
-  player1.general.dealDamage(
-    [player2.general],
+  player1.altar.dealDamage(
+    [player2.altar],
     new Damage({
-      baseAmount: player2.general.hp.current,
-      source: player1.general.card,
+      baseAmount: player2.altar.hp.current,
+      source: player1.altar.card,
       scalings: [new NoScalingStrategy()],
       mitigations: [new NoMitigationStrategy()]
     })
   );
 
-  expect(player1.team.victoryPoints).toBe(game.config.GENERAL_VP_REWARD);
+  expect(player1.team.victoryPoints).toBe(game.config.ALTAR_VP_REWARD);
 });

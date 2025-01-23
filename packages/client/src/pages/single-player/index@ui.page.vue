@@ -23,7 +23,7 @@ const options: Pick<GameOptions, 'mapId' | 'teams'> = {
         id: 'player',
         name: 'Daria',
         deck: {
-          general: { blueprintId: 'red-general-flame-lord' },
+          altar: { blueprintId: 'altar' },
           cards: [
             { blueprintId: 'red-crazed-blood-cultist' },
             { blueprintId: 'red-crazed-blood-cultist' },
@@ -73,7 +73,7 @@ const options: Pick<GameOptions, 'mapId' | 'teams'> = {
         id: 'ai',
         name: 'AI',
         deck: {
-          general: { blueprintId: 'red-general-flame-lord' },
+          altar: { blueprintId: 'altar' },
           cards: [
             { blueprintId: 'red-crazed-blood-cultist' },
             { blueprintId: 'red-crazed-blood-cultist' },

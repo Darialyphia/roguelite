@@ -19,12 +19,14 @@ import { tutorialQuest } from './tutorial_quest';
 import { redCrazedBloodCultist } from './red_crazed_blood_cultist';
 import { redFirePillar } from './red_fire-pillar';
 import { questBloodThirst } from './quest-blood-thirst';
-import { redBloodlust } from './red-bloodlust';
+import { redBloodlust } from './red_bloodlust';
 import { redMasterAtArms } from './red-master-at-arms';
 import { redBloodCultistDevotee } from './red_blood_cultist_devotee';
+import { altar } from './altar';
 
 export const CORE_CARDS = keyBy(
   [
+    altar,
     redGeneralFlameLord,
     redFootman,
     redArcher,

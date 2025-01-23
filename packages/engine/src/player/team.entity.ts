@@ -3,7 +3,6 @@ import { createEntityId, Entity, type EntityId } from '../entity';
 import type { Game } from '../game/game';
 import type { Point3D } from '@game/shared';
 import { CARDS_DICTIONARY } from '../card/cards/_index';
-import { nanoid } from 'nanoid';
 import { GAME_PHASES } from '../game/game-phase.system';
 import { makeCardId } from '../card/card.utils';
 
@@ -12,8 +11,8 @@ export type TeamOptions = {
   players: Array<{
     id: string;
     name: string;
-    deck: { general: { blueprintId: string }; cards: { blueprintId: string }[] };
-    generalPosition: Point3D;
+    deck: { altar: { blueprintId: string }; cards: { blueprintId: string }[] };
+    altarPosition: Point3D;
   }>;
 };
 
@@ -30,22 +29,20 @@ export class Team extends Entity {
     super(createEntityId(options.id));
     this.game = game;
     options.players.forEach(player => {
-      const generalBlueprint =
-        CARDS_DICTIONARY[
-          player.deck.general.blueprintId as keyof typeof CARDS_DICTIONARY
-        ];
-      if (!generalBlueprint) {
-        throw new Error(`blueprint not found: ${player.deck.general.blueprintId}`);
+      const altarBlueprint =
+        CARDS_DICTIONARY[player.deck.altar.blueprintId as keyof typeof CARDS_DICTIONARY];
+      if (!altarBlueprint) {
+        throw new Error(`blueprint not found: ${player.deck.altar.blueprintId}`);
       }
 
       const entity = new Player(game, this, {
-        generalPosition: player.generalPosition,
+        altarPosition: player.altarPosition,
         id: player.id,
         name: player.name,
         deck: {
-          general: {
-            id: `${player.id}_general_${player.deck.general.blueprintId}`,
-            blueprint: generalBlueprint
+          altar: {
+            id: `${player.id}_altar_${player.deck.altar.blueprintId}`,
+            blueprint: altarBlueprint
           },
           cards: player.deck.cards.map(card => {
             const blueprint =

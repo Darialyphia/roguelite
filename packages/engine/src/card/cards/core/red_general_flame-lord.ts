@@ -12,7 +12,7 @@ export const redGeneralFlameLord: UnitCardBlueprint = {
   name: 'Flame lord',
   description: '',
   kind: CARD_KINDS.UNIT,
-  unitType: UNIT_TYPES.GENERAL,
+  unitType: UNIT_TYPES.ALTAR,
   aiHints: meleeFighter,
   cost: {
     gold: 0,
