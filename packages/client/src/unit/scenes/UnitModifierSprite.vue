@@ -38,7 +38,7 @@ const cardPosition = computed(() =>
     >
       <div class="bg-black p-3 c-white">
         <div class="text-1 text-bold">{{ modifier.name }}</div>
-        <p class="text-0">{{ modifier.description }}</p>
+        <p class="text-0 max-inline-xs">{{ modifier.description }}</p>
       </div>
     </VirtualFloatingCard>
     <!-- <sprite

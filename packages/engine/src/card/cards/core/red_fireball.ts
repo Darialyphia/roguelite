@@ -6,11 +6,12 @@ import { PointAOEShape } from '../../../targeting/aoe-shapes';
 import { TARGETING_TYPE } from '../../../targeting/targeting-strategy';
 import { RUNES } from '../../../utils/rune';
 import { type SpellCardBlueprint } from '../../card-blueprint';
-import { CARD_KINDS } from '../../card-enums';
+import { CARD_KINDS, CARD_SETS } from '../../card-enums';
 
 export const redFireball: SpellCardBlueprint = {
   id: 'red-fireball',
   iconId: 'spell-fireball',
+  set: CARD_SETS.CORE,
   name: 'Fire ball',
   description: 'Deal 2 damage to an enemy.',
   kind: CARD_KINDS.SPELL,

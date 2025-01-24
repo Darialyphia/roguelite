@@ -53,6 +53,7 @@ watchEffect(() => {
   <div
     v-if="
       ui.mode === UI_MODES.PLAY_CARD &&
+      ui.cardTargets.length >= 1 &&
       ((ui.selectedCard?.maxTargetCount ?? 0) > 1 ||
         ui.selectedCard?.minTargetCount === 0)
     "

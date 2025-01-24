@@ -8,12 +8,13 @@ import { UnitModifier } from '../../../unit/unit-modifier.entity';
 import { JOBS } from '../../../utils/job';
 import { RUNES } from '../../../utils/rune';
 import { type UnitCardBlueprint } from '../../card-blueprint';
-import { CARD_KINDS, UNIT_TYPES } from '../../card-enums';
+import { CARD_KINDS, CARD_SETS, UNIT_TYPES } from '../../card-enums';
 
 export const redCrazedBloodCultist: UnitCardBlueprint = {
   id: 'red-crazed-blood-cultist',
   spriteId: 'crazed-warlord',
   iconId: 'unit_crazed-blood-cultist',
+  set: CARD_SETS.CORE,
   name: 'Crazed Blood Cultist',
   description: 'All minions have @Rage@.',
   kind: CARD_KINDS.UNIT,

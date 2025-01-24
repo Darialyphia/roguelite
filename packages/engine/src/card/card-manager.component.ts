@@ -83,6 +83,11 @@ export class CardManagerComponent {
     this.hand[index] = replacement;
   }
 
+  addToHand(card: Card) {
+    if (this.isHandFull) return;
+    this.hand.push(card);
+  }
+
   shutdown() {
     this.deck.cards.forEach(card => {
       card.shutdown();

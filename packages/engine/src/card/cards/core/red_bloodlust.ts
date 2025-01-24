@@ -7,11 +7,12 @@ import { RageModifier } from '../../../unit/modifiers/rage.modifier';
 import { UnitModifier } from '../../../unit/unit-modifier.entity';
 import { RUNES } from '../../../utils/rune';
 import { type SpellCardBlueprint } from '../../card-blueprint';
-import { CARD_KINDS } from '../../card-enums';
+import { CARD_KINDS, CARD_SETS } from '../../card-enums';
 
 export const redBloodlust: SpellCardBlueprint = {
   id: 'red-bloodlust',
   iconId: 'spell-bloodlust',
+  set: CARD_SETS.CORE,
   name: 'Bloodlust',
   description: 'Give @Rage@ and +1/+0 to a minion.',
   kind: CARD_KINDS.SPELL,
@@ -38,8 +39,6 @@ export const redBloodlust: SpellCardBlueprint = {
   },
   onPlay(game, card, cellTargets, unitTargets) {
     unitTargets.forEach(target => {
-      target.addModifier(new RageModifier(game, card));
-
       target.addModifier(
         new UnitModifier(createEntityId('bloodlust'), game, card, {
           stackable: true,
@@ -55,6 +54,7 @@ export const redBloodlust: SpellCardBlueprint = {
           ]
         })
       );
+      target.addModifier(new RageModifier(game, card));
     });
   }
 };

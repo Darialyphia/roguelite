@@ -45,7 +45,7 @@ export class RuneManager {
     );
   }
 
-  private countRunesById(runes: Rune[]): Record<string, number> {
+  countRunesById(runes: Rune[]): Record<string, number> {
     return runes.reduce(
       (acc, rune) => {
         acc[rune.id] = (acc[rune.id] || 0) + 1;
@@ -53,5 +53,9 @@ export class RuneManager {
       },
       {} as Record<string, number>
     );
+  }
+
+  getRuneCount(rune: Rune) {
+    return this.runes.filter(r => r.equals(rune)).length;
   }
 }

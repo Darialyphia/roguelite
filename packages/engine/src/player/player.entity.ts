@@ -173,6 +173,10 @@ export class Player extends Entity {
     return this.runeManager.getMissing.bind(this.runeManager);
   }
 
+  get getRuneCount() {
+    return this.runeManager.getRuneCount.bind(this.runeManager);
+  }
+
   get isActive() {
     return this.game.turnSystem.activePlayer.equals(this);
   }
@@ -199,6 +203,10 @@ export class Player extends Entity {
 
   get draw() {
     return this.cardManager.draw.bind(this.cardManager);
+  }
+
+  get addToHand() {
+    return this.cardManager.addToHand.bind(this.cardManager);
   }
 
   get opponents() {

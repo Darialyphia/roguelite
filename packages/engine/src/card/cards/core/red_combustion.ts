@@ -8,16 +8,18 @@ import {
   RingAOEShape
 } from '../../../targeting/aoe-shapes';
 import { TARGETING_TYPE } from '../../../targeting/targeting-strategy';
+import { BurnModifier } from '../../../unit/modifiers/burn.modifier';
 import { RUNES } from '../../../utils/rune';
 import { type SpellCardBlueprint } from '../../card-blueprint';
-import { CARD_KINDS } from '../../card-enums';
+import { CARD_KINDS, CARD_SETS } from '../../card-enums';
 
 export const redCombustion: SpellCardBlueprint = {
   id: 'red-combustion',
   iconId: 'spell-combustion',
   name: 'Combustion',
+  set: CARD_SETS.CORE,
   description:
-    'Deal 3 damage to an enemy minion. If it dies, deal 1 damage to all nearby units.',
+    'Deal 3 damage to an enemy minion. If it dies, give @Burn(1)@ to all nearby minions.',
   kind: CARD_KINDS.SPELL,
   aiHints: {},
   cost: {
@@ -63,13 +65,9 @@ export const redCombustion: SpellCardBlueprint = {
     );
     if (mainTarget.isDead) {
       otherTargets.forEach(target => {
-        target.takeDamage(
-          card,
-          new Damage({
-            baseAmount: 1,
-            source: card,
-            scalings: [new NoScalingStrategy()],
-            mitigations: [new NoMitigationStrategy()]
+        target.addModifier(
+          new BurnModifier(game, card, {
+            initialStacks: 1
           })
         );
       });

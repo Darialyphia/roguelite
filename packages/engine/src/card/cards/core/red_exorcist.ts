@@ -10,12 +10,13 @@ import { RangedModifier } from '../../../unit/modifiers/ranged.modifier';
 import { JOBS } from '../../../utils/job';
 import { RUNES } from '../../../utils/rune';
 import { type UnitCardBlueprint } from '../../card-blueprint';
-import { CARD_KINDS, UNIT_TYPES } from '../../card-enums';
+import { CARD_KINDS, CARD_SETS, UNIT_TYPES } from '../../card-enums';
 
 export const redExorcist: UnitCardBlueprint = {
   id: 'red-exorcist',
   spriteId: 'exorcist',
   iconId: 'unit_exorcist',
+  set: CARD_SETS.CORE,
   name: 'Exorcist',
   description: '@Ranged(2)@.\n@Summon@: Deal 1 damage to an enemy unit.',
   kind: CARD_KINDS.UNIT,

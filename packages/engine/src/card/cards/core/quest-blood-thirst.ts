@@ -4,14 +4,15 @@ import { PLAYER_EVENTS } from '../../../player/player-enums';
 import { AnywhereTargetingStrategy } from '../../../targeting/anywhere-targeting-strategy';
 import { TARGETING_TYPE } from '../../../targeting/targeting-strategy';
 import { type QuestCardBlueprint } from '../../card-blueprint';
-import { CARD_KINDS } from '../../card-enums';
+import { CARD_KINDS, CARD_SETS } from '../../card-enums';
 import { isUnitCard } from '../../unit-card.entity';
 
 export const questBloodThirst: QuestCardBlueprint = {
   id: 'quest-bloodthirst',
   iconId: 'placeholder',
-  description: 'Deal 12 combat damage in a single turn. Reward: 2 VP.',
+  set: CARD_SETS.CORE,
   name: 'Bloodthirst',
+  description: 'Deal 10 combat damage in a single turn. Reward: 2 VP.',
   kind: CARD_KINDS.QUEST,
   aiHints: mergeTraits(irrelevantTarget()),
   cost: {

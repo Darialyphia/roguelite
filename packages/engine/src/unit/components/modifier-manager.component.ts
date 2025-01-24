@@ -1,18 +1,24 @@
+import { isString, type Constructor } from '@game/shared';
 import type { EntityId, Entity } from '../../entity';
 import { UnitModifier } from '../unit-modifier.entity';
 import type { Unit } from '../unit.entity';
+import { RageModifier } from '../modifiers/rage.modifier';
 
 export class UnitModifierManager {
   private _modifiers: UnitModifier[] = [];
 
   constructor(private unit: Unit) {}
 
-  has(modifierOrId: EntityId | UnitModifier) {
+  has(modifierOrId: EntityId | UnitModifier | Constructor<UnitModifier>) {
     if (modifierOrId instanceof UnitModifier) {
       return this._modifiers.some(modifier => modifier.equals(modifierOrId));
-    } else {
+    } else if (isString(modifierOrId)) {
       return this._modifiers.some(modifier =>
         modifier.equals({ id: modifierOrId } as Entity)
+      );
+    } else {
+      return this._modifiers.some(
+        modifier => modifier.constructor.name === RageModifier.name
       );
     }
   }

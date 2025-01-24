@@ -13,12 +13,13 @@ import { UnitModifier } from '../../../unit/unit-modifier.entity';
 import { JOBS } from '../../../utils/job';
 import { RUNES } from '../../../utils/rune';
 import { type UnitCardBlueprint } from '../../card-blueprint';
-import { CARD_KINDS, UNIT_TYPES } from '../../card-enums';
+import { CARD_KINDS, CARD_SETS, UNIT_TYPES } from '../../card-enums';
 
 export const redWillOWisp: UnitCardBlueprint = {
   id: 'red-will-o-wisp',
   spriteId: 'will-o-wisp',
   iconId: 'unit_will-o-wisp',
+  set: CARD_SETS.CORE,
   name: 'Will-o-wisp',
   description: 'Inflict @Burn(1)@ to minions damaged by this unit.',
   kind: CARD_KINDS.UNIT,
@@ -62,9 +63,7 @@ export const redWillOWisp: UnitCardBlueprint = {
             TARGETING_TYPE.ENEMY_MINION
           );
           if (shouldBurn) {
-            target.addModifier(
-              new BurnModifier(game, card, { source: card, initialStacks: 1 })
-            );
+            target.addModifier(new BurnModifier(game, card, { initialStacks: 1 }));
           }
         });
       }

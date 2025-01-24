@@ -8,12 +8,13 @@ import { UnitModifier } from '../../../unit/unit-modifier.entity';
 import { JOBS } from '../../../utils/job';
 import { RUNES } from '../../../utils/rune';
 import { type UnitCardBlueprint } from '../../card-blueprint';
-import { CARD_KINDS, UNIT_TYPES } from '../../card-enums';
+import { CARD_KINDS, CARD_SETS, UNIT_TYPES } from '../../card-enums';
 
 export const redFireElemental: UnitCardBlueprint = {
   id: 'red-fire-elemental',
   spriteId: 'fire-elemental',
   iconId: 'unit_fire-elemental',
+  set: CARD_SETS.CORE,
   name: 'Fire Elemental',
   description: 'Applies @Burn(2)@ to nearby enemy units.',
   kind: CARD_KINDS.UNIT,

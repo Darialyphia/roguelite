@@ -5,12 +5,13 @@ import { SplashAttackModifier } from '../../../unit/modifiers/splash-attack.modi
 import { JOBS } from '../../../utils/job';
 import { RUNES } from '../../../utils/rune';
 import { type UnitCardBlueprint } from '../../card-blueprint';
-import { CARD_KINDS, UNIT_TYPES } from '../../card-enums';
+import { CARD_KINDS, CARD_SETS, UNIT_TYPES } from '../../card-enums';
 
 export const redBerserk: UnitCardBlueprint = {
   id: 'red-berserk',
   spriteId: 'berserk',
   iconId: 'unit_berserk',
+  set: CARD_SETS.CORE,
   name: 'Berserk',
   description: '@Splash Attack@.',
   kind: CARD_KINDS.UNIT,

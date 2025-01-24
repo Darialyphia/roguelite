@@ -1,26 +1,29 @@
 import { meleeFighter } from '../../../ai/ai-traits';
 import { PointAOEShape } from '../../../targeting/aoe-shapes';
 import { UnitSummonTargetingtrategy } from '../../../targeting/unit-summon-targeting.strategy';
+import { AltarModifier } from '../../../unit/modifiers/altar.modifier';
+import { RangedModifier } from '../../../unit/modifiers/ranged.modifier';
 import { JOBS } from '../../../utils/job';
 import { type UnitCardBlueprint } from '../../card-blueprint';
-import { CARD_KINDS, UNIT_TYPES } from '../../card-enums';
+import { CARD_KINDS, CARD_SETS, UNIT_TYPES } from '../../card-enums';
 
-export const redGeneralFlameLord: UnitCardBlueprint = {
-  id: 'red-general-flame-lord',
-  spriteId: 'flame-lord',
-  iconId: 'unit_flame-lord',
-  name: 'Flame lord',
-  description: '',
+export const altar: UnitCardBlueprint = {
+  id: 'altar',
+  spriteId: 'altar',
+  set: CARD_SETS.BASIC,
+  iconId: 'unit_altar',
+  name: 'Altar',
+  description: '@Altar@.',
   kind: CARD_KINDS.UNIT,
   unitType: UNIT_TYPES.ALTAR,
   aiHints: meleeFighter,
   cost: {
-    gold: 0,
+    gold: 3,
     runes: []
   },
-  jobs: [JOBS.FIGHTER],
-  atk: 2,
-  maxHp: 20,
+  jobs: [JOBS.SHOOTER],
+  atk: 0,
+  maxHp: 10,
   minTargets: 1,
   targets: [
     {
@@ -40,7 +43,7 @@ export const redGeneralFlameLord: UnitCardBlueprint = {
       return { tracks: [] };
     }
   },
-  onPlay() {
-    return;
+  onPlay(game, card) {
+    card.unit.addModifier(new AltarModifier(game, card));
   }
 };

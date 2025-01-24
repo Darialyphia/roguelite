@@ -9,13 +9,14 @@ import { UnitModifier } from '../../../unit/unit-modifier.entity';
 import { JOBS } from '../../../utils/job';
 import { RUNES } from '../../../utils/rune';
 import { type UnitCardBlueprint } from '../../card-blueprint';
-import { CARD_KINDS, UNIT_TYPES } from '../../card-enums';
+import { CARD_KINDS, CARD_SETS, UNIT_TYPES } from '../../card-enums';
 
 export const redMasterAtArms: UnitCardBlueprint = {
   id: 'red-master-at-arms',
   spriteId: 'master-at-arms',
   iconId: 'unit_master-at-arms',
-  name: 'MAster at Arms',
+  set: CARD_SETS.CORE,
+  name: 'Arms Master',
   description: 'Before this unit attacks, give it +1/+0.',
   kind: CARD_KINDS.UNIT,
   unitType: UNIT_TYPES.MINION,

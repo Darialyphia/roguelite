@@ -54,7 +54,7 @@ export class UnitCard extends Card<UnitCardBlueprint> {
     return new MeleeTargetingStrategy(
       this.game,
       this.unit,
-      TARGETING_TYPE.ENEMY_UNIT,
+      this.unit.attackTargetType,
       false
     );
   }

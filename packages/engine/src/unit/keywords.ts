@@ -20,6 +20,18 @@ export const KEYWORDS = {
     spriteId: 'keyword-altar',
     aliases: []
   },
+  AMBUSH: {
+    id: 'ambush',
+    name: 'Ambush',
+    description: 'This unit can be summon nearby an enemy unit.',
+    aliases: []
+  },
+  DESCEND: {
+    id: 'descend',
+    name: 'Descend',
+    description: 'This unie can be summoner anywhere.',
+    aliases: []
+  },
   COMMANDER: {
     id: 'commander',
     name: 'Commander',
@@ -39,7 +51,7 @@ export const KEYWORDS = {
     name: 'Burn(x)',
     spriteId: 'keyword-burn',
     description: 'At the beginning of its owner, deal x damage to this unit',
-    aliases: [/burn\([0-9]+\)/]
+    aliases: [/burn\([0-9]+\)/, /burn/]
   },
   SPLASH_ATTACK: {
     id: 'splash_attack',

@@ -1,28 +1,29 @@
 import { meleeFighter } from '../../../ai/ai-traits';
 import { PointAOEShape } from '../../../targeting/aoe-shapes';
 import { UnitSummonTargetingtrategy } from '../../../targeting/unit-summon-targeting.strategy';
-import { AltarModifier } from '../../../unit/modifiers/altar.modifier';
-import { RangedModifier } from '../../../unit/modifiers/ranged.modifier';
 import { JOBS } from '../../../utils/job';
+import { RUNES } from '../../../utils/rune';
 import { type UnitCardBlueprint } from '../../card-blueprint';
-import { CARD_KINDS, UNIT_TYPES } from '../../card-enums';
+import { CARD_KINDS, CARD_SETS, UNIT_TYPES } from '../../card-enums';
+import { redFireball } from './red_fireball';
 
-export const altar: UnitCardBlueprint = {
-  id: 'altar',
-  spriteId: 'altar',
-  iconId: 'unit_altar',
-  name: 'Altar',
-  description: '@Altar@.',
+export const redPyromancer: UnitCardBlueprint = {
+  id: 'red-pyromancer',
+  spriteId: 'blood-pyromancer',
+  iconId: 'unit_pyromancer',
+  set: CARD_SETS.CORE,
+  name: 'Pyromancer',
+  description: '@Summon@:  .',
   kind: CARD_KINDS.UNIT,
-  unitType: UNIT_TYPES.ALTAR,
+  unitType: UNIT_TYPES.MINION,
   aiHints: meleeFighter,
   cost: {
-    gold: 3,
-    runes: []
+    gold: 4,
+    runes: [RUNES.RED, RUNES.RED]
   },
-  jobs: [JOBS.SHOOTER],
-  atk: 0,
-  maxHp: 20,
+  jobs: [JOBS.MAGE],
+  atk: 2,
+  maxHp: 3,
   minTargets: 1,
   targets: [
     {
@@ -43,6 +44,10 @@ export const altar: UnitCardBlueprint = {
     }
   },
   onPlay(game, card) {
-    card.unit.addModifier(new AltarModifier(game, card));
+    const count = card.player.getRuneCount(RUNES.RED);
+
+    for (let i = 0; i <= count; i++) {
+      card.player.addToHand(card.player.generateCard(redFireball.id));
+    }
   }
 };

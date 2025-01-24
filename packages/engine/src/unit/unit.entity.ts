@@ -12,7 +12,11 @@ import { PointAOEShape, type AOEShape } from '../targeting/aoe-shapes';
 import { Damage } from '../combat/damage/damage';
 import { UnitModifierManager } from './components/modifier-manager.component';
 import type { UnitModifier } from './unit-modifier.entity';
-import type { TargetingStrategy } from '../targeting/targeting-strategy';
+import {
+  TARGETING_TYPE,
+  type TargetingStrategy,
+  type TargetingType
+} from '../targeting/targeting-strategy';
 import type { UnitCard } from '../card/unit-card.entity';
 import { CARD_KINDS, UNIT_TYPES } from '../card/card-enums';
 import { UNIT_EVENTS } from './unit-enums';
@@ -82,6 +86,7 @@ export class Unit extends Entity {
 
     attack: new Interceptable<number>(),
     attackTargetingPattern: new Interceptable<TargetingStrategy>(),
+    attackTargetType: new Interceptable<TargetingType>(),
     attackAOEShape: new Interceptable<AOEShape>(),
 
     maxAttacksPerTurn: new Interceptable<number>(),
@@ -246,6 +251,10 @@ export class Unit extends Entity {
 
   get attackTargettingPattern(): TargetingStrategy {
     return this.interceptors.attackTargetingPattern.getValue(this.card.attackPattern, {});
+  }
+
+  get attackTargetType(): TargetingType {
+    return this.interceptors.attackTargetType.getValue(TARGETING_TYPE.ENEMY_UNIT, {});
   }
 
   get attackAOEShape(): AOEShape {

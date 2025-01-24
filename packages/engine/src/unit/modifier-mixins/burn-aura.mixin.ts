@@ -35,7 +35,6 @@ export class BurnAuraModifierMixin extends AuraModifierMixin {
   onGainAura(unit: Unit): void {
     unit.addModifier(
       new BurnModifier(this.game, this.modifier.target.card, {
-        source: this.modifier.target.card,
         initialStacks: this.options.strength
       })
     );

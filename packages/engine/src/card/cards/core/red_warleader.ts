@@ -9,20 +9,21 @@ import { UnitModifier } from '../../../unit/unit-modifier.entity';
 import { JOBS } from '../../../utils/job';
 import { RUNES } from '../../../utils/rune';
 import { type UnitCardBlueprint } from '../../card-blueprint';
-import { CARD_KINDS, UNIT_TYPES } from '../../card-enums';
+import { CARD_KINDS, CARD_SETS, UNIT_TYPES } from '../../card-enums';
 
 export const redWarLeader: UnitCardBlueprint = {
   id: 'red-warleader',
   spriteId: 'warleader',
   iconId: 'unit_warleader',
+  set: CARD_SETS.CORE,
   name: 'Warleader',
-  description: '@Rush@.\n@Splash Attack@.\nAllies nearby this unit have +1/+0.',
+  description: '@Rush@.\n@Splash Attack@.',
   kind: CARD_KINDS.UNIT,
   unitType: UNIT_TYPES.MINION,
   aiHints: meleeFighter,
   cost: {
     gold: 6,
-    runes: [RUNES.RED, RUNES.RED, RUNES.RED, RUNES.RED]
+    runes: [RUNES.RED, RUNES.RED, RUNES.RED, RUNES.COLORLESS]
   },
   jobs: [JOBS.FIGHTER],
   atk: 4,
@@ -49,28 +50,5 @@ export const redWarLeader: UnitCardBlueprint = {
   onPlay(game, card) {
     card.unit.addModifier(new SplashAttackModifier(game, card));
     card.unit.addModifier(new RushModifier(game, card));
-    card.unit.addModifier(
-      new UnitModifier(createEntityId('warleader_aura'), game, card, {
-        stackable: true,
-        initialStacks: 1,
-        iconId: 'keyword-attack-buff',
-        name: 'Warleader aura',
-        description: '+1 / +0',
-        mixins: [
-          new InterceptorAuraModifierMixin(game, {
-            key: 'attack',
-            isElligible(unit, modifier) {
-              return (
-                unit.isAlly(modifier.target) &&
-                unit.position.isNearby(modifier.target, game)
-              );
-            },
-            interceptor(attack) {
-              return attack + 1;
-            }
-          })
-        ]
-      })
-    );
   }
 };

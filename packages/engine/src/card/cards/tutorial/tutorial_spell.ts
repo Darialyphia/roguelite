@@ -5,11 +5,12 @@ import { AnywhereTargetingStrategy } from '../../../targeting/anywhere-targeting
 import { PointAOEShape } from '../../../targeting/aoe-shapes';
 import { TARGETING_TYPE } from '../../../targeting/targeting-strategy';
 import { type SpellCardBlueprint } from '../../card-blueprint';
-import { CARD_KINDS } from '../../card-enums';
+import { CARD_KINDS, CARD_SETS } from '../../card-enums';
 
 export const tutorialSpell: SpellCardBlueprint = {
   id: 'tutorial-spell',
   iconId: 'placeholder',
+  set: CARD_SETS.TUTORIAL,
   name: 'Tutorial Spell',
   description: 'Deal 8 damage to the enemy altar.',
   kind: CARD_KINDS.SPELL,

@@ -1,6 +1,10 @@
 <script setup lang="ts">
 import { CARDS_DICTIONARY } from '@game/engine/src/card/cards/_index';
-import { CARD_KINDS } from '@game/engine/src/card/card-enums';
+import {
+  CARD_KINDS,
+  CARD_SETS,
+  type CardSet
+} from '@game/engine/src/card/card-enums';
 import { RouterLink } from 'vue-router';
 import Card from '@/card/components/Card.vue';
 
@@ -8,9 +12,11 @@ definePage({
   name: 'CardsList'
 });
 
+const authorizedSets: CardSet[] = [CARD_SETS.CORE];
+
 const cards = computed(() => {
   const byType = Object.groupBy(
-    Object.values(CARDS_DICTIONARY),
+    Object.values(CARDS_DICTIONARY).filter(c => authorizedSets.includes(c.set)),
     card => card.kind
   );
 

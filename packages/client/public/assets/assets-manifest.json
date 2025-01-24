@@ -702,6 +702,19 @@
         },
         {
           "alias": [
+            "icon-unit_blood-cultist-priestess"
+          ],
+          "src": [
+            "/assets/icons/unit_blood-cultist-priestess.png"
+          ],
+          "data": {
+            "tags": {
+              "m": true
+            }
+          }
+        },
+        {
+          "alias": [
             "icon-unit_crazed-blood-cultist"
           ],
           "src": [
@@ -798,6 +811,19 @@
           ],
           "src": [
             "/assets/icons/unit_master-at-arms.png"
+          ],
+          "data": {
+            "tags": {
+              "m": true
+            }
+          }
+        },
+        {
+          "alias": [
+            "icon-unit_pyromancer"
+          ],
+          "src": [
+            "/assets/icons/unit_pyromancer.png"
           ],
           "data": {
             "tags": {
@@ -2302,6 +2328,33 @@
           ],
           "src": [
             "/assets/units/blood-cultist-devotee.png"
+          ],
+          "data": {
+            "tags": {
+              "m": true
+            }
+          }
+        },
+        {
+          "alias": [
+            "blood-cultist-priestess"
+          ],
+          "src": [
+            "/assets/units/blood-cultist-priestess.json"
+          ],
+          "loadParser": "aseprite_loader",
+          "data": {
+            "tags": {
+              "m": true
+            }
+          }
+        },
+        {
+          "alias": [
+            "blood-cultist-priestess.png"
+          ],
+          "src": [
+            "/assets/units/blood-cultist-priestess.png"
           ],
           "data": {
             "tags": {

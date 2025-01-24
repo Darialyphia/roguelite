@@ -3,11 +3,12 @@ import { GAME_EVENTS } from '../../../game/game';
 import { AnywhereTargetingStrategy } from '../../../targeting/anywhere-targeting-strategy';
 import { TARGETING_TYPE } from '../../../targeting/targeting-strategy';
 import { type QuestCardBlueprint } from '../../card-blueprint';
-import { CARD_KINDS } from '../../card-enums';
+import { CARD_KINDS, CARD_SETS } from '../../card-enums';
 
 export const questWarPath: QuestCardBlueprint = {
   id: 'quest-war-path',
   iconId: 'placeholder',
+  set: CARD_SETS.CORE,
   name: 'War Path',
   description: 'Summon 6 unit. Reward: 2 VP.',
   kind: CARD_KINDS.QUEST,

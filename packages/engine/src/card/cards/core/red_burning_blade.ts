@@ -6,18 +6,19 @@ import { InterceptorModifierMixin } from '../../../unit/modifier-mixins/intercep
 import { UnitModifier } from '../../../unit/unit-modifier.entity';
 import { RUNES } from '../../../utils/rune';
 import { type SpellCardBlueprint } from '../../card-blueprint';
-import { CARD_KINDS } from '../../card-enums';
+import { CARD_KINDS, CARD_SETS } from '../../card-enums';
 
 export const redBurningBlade: SpellCardBlueprint = {
   id: 'red-burning-blade',
   iconId: 'spell-burning-blade',
+  set: CARD_SETS.CORE,
   name: 'Burning Blade',
   description: 'Give an ally minion +2/+0.',
   kind: CARD_KINDS.SPELL,
   aiHints: {},
   cost: {
     gold: 2,
-    runes: [RUNES.RED]
+    runes: [RUNES.RED, RUNES.RED]
   },
   minTargets: 1,
   targets: [

@@ -18,13 +18,13 @@ export class RageModifierMixin extends UnitModifierMixin {
   constructor(game: Game) {
     super(game);
 
-    this.onTurnStart = this.onTurnStart.bind(this);
+    this.seekAndAttack = this.seekAndAttack.bind(this);
   }
 
-  onTurnStart() {
+  seekAndAttack() {
     const attachedTo = this.modifier.target;
 
-    const [closestAttackableEnemy] = attachedTo.player.enemyUnits
+    const [closestAttackableEnemy] = this.game.unitSystem.units
       .filter(enemy => attachedTo.canAttackAt(enemy.position))
       .map(unit => {
         return {
@@ -73,11 +73,15 @@ export class RageModifierMixin extends UnitModifierMixin {
 
   onApplied(unit: Unit, modifier: UnitModifier): void {
     this.modifier = modifier;
-    unit.player.on(PLAYER_EVENTS.START_TURN, this.onTurnStart);
+    unit.player.on(PLAYER_EVENTS.START_TURN, this.seekAndAttack);
+
+    if (unit.player.isActive && !unit.isExhausted) {
+      this.seekAndAttack();
+    }
   }
 
   onRemoved(unit: Unit): void {
-    unit.player.off(PLAYER_EVENTS.START_TURN, this.onTurnStart);
+    unit.player.off(PLAYER_EVENTS.START_TURN, this.seekAndAttack);
   }
 
   // eslint-disable-next-line @typescript-eslint/no-empty-function

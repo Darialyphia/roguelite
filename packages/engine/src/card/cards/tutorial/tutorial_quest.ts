@@ -3,11 +3,12 @@ import { PLAYER_EVENTS } from '../../../player/player-enums';
 import { AnywhereTargetingStrategy } from '../../../targeting/anywhere-targeting-strategy';
 import { TARGETING_TYPE } from '../../../targeting/targeting-strategy';
 import { type QuestCardBlueprint } from '../../card-blueprint';
-import { CARD_KINDS } from '../../card-enums';
+import { CARD_KINDS, CARD_SETS } from '../../card-enums';
 
 export const tutorialQuest: QuestCardBlueprint = {
   id: 'tutorial-quest',
   iconId: 'placeholder',
+  set: CARD_SETS.TUTORIAL,
   name: 'Tutorial Quest',
   description: 'End your turn. Reward: 12 VP.',
   kind: CARD_KINDS.QUEST,

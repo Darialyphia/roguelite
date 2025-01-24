@@ -6,11 +6,12 @@ import { ShrineAoeShape } from '../../../targeting/aoe-shapes';
 import { TARGETING_TYPE } from '../../../targeting/targeting-strategy';
 import { RUNES } from '../../../utils/rune';
 import { type SpellCardBlueprint } from '../../card-blueprint';
-import { CARD_KINDS } from '../../card-enums';
+import { CARD_KINDS, CARD_SETS } from '../../card-enums';
 
 export const redFirePillar: SpellCardBlueprint = {
   id: 'red-fire-pillar',
   iconId: 'spell-fire-pillar',
+  set: CARD_SETS.CORE,
   name: 'Fire Pillar',
   description: 'Deal 3 damage to every unit standing on a shrine.',
   kind: CARD_KINDS.SPELL,
