@@ -27,7 +27,7 @@ export const redMasterAtArms: UnitCardBlueprint = {
   },
   jobs: [JOBS.FIGHTER],
   atk: 1,
-  maxHp: 6,
+  maxHp: 7,
   minTargets: 1,
   targets: [
     {

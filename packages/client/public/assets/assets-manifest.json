@@ -429,6 +429,19 @@
         },
         {
           "alias": [
+            "icon-obstacle_commanding-shrine"
+          ],
+          "src": [
+            "/assets/icons/obstacle_commanding-shrine.png"
+          ],
+          "data": {
+            "tags": {
+              "m": true
+            }
+          }
+        },
+        {
+          "alias": [
             "icon-obstacle_fortune-shrine"
           ],
           "src": [
@@ -862,6 +875,33 @@
     {
       "name": "obstacles",
       "assets": [
+        {
+          "alias": [
+            "commanding-shrine"
+          ],
+          "src": [
+            "/assets/obstacles/commanding-shrine.json"
+          ],
+          "loadParser": "aseprite_loader",
+          "data": {
+            "tags": {
+              "m": true
+            }
+          }
+        },
+        {
+          "alias": [
+            "commanding-shrine.png"
+          ],
+          "src": [
+            "/assets/obstacles/commanding-shrine.png"
+          ],
+          "data": {
+            "tags": {
+              "m": true
+            }
+          }
+        },
         {
           "alias": [
             "gold-shrine"
@@ -2571,6 +2611,33 @@
           ],
           "src": [
             "/assets/units/master-or-arms.png"
+          ],
+          "data": {
+            "tags": {
+              "m": true
+            }
+          }
+        },
+        {
+          "alias": [
+            "pyromancer"
+          ],
+          "src": [
+            "/assets/units/pyromancer.json"
+          ],
+          "loadParser": "aseprite_loader",
+          "data": {
+            "tags": {
+              "m": true
+            }
+          }
+        },
+        {
+          "alias": [
+            "pyromancer.png"
+          ],
+          "src": [
+            "/assets/units/pyromancer.png"
           ],
           "data": {
             "tags": {

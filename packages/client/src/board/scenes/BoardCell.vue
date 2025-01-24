@@ -112,7 +112,6 @@ const tutorial = useTutorialStore();
               return;
             }
             ui.unselectCard();
-            ui.unselectCard();
           })
           .exhaustive();
       }

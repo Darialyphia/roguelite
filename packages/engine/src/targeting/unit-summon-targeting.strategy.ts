@@ -10,8 +10,17 @@ export class UnitSummonTargetingtrategy implements TargetingStrategy {
   ) {}
 
   isWithinRange(point: Point3D) {
-    return this.card.player.units.some(
-      unit => unit.canSummonNearby && unit.position.isNearby(point, this.game)
+    return (
+      this.card.player.units.some(
+        unit => unit.canSummonNearby && unit.position.isNearby(point, this.game)
+      ) ||
+      this.game.boardSystem.commandingShrines.some(shrine => {
+        return (
+          shrine.position.equals(point) &&
+          shrine.player?.equals(this.card.player) &&
+          shrine.canBeSummonTarget
+        );
+      })
     );
   }
 

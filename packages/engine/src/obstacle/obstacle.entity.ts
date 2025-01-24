@@ -5,6 +5,7 @@ import { Position } from '../utils/position';
 import { OBSTACLES } from './obstacles/_index';
 import type { ObstacleBlueprint } from './obstacle-blueprint';
 import type { Game } from '../game/game';
+import { Interceptable, type inferInterceptor } from '../utils/interceptable';
 
 export type ObstacleOptions = {
   id: EntityId;
@@ -12,6 +13,8 @@ export type ObstacleOptions = {
   position: Point3D;
   playerId?: EntityId;
 };
+
+export type ObstacleInterceptor = Obstacle['interceptors'];
 
 export class Obstacle extends Entity {
   position: Position;
@@ -22,6 +25,11 @@ export class Obstacle extends Entity {
   iconId: string;
   meta: AnyObject = {};
   isAttackable: boolean;
+
+  private interceptors = {
+    canBeSummonTarget: new Interceptable<boolean>()
+  };
+
   constructor(
     private game: Game,
     options: ObstacleOptions
@@ -61,6 +69,10 @@ export class Obstacle extends Entity {
     return this.blueprint.walkable;
   }
 
+  get canBeSummonTarget() {
+    return this.interceptors.canBeSummonTarget.getValue(false, {});
+  }
+
   private checkOccupation() {
     const previous = this.occupant;
 
@@ -82,5 +94,22 @@ export class Obstacle extends Entity {
     assert(this.isAttackable, 'obstacle cannot be attacked');
 
     this.blueprint.onAttacked?.(this.game, this, unit);
+  }
+
+  addInterceptor<T extends keyof ObstacleInterceptor>(
+    key: T,
+    interceptor: inferInterceptor<ObstacleInterceptor[T]>,
+    priority?: number
+  ) {
+    this.interceptors[key].add(interceptor as any, priority);
+
+    return () => this.removeInterceptor(key, interceptor);
+  }
+
+  removeInterceptor<T extends keyof ObstacleInterceptor>(
+    key: T,
+    interceptor: inferInterceptor<ObstacleInterceptor[T]>
+  ) {
+    this.interceptors[key].remove(interceptor as any);
   }
 }

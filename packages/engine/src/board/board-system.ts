@@ -15,6 +15,7 @@ import { victoryShrine } from '../obstacle/obstacles/victory-shrine';
 import { fortuneShrine } from '../obstacle/obstacles/fortune-shrine';
 import { Obstacle } from '../obstacle/obstacle.entity';
 import { makeObstacleId } from '../obstacle/obstacle.utils';
+import { commandingShrine } from '../obstacle/obstacles/commanding-shrine';
 
 export type BoardSystemOptions = {
   map: GameMap;
@@ -45,6 +46,8 @@ export class BoardSystem extends System<BoardSystemOptions> {
 
   padding!: { x: number; y: number };
 
+  commandingShrines!: Obstacle[];
+
   initialize(options: BoardSystemOptions) {
     this.map = options.map;
 
@@ -73,6 +76,12 @@ export class BoardSystem extends System<BoardSystemOptions> {
       height: options.map.rows
     };
     this.padding = options.map.padding;
+
+    this.commandingShrines = this.cells
+      .filter((cell): cell is RequiredBy<Cell, 'obstacle'> => {
+        return cell.obstacle?.blueprintId === commandingShrine.id;
+      })
+      .map(cell => cell.obstacle);
   }
 
   // eslint-disable-next-line @typescript-eslint/no-empty-function
@@ -101,20 +110,11 @@ export class BoardSystem extends System<BoardSystemOptions> {
     });
   }
 
-  getVictoryShrines() {
+  get victoryShrines() {
     return this.cells
       .filter(
         (cell): cell is RequiredBy<Cell, 'obstacle'> =>
-          cell.obstacle?.id === victoryShrine.id
-      )
-      .map(cell => cell.obstacle);
-  }
-
-  getFortuneShrines() {
-    return this.cells
-      .filter(
-        (cell): cell is RequiredBy<Cell, 'obstacle'> =>
-          cell.obstacle?.id === fortuneShrine.id
+          cell.obstacle?.blueprintId === victoryShrine.id
       )
       .map(cell => cell.obstacle);
   }

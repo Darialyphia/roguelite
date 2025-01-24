@@ -16,6 +16,7 @@ import { makeCardViewModel, type CardViewModel } from '@/card/card.model';
 import { Layer } from '@pixi/layers';
 import { match } from 'ts-pattern';
 import type { DisplayObject } from 'pixi.js';
+import type { CellViewModel } from '@/board/models/cell.model';
 
 export const UI_MODES = {
   BASIC: 'basic',
@@ -152,6 +153,29 @@ export const useBattleUiStore = defineStore('battle-ui', () => {
     fx: ref()
   };
 
+  const validCardTargets = ref(new Set<string>());
+  const getValidTargets = () => {
+    validCardTargets.value.clear();
+    battleStore.state.cells.forEach(cell => {
+      try {
+        if (modeContext.value?.mode !== UI_MODES.PLAY_CARD) {
+          return;
+        }
+        const isValid = modeContext.value.card.areTargetsValid([
+          ...modeContext.value.targets,
+          cell
+        ]);
+        if (isValid) {
+          validCardTargets.value.add(`${cell.x}:${cell.y}:${cell.z}`);
+        }
+      } catch {}
+    });
+  };
+
+  watchEffect(() => {
+    getValidTargets();
+  });
+
   return {
     isBoardAppearAnimationDone,
     registerLayer(layer: Layer, name: LayerName) {
@@ -213,17 +237,7 @@ export const useBattleUiStore = defineStore('battle-ui', () => {
       return modeContext.value.card.canPlayAt(modeContext.value.targets);
     },
     isTargetValid(point: Point3D) {
-      try {
-        if (modeContext.value?.mode !== UI_MODES.PLAY_CARD) {
-          return false;
-        }
-        return modeContext.value.card.areTargetsValid([
-          ...modeContext.value.targets,
-          point
-        ]);
-      } catch (err) {
-        return false;
-      }
+      return validCardTargets.value.has(`${point.x}:${point.y}:${point.z}`);
     },
     selectedCard: computed(() => {
       if (modeContext.value?.mode !== UI_MODES.PLAY_CARD) {

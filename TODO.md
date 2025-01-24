@@ -9,7 +9,7 @@ There is no need for a back end as this point, and the games will be single play
 
 - [ ] Add a machanic that allows a player to choose between multiple card effects when playing a card (for example: draw a card OR deal one damage to a unit).
 - [ ] Add a mechanic that allows a player to search their deck for a specific card.
-- [ ] Add a mechanic that allows a player to choose one card to pick among 3 randomized choices. It needs to have flexibility in how the pool of cards for the randomized chocies is defined.
+- [ ] Add a mechanic that allows a player to choose one card to pick among 3 randomized choices. It needs to have flexibility in how the pool of cards for the randomized choices is defined.
 - [ ] Remake the tutorial to account for the changes in core game mechanics.
 - [ ] Add the ability for units to have activated abilities.
 - [ ] Implement card modifiers.
@@ -28,7 +28,8 @@ There is no need for a back end as this point, and the games will be single play
 
 
 ### UI
-
+- [ ] Disable the card shimmer effect while it is being dragged as it is costly and can cause dropped frames
+- [ ] Remake the way runes and gold are displayed, they're not eye catching enough space
 - [ ] Allows users to hover other card names in the description to display that card on the side, like it does for keywords.
 - [ ] Display the progress of ongoing quests. What to display will probably need to be setup on a per-card basis in the blueprint.
 - [ ] Add the ability for the user to see what cards are in a player discard pile
@@ -86,7 +87,8 @@ Players will be able to
 
 # Change Log
 
-- [x] Add a highlight on a board cell to show the AOE of a unit attack or a spell.
+- [x] 24/01/20255: Add a commanding shrine on the middle of the board that allows a player to summon unit on it
+- [x] 24/01/2025!Add a highlight on a board cell to show the AOE of a unit attack or a spell.
 - [x] 24/01/2025: When a player has many cards in hand, it becomes hard to hover the one after the other.
 - [x] 24/01/2025: Add a `Berzerk` [keyword](packages/engine/src/unit/keywords.ts) that makes a unit move to the nearest unit or general at the beginning of its turn, and attack it. Add the [UnitModifierMixin](packages/engine/src/unit/modifier-mixins/unit-modifier-mixin.ts)implementing the keyword.
 - [x] 19/01/2025: In sandbox mode, the player informations keep swapping position along with the active player.
