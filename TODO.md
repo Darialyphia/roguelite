@@ -25,6 +25,7 @@ There is no need for a back end as this point, and the games will be single play
 
 ### UI
 
+- [ ] Allows users to hover other card names in the description to display that card on the side, like it does for keywords.
 - [ ] Display the progress of ongoing quests. What to display will probably need to be setup on a per-card basis in the blueprint.
 - [ ] Add the ability for the user to see what cards are in a player discard pile
 - [ ] Add some visual feedback whenever a player fulfills a quest.

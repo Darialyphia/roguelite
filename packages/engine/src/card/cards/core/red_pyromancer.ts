@@ -13,7 +13,8 @@ export const redPyromancer: UnitCardBlueprint = {
   iconId: 'unit_pyromancer',
   set: CARD_SETS.CORE,
   name: 'Pyromancer',
-  description: '@Summon@:  .',
+  description:
+    '@Summon@: Add a @Fireball@ to your hand for each Destruction rune you have.',
   kind: CARD_KINDS.UNIT,
   unitType: UNIT_TYPES.MINION,
   aiHints: meleeFighter,
