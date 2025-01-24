@@ -8,7 +8,7 @@ The game is a trading card game - board game hybrid
 
 The game opposes two players.
 
-Each player has a deck of cards and a general that starts on the board.
+Each player has a deck of cards and an altar that starts on the board.
 
 On their turn, players increase their resources, draw and play cards, move their units and attack with them
 
@@ -44,7 +44,7 @@ During their turn, the player can
 
 - move their units
 
-- make the unit attack one or many times
+- make the unit attack one times
 
 - play one or more cards
 
@@ -74,7 +74,7 @@ There are 5 types of runes of different color:
 - Oblivion (Purple)
 - Arcane (Blue)
 
-Once a player acquires a rune, it is never spent: for example once you have 2 red runes, you can play as many cards that have up to 2 red runes as a requirement.general
+Once a player acquires a rune, it is never spent: for example once you have 2 red runes, you can play as many cards that have up to 2 red runes as a requirement
 
 ### Resource actions
 
@@ -86,33 +86,17 @@ Players get one Resource Action per turn that they can activate during any of th
 
 - Draw an additional card
 
-## Generals
+## Altar
 
-Each player controls a general, a unique and versatile unit that acts as the focal point of their strategy. Generals differ from regular units in several key ways:
+Each player starts the game with an altar, which is use as an anchor for summoning unit on the board.
 
-Victory points: generals are high-value targets. Bringing their HP to zero awards 8 Victory Points.
+Victory points: altars are high-value targets. Bringing their HP to zero awards 6 Victory Points.
 
-Abilties: each general possesses unique abilities, which may include passive effects, activated powers, or buffs.
-
-Generals can move and attack like any other unit on the board.
-
-### Spellcasting Anchor
-
-Spellcasting Range: The general determines the casting range for most spells. A spell can only be cast if the target is within range of the general or a unit with the "spellcaster" keyword.
-
-Spellcaster Units: Units with the "spellcaster" keyword extend the player's spellcasting range, allowing for greater board control.
-
-### Destruction and Persistence
-
-Ghost Mechanic: If a general is destroyed, it remains on the board as a "ghost." While in ghost form:
-
-- The general cannot attack or be attacked.
-
-- It can still move and act as a spellcasting anchor.
-
-The ghost ensures that players retain the ability to cast spells and summon units.
+Abilties: each altar possesses unique abilities, which may include passive effects, activated powers, or buffs. Once destroyed, an altar loses these effects.
 
 ## Cards
+
+See [here](https://docs.google.com/spreadsheets/d/1Kxi_LxDMIQihuY53rrvQ4qTDpE6dk17BTxk4E4K7dKA/edit?usp=sharing) for the list of implemented and planned cards.
 
 There are three types of cards.
 
@@ -130,27 +114,23 @@ Units have the following stats:
 
 Units cannot act the turn they are summoned (unless specified otherwise on the card text).
 
-Units have 3 Action Points (called AP) that refreshes every turn. AP are used by the unit to perform actions.
+Units can usually only be summoned nearby its player's altar, but some effects may circumvent this restriction.
 
 ### Movement
 
-Unit can move on the board by spending one AP per tile.
+Unit can move up to 2 hexes on the board.
 
 A unit is no longer able to move during their turn once they have attacked.
 
-### Attacks
+### Attack
 
 Unit can attack another nearby unit (although a card may have special effects that allows attacking other attack patterns).
 
 The first attack in a turn costs 1 AP.
 
-Subsequent attacks in the same turn will cost two more AP per additional attack (Second attack costs 2 ap, third attack costs 3 AP, etc...). Hence, under normal circumstances, a unit will only be able to perform one attack per turn.
-
 Attacked units can counterattack. A counterattack means the unit will attack back the attacker, if able to. For example, some units are ranged but cannot attack in melee range, so when attack in melee range, they will not counterattack.
 
-By default, units will counter attack only once per turn, but some units could do it many times.
-
-A unit will counterattack event if it was destroyed by the attacker. A killing blow will not prevent a counterattack.
+A unit will counterattack even if it was destroyed by the attacker. A killing blow will not prevent a counterattack.
 
 ### Abilities
 
@@ -182,7 +162,7 @@ Some special tiles on the board are called shrines.
 
 Units can walk on those shrines freely.
 
-At the start of every player's turn, if a non-general unit is standing on a shrine, its effect trigger.
+At the start of every player's turn, if a unit is standing on a shrine, its effect trigger.
 
 A shrine can only be controlled by one player. While multiple units cannot normally be on the same board tile, If that case were to happen due to special conditions, the shrine won't award Victory Points to any player.
 
@@ -195,7 +175,7 @@ The different kind of shrines are:
 
 Players accumulate Victory Points (VP) by accomplishing certain feats.
 
-A player win the game by having 15 VP.
+A player win the game by having 12 VP.
 
 VPs can be earned by
 
@@ -203,19 +183,11 @@ VPs can be earned by
 
 - Fulfilling quest cards.
 
-- Destroying the enemy general awards 8 VP.
-
-## Comeback Mechanic
-
-To help balance the game and offer comeback opportunities, players gain a bonus when their opponent reaches certain VP thresholds:
-
-When the opponent reaches 5 VP, the player draws an extra card.
-
-When the opponent reaches 10 VP, the player draws an additional extra card.
+- Destroying the enemy altar awards 6 VP.
 
 ## Turn Limit and Endgame
 
-The game has a turn limit of 10 turns per player (20 turns total). If neither player has reached 15 VP by the end of the game, bonus turns are introduced:
+The game has a turn limit of 15 turns per player (20 turns total). If neither player has reached 15 VP by the end of the game, bonus turns are introduced:
 
 Both players take additional turns until one player has more VP than the other at the end of a full round (both players have completed a turn).
 
