@@ -7,6 +7,10 @@ There is no need for a back end as this point, and the games will be single play
 
 ### Gameplay
 
+- [ ] Add a machanic that allows a player to choose between multiple card effects when playing a card (for example: draw a card OR deal one damage to a unit).
+- [ ] Add a mechanic that allows a player to search their deck for a specific card.
+- [ ] Add a mechanic that allows a player to choose one card to pick among 3 randomized choices. It needs to have flexibility in how the pool of cards for the randomized chocies is defined.
+- [ ] Remake the tutorial to account for the changes in core game mechanics.
 - [ ] Add the ability for units to have activated abilities.
 - [ ] Implement card modifiers.
 - [ ] Add an `AmbushModifierMixin` that implements the Ambush keyword.
@@ -35,6 +39,7 @@ There is no need for a back end as this point, and the games will be single play
 
 - [ ] Maybe we don't need all the bells and whistles with scaling and mitigations for the Damage class, inerceptors on `dealtDamage` and `receivedDamage` should be enough. Let's keep the Damage class though, it might still be useful down the line.
 - [ ] Make the AI less stupid. while it's probably pointless to try to make the AI look further ahead (too slow), better adjustments to the game state scoring system, more AI hint "archetypes" and better filtering of pointless inputs would be great.
+- [ ] Refactor the card target selection to be handled by the engine and not the client
 
 ### Bugs
 - [ ] Server session crashes as soon as an error occurs during an input. It needs error handling, at least for recoverable errors
