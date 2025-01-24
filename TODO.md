@@ -8,14 +8,15 @@ There is no need for a back end as this point, and the games will be single play
 ### Gameplay
 
 - [ ] Add the ability for units to have activated abilities.
+- [ ] Implement card modifiers.
+- [ ] Add an `AmbushModifierMixin` that implements the Ambush keyword.
+- [ ] Add a `DescendModifierMixin` that implements the Descend keyword.
 - [ ] Add a `VigilantModifierMixin` that implements the Vigilant keyword.
 - [ ] Add a `Taunt` [keyword](packages/engine/src/unit/keywords.ts) that makes nearby enemies unable to move and forced to attack the taunter if they attack. Add the [UnitModifierMixin](packages/engine/src/unit/modifier-mixins/unit-modifier-mixin.ts) implementing the keyword
 - [ ] Add a `Frozen` [keyword](packages/engine/src/unit/keywords.ts) that makes a unit unable to move, attack, or use abilities. Add the [UnitModifierMixin](packages/engine/src/unit/modifier-mixins/unit-modifier-mixin.ts)implementing the keyword.
-- [ ] Add a `Berzerk` [keyword](packages/engine/src/unit/keywords.ts) that makes a unit move to the nearest unit or general at the beginning of its turn, and attack it. Add the [UnitModifierMixin](packages/engine/src/unit/modifier-mixins/unit-modifier-mixin.ts)implementing the keyword.
 - [ ] Add a `Barrier` [keyword](packages/engine/src/unit/keywords.ts) that blocks the next damage instance a unit receives. Add the [UnitModifierMixin](packages/engine/src/unit/modifier-mixins/unit-modifier-mixin.ts)implementing the keyword.
 - [ ] Add a 'Blast' [keyword](packages/engine/src/unit/keywords.ts) that makes the unit deal damage to ALL units nearby the target. Damage to those units should be halved (rounded up). Add the [UnitModifierMixin](packages/engine/src/unit/modifier-mixins/unit-modifier-mixin.ts)implementing the keyword
 - [ ] Add a `Magic Guard` [keyword](packages/engine/src/unit/keywords.ts) that prevent a unit from receiving damage from spell cards, or be targeted by spell cards. Implement the [UnitModifierMixin](packages/engine/src/unit/modifier-mixins/unit-modifier-mixin.ts)implementing the keyword
-- [ ] Add a `General Guard` [keyword](packages/engine/src/unit/keywords.ts) that prevent a unit from receiving damage from generals attacks and effects, or be targeted by general effects. Implement the [UnitModifierMixin](packages/engine/src/unit/modifier-mixins/unit-modifier-mixin.ts)implementing the keyword
 - [ ] Add a `Rooted` [keyword](packages/engine/src/unit/keywords.ts) that prevents a unit from moving. Implement the [UnitModifierMixin](packages/engine/src/unit/modifier-mixins/unit-modifier-mixin.ts)implementing the keyword
 - [ ] Add a `Silenced` [keyword](packages/engine/src/unit/keywords.ts) that prevents a unit from using abilities. Implement the [UnitModifierMixin](packages/engine/src/unit/modifier-mixins/unit-modifier-mixin.ts)implementing the keyword
 - [ ] Add a `Slowed` [keyword](packages/engine/src/unit/keywords.ts) that make a unit spend 50% more AP to move one tile. Implement the [UnitModifierMixin](packages/engine/src/unit/modifier-mixins/unit-modifier-mixin.ts)implementing the keyword
@@ -24,16 +25,15 @@ There is no need for a back end as this point, and the games will be single play
 
 ### UI
 
-- [ ] When a player has many cards in hand, it becomes hard to hover the one after the other.
 - [ ] Display the progress of ongoing quests. What to display will probably need to be setup on a per-card basis in the blueprint.
 - [ ] Add the ability for the user to see what cards are in a player discard pile
 - [ ] Add some visual feedback whenever a player fulfills a quest.
-- [ ] Add a highlight on a board cell to show the AOE of a unit attack or a spell.
 - [ ] Improve the TextWithKeyword component to be able to display things like rune, AP or gold icons. Then rename it to CardDescription
 
 ### Refactoring
 
 - [ ] Maybe we don't need all the bells and whistles with scaling and mitigations for the Damage class, inerceptors on `dealtDamage` and `receivedDamage` should be enough. Let's keep the Damage class though, it might still be useful down the line.
+- [ ] Make the AI less stupid. while it's probably pointless to try to make the AI look further ahead (too slow), better adjustments to the game state scoring system, more AI hint "archetypes" and better filtering of pointless inputs would be great.
 
 ### Bugs
 - [ ] Server session crashes as soon as an error occurs during an input. It needs error handling, at least for recoverable errors
@@ -80,6 +80,9 @@ Players will be able to
 
 # Change Log
 
+- [x] Add a highlight on a board cell to show the AOE of a unit attack or a spell.
+- [x] 24/01/2025: When a player has many cards in hand, it becomes hard to hover the one after the other.
+- [x] 24/01/2025: Add a `Berzerk` [keyword](packages/engine/src/unit/keywords.ts) that makes a unit move to the nearest unit or general at the beginning of its turn, and attack it. Add the [UnitModifierMixin](packages/engine/src/unit/modifier-mixins/unit-modifier-mixin.ts)implementing the keyword.
 - [x] 19/01/2025: In sandbox mode, the player informations keep swapping position along with the active player.
 - [x] 19/01/2025: - [Red Exorcist](packages/engine//src/card/cards/core/red_exorcist.ts) Damage amplification on shrines seems to not be working.
 - [x] 17/01/2025: Sandbox first draft
