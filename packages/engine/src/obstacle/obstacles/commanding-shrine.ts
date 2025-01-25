@@ -26,7 +26,7 @@ export const commandingShrine: ObstacleBlueprint = {
 
         obstacle.player?.once(PLAYER_EVENTS.END_TURN, () => {
           obstacle.meta.interceptorUnsub?.();
-          obstacle.playerId = obstacle.occupant!.player.id;
+          obstacle.playerId = undefined;
           if (!obstacle.occupant) {
             obstacle.meta.eventUnsub?.();
           }

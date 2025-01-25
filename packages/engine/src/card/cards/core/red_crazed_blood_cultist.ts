@@ -25,8 +25,8 @@ export const redCrazedBloodCultist: UnitCardBlueprint = {
     runes: [RUNES.RED, RUNES.RED, RUNES.RED]
   },
   jobs: [JOBS.FIGHTER],
-  atk: 3,
-  maxHp: 1,
+  atk: 4,
+  maxHp: 3,
   minTargets: 1,
   targets: [
     {

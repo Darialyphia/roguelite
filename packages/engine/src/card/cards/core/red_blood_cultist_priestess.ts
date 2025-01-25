@@ -29,7 +29,7 @@ export const redBloodCultistPriestess: UnitCardBlueprint = {
   },
   jobs: [JOBS.MAGE],
   atk: 3,
-  maxHp: 1,
+  maxHp: 3,
   minTargets: 1,
   targets: [
     {
