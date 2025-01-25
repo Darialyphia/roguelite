@@ -5,7 +5,7 @@ import { FearsomeModifier } from '../src/unit/modifiers/fearsome.modifier';
 test('Fearsome', () => {
   const { game, player1, player2 } = testGameBuilder()
     .withP2Deck({
-      altar: { blueprintId: 'red-general-flame-lord' },
+      altar: { blueprintId: 'altar' },
       cards: Array.from({ length: 10 }, () => ({ blueprintId: 'red-footman' }))
     })
     .build();

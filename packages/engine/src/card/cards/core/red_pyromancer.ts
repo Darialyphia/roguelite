@@ -9,7 +9,7 @@ import { redFireball } from './red_fireball';
 
 export const redPyromancer: UnitCardBlueprint = {
   id: 'red-pyromancer',
-  spriteId: 'blood-pyromancer',
+  spriteId: 'pyromancer',
   iconId: 'unit_pyromancer',
   set: CARD_SETS.CORE,
   name: 'Pyromancer',
@@ -19,11 +19,11 @@ export const redPyromancer: UnitCardBlueprint = {
   unitType: UNIT_TYPES.MINION,
   aiHints: meleeFighter,
   cost: {
-    gold: 4,
+    gold: 5,
     runes: [RUNES.RED, RUNES.RED]
   },
   jobs: [JOBS.MAGE],
-  atk: 2,
+  atk: 3,
   maxHp: 3,
   minTargets: 1,
   targets: [

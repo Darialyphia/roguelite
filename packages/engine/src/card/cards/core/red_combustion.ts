@@ -43,7 +43,7 @@ export const redCombustion: SpellCardBlueprint = {
       new PointAOEShape(game),
       new RingAOEShape(game, game.unitSystem.getUnitAt(points[0])!.card, {
         allow3D: true,
-        targetingType: TARGETING_TYPE.ALLY_UNIT
+        targetingType: TARGETING_TYPE.ALLY_MINION
       })
     ]);
   },

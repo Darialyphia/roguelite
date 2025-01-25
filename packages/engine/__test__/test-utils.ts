@@ -49,7 +49,7 @@ export const testGameBuilder = () => {
               id: 'p1',
               name: 'Player 1',
               deck: options.teams?.[0][0]?.deck ?? {
-                altar: { blueprintId: 'red-general-flame-lord' },
+                altar: { blueprintId: 'altar' },
                 cards: []
               }
             }
@@ -59,7 +59,7 @@ export const testGameBuilder = () => {
               id: 'p2',
               name: 'Player 2',
               deck: options.teams?.[1][0]?.deck ?? {
-                altar: { blueprintId: 'red-general-flame-lord' },
+                altar: { blueprintId: 'altar' },
                 cards: []
               }
             }

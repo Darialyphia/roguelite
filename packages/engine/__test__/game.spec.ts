@@ -1,6 +1,5 @@
 import { expect, test } from 'vitest';
 import { testGameBuilder } from './test-utils';
-import { defaultConfig } from '../src/config';
 import { Damage } from '../src/combat/damage/damage';
 import { NoScalingStrategy } from '../src/combat/damage/scaling/no-scaling.strategy';
 import { NoMitigationStrategy } from '../src/combat/damage/mitigation/no-mitigation.strategy';
@@ -8,7 +7,7 @@ import { NoMitigationStrategy } from '../src/combat/damage/mitigation/no-mitigat
 test('General damage Victory Point reward trigger properly', () => {
   const { game, player1, player2 } = testGameBuilder()
     .withP2Deck({
-      altar: { blueprintId: 'red-general-flame-lord' },
+      altar: { blueprintId: 'altar' },
       cards: Array.from({ length: 10 }, () => ({ blueprintId: 'red-footman' }))
     })
     .build();

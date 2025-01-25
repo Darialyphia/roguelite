@@ -49,7 +49,9 @@ export const redBloodlust: SpellCardBlueprint = {
           mixins: [
             new InterceptorModifierMixin(game, {
               key: 'attack',
-              interceptor: (attack, modifier) => attack + modifier.stacks
+              interceptor: (attack, ctx, modifier) => {
+                return attack + modifier.stacks;
+              }
             })
           ]
         })
