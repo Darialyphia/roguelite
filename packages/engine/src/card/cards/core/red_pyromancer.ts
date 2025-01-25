@@ -45,11 +45,12 @@ export const redPyromancer: UnitCardBlueprint = {
     }
   },
   onPlay(game, card) {
-    const count = game.unitSystem.units.filter(unit =>
+    const burningUnits = game.unitSystem.units.filter(unit =>
       unit.hasModifier(BurnModifier)
-    ).length;
+    );
+    console.log('burning units', burningUnits);
 
-    for (let i = 0; i <= count; i++) {
+    for (let i = 0; i < burningUnits.length; i++) {
       card.player.addToHand(card.player.generateCard(redFireball.id));
     }
   }

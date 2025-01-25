@@ -143,6 +143,12 @@ section {
   }
 }
 
+fieldset {
+  display: flex;
+  flex-direction: column;
+  gap: var(--size-3);
+}
+
 legend {
   margin-bottom: var(--size-3);
 }
@@ -153,6 +159,9 @@ label {
   padding: var(--size-5) var(--size-6);
   position: relative;
   cursor: pointer;
+  &:hover {
+    scale: 1.02;
+  }
   &:has(input:checked) {
     color: #d7ad42;
     &::before {

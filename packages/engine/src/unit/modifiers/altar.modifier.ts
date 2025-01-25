@@ -30,10 +30,6 @@ export class AltarModifier extends UnitModifier {
           interceptor: () => false
         }),
         new InterceptorModifierMixin(game, {
-          key: 'canCounterAttack',
-          interceptor: () => false
-        }),
-        new InterceptorModifierMixin(game, {
           key: 'canSummonNearby',
           interceptor: () => true
         }),

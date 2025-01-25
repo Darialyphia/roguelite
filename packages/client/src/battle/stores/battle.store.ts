@@ -26,6 +26,7 @@ import {
   isDefined,
   Vec3,
   waitFor,
+  type Nullable,
   type Override,
   type PartialBy,
   type Point3D
@@ -56,7 +57,7 @@ export const useBattleStore = defineStore('battle', () => {
   const players = ref<PlayerViewModel[]>([]);
   const units = ref<UnitViewModel[]>([]);
   const turn = ref(0);
-
+  const winner = ref<Nullable<PlayerViewModel>>(null);
   const phase = ref<GamePhase>('mulligan');
 
   const syncState = () => {
@@ -73,6 +74,9 @@ export const useBattleStore = defineStore('battle', () => {
     units.value = game.unitSystem.units.map(unit => {
       return makeUnitViewModel(game, unit);
     });
+    winner.value = game.winner
+      ? makePlayerViewModel(game, game.winner.players[0])
+      : null;
   };
 
   const fxEmitter = new TypedEventEmitter<GameEventMap>(true);
@@ -148,6 +152,7 @@ export const useBattleStore = defineStore('battle', () => {
       phase,
       cells,
       players,
+      winner,
       units,
       userPlayer: computed(
         () => players.value.find(p => p.id === playerId.value)!
@@ -238,7 +243,6 @@ export const useGameClientState = () => {
 
 export const usePathHelpers = () => {
   const ui = useBattleUiStore();
-  const game = useGame();
   const state = useGameClientState();
 
   const pathCache = new Map<

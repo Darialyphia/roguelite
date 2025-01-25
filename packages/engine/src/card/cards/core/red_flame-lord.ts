@@ -4,7 +4,7 @@ import { UnitSummonTargetingtrategy } from '../../../targeting/unit-summon-targe
 import { BurnModifier } from '../../../unit/modifiers/burn.modifier';
 import { CommanderModifier } from '../../../unit/modifiers/commander.modifier';
 import { JOBS } from '../../../utils/job';
-import { Rune, RUNES } from '../../../utils/rune';
+import { RUNES } from '../../../utils/rune';
 import { type UnitCardBlueprint } from '../../card-blueprint';
 import { CARD_KINDS, CARD_SETS, UNIT_TYPES } from '../../card-enums';
 

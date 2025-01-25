@@ -11,6 +11,7 @@ import OpponentHand from '@/card/components/OpponentHand.vue';
 import TurnIndicator from '@/player/components/TurnIndicator.vue';
 import { useGame, useGameClientState } from '../stores/battle.store';
 import TargetingUi from './TargetingUi.vue';
+import EndGameUi from './EndGameUi.vue';
 
 const state = useGameClientState();
 const game = useGame();
@@ -23,7 +24,7 @@ const game = useGame();
     <PlayedCard />
     <TurnIndicator />
     <TargetingUi />
-
+    <EndGameUi />
     <header>
       <PlayerBattleInfos
         :player="state.players[0]"

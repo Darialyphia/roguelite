@@ -19,7 +19,7 @@ export const redBloodCultistPriestess: UnitCardBlueprint = {
   set: CARD_SETS.CORE,
   name: 'Blood Cultist Priestess',
   description:
-    '@Commander@.\nWhile this is on the board, units with @Rage@ can attack allies minions.',
+    '@Commander@.\nWhile this is on the board, units with @Rage@ can attack ally minions.',
   kind: CARD_KINDS.UNIT,
   unitType: UNIT_TYPES.MINION,
   aiHints: meleeFighter,

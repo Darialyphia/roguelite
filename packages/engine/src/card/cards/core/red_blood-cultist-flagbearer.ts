@@ -19,7 +19,7 @@ export const redBloodCultistFlagbearer: UnitCardBlueprint = {
   set: CARD_SETS.CORE,
   name: 'Blood Cultist Flagbearer',
   description:
-    'Immunity to @Rage@.\nAllies with @Rage@ in a 3 cells radius have @Fearsome@.',
+    'Immunity to @Rage@.\nAllies with @Rage@ in a 2 cells radius have @Fearsome@.',
   kind: CARD_KINDS.UNIT,
   unitType: UNIT_TYPES.MINION,
   aiHints: meleeFighter,
@@ -61,7 +61,7 @@ export const redBloodCultistFlagbearer: UnitCardBlueprint = {
             isElligible(unit) {
               if (unit.isEnemy(card.unit)) return false;
               return (
-                unit.position.isWithinCells(card.unit.position, 3, game) &&
+                unit.position.isWithinCells(card.unit.position, 2, game) &&
                 unit.hasModifier(RageModifier)
               );
             }

@@ -18,12 +18,19 @@ export const commandingShrine: ObstacleBlueprint = {
     obstacle.meta.eventUnsub = obstacle.occupant?.player.on(
       PLAYER_EVENTS.START_TURN,
       () => {
-        if (!obstacle.occupant) return; // @TODO this normally shouldnt happen, need to investigate
-        obstacle.playerId = obstacle.occupant!.player.id;
-        obstacle.meta.interceptorUnsub = obstacle.addInterceptor(
-          'canBeSummonTarget',
-          () => true
-        );
+        if (!obstacle.occupant) {
+          obstacle.playerId = undefined;
+          obstacle.meta.interceptorUnsub?.();
+          obstacle.meta.eventUnsub?.();
+        }
+
+        if (!obstacle.playerId) {
+          obstacle.playerId = obstacle.occupant!.player.id;
+          obstacle.meta.interceptorUnsub = obstacle.addInterceptor(
+            'canBeSummonTarget',
+            () => true
+          );
+        }
 
         obstacle.player?.once(PLAYER_EVENTS.END_TURN, () => {
           obstacle.meta.interceptorUnsub?.();

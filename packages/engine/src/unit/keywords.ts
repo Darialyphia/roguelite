@@ -50,7 +50,7 @@ export const KEYWORDS = {
     id: 'burn',
     name: 'Burn(x)',
     spriteId: 'keyword-burn',
-    description: 'At the beginning of its owner, deal x damage to this unit',
+    description: "At the beginning of its owner's turn, deal x damage to this unit",
     aliases: [/burn\([0-9]+\)/, /burn/]
   },
   SPLASH_ATTACK: {
@@ -93,7 +93,7 @@ export const KEYWORDS = {
     spriteId: 'keyword-rage',
     name: 'Rage',
     description:
-      'At the beginning of its turn, this unit walks towards the nearest me and attacks it if possible',
+      'At the beginning of its turn, this unit walks towards the nearest enemy and attacks it if possible',
     aliases: []
   }
 } as const satisfies Record<string, Keyword>;

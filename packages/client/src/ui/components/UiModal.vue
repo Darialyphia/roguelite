@@ -129,7 +129,7 @@ const {
   }
 }
 
-.content {
+.end-game-ui {
   background-color: #32021b;
   padding: var(--size-5);
   border: solid 6px #efef9f;

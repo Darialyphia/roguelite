@@ -1,16 +1,13 @@
-# PHASE 1: Prototype
-
-The goal of this phase is to shape up the core game mechanics and the UI for the battle screen. This is so we can iterate quickly on game mechanics and "find the fun".
-There is no need for a back end as this point, and the games will be single player VS AI with hardcoded decks that we change manually as we need to test cards and implement mechanics.
+# Tasks
 
 ## High Priority (core mechanics)
 
 ### Gameplay
 
+- [ ] Remake the tutorial to account for the changes in core game mechanics.
 - [ ] Add a machanic that allows a player to choose between multiple card effects when playing a card (for example: draw a card OR deal one damage to a unit).
 - [ ] Add a mechanic that allows a player to search their deck for a specific card.
 - [ ] Add a mechanic that allows a player to choose one card to pick among 3 randomized choices. It needs to have flexibility in how the pool of cards for the randomized choices is defined.
-- [ ] Remake the tutorial to account for the changes in core game mechanics.
 - [ ] Add the ability for units to have activated abilities.
 - [ ] Implement card modifiers.
 - [ ] Add an `AmbushModifierMixin` that implements the Ambush keyword.
@@ -26,51 +23,62 @@ There is no need for a back end as this point, and the games will be single play
 - [ ] Add a `Slowed` [keyword](packages/engine/src/unit/keywords.ts) that make a unit spend 50% more AP to move one tile. Implement the [UnitModifierMixin](packages/engine/src/unit/modifier-mixins/unit-modifier-mixin.ts)implementing the keyword
 - [ ] Add a `Swift` [keyword](packages/engine/src/unit/keywords.ts) that make a unit able to move after attacking. Implement the [UnitModifierMixin](packages/engine/src/unit/modifier-mixins/unit-modifier-mixin.ts)implementing the keyword
 
+### Bugs
+- [ ] the targeting of units affected by [Rage](packages/engine/src/unit//modifier-mixins/rage.mixin.ts) seems to be fairly unreliable and unintuitive.
+- [ ] Altars can be destroyed.
+- [ ] [KeywordImuunityModifier](packages/engine/src/unit/modifiers/keyword-immunity.modifier.ts) is not working
+- [ ] Server session crashes as soon as an error occurs during an input. It needs error handling, at least for recoverable errors
+- [ ] AI or automatic attacks (for exemple because of [RageModifierMixin](packages/engine/src/unit//modifier-mixins/rage.mixin.ts)) sometimes fire from range but the attacker should be melee.
+- [ ] AI sometimes just moves units to the top of the map without any specific reason.
+- [ ] AI will always spend all of it action points, which sometimes maks it step out of shrines for no reason.
 
 ### UI
+- [ ] [BoardCellHighlights](packages/client/src/board/scenes/BoardCellHighlights.vue) seems to not highlight empty cells in aoe (exemple: Immolation)
 - [ ] Remake the way runes and gold are displayed, they're not eye catching enough space
 - [ ] Allows users to hover other card names in the description to display that card on the side, like it does for keywords.
 - [ ] Display the progress of ongoing quests. What to display will probably need to be setup on a per-card basis in the blueprint.
 - [ ] Add the ability for the user to see what cards are in a player discard pile
 - [ ] Add some visual feedback whenever a player fulfills a quest.
-- [ ] Improve the TextWithKeyword component to be able to display things like rune, AP or gold icons. Then rename it to CardDescription
 
 ### Refactoring
-
-- [ ] Maybe we don't need all the bells and whistles with scaling and mitigations for the Damage class, inerceptors on `dealtDamage` and `receivedDamage` should be enough. Let's keep the Damage class though, it might still be useful down the line.
+- [ ] split TURN_START and TURN_END events on the player into BEFORE_* and AFTER_* parts
 - [ ] Make the AI less stupid. while it's probably pointless to try to make the AI look further ahead (too slow), better adjustments to the game state scoring system, more AI hint "archetypes" and better filtering of pointless inputs would be great.
-- [ ] Refactor the card target selection to be handled by the engine and not the client
+- [ ] Refactor the card target selection to be handled by the engine  not the client
 
-### Bugs
-- [ ] [KeywordImuunity](packages/engine/src/unit/modifiers/keyword-immunity.modifier.ts) is not working
-- [ ] Server session crashes as soon as an error occurs during an input. It needs error handling, at least for recoverable errors
-- [ ] AI or automatic attacks (for exemple because of [RageModifierMixin](packages/engine/src/unit//modifier-mixins/rage.mixin.ts)) sometimes fire from range but the attacker should be melee.
-- [ ] AI sometimes just moves units to the top of the map without any specific reason.
-- [ ] AI will always spend all of it action points, which sometimes maks it step out of shrines for no reason.
-- [ ] The card spacing in the opponent's hand after the first turn is incorrect, resulting in cards being spaced too much.
-- [ ] Avoid a shrine
 
 ## Medium Priority (enhancements)
 
 - [ ] make the Battle Log interactive by giving it the possibility to hover pars of the events to highlight them on the board.
+- [ ] Improve the TextWithKeyword component to be able to display things like rune, AP or gold icons. Then rename it to CardDescription
+
+- [ ] Maybe we don't need all the bells and whistles with scaling and mitigations for the Damage class, inerceptors on `dealtDamage` and `receivedDamage` should be enough. Let's keep the Damage class though, it might still be useful down the line.
 
 ## Low Priority (nice to have)
 
 - [ ] When drawing a card, it would be cool if the card appeared from the deck icon in the player infos then went into the hand
+- [ ] Fix the card spacing when hand size is low. Cards should be closer to each other.
 
 
-# PHASE 2: MVP
+#ROADMAP
 
-The goal of this phase is to use the prototype to make a minimalistic versions that can be presented for user testing.
+## PHASE 1: Prototype: DONE
+
+The goal of this phase is to shape up the core game mechanics and the UI for the battle screen. This is so we can iterate quickly on game mechanics and "find the fun".
+There is no need for a back end as this point, and the games will be single player VS AI with hardcoded decks that we change manually as we need to test cards and implement mechanics. A sandbox will also be made to enable testing a game playing both players.
+
+## PHASE 2: MVP
+
+The goal of this phase is to use the prototype to make a minimalistic version that can be presented for user testing.
 Players will be able to choose between a few predefined decks or create their own with access to all the cards.
 Players will be able 
 - follow a game tutorial
 - play vs AI 
 - create lobbies to play pvp games
+- play against themselves in the sandbox
 However, players wont have a user account yet as there won't be any backend API besides the websocket server for PVP games
 At this point, a good target would be to publish the game on itch.io
 
-# PHASE 3: Full game
+## PHASE 3: Full game
 
 The goal of this stage is to refine the game, taking players feedback into account, to make a game worthy of being officially released to broader platforms such as steam.
 Players will be able to

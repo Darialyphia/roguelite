@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { RouterLink, type RouterLinkProps } from 'vue-router';
 import type { StyleProp } from '../ui-utils';
 import { Icon } from '@iconify/vue';
 
@@ -27,6 +28,7 @@ export type ButtonProps = {
   isCta?: boolean;
   isFullwidth?: boolean;
   style?: StyleProp<ButtonStyleVariables>;
+  to?: RouterLinkProps['to'];
 };
 
 const {
@@ -42,7 +44,7 @@ const attrs = useAttrs();
 
 const tag = computed(() => {
   if (attrs.href) return 'a';
-
+  if (attrs.to) return RouterLink;
   return 'button';
 });
 </script>

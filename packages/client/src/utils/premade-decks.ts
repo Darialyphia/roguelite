@@ -11,6 +11,7 @@ import { redFireElemental } from '@game/engine/src/card/cards/core/red_fire-elem
 import { redFireball } from '@game/engine/src/card/cards/core/red_fireball';
 import { redFlameLord } from '@game/engine/src/card/cards/core/red_flame-lord';
 import { redFootman } from '@game/engine/src/card/cards/core/red_footman';
+import { redIgnite } from '@game/engine/src/card/cards/core/red_ignite';
 import { redImmolation } from '@game/engine/src/card/cards/core/red_immolation';
 import { redPyromancer } from '@game/engine/src/card/cards/core/red_pyromancer';
 import { redWarLeader } from '@game/engine/src/card/cards/core/red_warleader';
@@ -72,7 +73,6 @@ export const premadeDecks: Array<{
       cards: [
         { blueprintId: redFlameLord.id },
         { blueprintId: redFlameLord.id },
-        { blueprintId: redFlameLord.id },
         { blueprintId: redPyromancer.id },
         { blueprintId: redPyromancer.id },
         { blueprintId: redPyromancer.id },
@@ -90,16 +90,15 @@ export const premadeDecks: Array<{
         { blueprintId: redImmolation.id },
         { blueprintId: redAvenger.id },
         { blueprintId: redAvenger.id },
+        { blueprintId: redAvenger.id },
         { blueprintId: redFireball.id },
         { blueprintId: redFireball.id },
-        { blueprintId: redFireball.id },
-        { blueprintId: redFootman.id },
-        { blueprintId: redFootman.id },
-        { blueprintId: redFootman.id },
-        { blueprintId: redWarLeader.id },
         { blueprintId: redExorcist.id },
         { blueprintId: redExorcist.id },
-        { blueprintId: redExorcist.id }
+        { blueprintId: redExorcist.id },
+        { blueprintId: redIgnite.id },
+        { blueprintId: redIgnite.id },
+        { blueprintId: redIgnite.id }
       ]
     }
   }

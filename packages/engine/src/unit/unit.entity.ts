@@ -18,7 +18,7 @@ import {
   type TargetingType
 } from '../targeting/targeting-strategy';
 import type { UnitCard } from '../card/unit-card.entity';
-import { CARD_KINDS, UNIT_TYPES } from '../card/card-enums';
+import { CARD_KINDS } from '../card/card-enums';
 import { UNIT_EVENTS } from './unit-enums';
 import { COMBAT_EVENTS, CombatComponent } from '../combat/combat.component';
 import { PathfinderComponent } from '../pathfinding/pathfinder.component';
@@ -189,10 +189,7 @@ export class Unit extends Entity {
   }
 
   get canBeAttacked(): boolean {
-    return this.interceptors.canBeAttackTarget.getValue(
-      this.isAltar ? !this.isDead : true,
-      {}
-    );
+    return this.interceptors.canBeAttackTarget.getValue(!this.isDead, {});
   }
 
   get canBeCardTarget(): boolean {

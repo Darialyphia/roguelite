@@ -2,7 +2,6 @@ import { meleeFighter } from '../../../ai/ai-traits';
 import { PointAOEShape } from '../../../targeting/aoe-shapes';
 import { UnitSummonTargetingtrategy } from '../../../targeting/unit-summon-targeting.strategy';
 import { AltarModifier } from '../../../unit/modifiers/altar.modifier';
-import { RangedModifier } from '../../../unit/modifiers/ranged.modifier';
 import { JOBS } from '../../../utils/job';
 import { type UnitCardBlueprint } from '../../card-blueprint';
 import { CARD_KINDS, CARD_SETS, UNIT_TYPES } from '../../card-enums';
@@ -23,7 +22,7 @@ export const altar: UnitCardBlueprint = {
   },
   jobs: [JOBS.SHOOTER],
   atk: 0,
-  maxHp: 10,
+  maxHp: 12,
   minTargets: 1,
   targets: [
     {
