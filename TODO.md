@@ -28,7 +28,6 @@ There is no need for a back end as this point, and the games will be single play
 
 
 ### UI
-- [ ] Disable the card shimmer effect while it is being dragged as it is costly and can cause dropped frames
 - [ ] Remake the way runes and gold are displayed, they're not eye catching enough space
 - [ ] Allows users to hover other card names in the description to display that card on the side, like it does for keywords.
 - [ ] Display the progress of ongoing quests. What to display will probably need to be setup on a per-card basis in the blueprint.
@@ -87,7 +86,8 @@ Players will be able to
 
 # Change Log
 
-- [x] 24/01/20255: Add a commanding shrine on the middle of the board that allows a player to summon unit on it
+- [x] 25/01/2025: Disable the card shimmer effect while it is being dragged as it is costly and can cause dropped frames
+- [x] 24/01/2025: Add a commanding shrine on the middle of the board that allows a player to summon unit on it
 - [x] 24/01/2025!Add a highlight on a board cell to show the AOE of a unit attack or a spell.
 - [x] 24/01/2025: When a player has many cards in hand, it becomes hard to hover the one after the other.
 - [x] 24/01/2025: Add a `Berzerk` [keyword](packages/engine/src/unit/keywords.ts) that makes a unit move to the nearest unit or general at the beginning of its turn, and attack it. Add the [UnitModifierMixin](packages/engine/src/unit/modifier-mixins/unit-modifier-mixin.ts)implementing the keyword.
