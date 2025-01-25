@@ -1,5 +1,5 @@
 { "frames": {
-   "pyromancer__base_idle_0": {
+   "blood-cultist-brute__base_idle_0": {
     "frame": { "x": 0, "y": 0, "w": 128, "h": 128 },
     "rotated": false,
     "trimmed": false,

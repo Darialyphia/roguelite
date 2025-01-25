@@ -42,6 +42,7 @@ There is no need for a back end as this point, and the games will be single play
 - [ ] Refactor the card target selection to be handled by the engine and not the client
 
 ### Bugs
+- [ ] [KeywordImuunity](packages/engine/src/unit/modifiers/keyword-immunity.modifier.ts) is not working
 - [ ] Server session crashes as soon as an error occurs during an input. It needs error handling, at least for recoverable errors
 - [ ] AI or automatic attacks (for exemple because of [RageModifierMixin](packages/engine/src/unit//modifier-mixins/rage.mixin.ts)) sometimes fire from range but the attacker should be melee.
 - [ ] AI sometimes just moves units to the top of the map without any specific reason.

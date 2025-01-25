@@ -43,7 +43,7 @@ export class PointAOEShape implements AOEShape {
 
 export type CircleAOEShapeOptions = {
   allow3D: boolean;
-  targetingType: NonEmptyTargetingType;
+  targetingType: TargetingType;
   range: number;
 };
 

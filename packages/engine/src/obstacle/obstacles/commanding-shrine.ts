@@ -18,6 +18,7 @@ export const commandingShrine: ObstacleBlueprint = {
     obstacle.meta.eventUnsub = obstacle.occupant?.player.on(
       PLAYER_EVENTS.START_TURN,
       () => {
+        if (!obstacle.occupant) return; // @TODO this normally shouldnt happen, need to investigate
         obstacle.playerId = obstacle.occupant!.player.id;
         obstacle.meta.interceptorUnsub = obstacle.addInterceptor(
           'canBeSummonTarget',

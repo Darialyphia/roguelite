@@ -26,6 +26,10 @@ export class AltarModifier extends UnitModifier {
           interceptor: () => false
         }),
         new InterceptorModifierMixin(game, {
+          key: 'canBeDestroyed',
+          interceptor: () => false
+        }),
+        new InterceptorModifierMixin(game, {
           key: 'canCounterAttack',
           interceptor: () => false
         }),

@@ -11,12 +11,12 @@ export const redImmolation: SpellCardBlueprint = {
   iconId: 'spell-immolation',
   set: CARD_SETS.CORE,
   name: 'Immolation',
-  description: 'Give Burn(3) to minions in a 2 cells area.',
+  description: 'Give Burn(1) to minions in a 3 cells area.',
   kind: CARD_KINDS.SPELL,
   aiHints: {},
   cost: {
-    gold: 5,
-    runes: [RUNES.RED, RUNES.RED, RUNES.COLORLESS, RUNES.COLORLESS]
+    gold: 3,
+    runes: [RUNES.RED, RUNES.COLORLESS, RUNES.COLORLESS]
   },
   minTargets: 1,
   targets: [
@@ -29,7 +29,7 @@ export const redImmolation: SpellCardBlueprint = {
   getAoe(game, card) {
     return new CircleAOEShape(game, card, {
       allow3D: true,
-      targetingType: TARGETING_TYPE.MINION,
+      targetingType: TARGETING_TYPE.ANYWHERE,
       range: 2
     });
   },
@@ -40,7 +40,8 @@ export const redImmolation: SpellCardBlueprint = {
   },
   onPlay(game, card, cellTargets, unitTargets) {
     unitTargets.forEach(target => {
-      target.addModifier(new BurnModifier(game, card, { initialStacks: 3 }));
+      if (target.isAltar) return;
+      target.addModifier(new BurnModifier(game, card, { initialStacks: 1 }));
     });
   }
 };

@@ -1,6 +1,7 @@
 import { meleeFighter } from '../../../ai/ai-traits';
 import { PointAOEShape } from '../../../targeting/aoe-shapes';
 import { UnitSummonTargetingtrategy } from '../../../targeting/unit-summon-targeting.strategy';
+import { BurnModifier } from '../../../unit/modifiers/burn.modifier';
 import { JOBS } from '../../../utils/job';
 import { RUNES } from '../../../utils/rune';
 import { type UnitCardBlueprint } from '../../card-blueprint';
@@ -13,18 +14,17 @@ export const redPyromancer: UnitCardBlueprint = {
   iconId: 'unit_pyromancer',
   set: CARD_SETS.CORE,
   name: 'Pyromancer',
-  description:
-    '@Summon@: Add a @Fireball@ to your hand for each Destruction rune you have.',
+  description: '@Summon@: Add a @Fireball@ to your hand for each unit with @Burn@.',
   kind: CARD_KINDS.UNIT,
   unitType: UNIT_TYPES.MINION,
   aiHints: meleeFighter,
   cost: {
-    gold: 5,
+    gold: 4,
     runes: [RUNES.RED, RUNES.RED]
   },
   jobs: [JOBS.MAGE],
   atk: 3,
-  maxHp: 3,
+  maxHp: 4,
   minTargets: 1,
   targets: [
     {
@@ -45,7 +45,9 @@ export const redPyromancer: UnitCardBlueprint = {
     }
   },
   onPlay(game, card) {
-    const count = card.player.getRuneCount(RUNES.RED);
+    const count = game.unitSystem.units.filter(unit =>
+      unit.hasModifier(BurnModifier)
+    ).length;
 
     for (let i = 0; i <= count; i++) {
       card.player.addToHand(card.player.generateCard(redFireball.id));
