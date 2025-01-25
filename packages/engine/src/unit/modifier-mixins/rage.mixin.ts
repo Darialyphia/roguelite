@@ -75,9 +75,11 @@ export class RageModifierMixin extends UnitModifierMixin {
     this.modifier = modifier;
     unit.player.on(PLAYER_EVENTS.START_TURN, this.seekAndAttack);
 
-    if (unit.player.isActive && !unit.isExhausted) {
-      this.seekAndAttack();
-    }
+    this.game.inputSystem.schedule(() => {
+      if (unit.player.isActive && !unit.isExhausted) {
+        this.seekAndAttack();
+      }
+    });
   }
 
   onRemoved(unit: Unit): void {
