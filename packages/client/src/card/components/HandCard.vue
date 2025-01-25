@@ -115,6 +115,7 @@ const violations = computed<{ gold?: boolean; runes?: boolean }>(() =>
             'is-highlighted': card.shouldHighlightInHand
           }"
           :violations="violations"
+          :has-shimmer="!isDragging"
         />
       </Transition>
     </component>

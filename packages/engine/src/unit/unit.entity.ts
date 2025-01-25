@@ -81,6 +81,7 @@ export class Unit extends Entity {
     canBeCardTarget: new Interceptable<boolean>(),
     canBeDestroyed: new Interceptable<boolean>(),
     canSummonNearby: new Interceptable<boolean>(),
+    canReceiveModifier: new Interceptable<boolean, { modifier: UnitModifier }>(),
 
     shouldDeactivateWhenSummoned: new Interceptable<boolean>(),
 
@@ -542,6 +543,10 @@ export class Unit extends Entity {
   }
 
   addModifier(modifier: UnitModifier) {
+    const canAdd = this.interceptors.canReceiveModifier.getValue(true, { modifier });
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
+    if (!canAdd) return () => {};
+
     this.modifierManager.add(modifier);
 
     return () => this.removeModifier(modifier.id);

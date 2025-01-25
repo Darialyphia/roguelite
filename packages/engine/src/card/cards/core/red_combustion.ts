@@ -41,7 +41,7 @@ export const redCombustion: SpellCardBlueprint = {
   getAoe(game, unit, points) {
     return new CompositeAOEShape([
       new PointAOEShape(game),
-      new RingAOEShape(game, game.unitSystem.getUnitAt(points[0])!, {
+      new RingAOEShape(game, game.unitSystem.getUnitAt(points[0])!.card, {
         allow3D: true,
         targetingType: TARGETING_TYPE.ALLY_UNIT
       })

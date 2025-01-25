@@ -10,7 +10,11 @@ import TextWithKeywords from './TextWithKeywords.vue';
 import { useElementHover, useMouse } from '@vueuse/core';
 import { clamp } from '@game/shared';
 
-const { card, violations } = defineProps<{
+const {
+  card,
+  violations,
+  hasShimmer = true
+} = defineProps<{
   card: Pick<
     CardViewModel,
     'name' | 'description' | 'kind' | 'iconId' | 'cost'
@@ -19,6 +23,7 @@ const { card, violations } = defineProps<{
       Pick<CardViewModel & { kind: 'unit' }, 'atk' | 'maxHp' | 'unitType'>
     >;
   violations?: { job?: boolean; ap?: boolean; gold?: boolean; runes?: boolean };
+  hasShimmer?: boolean;
 }>();
 
 const nameFontSize = useDynamicFontSize(card.name, {
@@ -62,6 +67,7 @@ const root = useTemplateRef('card');
 const { x, y } = useMouse();
 
 const pointerStyle = computed(() => {
+  if (!hasShimmer) return;
   if (!root.value) return;
   const rect = root.value.getBoundingClientRect();
   return {
@@ -116,8 +122,7 @@ const pointerStyle = computed(() => {
       <StatCircle :value="card.maxHp!" icon="hp" />
     </div>
 
-    <div class="shine" />
-    <div class="glare" />
+    <div class="shimmer" v-if="hasShimmer" />
   </div>
 </template>
 
@@ -225,7 +230,7 @@ ul:has(.rune) {
   padding-bottom: 8px;
 }
 
-.glare {
+.shimmer {
   position: absolute;
   pointer-events: none;
   inset: 0;

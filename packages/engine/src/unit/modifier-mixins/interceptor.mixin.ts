@@ -1,5 +1,8 @@
 import type { Game } from '../../game/game';
-import type { inferInterceptorValue } from '../../utils/interceptable';
+import type {
+  inferInterceptorCtx,
+  inferInterceptorValue
+} from '../../utils/interceptable';
 import type { UnitModifier } from '../unit-modifier.entity';
 import type { Unit, UnitInterceptor } from '../unit.entity';
 import { UnitModifierMixin } from './unit-modifier-mixin';
@@ -15,6 +18,7 @@ export class InterceptorModifierMixin<
       key: TKey;
       interceptor: (
         value: inferInterceptorValue<UnitInterceptor[TKey]>,
+        ctx: inferInterceptorCtx<UnitInterceptor[TKey]>,
         modifier: UnitModifier
       ) => inferInterceptorValue<UnitInterceptor[TKey]>;
     }
@@ -23,8 +27,11 @@ export class InterceptorModifierMixin<
     this.interceptor = this.interceptor.bind(this);
   }
 
-  interceptor(value: inferInterceptorValue<UnitInterceptor[TKey]>) {
-    return this.options.interceptor(value, this.modifier);
+  interceptor(
+    value: inferInterceptorValue<UnitInterceptor[TKey]>,
+    ctx: inferInterceptorCtx<UnitInterceptor[TKey]>
+  ) {
+    return this.options.interceptor(value, ctx, this.modifier);
   }
 
   onApplied(unit: Unit, modifier: UnitModifier): void {

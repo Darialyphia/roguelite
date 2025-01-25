@@ -213,7 +213,6 @@ export const useVFXEvent = <T extends keyof VFXEventMap>(
 
 export const useUserPlayer = () => {
   const store = useBattleStore();
-
   return computed(() => store.state.userPlayer);
 };
 

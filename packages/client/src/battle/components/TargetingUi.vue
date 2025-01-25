@@ -47,19 +47,22 @@ watchEffect(() => {
     })
     .exhaustive();
 });
+
+const isDisplayed = computed(() => {
+  // this is strange, but if we dont evaluate all the conditions we rn into reactivity issues
+  // maybe it is pinia related ?
+  const isCorrectMode = ui.mode === UI_MODES.PLAY_CARD;
+  const hasMultipleTargets = ui.cardTargets.length > 0;
+  const needsMultipleTargets =
+    (ui.selectedCard?.maxTargetCount ?? 0) > 1 ||
+    ui.selectedCard?.minTargetCount === 0;
+
+  return isCorrectMode && hasMultipleTargets && needsMultipleTargets;
+});
 </script>
 
 <template>
-  <div
-    v-if="
-      ui.mode === UI_MODES.PLAY_CARD &&
-      ui.cardTargets.length >= 1 &&
-      ((ui.selectedCard?.maxTargetCount ?? 0) > 1 ||
-        ui.selectedCard?.minTargetCount === 0)
-    "
-    class="targeting-ui"
-    @click.stop
-  >
+  <div v-if="isDisplayed" class="targeting-ui" @click.stop>
     <UiButton class="error-button" is-cta @click="cancel">Cancel</UiButton>
     <UiButton v-if="canSkip" is-cta class="primary-button" @click="commitPlay">
       Skip

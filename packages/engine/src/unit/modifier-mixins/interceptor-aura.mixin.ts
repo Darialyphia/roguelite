@@ -1,6 +1,10 @@
 import { type EntityId } from '../../entity';
 import type { Game } from '../../game/game';
-import type { inferInterceptor, inferInterceptorValue } from '../../utils/interceptable';
+import type {
+  inferInterceptor,
+  inferInterceptorCtx,
+  inferInterceptorValue
+} from '../../utils/interceptable';
 import type { UnitModifier } from '../unit-modifier.entity';
 import type { Unit, UnitInterceptor } from '../unit.entity';
 import { AuraModifierMixin } from './aura.mixin';
@@ -17,7 +21,8 @@ export class InterceptorAuraModifierMixin<
       interceptor: (
         value: inferInterceptorValue<UnitInterceptor[TKey]>,
         unit: Unit,
-        modifier: UnitModifier
+        modifier: UnitModifier,
+        ctx: inferInterceptorCtx<UnitInterceptor[TKey]>
       ) => inferInterceptorValue<UnitInterceptor[TKey]>;
       isElligible: (unit: Unit, modifier: UnitModifier) => boolean;
     }
@@ -30,8 +35,10 @@ export class InterceptorAuraModifierMixin<
   }
 
   onGainAura(unit: Unit): void {
-    const interceptor = (value: inferInterceptorValue<UnitInterceptor[TKey]>) =>
-      this.options.interceptor(value, unit, this.modifier);
+    const interceptor = (
+      value: inferInterceptorValue<UnitInterceptor[TKey]>,
+      ctx: inferInterceptorCtx<UnitInterceptor[TKey]>
+    ) => this.options.interceptor(value, unit, this.modifier, ctx);
     this.interceptorMap.set(unit.id, interceptor as any);
     unit.addInterceptor(this.options.key, interceptor as any);
   }

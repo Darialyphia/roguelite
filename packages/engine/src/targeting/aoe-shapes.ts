@@ -10,6 +10,7 @@ import {
 import { match } from 'ts-pattern';
 import type { Unit } from '../unit/unit.entity';
 import type { Player } from '../player/player.entity';
+import type { Card } from '../card/card.entity';
 
 export type AOEShape = {
   getCells(points: Point3D[]): Cell[];
@@ -40,6 +41,41 @@ export class PointAOEShape implements AOEShape {
   }
 }
 
+export type CircleAOEShapeOptions = {
+  allow3D: boolean;
+  targetingType: NonEmptyTargetingType;
+  range: number;
+};
+
+export class CircleAOEShape implements AOEShape {
+  constructor(
+    private game: Game,
+    private card: Card,
+    private options: CircleAOEShapeOptions
+  ) {}
+
+  getCells(points: Point3D[]) {
+    return this.game.boardSystem.cells.filter(cell =>
+      cell.position.isWithinCells(points[0], this.options.range, this.game)
+    );
+  }
+
+  getUnits(points: Point3D[]) {
+    return this.getCells(points)
+      .filter(cell => {
+        if (!isDefined(cell.unit)) return false;
+        return isValidTargetingType(
+          this.game,
+          cell,
+          this.card.player,
+          this.options.targetingType
+        );
+      })
+      .map(cell => cell.unit)
+      .filter(isDefined);
+  }
+}
+
 export type RingAOEShapeOptions = {
   allow3D: boolean;
   targetingType: NonEmptyTargetingType;
@@ -48,7 +84,7 @@ export type RingAOEShapeOptions = {
 export class RingAOEShape implements AOEShape {
   constructor(
     private game: Game,
-    private unit: Unit,
+    private card: Card,
     private options: RingAOEShapeOptions
   ) {}
 
@@ -60,31 +96,17 @@ export class RingAOEShape implements AOEShape {
 
   getUnits(points: Point3D[]) {
     return this.getCells(points)
+      .filter(cell => {
+        if (!isDefined(cell.unit)) return false;
+        return isValidTargetingType(
+          this.game,
+          cell,
+          this.card.player,
+          this.options.targetingType
+        );
+      })
       .map(cell => cell.unit)
-      .filter((unit): unit is Unit => {
-        if (!isDefined(unit)) return false;
-
-        return match(this.options.targetingType)
-          .with(TARGETING_TYPE.ALLY_UNIT, () => !!unit?.isAlly(this.unit))
-          .with(TARGETING_TYPE.ALLY_ALTAR, () => !!unit.isAlly(this.unit) && unit.isAltar)
-          .with(
-            TARGETING_TYPE.ALLY_MINION,
-            () => !!unit?.isAlly(this.unit) && !unit.isAltar
-          )
-          .with(TARGETING_TYPE.ENEMY_UNIT, () => !!unit?.isEnemy(this.unit))
-          .with(
-            TARGETING_TYPE.ENEMY_ALTAR,
-            () => !!unit?.isEnemy(this.unit) && unit.isAltar
-          )
-          .with(
-            TARGETING_TYPE.ENEMY_MINION,
-            () => !!unit?.isEnemy(this.unit) && !unit.isAltar
-          )
-          .with(TARGETING_TYPE.UNIT, () => isDefined(unit))
-          .with(TARGETING_TYPE.ALTAR, () => isDefined(unit) && unit?.isAltar)
-          .with(TARGETING_TYPE.MINION, () => isDefined(unit) && !unit.isAltar)
-          .exhaustive();
-      });
+      .filter(isDefined);
   }
 }
 
@@ -175,8 +197,8 @@ export class ShrineAoeShape implements AOEShape {
 
   getCells(): Cell[] {
     const shrines = [
-      ...this.game.boardSystem.getFortuneShrines(),
-      ...this.game.boardSystem.getFortuneShrines()
+      ...this.game.boardSystem.victoryShrines,
+      ...this.game.boardSystem.commandingShrines
     ];
 
     return shrines.map(shrine => this.game.boardSystem.getCellAt(shrine.position)!);

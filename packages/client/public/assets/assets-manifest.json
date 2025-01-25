@@ -325,6 +325,19 @@
         },
         {
           "alias": [
+            "icon-keyword-immunity"
+          ],
+          "src": [
+            "/assets/icons/keyword-immunity.png"
+          ],
+          "data": {
+            "tags": {
+              "m": true
+            }
+          }
+        },
+        {
+          "alias": [
             "icon-keyword-rage"
           ],
           "src": [
@@ -585,6 +598,19 @@
         },
         {
           "alias": [
+            "icon-spell-immolation"
+          ],
+          "src": [
+            "/assets/icons/spell-immolation.png"
+          ],
+          "data": {
+            "tags": {
+              "m": true
+            }
+          }
+        },
+        {
+          "alias": [
             "icon-spell-lightning-bolt"
           ],
           "src": [
@@ -706,6 +732,19 @@
           ],
           "src": [
             "/assets/icons/unit_blood-cultist-devotee.png"
+          ],
+          "data": {
+            "tags": {
+              "m": true
+            }
+          }
+        },
+        {
+          "alias": [
+            "icon-unit_blood-cultist-flagbearer"
+          ],
+          "src": [
+            "/assets/icons/unit_blood-cultist-flagbearer.png"
           ],
           "data": {
             "tags": {
@@ -2368,6 +2407,33 @@
           ],
           "src": [
             "/assets/units/blood-cultist-devotee.png"
+          ],
+          "data": {
+            "tags": {
+              "m": true
+            }
+          }
+        },
+        {
+          "alias": [
+            "blood-cultist-flagbearer"
+          ],
+          "src": [
+            "/assets/units/blood-cultist-flagbearer.json"
+          ],
+          "loadParser": "aseprite_loader",
+          "data": {
+            "tags": {
+              "m": true
+            }
+          }
+        },
+        {
+          "alias": [
+            "blood-cultist-flagbearer.png"
+          ],
+          "src": [
+            "/assets/units/blood-cultist-flagbearer.png"
           ],
           "data": {
             "tags": {
