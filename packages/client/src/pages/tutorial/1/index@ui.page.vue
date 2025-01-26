@@ -372,9 +372,7 @@ const options: BetterOmit<
           onEnter(next) {
             tutorial.highlightedCell = { x: 3, y: 5, z: 1 };
             const id = computed(() => ui.selectedUnit?.id);
-            watchEffect(() => {
-              console.log(id.value);
-            });
+            watchEffect(() => {});
             until(computed(() => ui.selectedUnit?.id))
               .toBe('unit_3')
               .then(() => {
@@ -389,7 +387,13 @@ const options: BetterOmit<
           onEnter() {
             tutorial.highlightedCell = { x: 4, y: 7, z: 1 };
           }
-        },
+        }
+      ]
+    },
+    {
+      expectedInputs: [{ type: 'endTurn', payload: { playerId: 'player' } }],
+      meta: {},
+      tooltips: [
         {
           text: 'Your footman is now standing on a Victory Shrine',
           canClickNext: true
@@ -400,7 +404,20 @@ const options: BetterOmit<
         },
         {
           text: `Earn ${defaultConfig.VP_WIN_THRESHOLD} to win the game !`,
-          canClickNext: true
+          canClickNext: true,
+          onEnter() {
+            tutorial.isVPDisplayed = true;
+          }
+        },
+        {
+          text: "You don't have anything else to do, so let's end your turn.",
+          canClickNext: false,
+          onEnter() {
+            tutorial.highlightedElementId = 'end-turn-action-button';
+          },
+          onLeave() {
+            tutorial.highlightedElementId = null;
+          }
         }
       ]
     }
