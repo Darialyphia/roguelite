@@ -5,9 +5,7 @@ import {
   HoverCardRoot,
   HoverCardTrigger,
   HoverCardContent,
-  HoverCardPortal,
-  ProgressRoot,
-  ProgressIndicator
+  HoverCardPortal
 } from 'radix-vue';
 import Card from '@/card/components/Card.vue';
 import { GAME_PHASES } from '@game/engine/src/game/game-phase.system';
@@ -81,21 +79,6 @@ const tutorial = useTutorialStore();
       {{ player.name }}
     </div>
     <ul class="resources">
-      <UiSimpleTooltip v-for="rune in runes" :key="rune.type">
-        <template #trigger>
-          <li
-            class="rune"
-            :class="!tutorial.isRuneResourcesDisplayed && 'tutorial-hidden'"
-            :style="{
-              '--bg': `url('/assets/ui/rune-${rune.type}-small.png')`
-            }"
-          >
-            {{ rune.count }}
-          </li>
-        </template>
-        Unlocked {{ rune.name }} runes.
-      </UiSimpleTooltip>
-
       <UiSimpleTooltip>
         <template #trigger>
           <li
@@ -110,6 +93,21 @@ const tutorial = useTutorialStore();
         </template>
         Available gold.
       </UiSimpleTooltip>
+
+      <template v-for="rune in runes" :key="rune.type">
+        <UiSimpleTooltip v-for="i in rune.count" :key="i">
+          <template #trigger>
+            <li
+              class="rune"
+              :class="!tutorial.isRuneResourcesDisplayed && 'tutorial-hidden'"
+              :style="{
+                '--bg': `url('/assets/ui/rune-${rune.type}-small.png')`
+              }"
+            />
+          </template>
+          {{ rune.name }} runes.
+        </UiSimpleTooltip>
+      </template>
     </ul>
 
     <div class="bottom-row">
@@ -251,11 +249,10 @@ const tutorial = useTutorialStore();
 .resources {
   grid-area: resources;
   display: flex;
-  justify-content: space-between;
-  gap: var(--size-2);
-
+  flex-direction: row-reverse;
+  min-width: calc(var(--pixel-art-scale) * 6 * 13px + 100px);
   .is-inverted & {
-    flex-direction: row-reverse;
+    flex-direction: row;
   }
 }
 

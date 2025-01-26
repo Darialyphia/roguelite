@@ -65,6 +65,7 @@ const tutorial = useTutorialStore();
     class="hand"
     v-if="state.phase === GAME_PHASES.BATTLE"
     ref="root"
+    id="player-hand"
     :class="!tutorial.isHandDisplayed && 'tutorial-hidden'"
   >
     <DraggedCard />

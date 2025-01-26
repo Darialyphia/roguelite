@@ -5,11 +5,11 @@ export const useTutorialStore = defineStore('tutorial', () => {
   const highlightedCell = ref<Nullable<Point3D>>(null);
   const highlightedElementId = ref<Nullable<string>>(null);
 
-  const highlightedElement = computed(() =>
-    highlightedElementId.value
+  const highlightedElement = computed(() => {
+    return highlightedElementId.value
       ? (document.getElementById(highlightedElementId.value) as HTMLElement)
-      : null
-  );
+      : null;
+  });
 
   watch(highlightedElement, (el, prevEl) => {
     prevEl?.classList.remove('tutorial-highlighted');

@@ -24,8 +24,8 @@ export const commandingShrine: ObstacleBlueprint = {
           obstacle.meta.eventUnsub?.();
         }
 
-        if (!obstacle.playerId) {
-          obstacle.playerId = obstacle.occupant!.player.id;
+        if (obstacle.occupant && !obstacle.playerId) {
+          obstacle.playerId = obstacle.occupant.player.id;
           obstacle.meta.interceptorUnsub = obstacle.addInterceptor(
             'canBeSummonTarget',
             () => true

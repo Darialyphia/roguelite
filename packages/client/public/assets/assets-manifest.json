@@ -598,6 +598,19 @@
         },
         {
           "alias": [
+            "icon-spell-ignite"
+          ],
+          "src": [
+            "/assets/icons/spell-ignite.png"
+          ],
+          "data": {
+            "tags": {
+              "m": true
+            }
+          }
+        },
+        {
+          "alias": [
             "icon-spell-immolation"
           ],
           "src": [

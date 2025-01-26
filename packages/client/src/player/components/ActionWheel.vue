@@ -313,7 +313,13 @@ const tutorial = useTutorialStore();
     calc((var(--item-size) * 0.75) - 1px);
 
   > * {
-    clip-path: polygon(50% 0, 100% 25%, 100% 75%, 50% 100%, 0 75%, 0 25%);
+    &:not(:has(.tutorial-highlighted)) {
+      clip-path: polygon(50% 0, 100% 25%, 100% 75%, 50% 100%, 0 75%, 0 25%);
+    }
+    &:has(.tutorial-highlighted) {
+      position: relative;
+      z-index: 1;
+    }
     width: var(--item-size);
     aspect-ratio: 1;
     &:nth-of-type(1) {
