@@ -17,9 +17,7 @@ export class UnitModifierManager {
         modifier.equals({ id: modifierOrId } as Entity)
       );
     } else {
-      return this._modifiers.some(
-        modifier => modifier.constructor.name === RageModifier.name
-      );
+      return this._modifiers.some(modifier => modifier.constructor === modifierOrId);
     }
   }
 

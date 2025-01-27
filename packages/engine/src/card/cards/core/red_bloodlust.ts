@@ -18,7 +18,7 @@ export const redBloodlust: SpellCardBlueprint = {
   kind: CARD_KINDS.SPELL,
   aiHints: {},
   cost: {
-    gold: 2,
+    gold: 1,
     runes: [RUNES.RED]
   },
   minTargets: 1,
