@@ -8,7 +8,7 @@ import { UnitModifier } from '../unit-modifier.entity';
 
 export class CommanderModifier extends UnitModifier {
   constructor(game: Game, source: Card) {
-    super(createEntityId(KEYWORDS.RUSH.id), game, source, {
+    super(createEntityId(KEYWORDS.COMMANDER.id), game, source, {
       stackable: false,
       mixins: [
         new InterceptorModifierMixin(game, {

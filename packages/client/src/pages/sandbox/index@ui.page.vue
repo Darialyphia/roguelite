@@ -108,6 +108,11 @@ useBattleEvent(GAME_EVENTS.PLAYER_MULLIGAN, async ({ player }) => {
           Debug client session
         </button>
       </li>
+      <li>
+        <button @click="() => console.log(battleStore.state)">
+          Debug client ui state
+        </button>
+      </li>
     </ul>
 
     <BattleUi />

@@ -36,7 +36,7 @@ export const KEYWORDS = {
     id: 'commander',
     name: 'Commander',
     description: 'You can summon units nearby this.',
-    spriteId: 'commander',
+    spriteId: 'keyword-commander',
     aliases: []
   },
   RANGED: {

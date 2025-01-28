@@ -17,36 +17,33 @@ export const commandingShrine: ObstacleBlueprint = {
   attackable: false,
   onCreated(game, obstacle) {
     game.on(GAME_EVENTS.PLAYER_START_TURN, event => {
-      if (obstacle.occupant) {
-        if (obstacle.occupant.player.isAlly(event.player)) {
-          return;
-        }
+      obstacle.playerId = obstacle.occupant?.player.id;
 
-        obstacle.playerId = event.player.id;
-        const modifierId = createEntityId(KEYWORDS.COMMANDER.id);
+      if (!obstacle.occupant) return;
 
-        const isAlreadyCommander = obstacle.occupant.hasModifier(modifierId);
-        if (isAlreadyCommander) {
-          obstacle.occupant.player.once(PLAYER_EVENTS.END_TURN, () => {
-            obstacle.playerId = undefined;
-          });
-          return;
-        }
+      if (obstacle.occupant.player.isEnemy(event.player)) {
+        return;
+      }
+      const unit = obstacle.occupant;
+      const modifierId = createEntityId(KEYWORDS.COMMANDER.id);
 
-        obstacle.occupant.addModifier(
-          new CommanderModifier(game, event.player.altar.card)
-        );
-        const unsub = obstacle.occupant.once(UNIT_EVENTS.AFTER_MOVE, () => {
-          obstacle.occupant?.removeModifier(modifierId);
-        });
-        obstacle.occupant.player.once(PLAYER_EVENTS.END_TURN, () => {
-          unsub();
-          obstacle.occupant?.removeModifier(modifierId);
+      const isAlreadyCommander = unit.hasModifier(modifierId);
+      if (isAlreadyCommander) {
+        event.player.once(PLAYER_EVENTS.END_TURN, () => {
           obstacle.playerId = undefined;
         });
-      } else {
-        obstacle.playerId = undefined;
+        return;
       }
+
+      unit.addModifier(new CommanderModifier(game, event.player.altar.card));
+      const unsub = unit.once(UNIT_EVENTS.AFTER_MOVE, () => {
+        unit.removeModifier(modifierId);
+      });
+      event.player.once(PLAYER_EVENTS.END_TURN, () => {
+        unsub();
+        unit.removeModifier(modifierId);
+        obstacle.playerId = undefined;
+      });
     });
   },
   onDestroyed(game, obstacle) {
