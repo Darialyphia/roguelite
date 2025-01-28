@@ -16,7 +16,7 @@ export const redFireElemental: UnitCardBlueprint = {
   iconId: 'unit_fire-elemental',
   set: CARD_SETS.CORE,
   name: 'Fire Elemental',
-  description: 'Applies @Burn(2)@ to nearby enemy units.',
+  description: 'Nearby enemy minions have @Burn(1)@.',
   kind: CARD_KINDS.UNIT,
   unitType: UNIT_TYPES.MINION,
   aiHints: meleeFighter,
@@ -52,8 +52,8 @@ export const redFireElemental: UnitCardBlueprint = {
         stackable: false,
         mixins: [
           new BurnAuraModifierMixin(game, {
-            strength: 2,
-            targetingType: TARGETING_TYPE.ENEMY_UNIT
+            strength: 1,
+            targetingType: TARGETING_TYPE.ENEMY_MINION
           })
         ]
       })

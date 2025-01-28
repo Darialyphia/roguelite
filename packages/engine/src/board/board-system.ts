@@ -12,10 +12,8 @@ import type { GameMap } from './map';
 import { defineHex, Grid, Orientation, rectangle, spiral } from 'honeycomb-grid';
 import { defaultConfig } from '../config';
 import { victoryShrine } from '../obstacle/obstacles/victory-shrine';
-import { fortuneShrine } from '../obstacle/obstacles/fortune-shrine';
 import { Obstacle } from '../obstacle/obstacle.entity';
 import { makeObstacleId } from '../obstacle/obstacle.utils';
-import { commandingShrine } from '../obstacle/obstacles/commanding-shrine';
 
 export type BoardSystemOptions = {
   map: GameMap;
@@ -79,7 +77,7 @@ export class BoardSystem extends System<BoardSystemOptions> {
 
     this.commandingShrines = this.cells
       .filter((cell): cell is RequiredBy<Cell, 'obstacle'> => {
-        return cell.obstacle?.blueprintId === commandingShrine.id;
+        return cell.obstacle?.blueprintId === 'commandingShrine.id';
       })
       .map(cell => cell.obstacle);
   }

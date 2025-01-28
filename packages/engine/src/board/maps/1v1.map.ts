@@ -2,7 +2,6 @@ import { Vec3 } from '@game/shared';
 import type { GameMap } from '../map';
 import { plainTileset } from '../tilesets/plains';
 import { victoryShrine } from '../../obstacle/obstacles/victory-shrine';
-import { commandingShrine } from '../../obstacle/obstacles/commanding-shrine';
 
 export const map1v1: GameMap = {
   id: '1v1',
@@ -191,7 +190,7 @@ export const map1v1: GameMap = {
         plainTileset.GRASS,
         plainTileset.GRASS,
         plainTileset.GRASS,
-        { ...plainTileset.GRASS, obstacle: commandingShrine.id },
+        { ...plainTileset.GRASS, obstacle: 'commanding-shrine' },
         plainTileset.GRASS,
         plainTileset.GRASS,
         plainTileset.GRASS,

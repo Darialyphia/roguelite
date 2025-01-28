@@ -78,7 +78,7 @@ const options: BetterOmit<
         { type: 'mulligan', payload: { playerId: 'player', indices: [] } },
         { type: 'mulligan', payload: { playerId: 'ai', indices: [] } }
       ],
-      meta: {},
+
       tooltips: []
     },
     {
@@ -105,7 +105,7 @@ const options: BetterOmit<
           }
         }
       ],
-      meta: {},
+
       tooltips: [
         {
           text: 'Welcome to the first tutorial for Worselyst !',
@@ -168,23 +168,24 @@ const options: BetterOmit<
           payload: {
             playerId: 'player',
             index: 0,
-            targets: [{ x: 3, y: 5, z: 1 }]
+            targets: [{ x: 3, y: 6, z: 1 }]
           }
         }
       ],
-      meta: {},
+
       tooltips: [
         {
-          text: 'You know have unlocked enough runes to play the cards in your hands.',
+          text: 'You can play unit cards nearby your altar.',
           canClickNext: true
         },
         {
-          text: 'You can play unit cards nearby your alter. Play the highlighted card on the highlighted tile',
+          text: 'Drag the highlighted card on the board!',
           canClickNext: false,
           onEnter() {
-            tutorial.highlightedCell = { x: 3, y: 5, z: 1 };
+            tutorial.highlightedCell = { x: 3, y: 6, z: 1 };
             tutorial.highlightedElementId = 'hand_card_0';
           },
+
           onLeave() {
             tutorial.highlightedCell = null;
             tutorial.highlightedElementId = null;
@@ -201,7 +202,7 @@ const options: BetterOmit<
           }
         }
       ],
-      meta: {},
+
       onEnter() {
         tutorial.isEndTurnDisplayed = true;
         tutorial.highlightedElementId = 'end-turn-action-button';
@@ -245,39 +246,32 @@ const options: BetterOmit<
           payload: { playerId: 'ai' }
         }
       ],
-      meta: {},
-      onEnter() {
+
+      async onEnter() {
         tutorial.isOpponentHandDisplayed = true;
-      },
-      tooltips: [
-        {
-          text: "It's now my turn. Like you, I will gain a rune and play a unit",
-          canClickNext: true,
-          async onLeave() {
-            battle.dispatch({
-              type: 'runeResourceAction',
-              payload: {
-                playerId: 'ai',
-                rune: 'RED'
-              }
-            });
-            await waitFor(1500);
-            battle.dispatch({
-              type: 'playCard',
-              payload: {
-                playerId: 'ai',
-                index: 0,
-                targets: [{ x: 7, y: 5, z: 1 }]
-              }
-            });
-            await waitFor(3000);
-            battle.dispatch({
-              type: 'endTurn',
-              payload: { playerId: 'ai' }
-            });
+        battle.dispatch({
+          type: 'runeResourceAction',
+          payload: {
+            playerId: 'ai',
+            rune: 'RED'
           }
-        }
-      ]
+        });
+        await waitFor(3000);
+        battle.dispatch({
+          type: 'playCard',
+          payload: {
+            playerId: 'ai',
+            index: 0,
+            targets: [{ x: 7, y: 5, z: 1 }]
+          }
+        });
+        await waitFor(3000);
+        battle.dispatch({
+          type: 'endTurn',
+          payload: { playerId: 'ai' }
+        });
+      },
+      tooltips: []
     },
     {
       expectedInputs: [
@@ -288,7 +282,7 @@ const options: BetterOmit<
           }
         }
       ],
-      meta: {},
+
       tooltips: [
         {
           text: 'At the start of your turn, you gain 3 gold.',
@@ -302,7 +296,7 @@ const options: BetterOmit<
           }
         },
         {
-          text: 'You have enough runes, but not enough gold to play your units.',
+          text: 'Your cards cost 4. You need more gold !',
           canClickNext: true
         },
         {
@@ -314,7 +308,7 @@ const options: BetterOmit<
           }
         },
         {
-          text: 'Gain one gold so you can play your Berzerk.',
+          text: 'Use your resource action to get one gold.',
           canClickNext: false,
           onEnter() {
             tutorial.highlightedElementId = 'gold-action-button';
@@ -329,15 +323,14 @@ const options: BetterOmit<
           payload: {
             playerId: 'player',
             index: 0,
-            targets: [{ x: 3, y: 4, z: 1 }]
+            targets: [{ x: 3, y: 5, z: 1 }]
           }
         }
       ],
-      meta: {},
+
       onEnter() {
         tutorial.highlightedElementId = 'hand_card_0';
-        tutorial.highlightedCell = { x: 3, y: 4, z: 1 };
-        console.log(tutorial.highlightedElement);
+        tutorial.highlightedCell = { x: 3, y: 5, z: 1 };
       },
       onLeave() {
         tutorial.highlightedElementId = null;
@@ -363,20 +356,17 @@ const options: BetterOmit<
           }
         }
       ],
-      meta: {},
+
       tooltips: [
         { text: "let's now learn how to use your units.", canClickNext: true },
         {
           text: 'Your footman can act. Click on it to select it.',
           canClickNext: false,
           onEnter(next) {
-            tutorial.highlightedCell = { x: 3, y: 5, z: 1 };
-            const id = computed(() => ui.selectedUnit?.id);
-            watchEffect(() => {});
+            tutorial.highlightedCell = { x: 3, y: 6, z: 1 };
             until(computed(() => ui.selectedUnit?.id))
               .toBe('unit_3')
               .then(() => {
-                console.log('should next');
                 next();
               });
           }
@@ -386,31 +376,34 @@ const options: BetterOmit<
           canClickNext: false,
           onEnter() {
             tutorial.highlightedCell = { x: 4, y: 7, z: 1 };
+          },
+          onLeave() {
+            tutorial.highlightedCell = null;
           }
         }
       ]
     },
     {
       expectedInputs: [{ type: 'endTurn', payload: { playerId: 'player' } }],
-      meta: {},
+
       tooltips: [
         {
-          text: 'Your footman is now standing on a Victory Shrine',
+          text: 'Your footman is now standing on a VICTORY SHRINE.',
           canClickNext: true
         },
         {
-          text: 'Having a unit on a victory shrine at the start of your turn earns you one Victory Point',
+          text: 'Having a unit on a victory shrine at the start of your turn grants you one Victory Point (VP).',
           canClickNext: true
         },
         {
-          text: `Earn ${defaultConfig.VP_WIN_THRESHOLD} to win the game !`,
+          text: `Earn ${defaultConfig.VP_WIN_THRESHOLD} VP to win the game !`,
           canClickNext: true,
           onEnter() {
             tutorial.isVPDisplayed = true;
           }
         },
         {
-          text: "You don't have anything else to do, so let's end your turn.",
+          text: "Nothing more to do, Let's end your turn.",
           canClickNext: false,
           onEnter() {
             tutorial.highlightedElementId = 'end-turn-action-button';
@@ -418,6 +411,146 @@ const options: BetterOmit<
           onLeave() {
             tutorial.highlightedElementId = null;
           }
+        }
+      ]
+    },
+    {
+      expectedInputs: [
+        {
+          type: 'runeResourceAction',
+          payload: { playerId: 'ai', rune: 'RED' }
+        }
+      ],
+
+      tooltips: [],
+      onEnter() {
+        battle.dispatch({
+          type: 'runeResourceAction',
+          payload: { playerId: 'ai', rune: 'RED' }
+        });
+      }
+    },
+    {
+      expectedInputs: [
+        {
+          type: 'move',
+          payload: { playerId: 'ai', unitId: 'unit_4', x: 5, y: 5, z: 1 }
+        }
+      ],
+
+      tooltips: [],
+      onEnter() {
+        setTimeout(() => {
+          battle.dispatch({
+            type: 'move',
+            payload: { playerId: 'ai', unitId: 'unit_4', x: 5, y: 5, z: 1 }
+          });
+        }, 2000);
+      }
+    },
+    {
+      expectedInputs: [{ type: 'endTurn', payload: { playerId: 'ai' } }],
+
+      tooltips: [],
+      onEnter() {
+        setTimeout(() => {
+          battle.dispatch({ type: 'endTurn', payload: { playerId: 'ai' } });
+        }, 1000);
+      }
+    },
+    {
+      expectedInputs: [
+        {
+          type: 'move',
+          payload: { playerId: 'player', unitId: 'unit_3', x: 5, y: 6, z: 1 }
+        }
+      ],
+
+      tooltips: [
+        {
+          text: 'The enemy is in attack range of your Footman !',
+          canClickNext: true
+        },
+        {
+          text: 'Move your footman in melee range.',
+          canClickNext: false,
+          onEnter() {
+            tutorial.highlightedCell = { x: 5, y: 6, z: 1 };
+          },
+          onLeave() {
+            tutorial.highlightedCell = null;
+          }
+        }
+      ]
+    },
+    {
+      expectedInputs: [
+        {
+          type: 'attack',
+          payload: { playerId: 'player', unitId: 'unit_3', x: 5, y: 5, z: 1 }
+        }
+      ],
+      tooltips: [
+        {
+          text: 'Click the enemy to attack it',
+          canClickNext: false
+        }
+      ]
+    },
+    {
+      expectedInputs: [
+        {
+          type: 'playCard',
+          payload: {
+            playerId: 'player',
+            index: 3,
+            targets: [{ x: 5, y: 5, z: 1 }]
+          }
+        }
+      ],
+      tooltips: [
+        {
+          text: "The enemy unit has 2hp left. It's dangerous to keep him alive.",
+          canClickNext: true
+        },
+        {
+          text: 'The reason is he is standing on a COMMANDING SHRINE.',
+          canClickNext: true
+        },
+        {
+          text: 'A unit on a Victory Shrine gains the COMMANDER attribute at the start of its owner turn.',
+          canClickNext: true
+        },
+        {
+          text: 'Commander are allowed to play unit cards nearby them !',
+          canClickNext: true
+        },
+        {
+          text: 'Use the Spell card FIREBALL in your hand to destroy the enemy footman !',
+          canClickNext: false,
+          onEnter() {
+            tutorial.highlightedCell = { x: 5, y: 5, z: 1 };
+            tutorial.highlightedElementId = 'hand_card_3';
+          },
+          onLeave() {
+            tutorial.highlightedCell = null;
+            tutorial.highlightedElementId = null;
+          }
+        }
+      ]
+    },
+    {
+      expectedInputs: [
+        {
+          type: 'move',
+          payload: { unitId: 'unit_5', playerId: 'player', x: 5, y: 5, z: 1 }
+        },
+        { type: 'endTurn', payload: { playerId: 'player' } }
+      ],
+      tooltips: [
+        {
+          text: 'Now move your berserk to the Commanding shrine and end your turn.',
+          canClickNext: false
         }
       ]
     }

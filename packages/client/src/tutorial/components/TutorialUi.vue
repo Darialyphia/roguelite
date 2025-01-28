@@ -27,11 +27,12 @@ const serverOptions = {
 
 const isInvalidInput = ref(false);
 
-const clientOptions = {
+const clientOptions: TutorialSessionOptions = {
   ...options,
   steps,
-  onInvalidInput() {
+  onInvalidInput(input, expected) {
     isInvalidInput.value = true;
+    console.log({ input, expected });
     setTimeout(() => {
       isInvalidInput.value = false;
     }, 1000);

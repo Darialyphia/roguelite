@@ -1,4 +1,4 @@
-import type { AnyObject, MaybePromise } from '@game/shared';
+import type { MaybePromise } from '@game/shared';
 import type { SerializedInput } from './input/input-system';
 import {
   ClientSession,
@@ -18,7 +18,6 @@ export type TutorialStep = {
   }>;
   onEnter?: (session: TutorialSession) => void;
   onLeave?: (session: TutorialSession) => void;
-  meta: AnyObject;
 };
 
 export type TutorialSessionOptions = ClientSessionOptions & {

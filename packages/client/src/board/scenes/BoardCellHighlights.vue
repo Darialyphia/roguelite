@@ -18,6 +18,7 @@ import {
 import { useTutorialStore } from '@/tutorial/tutorial.store';
 import { useSpritesheet } from '@/shared/composables/useSpritesheet';
 import UiLayerContainer from '@/ui/scenes/UiLayerContainer.vue';
+import { altar } from '@game/engine/src/card/cards/basic/altar';
 
 const { cell } = defineProps<{ cell: CellViewModel }>();
 
@@ -164,6 +165,10 @@ const tag = computed(() => {
     />
   </PTransition>
   <UiLayerContainer v-if="tag === 'tutorial'">
-    <sprite texture="/assets/ui/tutorial-arrow.png" :anchor="0.5" :y="-60" />
+    <sprite
+      texture="/assets/ui/tutorial-arrow.png"
+      :anchor="0.5"
+      :y="cell.obstacle?.blueprintId === altar.id ? -75 : -60"
+    />
   </UiLayerContainer>
 </template>
