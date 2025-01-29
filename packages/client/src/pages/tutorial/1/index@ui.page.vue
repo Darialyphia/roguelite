@@ -10,6 +10,7 @@ import { RUNES } from '@game/engine/src/utils/rune';
 import { waitFor, type BetterOmit } from '@game/shared';
 import { RouterLink } from 'vue-router';
 import { defaultConfig } from '@game/engine/src/config';
+import { GAME_EVENTS } from '@game/engine/src/game/game';
 
 definePage({
   name: 'Tutorial1'
@@ -41,7 +42,7 @@ const options: BetterOmit<
             { blueprintId: 'tutorial-berserk' },
             { blueprintId: 'tutorial-berserk' },
             { blueprintId: 'red-fireball' },
-            { blueprintId: 'red-berserk' },
+            { blueprintId: 'red-burning-blade' },
             { blueprintId: 'tutorial-spell' },
             { blueprintId: 'tutorial-quest' },
             { blueprintId: 'red-footman' },
@@ -55,7 +56,7 @@ const options: BetterOmit<
         id: 'ai',
         name: 'AI',
         deck: {
-          altar: { blueprintId: 'altar' },
+          altar: { blueprintId: 'tutorial-altar' },
           cards: [
             { blueprintId: 'red-footman' },
             { blueprintId: 'red-footman' },
@@ -552,6 +553,100 @@ const options: BetterOmit<
           text: 'Now move your berserk to the Commanding shrine and end your turn.',
           canClickNext: false
         }
+      ]
+    },
+    {
+      expectedInputs: [
+        {
+          type: 'endTurn',
+          payload: { playerId: 'ai' }
+        }
+      ],
+      onEnter() {
+        battle.dispatch({
+          type: 'endTurn',
+          payload: { playerId: 'ai' }
+        });
+      },
+      tooltips: []
+    },
+    {
+      expectedInputs: [
+        {
+          type: 'runeResourceAction',
+          payload: { playerId: 'player', rune: 'RED' }
+        }
+      ],
+      tooltips: [
+        {
+          text: 'Another way to gain VP is to destroy the enemy altar.',
+          canClickNext: true
+        },
+        {
+          text: `It will grant you ${defaultConfig.ALTAR_VP_REWARD}VP !`,
+          canClickNext: true
+        },
+        {
+          text: "We can use the Burning Blade Spell you just drew to boost your Berserk's attack !",
+          canClickNext: true
+        },
+        {
+          text: 'First, use your resource action to get a second Destruction Rune.',
+          canClickNext: false,
+          onEnter() {
+            tutorial.highlightedElementId = 'rune_action_red';
+          },
+          onLeave() {
+            tutorial.highlightedElementId = null;
+          }
+        }
+      ]
+    },
+    {
+      expectedInputs: [
+        {
+          type: 'playCard',
+          payload: {
+            playerId: 'player',
+            index: 3,
+            targets: [{ x: 5, y: 5, z: 1 }]
+          }
+        }
+      ],
+      tooltips: [
+        {
+          text: 'Now play your Burning Blade !',
+          canClickNext: false,
+          onEnter() {
+            tutorial.highlightedCell = { x: 5, y: 5, z: 1 };
+            tutorial.highlightedElementId = 'hand_card_3';
+          },
+          onLeave() {
+            tutorial.highlightedCell = null;
+            tutorial.highlightedElementId = null;
+          }
+        }
+      ]
+    },
+    {
+      expectedInputs: [
+        {
+          type: 'move',
+          payload: { playerId: 'player', unitId: 'unit_5', x: 7, y: 5, z: 1 }
+        },
+        {
+          type: 'attack',
+          payload: { playerId: 'player', unitId: 'unit_5', x: 8, y: 5, z: 1 }
+        }
+      ],
+      onEnter() {
+        tutorial.highlightedCell = { x: 6, y: 5, z: 1 };
+        battle.once(GAME_EVENTS.FLUSHED, async () => {
+          tutorial.highlightedCell = { x: 7, y: 5, z: 1 };
+        });
+      },
+      tooltips: [
+        { text: 'You can now destroy the enemy Altar !', canClickNext: false }
       ]
     }
   ]

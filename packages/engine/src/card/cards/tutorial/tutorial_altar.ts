@@ -1,29 +1,28 @@
 import { meleeFighter } from '../../../ai/ai-traits';
 import { PointAOEShape } from '../../../targeting/aoe-shapes';
 import { UnitSummonTargetingtrategy } from '../../../targeting/unit-summon-targeting.strategy';
-import { SplashAttackModifier } from '../../../unit/modifiers/splash-attack.modifier';
+import { AltarModifier } from '../../../unit/modifiers/altar.modifier';
 import { JOBS } from '../../../utils/job';
-import { RUNES } from '../../../utils/rune';
 import { type UnitCardBlueprint } from '../../card-blueprint';
 import { CARD_KINDS, CARD_SETS, UNIT_TYPES } from '../../card-enums';
 
-export const tutorialBerserk: UnitCardBlueprint = {
-  id: 'tutorial-berserk',
-  spriteId: 'berserk',
-  iconId: 'unit_berserk',
+export const tutorialAltar: UnitCardBlueprint = {
+  id: 'tutorial-altar',
+  spriteId: 'altar',
   set: CARD_SETS.TUTORIAL,
-  name: 'Berserk',
-  description: '',
+  iconId: 'unit_altar',
+  name: 'Altar',
+  description: '@Altar@.',
   kind: CARD_KINDS.UNIT,
-  unitType: UNIT_TYPES.MINION,
+  unitType: UNIT_TYPES.ALTAR,
   aiHints: meleeFighter,
   cost: {
-    gold: 4,
-    runes: [RUNES.RED]
+    gold: 3,
+    runes: []
   },
-  jobs: [JOBS.FIGHTER],
-  atk: 4,
-  maxHp: 4,
+  jobs: [JOBS.SHOOTER],
+  atk: 0,
+  maxHp: 6,
   minTargets: 1,
   targets: [
     {
@@ -44,6 +43,6 @@ export const tutorialBerserk: UnitCardBlueprint = {
     }
   },
   onPlay(game, card) {
-    card.unit.addModifier(new SplashAttackModifier(game, card));
+    card.unit.addModifier(new AltarModifier(game, card));
   }
 };

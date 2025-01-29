@@ -52,7 +52,7 @@ export const redBurningBlade: SpellCardBlueprint = {
           mixins: [
             new InterceptorModifierMixin(game, {
               key: 'attack',
-              interceptor: (attack, modifier) => attack + 2 * modifier.stacks
+              interceptor: (attack, context, modifier) => attack + 2 * modifier.stacks
             })
           ]
         })

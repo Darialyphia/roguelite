@@ -181,6 +181,13 @@ export const useBattleStore = defineStore('battle', () => {
       return fxEmitter.on(eventName, handler);
     },
 
+    once<T extends keyof GameEventMap>(
+      eventName: T,
+      handler: (...eventArg: GameEventMap[T]) => Promise<void>
+    ) {
+      return fxEmitter.once(eventName, handler);
+    },
+
     off<T extends keyof GameEventMap>(
       eventName: T,
       handler: (...eventArg: GameEventMap[T]) => Promise<void>
