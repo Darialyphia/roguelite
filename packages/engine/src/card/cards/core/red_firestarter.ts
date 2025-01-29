@@ -1,7 +1,4 @@
 import { meleeFighter } from '../../../ai/ai-traits';
-import { Damage } from '../../../combat/damage/damage';
-import { NoMitigationStrategy } from '../../../combat/damage/mitigation/no-mitigation.strategy';
-import { NoScalingStrategy } from '../../../combat/damage/scaling/no-scaling.strategy';
 import { AnywhereTargetingStrategy } from '../../../targeting/anywhere-targeting-strategy';
 import { PointAOEShape } from '../../../targeting/aoe-shapes';
 import { TARGETING_TYPE } from '../../../targeting/targeting-strategy';
@@ -55,7 +52,6 @@ export const redFirestarter: UnitCardBlueprint = {
     }
   },
   onPlay(game, card, cells, units) {
-    card.unit.addModifier(new RangedModifier(game, card, 2));
     const target = units[1];
     if (target) {
       target.addModifier(new BurnModifier(game, card, { initialStacks: 1 }));

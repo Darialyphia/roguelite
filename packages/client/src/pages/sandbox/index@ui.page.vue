@@ -6,10 +6,31 @@ import { useBattleEvent, useBattleStore } from '@/battle/stores/battle.store';
 import BattleUi from '@/battle/components/BattleUi.vue';
 import { premadeDecks } from '@/utils/premade-decks';
 import UiButton from '@/ui/components/UiButton.vue';
+import { useLocalStorage } from '@vueuse/core';
 
 definePage({
   name: 'Sandbox'
 });
+
+type Deck = {
+  name: string;
+  cards: string[];
+};
+const savedDecks = useLocalStorage<Deck[]>('decks', []);
+const MAX_DECK_SIZE = 30;
+const availableDecks = computed(() => [
+  ...premadeDecks,
+  ...savedDecks.value
+    .filter(deck => deck.cards.length === MAX_DECK_SIZE)
+    .map(deck => ({
+      name: deck.name,
+      runes: [],
+      deck: {
+        altar: { blueprintId: 'altar' },
+        cards: deck.cards.map(card => ({ blueprintId: card }))
+      }
+    }))
+]);
 
 const battleStore = useBattleStore();
 
@@ -61,7 +82,7 @@ useBattleEvent(GAME_EVENTS.PLAYER_MULLIGAN, async ({ player }) => {
     <div>
       <fieldset>
         <legend>Player 1 deck</legend>
-        <label v-for="deck in premadeDecks" :key="deck.name">
+        <label v-for="deck in availableDecks" :key="deck.name">
           <input
             type="radio"
             v-model="decks[0]"

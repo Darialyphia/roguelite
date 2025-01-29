@@ -1,9 +1,7 @@
 import { meleeFighter } from '../../../ai/ai-traits';
 import { createEntityId } from '../../../entity';
 import { GAME_EVENTS } from '../../../game/game';
-import { AnywhereTargetingStrategy } from '../../../targeting/anywhere-targeting-strategy';
 import { PointAOEShape } from '../../../targeting/aoe-shapes';
-import { TARGETING_TYPE } from '../../../targeting/targeting-strategy';
 import { UnitSummonTargetingtrategy } from '../../../targeting/unit-summon-targeting.strategy';
 import { GameEventModifierMixin } from '../../../unit/modifier-mixins/game-event.mixin';
 import { BurnModifier } from '../../../unit/modifiers/burn.modifier';
@@ -19,7 +17,8 @@ export const redFlameHarvester: UnitCardBlueprint = {
   iconId: 'placeholder',
   set: CARD_SETS.CORE,
   name: 'Flame Harvester',
-  description: 'At the start of your turn, if an enemy minion has @Burn@, gain 1 gold.',
+  description:
+    'At the start of your turn, if at least 2 enemy minions have @Burn@, gain 1 gold.',
   kind: CARD_KINDS.UNIT,
   unitType: UNIT_TYPES.MINION,
   aiHints: meleeFighter,
@@ -59,10 +58,10 @@ export const redFlameHarvester: UnitCardBlueprint = {
             handler(event) {
               if (!event.player.equals(card.player)) return;
 
-              const hasBurningEnemy = card.player.enemyUnits.some(unit =>
-                unit.hasModifier(BurnModifier)
-              );
-              if (hasBurningEnemy) card.player.addGold(1);
+              const hasBurningEnemies =
+                card.player.enemyUnits.filter(unit => unit.hasModifier(BurnModifier))
+                  .length >= 2;
+              if (hasBurningEnemies) card.player.addGold(1);
             }
           })
         ]

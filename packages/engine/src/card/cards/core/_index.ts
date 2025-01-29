@@ -27,8 +27,8 @@ import { redImmolation } from './red_immolation';
 import { redBloodCultistFlagbearer } from './red_blood-cultist-flagbearer';
 import { redIgnite } from './red_ignite';
 import { redFirestarter } from './red_firestarter';
-import { redFlameDancer } from './red-_flame-dancer';
-import { redFlameHarvester } from './flame-harvester';
+import { redFlameDancer } from './red_flame-dancer';
+import { redFlameHarvester } from './red_flame-harvester';
 import { redRageEffigy } from './red-rage-effigy';
 
 export const CORE_CARDS = keyBy(

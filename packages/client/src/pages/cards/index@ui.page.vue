@@ -74,12 +74,20 @@ const hasMaxCopies = (card: CardBlueprint) => {
 };
 
 const selectedDeckContent = computed(() => {
-  if (!selectedDeck.value) return {};
+  if (!selectedDeck.value) return [];
   const deckCards = selectedDeck.value.cards.map(
     id => cards.value.find(card => card.id === id)!
   );
 
-  return Object.groupBy(deckCards, card => card.name);
+  const grouped = Object.groupBy(deckCards, card => card.id);
+  return Object.entries(grouped)
+    .map(([id, copies]) => ({
+      id,
+      name: copies![0].name,
+      copies: copies!.length,
+      blueprint: copies![0]
+    }))
+    .sort((a, b) => a.blueprint.cost.gold - b.blueprint.cost.gold);
 });
 </script>
 
@@ -92,6 +100,9 @@ const selectedDeckContent = computed(() => {
         </li>
         <li>
           <RouterLink :to="{ name: 'SinglePlayer' }">Vs AI</RouterLink>
+        </li>
+        <li>
+          <RouterLink :to="{ name: 'Sandbox' }">Sandbox</RouterLink>
         </li>
       </ul>
     </nav>
@@ -144,33 +155,31 @@ const selectedDeckContent = computed(() => {
         </ul>
         <UiButton class="primary-button" @click="createDeck">New deck</UiButton>
       </template>
-      <template v-else>
+      <div class="deck" v-else>
         <div class="flex justiy-between">
           <input v-model="selectedDeck.name" />
           {{ selectedDeck.cards.length }} / {{ DECK_SIZE }}
         </div>
         <ul>
           <li
-            v-for="(copies, name) in selectedDeckContent"
-            :key="name"
+            v-for="card in selectedDeckContent"
+            :key="card.id"
             class="deck-item"
             @click="
               () => {
-                const idx = selectedDeck?.cards.findIndex(
-                  c => c === copies![0].id
-                )!;
+                const idx = selectedDeck?.cards.findIndex(c => c === card.id)!;
                 selectedDeck?.cards.splice(idx, 1);
               }
             "
           >
-            <CardIcon :card="copies![0]" />
-            {{ name }} X {{ copies?.length }}
+            <CardIcon :card="card.blueprint" />
+            {{ card.name }} X {{ card.copies }}
           </li>
         </ul>
         <UiButton class="primary-button" @click="selectedDeck = null">
           Back
         </UiButton>
-      </template>
+      </div>
     </aside>
   </div>
 </template>
@@ -190,6 +199,7 @@ const selectedDeckContent = computed(() => {
 
 aside {
   padding: var(--size-3);
+  overflow-y: hidden;
 }
 .cards {
   gap: var(--size-6);
@@ -205,6 +215,15 @@ aside {
 
 .card:not(.disabled):hover {
   cursor: url('/assets/ui/cursor-hover.png'), auto;
+}
+
+.deck {
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  height: 100%;
+  > ul {
+    overflow-y: auto;
+  }
 }
 .deck-item {
   display: flex;
