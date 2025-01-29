@@ -7,6 +7,8 @@ import type { Card } from '../../card/card.entity';
 import { NoMitigationStrategy } from '../../combat/damage/mitigation/no-mitigation.strategy';
 import { NoScalingStrategy } from '../../combat/damage/scaling/no-scaling.strategy';
 import { PLAYER_EVENTS } from '../../player/player-enums';
+import { CARD_KINDS } from '../../card/card-enums';
+import { DAMAGE_TYPES } from '../../combat/damage/damage.enums';
 
 export class BurnModifierMixin extends UnitModifierMixin {
   private modifier!: UnitModifier;
@@ -25,6 +27,10 @@ export class BurnModifierMixin extends UnitModifierMixin {
       new Damage({
         baseAmount: this.modifier.stacks,
         source: this.source,
+        type:
+          this.source.kind === CARD_KINDS.UNIT
+            ? DAMAGE_TYPES.ABILITY
+            : DAMAGE_TYPES.SPELL,
         mitigations: [new NoMitigationStrategy()],
         scalings: [new NoScalingStrategy()]
       })

@@ -48,6 +48,7 @@ useVFXEvent('SHAKE_UNIT', async params => {
 });
 
 useBattleEvent(GAME_EVENTS.UNIT_BEFORE_DESTROY, async e => {
+  if (unit.isAltar) return;
   if (!e.unit.equals(unit.getUnit())) return Promise.resolve();
   await gsap.to(container.value!, {
     pixi: {

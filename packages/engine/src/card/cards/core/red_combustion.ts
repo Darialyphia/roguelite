@@ -1,4 +1,5 @@
 import { Damage } from '../../../combat/damage/damage';
+import { DAMAGE_TYPES } from '../../../combat/damage/damage.enums';
 import { NoMitigationStrategy } from '../../../combat/damage/mitigation/no-mitigation.strategy';
 import { NoScalingStrategy } from '../../../combat/damage/scaling/no-scaling.strategy';
 import { AnywhereTargetingStrategy } from '../../../targeting/anywhere-targeting-strategy';
@@ -59,6 +60,7 @@ export const redCombustion: SpellCardBlueprint = {
       new Damage({
         baseAmount: 3,
         source: card,
+        type: DAMAGE_TYPES.SPELL,
         scalings: [new NoScalingStrategy()],
         mitigations: [new NoMitigationStrategy()]
       })

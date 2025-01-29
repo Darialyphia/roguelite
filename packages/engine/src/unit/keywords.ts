@@ -73,13 +73,6 @@ export const KEYWORDS = {
     description: 'Units attacked by this do not counterattack.',
     aliases: []
   },
-  VIGILANT: {
-    id: 'vigilant',
-    name: 'Vigilant',
-    spriteId: 'keyword-vigilant',
-    description: 'This unit has unlimited counterattacks.',
-    aliases: []
-  },
   RUSH: {
     id: 'rush',
     name: 'Rush',
@@ -94,6 +87,20 @@ export const KEYWORDS = {
     name: 'Rage',
     description:
       'At the beginning of its turn, this unit walks towards the nearest enemy and attacks it if possible',
+    aliases: []
+  },
+  STRUCTURE: {
+    id: 'strucure',
+    spriteId: 'keyword-structure',
+    name: 'Structure',
+    description: 'This unit cannot move or attack.',
+    aliases: []
+  },
+  DOUBLE_ATTACK: {
+    id: 'double_attack',
+    spriteId: 'keyword-double-attack',
+    name: 'Double Attack',
+    description: 'This unit can attack twice.',
     aliases: []
   }
 } as const satisfies Record<string, Keyword>;

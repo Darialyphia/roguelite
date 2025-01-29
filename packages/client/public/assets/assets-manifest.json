@@ -247,6 +247,19 @@
         },
         {
           "alias": [
+            "icon-keyword-double-attack"
+          ],
+          "src": [
+            "/assets/icons/keyword-double-attack.png"
+          ],
+          "data": {
+            "tags": {
+              "m": true
+            }
+          }
+        },
+        {
+          "alias": [
             "icon-keyword-fearsome"
           ],
           "src": [
@@ -407,6 +420,19 @@
           ],
           "src": [
             "/assets/icons/keyword-stasis.png"
+          ],
+          "data": {
+            "tags": {
+              "m": true
+            }
+          }
+        },
+        {
+          "alias": [
+            "icon-keyword-structure"
+          ],
+          "src": [
+            "/assets/icons/keyword-structure.png"
           ],
           "data": {
             "tags": {
@@ -2717,6 +2743,33 @@
           ],
           "src": [
             "/assets/units/pyromancer.png"
+          ],
+          "data": {
+            "tags": {
+              "m": true
+            }
+          }
+        },
+        {
+          "alias": [
+            "red-placeholder"
+          ],
+          "src": [
+            "/assets/units/red-placeholder.json"
+          ],
+          "loadParser": "aseprite_loader",
+          "data": {
+            "tags": {
+              "m": true
+            }
+          }
+        },
+        {
+          "alias": [
+            "red-placeholder.png"
+          ],
+          "src": [
+            "/assets/units/red-placeholder.png"
           ],
           "data": {
             "tags": {

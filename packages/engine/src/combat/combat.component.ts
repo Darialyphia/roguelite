@@ -8,6 +8,7 @@ import type { Card } from '../card/card.entity';
 import { TypedEventEmitter } from '../utils/typed-emitter';
 import { CombatMitigationStrategy } from './damage/mitigation/combat-mitigation-strategy';
 import { PointAOEShape } from '../targeting/aoe-shapes';
+import { DAMAGE_TYPES } from './damage/damage.enums';
 
 export const COMBAT_EVENTS = {
   BEFORE_ATTACK: 'before_attack',
@@ -85,6 +86,7 @@ export class CombatComponent {
     const damage = new Damage({
       baseAmount: 0,
       source: this.unit.card,
+      type: DAMAGE_TYPES.COMBAT,
       scalings: [new CombatScalingStrategy()],
       mitigations: [new CombatMitigationStrategy()]
     });
@@ -106,6 +108,7 @@ export class CombatComponent {
     const damage = new Damage({
       baseAmount: 0,
       source: this.unit.card,
+      type: DAMAGE_TYPES.COMBAT,
       scalings: [new CombatScalingStrategy()],
       mitigations: [new CombatMitigationStrategy()]
     });

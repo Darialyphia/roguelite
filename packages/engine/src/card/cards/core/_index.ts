@@ -26,6 +26,10 @@ import { redBloodCultistPriestess } from './red_blood_cultist_priestess';
 import { redImmolation } from './red_immolation';
 import { redBloodCultistFlagbearer } from './red_blood-cultist-flagbearer';
 import { redIgnite } from './red_ignite';
+import { redFirestarter } from './red_firestarter';
+import { redFlameDancer } from './red-_flame-dancer';
+import { redFlameHarvester } from './flame-harvester';
+import { redRageEffigy } from './red-rage-effigy';
 
 export const CORE_CARDS = keyBy(
   [
@@ -53,6 +57,10 @@ export const CORE_CARDS = keyBy(
     redImmolation,
     redIgnite,
     redPyromancer,
+    redFirestarter,
+    redFlameDancer,
+    redFlameHarvester,
+    redRageEffigy,
     questWarPath,
     questBloodThirst
   ],
