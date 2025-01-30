@@ -4,7 +4,6 @@ import { PointAOEShape } from '../../../targeting/aoe-shapes';
 import { TARGETING_TYPE } from '../../../targeting/targeting-strategy';
 import { UnitSummonTargetingtrategy } from '../../../targeting/unit-summon-targeting.strategy';
 import { BurnModifier } from '../../../unit/modifiers/burn.modifier';
-import { RangedModifier } from '../../../unit/modifiers/ranged.modifier';
 import { JOBS } from '../../../utils/job';
 import { RUNES } from '../../../utils/rune';
 import { type UnitCardBlueprint } from '../../card-blueprint';
@@ -12,8 +11,8 @@ import { CARD_KINDS, CARD_SETS, UNIT_TYPES } from '../../card-enums';
 
 export const redFirestarter: UnitCardBlueprint = {
   id: 'red-firestarter',
-  spriteId: 'red-placeholder',
-  iconId: 'placeholder',
+  spriteId: 'firestarter',
+  iconId: 'unit_firestarter',
   set: CARD_SETS.CORE,
   name: 'Firestarter',
   description: '@Summon@: inflict @Burn(1)@ to a minion.',
