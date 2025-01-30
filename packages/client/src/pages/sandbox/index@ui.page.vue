@@ -94,7 +94,7 @@ useBattleEvent(GAME_EVENTS.PLAYER_MULLIGAN, async ({ player }) => {
       </fieldset>
       <fieldset>
         <legend>Player 2 deck</legend>
-        <label v-for="deck in premadeDecks" :key="deck.name">
+        <label v-for="deck in availableDecks" :key="deck.name">
           <input
             type="radio"
             v-model="decks[1]"

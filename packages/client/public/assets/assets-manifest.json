@@ -858,6 +858,19 @@
         },
         {
           "alias": [
+            "icon-unit_firestarter"
+          ],
+          "src": [
+            "/assets/icons/unit_firestarter.png"
+          ],
+          "data": {
+            "tags": {
+              "m": true
+            }
+          }
+        },
+        {
+          "alias": [
             "icon-unit_flame-lord"
           ],
           "src": [
